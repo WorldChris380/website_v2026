@@ -1,11 +1,15 @@
+//General styles
 @use '../../styles.scss' as *;
+
+// 1st Header Column
 
 #header-full-width {
     width: 100%;
-    background-color: $cb-grey-ish;
+    background-color: $cb-white-ish;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom: 1px solid $cb-grey-ish;
 
     &:hover #header-logo-div img {
         transform: rotate(1360deg);
@@ -23,7 +27,7 @@
 #header-logo-div {
     display: flex;
     align-items: center;
-    padding: 4px;
+    padding: 0 4px;
 
     img {
         transition: transform 2s ease-in-out;
@@ -41,10 +45,12 @@
 }
 
 #page-heading {
-    color: $cb-white-ish;
+    color: $cb-grey-ish;
     font-size: 24px;
     margin-left: 12px;
 }
+
+// 2nd Header Column
 
 #header-navigation-div {
     display: flex;
@@ -53,25 +59,68 @@
 }
 
 nav {
-    color: $cb-white-ish;
+    color: $cb-grey-ish;
     font-size: 20px;
     align-self: center;
+    padding: 4px;
 
     &:hover {
         cursor: pointer;
+        border-radius: 4px 4px 0 0;
     }
 }
 
 #photography-nav:hover {
-    background: $cb-dark-green;
+    background: $cb-green-ish;
 }
 
 #career-nav:hover {
     background: $cb-blue-ish;
 }
 
+// 3rd Header Column
 #header-3rd-row-div {
-    color: $cb-white-ish;
+    color: $cb-grey-ish;
     font-size: 16px;
     padding: 4px;
+}
+
+//Dropdown menu
+.dropdown-list {
+    display: none;
+}
+
+.complete-menu-div {
+    position: relative;
+}
+
+.complete-menu-div:hover .dropdown-list {
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 101%;
+    left: 0;
+    background-color: $cb-white-ish;
+    border-top: 1px solid $cb-grey-ish;
+    border-radius: 0 0 4px 4px;
+    gap: 4px;
+}
+
+.dropdown-link {
+    background-color: $cb-white-ish;
+    color: $cb-grey-ish !important;
+    padding: 4px
+}
+
+.dropdown-link-photography:hover {
+    background-color: $cb-green-ish;
+}
+
+.dropdown-link-career:hover {
+    background-color: $cb-blue-ish;
+}
+
+.last-link-in-dropdown {
+    border-radius: 0 0 4px 4px;
 }
