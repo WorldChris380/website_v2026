@@ -46,8 +46,8 @@
 
 #page-heading {
     color: $cb-grey-ish;
-    font-size: 24px;
-    margin-left: 12px;
+    font-size: 20px;
+    margin-left: 8px;
 }
 
 // 2nd Header Column
@@ -81,7 +81,7 @@ nav {
 // 3rd Header Column
 #header-3rd-row-div {
     color: $cb-grey-ish;
-    font-size: 16px;
+    font-size: 20px;
     padding: 4px;
 }
 
@@ -107,6 +107,16 @@ nav {
     gap: 4px;
 }
 
+.complete-menu-div:hover #photography-nav {
+    background-color: $cb-green-ish;
+    border-radius: 4px 4px 0 0;
+}
+
+.complete-menu-div:hover #career-nav {
+    background-color: $cb-blue-ish;
+    border-radius: 4px 4px 0 0;
+}
+
 .dropdown-link {
     background-color: $cb-white-ish;
     color: $cb-grey-ish !important;
@@ -124,3 +134,70 @@ nav {
 .last-link-in-dropdown {
     border-radius: 0 0 4px 4px;
 }
+
+//Burger Menu
+#burger-menu-icon {
+    font-size: 20px;
+    color: $cb-grey-ish;
+    background-color: $cb-white-ish;
+    border: none;
+    cursor: pointer;
+}
+
+#burger-menu-close-icon {
+    display: none;
+    background-color: $cb-red-ish;
+    border-radius: 4px;
+    border: none;
+    font-size: 16px;
+    color: $cb-grey-ish;
+    margin-right: 4px;
+    cursor: pointer;
+}
+
+#burger-menu-content {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    top: 31px;
+    padding-top: 8px;
+    gap: 8px;
+    background-color: $cb-white-ish;
+    width: 100vw;
+    height: calc(100vh - 35px);
+
+    a {
+        color: $cb-grey-ish;
+    }
+
+}
+
+@media(max-width: 1919px) {}
+
+@media(max-width: 1279px) {}
+
+
+@media(min-width: 769px) {
+    #burger-menu {
+        display: none;
+    }
+}
+
+@media(max-width: 768px) {
+    #header-navigation-div {
+        display: none;
+    }
+
+    #header-3rd-row-div {
+        display: none;
+    }
+
+    #burger-menu {
+        display: flex;
+    }
+}
+
+
+
+@media(max-width: 480px) {}

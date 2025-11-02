@@ -33,5 +33,15 @@
         </div>
         <div id="header-3rd-row-div">Toggle darkmode
         </div>
+        <div id="burger-menu">
+            <button #burgerMenuOpenIcon (click)="toggleBurgerMenu()" id="burger-menu-icon" type="button">☰
+            </button>
+            <button #burgerMenuCloseIcon (click)="toggleBurgerMenu()" id="burger-menu-close-icon" type="button">X
+            </button>
+        </div>
+    </div>
+    <div #burgerMenuContent id="burger-menu-content">
+        <a href="">Photography</a>
+        <a href="https://career.christian-boehme.com">Career</a>
     </div>
 </div>
