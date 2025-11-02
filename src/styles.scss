@@ -27,3 +27,52 @@ body {
 a {
     text-decoration: none;
 }
+
+// Dark mode styles
+// Header dark mode
+body.dark-mode #header-full-width {
+    background-color: $cb-grey-ish !important;
+    color: $cb-white-ish;
+}
+
+body.dark-mode #page-heading {
+    color: $cb-white-ish;
+}
+
+body.dark-mode nav {
+    color: $cb-white-ish;
+}
+
+body.dark-mode .dropdown-list {
+    background-color: $cb-grey-ish !important;
+}
+
+body.dark-mode .dropdown-link-photography:hover {
+    background-color: $cb-green-ish !important;
+}
+
+body.dark-mode .dropdown-link-career:hover {
+    background-color: $cb-blue-ish !important;
+}
+
+body.dark-mode .dropdown-link {
+    background-color: $cb-grey-ish !important;
+    color: $cb-white-ish !important;
+}
+
+body.dark-mode #burger-menu-content {
+    background-color: $cb-grey-ish !important;
+
+    & a {
+        color: $cb-white-ish !important;
+        background-color: $cb-grey-ish !important;
+    }
+
+    & .burger-menu-green-item:hover {
+        background-color: $cb-green-ish !important;
+    }
+
+    & .burger-menu-blue-item:hover {
+        background-color: $cb-blue-ish !important;
+    }
+}
