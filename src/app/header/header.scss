@@ -1,0 +1,77 @@
+@use '../../styles.scss' as *;
+
+#header-full-width {
+    width: 100%;
+    background-color: $cb-grey-ish;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover #header-logo-div img {
+        transform: rotate(1360deg);
+    }
+}
+
+#header-content-limitation {
+    max-width: 1920px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#header-logo-div {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+
+    img {
+        transition: transform 2s ease-in-out;
+    }
+
+    #header-logo-link {
+        display: flex;
+        align-items: center;
+    }
+}
+
+#header-logo-img {
+    height: 30px;
+    width: 30px;
+}
+
+#page-heading {
+    color: $cb-white-ish;
+    font-size: 24px;
+    margin-left: 12px;
+}
+
+#header-navigation-div {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+nav {
+    color: $cb-white-ish;
+    font-size: 20px;
+    align-self: center;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#photography-nav:hover {
+    background: $cb-dark-green;
+}
+
+#career-nav:hover {
+    background: $cb-blue-ish;
+}
+
+#header-3rd-row-div {
+    color: $cb-white-ish;
+    font-size: 16px;
+    padding: 4px;
+}

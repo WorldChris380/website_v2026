@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+// Color definitions
+$cb-white-ish: #f5f5f5;
+$cb-grey-ish: #1f1f1f;
+$cb-dark-green: #004d40;
+$cb-blue-ish: #89BCD9;
+
+// Font import
+@font-face {
+    font-family: 'Quicksand';
+    src: url('/assets/fonts/Quicksand-Regular.ttf') format('truetype');
+    font-weight: 400; // Normal
+    font-style: normal;
+}
+
+// Global styles
+* {
+    box-sizing: border-box;
+    font-family: "Quicksand", sans-serif;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
