@@ -60,6 +60,15 @@ body.dark-mode .dropdown-link {
     color: $cb-white-ish !important;
 }
 
+body.dark-mode #burger-menu-icon {
+    background-color: $cb-grey-ish !important;
+    color: $cb-white-ish !important;
+}
+
+body.dark-mode #burger-menu-close-icon {
+    color: $cb-white-ish !important;
+}
+
 body.dark-mode #burger-menu-content {
     background-color: $cb-grey-ish !important;
 

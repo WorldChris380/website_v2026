@@ -8,7 +8,8 @@
         </div>
         <div id="header-navigation-div">
             <div class="complete-menu-div">
-                <a class="menu-link" id="menu-link-photography" href="/">
+                <a class="menu-link" id="menu-link-photography" (click)="toggleDropdown('photography')"
+                    href="javascript:void(0);">
                     <nav class="nav-item" id="photography-nav">Photography</nav>
                 </a>
                 <div class="dropdown-list">
@@ -21,7 +22,8 @@
                 </div>
             </div>
             <div class="complete-menu-div">
-                <a class="menu-link" id="menu-link-career" href="/">
+                <a class="menu-link" id="menu-link-career" (click)="toggleDropdown('career')"
+                    href="javascript:void(0);">
                     <nav id="career-nav">Career</nav>
                 </a>
                 <div class="dropdown-list">
@@ -32,9 +34,11 @@
             </div>
         </div>
         <div id="header-3rd-row-div">
-            <span #moonIcon (click)="toggleDarkMode()" id="moon-icon">⏾
+            <span #moonIcon (click)="toggleDarkMode()" id="moon-icon"><img src="/assets/img/logos/icons/darkmode.png"
+                    alt="Darkmode Icon">
             </span>
-            <span #lightIcon (click)="toggleDarkMode()" id="light-icon">💡
+            <span #lightIcon (click)="toggleDarkMode()" id="light-icon"><img
+                    src="/assets/img/logos/icons/brightmode.png" alt="Brightmode Icon">
             </span>
         </div>
         <div id="burger-menu">
@@ -48,9 +52,11 @@
         <a class="burger-menu-green-item" href="">Photography</a>
         <a class="burger-menu-blue-item" href="https://career.christian-boehme.com">Career</a>
         <div id="burger-menu-bottom-area">
-            <span #moonIconBurger (click)="toggleDarkMode()" id="moon-icon">⏾
+            <span #moonIconBurger (click)="toggleDarkMode()" id="moon-icon-burger"><img
+                    src="/assets/img/logos/icons/darkmode.png" alt="Darkmode Icon">
             </span>
-            <span #lightIconBurger (click)="toggleDarkMode()" id="light-icon">💡
+            <span #lightIconBurger (click)="toggleDarkMode()" id="light-icon-burger"><img
+                    src="/assets/img/logos/icons/brightmode.png" alt="Brightmode Icon">
             </span>
         </div>
     </div>

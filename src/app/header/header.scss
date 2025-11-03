@@ -90,14 +90,6 @@ nav {
 
 //Dropdown menu
 .dropdown-list {
-    display: none;
-}
-
-.complete-menu-div {
-    position: relative;
-}
-
-.complete-menu-div:hover .dropdown-list {
     min-width: 160px;
     display: flex;
     flex-direction: column;
@@ -105,9 +97,15 @@ nav {
     top: 101%;
     left: 0;
     background-color: $cb-white-ish;
-    border-top: 1px solid $cb-grey-ish;
     border-radius: 0 0 4px 4px;
     gap: 4px;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease;
+}
+
+.complete-menu-div {
+    position: relative;
 }
 
 .complete-menu-div:hover #photography-nav {
@@ -193,10 +191,41 @@ nav {
 #light-icon {
     display: none;
     cursor: pointer;
+
+    & img {
+        height: 20px;
+        width: 20px;
+    }
 }
 
 #moon-icon {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    & img {
+        height: 20px;
+        width: 20px;
+    }
+}
+
+#light-icon-burger {
+    display: none;
+    cursor: pointer;
+
+    & img {
+        height: 20px;
+        width: 20px;
+    }
+}
+
+#moon-icon-burger {
+    cursor: pointer;
+
+    & img {
+        height: 20px;
+        width: 20px;
+    }
 }
 
 // Responsive Designs
