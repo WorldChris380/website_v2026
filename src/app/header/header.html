@@ -7,9 +7,9 @@
             </a>
         </div>
         <div id="header-navigation-div">
-            <div class="complete-menu-div">
-                <a (mouseover)="toggleDropdownMenu('photography')" class="menu-link" id="menu-link-photography"
-                    href="javascript:void(0);">
+            <div class="complete-menu-div" (mouseenter)="openDropdownMenu('photography')"
+                (mouseleave)="closeDropdownMenu('photography')">
+                <a class="menu-link" id="menu-link-photography" href="javascript:void(0);">
                     <nav class="nav-item" id="photography-nav">Photography</nav>
                 </a>
                 <div #photographyDropdownList class="dropdown-list">
@@ -21,9 +21,9 @@
                     </a>
                 </div>
             </div>
-            <div id="dropDownMenuCareer" class="complete-menu-div">
-                <a (mouseover)="toggleDropdownMenu('career')" class="menu-link" id="menu-link-career"
-                    (click)="toggleDropdownMenu('career')" href="javascript:void(0);">
+            <div (mouseenter)="openDropdownMenu('career')" (mouseleave)="closeDropdownMenu('career')"
+                id="dropDownMenuCareer" class="complete-menu-div">
+                <a class="menu-link" id="menu-link-career" href="javascript:void(0);">
                     <nav id="career-nav">Career</nav>
                 </a>
                 <div #careerDropdownList class="dropdown-list">

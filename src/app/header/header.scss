@@ -105,7 +105,15 @@ nav {
     gap: 4px;
     overflow: hidden;
     max-height: 0;
-    transition: max-height 0.5s ease;
+    opacity: 0;
+    transition: max-height 1.5s ease;
+    pointer-events: none;
+}
+
+.dropdown-list.open {
+    max-height: 500px;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .complete-menu-div {

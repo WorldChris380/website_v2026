@@ -31,7 +31,33 @@ export class Header {
     }
   }
 
-  toggleDropdownMenu(menu: string) { if (menu === 'photography') { this.photographyDropdownList.nativeElement.style.display = 'flex'; } else if (menu === 'career') { this.careerDropdownList.nativeElement.style.display = 'flex'; } }
+  openDropdownMenu(menuItem: string) {
+    let dropdown: HTMLElement;
+
+    if (menuItem === 'photography') {
+      dropdown = this.photographyDropdownList.nativeElement;
+    } else if (menuItem === 'career') {
+      dropdown = this.careerDropdownList.nativeElement;
+    } else {
+      return;
+    }
+
+    dropdown.classList.add('open');
+  }
+
+  closeDropdownMenu(menuItem: string) {
+    let dropdown: HTMLElement;
+
+    if (menuItem === 'photography') {
+      dropdown = this.photographyDropdownList.nativeElement;
+    } else if (menuItem === 'career') {
+      dropdown = this.careerDropdownList.nativeElement;
+    } else {
+      return;
+    }
+
+    dropdown.classList.remove('open');
+  }
 
   toggleBurgerMenu() {
     if (this.burgerMenuOpenIcon.nativeElement.style.display == 'none') {
