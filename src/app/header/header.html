@@ -8,11 +8,11 @@
         </div>
         <div id="header-navigation-div">
             <div class="complete-menu-div">
-                <a class="menu-link" id="menu-link-photography" (click)="toggleDropdown('photography')"
+                <a (mouseover)="toggleDropdownMenu('photography')" class="menu-link" id="menu-link-photography"
                     href="javascript:void(0);">
                     <nav class="nav-item" id="photography-nav">Photography</nav>
                 </a>
-                <div class="dropdown-list">
+                <div #photographyDropdownList class="dropdown-list">
                     <a href="/" class="dropdown-link dropdown-link-photography">
                         Buy my photos on adobe stock
                     </a>
@@ -21,12 +21,12 @@
                     </a>
                 </div>
             </div>
-            <div class="complete-menu-div">
-                <a class="menu-link" id="menu-link-career" (click)="toggleDropdown('career')"
-                    href="javascript:void(0);">
+            <div id="dropDownMenuCareer" class="complete-menu-div">
+                <a (mouseover)="toggleDropdownMenu('career')" class="menu-link" id="menu-link-career"
+                    (click)="toggleDropdownMenu('career')" href="javascript:void(0);">
                     <nav id="career-nav">Career</nav>
                 </a>
-                <div class="dropdown-list">
+                <div #careerDropdownList class="dropdown-list">
                     <a href="/" class="dropdown-link dropdown-link-career last-link-in-dropdown">
                         LinkedIn Profile
                     </a>

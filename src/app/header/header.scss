@@ -89,6 +89,10 @@ nav {
 }
 
 //Dropdown menu
+.hide-dropdown {
+    display: none;
+}
+
 .dropdown-list {
     min-width: 160px;
     display: flex;

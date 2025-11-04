@@ -13,6 +13,9 @@ export class Header {
   @ViewChild('lightIcon', { static: true }) lightIcon!: ElementRef<HTMLSpanElement>;
   @ViewChild('moonIconBurger', { static: true }) moonIconBurger!: ElementRef<HTMLSpanElement>;
   @ViewChild('lightIconBurger', { static: true }) lightIconBurger!: ElementRef<HTMLSpanElement>;
+  @ViewChild('photographyDropdownList', { static: true }) photographyDropdownList!: ElementRef<HTMLDivElement>;
+  @ViewChild('careerDropdownList', { static: true }) careerDropdownList!: ElementRef<HTMLDivElement>;
+
 
   ngOnInit() {
     // Set theme to local storage value
@@ -28,23 +31,7 @@ export class Header {
     }
   }
 
-  toggleDropdown(menu: string) {
-    const dropdown = document.getElementById(`dropdown-${menu}`);
-    if (dropdown) {
-      // Überprüfe, ob das Dropdown bereits geöffnet ist
-      const isOpen = dropdown.style.maxHeight && dropdown.style.maxHeight !== '0px';
-
-      if (isOpen) {
-        // Dropdown schließen
-        dropdown.style.maxHeight = '0';
-        dropdown.style.opacity = '0';
-      } else {
-        // Dropdown öffnen
-        dropdown.style.maxHeight = '500px';
-        dropdown.style.opacity = '1';
-      }
-    }
-  }
+  toggleDropdownMenu(menu: string) { if (menu === 'photography') { this.photographyDropdownList.nativeElement.style.display = 'flex'; } else if (menu === 'career') { this.careerDropdownList.nativeElement.style.display = 'flex'; } }
 
   toggleBurgerMenu() {
     if (this.burgerMenuOpenIcon.nativeElement.style.display == 'none') {
