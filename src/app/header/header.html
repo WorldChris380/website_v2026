@@ -1,4 +1,4 @@
-<div id="header-full-width">
+<header id="header-full-width">
     <div id="header-content-limitation">
         <div id="header-logo-div">
             <a id="header-logo-link" href=""><img id="header-logo-img"
@@ -6,43 +6,80 @@
                 <span id="page-heading">Christian Böhme</span>
             </a>
         </div>
+
         <div id="header-navigation-div">
+            <!-- Photography Menu -->
             <div class="complete-menu-div" (mouseenter)="openDropdownMenu('photography')"
                 (mouseleave)="closeDropdownMenu('photography')">
                 <a class="menu-link" id="menu-link-photography" href="javascript:void(0);">
                     <nav class="nav-item" id="photography-nav">Photography</nav>
                 </a>
                 <div #photographyDropdownList class="dropdown-list">
+                    <a target="_blank"
+                        href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
+                        class="dropdown-link dropdown-link-photography">
+                        <img #adobeStockLogoDropDownMenu class="adobe-stock-logo"
+                            src="/assets/img/logos/adobe-stock-logo-black.png" alt="adobe stock logo">Buy my photos on
+                        adobe stock
+                    </a>
                     <a href="/" class="dropdown-link dropdown-link-photography">
-                        Buy my photos on adobe stock
+                        Landscape Gallery
                     </a>
                     <a href="/" class="dropdown-link dropdown-link-photography last-link-in-dropdown">
-                        2nd row link
+                        Aviation Gallery
                     </a>
                 </div>
             </div>
+            <!-- Blog Menu -->
+            <div class="complete-menu-div" (mouseenter)="openDropdownMenu('blog')"
+                (mouseleave)="closeDropdownMenu('blog')">
+                <a class="menu-link" id="menu-link-blog" href="javascript:void(0);">
+                    <nav class="nav-item" id="blog-nav">Blog</nav>
+                </a>
+                <div #blogDropdownList class="dropdown-list">
+                    <a href="/" class="dropdown-link dropdown-link-blog last-link-in-dropdown">
+                        MSFS Career addons comparison
+                    </a>
+                </div>
+            </div>
+            <!-- Career Menu -->
             <div (mouseenter)="openDropdownMenu('career')" (mouseleave)="closeDropdownMenu('career')"
-                id="dropDownMenuCareer" class="complete-menu-div">
+                class="complete-menu-div">
                 <a class="menu-link" id="menu-link-career" href="javascript:void(0);">
                     <nav id="career-nav">Career</nav>
                 </a>
                 <div #careerDropdownList class="dropdown-list">
-                    <a href="/" class="dropdown-link dropdown-link-career last-link-in-dropdown">
+                    <a target="_blank" href="https://career.christian-boehme.com"
+                        class="dropdown-link dropdown-link-career">
+                        <img #openInNewTabIcon class="open-in-new-tab-icon"
+                            src="/assets/img/icons/open-in-new-tab-icon-black.png" alt="open in new tab icon">Career
+                        Website
+                    </a>
+                    <a target="_blank" href="https://github.com/WorldChris380"
+                        class="dropdown-link dropdown-link-career">
+                        <img #githubLogoDropDownMenu class="github-logo" src="/assets/img/logos/GitHub-logo-black.png"
+                            alt="GitHub Logo">GitHub
+                        Profile
+                    </a>
+                    <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
+                        class="dropdown-link dropdown-link-career last-link-in-dropdown">
+                        <img #linkedInLogoDropDownMenu class="linkedIn-Logo"
+                            src="/assets/img/logos/linkedIn-logo-black.png" alt="LinkedIn Logo">
                         LinkedIn Profile
                     </a>
                 </div>
             </div>
         </div>
         <div id="header-3rd-row-div">
-            <span #moonIcon (click)="toggleDarkMode()" id="moon-icon"><img src="/assets/img/logos/icons/darkmode.png"
+            <span #moonIcon (click)="toggleDarkMode()" id="moon-icon"><img src="/assets/img/icons/darkmode.png"
                     alt="Darkmode Icon">
             </span>
-            <span #lightIcon (click)="toggleDarkMode()" id="light-icon"><img
-                    src="/assets/img/logos/icons/brightmode.png" alt="Brightmode Icon">
+            <span #lightIcon (click)="toggleDarkMode()" id="light-icon"><img src="/assets/img/icons/brightmode.png"
+                    alt="Brightmode Icon">
             </span>
         </div>
-        <div id="burger-menu">
-            <button #burgerMenuOpenIcon (click)="toggleBurgerMenu()" id="burger-menu-icon" type="button">☰
+        <div id="burger-menu-icon">
+            <button #burgerMenuOpenIcon (click)="toggleBurgerMenu()" id="burger-menu-open-icon" type="button">☰
             </button>
             <button #burgerMenuCloseIcon (click)="toggleBurgerMenu()" id="burger-menu-close-icon" type="button">X
             </button>
@@ -53,11 +90,11 @@
         <a class="burger-menu-blue-item" href="https://career.christian-boehme.com">Career</a>
         <div id="burger-menu-bottom-area">
             <span #moonIconBurger (click)="toggleDarkMode()" id="moon-icon-burger"><img
-                    src="/assets/img/logos/icons/darkmode.png" alt="Darkmode Icon">
+                    src="/assets/img/icons/darkmode.png" alt="Darkmode Icon">
             </span>
             <span #lightIconBurger (click)="toggleDarkMode()" id="light-icon-burger"><img
-                    src="/assets/img/logos/icons/brightmode.png" alt="Brightmode Icon">
+                    src="/assets/img/icons/brightmode.png" alt="Brightmode Icon">
             </span>
         </div>
     </div>
-</div>
+</header>

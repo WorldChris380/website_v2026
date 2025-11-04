@@ -15,17 +15,21 @@ export class Header {
   @ViewChild('lightIconBurger', { static: true }) lightIconBurger!: ElementRef<HTMLSpanElement>;
   @ViewChild('photographyDropdownList', { static: true }) photographyDropdownList!: ElementRef<HTMLDivElement>;
   @ViewChild('careerDropdownList', { static: true }) careerDropdownList!: ElementRef<HTMLDivElement>;
-
+  @ViewChild('blogDropdownList', { static: true }) blogDropdownList!: ElementRef<HTMLDivElement>;
+  @ViewChild('adobeStockLogoDropDownMenu', { static: true }) adobeStockLogoDropDownMenu!: ElementRef<HTMLImageElement>;
+  @ViewChild('openInNewTabIcon', { static: true }) openInNewTabIcon!: ElementRef<HTMLImageElement>;
+  @ViewChild('githubLogoDropDownMenu', { static: true }) githubLogoDropDownMenu!: ElementRef<HTMLImageElement>;
+  @ViewChild('linkedInLogoDropDownMenu', { static: true }) linkedInLogoDropDownMenu!: ElementRef<HTMLImageElement>;
 
   ngOnInit() {
     // Set theme to local storage value
     if (typeof window !== 'undefined' && window.localStorage) {
       const theme = localStorage.getItem('data-theme');
       if (theme === 'dark') {
-        this.turnOnLightMode();
+        this.turnOnDarkMode();
         document.body.classList.add('dark-mode');
       } else {
-        this.turnOnDarkMode();
+        this.turnOnLightMode();
         document.body.classList.remove('dark-mode');
       }
     }
@@ -38,6 +42,8 @@ export class Header {
       dropdown = this.photographyDropdownList.nativeElement;
     } else if (menuItem === 'career') {
       dropdown = this.careerDropdownList.nativeElement;
+    } else if (menuItem === 'blog') {
+      dropdown = this.blogDropdownList.nativeElement;
     } else {
       return;
     }
@@ -52,6 +58,8 @@ export class Header {
       dropdown = this.photographyDropdownList.nativeElement;
     } else if (menuItem === 'career') {
       dropdown = this.careerDropdownList.nativeElement;
+    } else if (menuItem === 'blog') {
+      dropdown = this.blogDropdownList.nativeElement;
     } else {
       return;
     }
@@ -60,7 +68,8 @@ export class Header {
   }
 
   toggleBurgerMenu() {
-    if (this.burgerMenuOpenIcon.nativeElement.style.display == 'none') {
+    const isOpen = this.burgerMenuContent.nativeElement.style.display === 'flex';
+    if (isOpen === true) {
       this.closeBurgerMenu();
     }
     else {
@@ -80,36 +89,46 @@ export class Header {
     this.burgerMenuContent.nativeElement.style.display = 'none';
   }
 
-  //Close burger menu on window resize
+  // Close burger menu on window resize
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     const width = (event.target as Window).innerWidth;
     this.closeBurgerMenu()
   }
 
+  // Dark mode implementation
   toggleDarkMode() {
-    if (this.moonIcon.nativeElement.style.display !== 'none') {
+    if (this.lightIcon.nativeElement.style.display === 'flex') {
       this.turnOnLightMode();
-      document.body.classList.add('dark-mode');
-      localStorage.setItem("data-theme", "dark");
+      document.body.classList.remove('dark-mode');
+
+      localStorage.setItem("data-theme", "light");
     } else {
       this.turnOnDarkMode();
-      document.body.classList.remove('dark-mode');
-      localStorage.setItem("data-theme", "light");
+      document.body.classList.add('dark-mode');
+
+      localStorage.setItem("data-theme", "dark");
     }
   }
-
-  turnOnLightMode() {
+  turnOnDarkMode() {
     this.moonIcon.nativeElement.style.display = 'none';
     this.lightIcon.nativeElement.style.display = 'flex';
     this.moonIconBurger.nativeElement.style.display = 'none';
     this.lightIconBurger.nativeElement.style.display = 'flex';
+    this.adobeStockLogoDropDownMenu.nativeElement.src = "/assets/img/logos/adobe-stock-logo-white.png";
+    this.openInNewTabIcon.nativeElement.src = "/assets/img/icons/open-in-new-tab-icon-white.png";
+    this.githubLogoDropDownMenu.nativeElement.src = "/assets/img/logos/GitHub-logo-white.png";
+    this.linkedInLogoDropDownMenu.nativeElement.src = "/assets/img/logos/linkedIn-logo-white.png";
   }
 
-  turnOnDarkMode() {
+  turnOnLightMode() {
     this.moonIcon.nativeElement.style.display = 'flex';
     this.lightIcon.nativeElement.style.display = 'none';
     this.moonIconBurger.nativeElement.style.display = 'flex';
     this.lightIconBurger.nativeElement.style.display = 'none';
+    this.adobeStockLogoDropDownMenu.nativeElement.src = "/assets/img/logos/adobe-stock-logo-black.png";
+    this.openInNewTabIcon.nativeElement.src = "/assets/img/icons/open-in-new-tab-icon-black.png";
+    this.githubLogoDropDownMenu.nativeElement.src = "/assets/img/logos/GitHub-logo-black.png";
+    this.linkedInLogoDropDownMenu.nativeElement.src = "/assets/img/logos/linkedIn-logo-black.png";
   }
 }
