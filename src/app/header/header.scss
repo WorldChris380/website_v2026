@@ -231,12 +231,12 @@ nav {
     flex-direction: column;
     position: absolute;
     left: 0;
-    top: 40px;
+    top: 41px;
     padding-top: 8px;
     gap: 8px;
     background-color: $cb-white-ish;
     width: 100vw;
-    height: calc(100vh - 40px);
+    height: calc(100vh - 41px);
 
     a {
         color: $cb-grey-ish;
