@@ -67,8 +67,14 @@ body.dark-mode #burger-menu-icon {
     color: $cb-white-ish !important;
 }
 
+body.dark-mode #burger-menu-open-icon {
+    background-color: $cb-grey-ish !important;
+    color: $cb-white-ish !important;
+}
+
 body.dark-mode #burger-menu-close-icon {
     color: $cb-white-ish !important;
+    background-color: $cb-grey-ish !important;
 }
 
 body.dark-mode #burger-menu-content {

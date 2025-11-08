@@ -201,7 +201,7 @@ nav {
     justify-content: center;
     width: 32px;
     height: 32px;
-    font-size: 16px;
+    font-size: 24px;
     color: $cb-grey-ish;
     background-color: $cb-white-ish;
     border: none;
@@ -215,13 +215,13 @@ nav {
     display: none;
     align-items: center;
     justify-content: center;
-    background-color: $cb-red-ish;
-    border-radius: 4px;
+    background-color: $cb-white-ish;
     border: none;
-    font-size: 16px;
+    font-weight: 900;
+    font-size: 24px;
     width: 32px;
     height: 32px;
-    color: $cb-grey-ish;
+    color: $cb-red-ish;
     margin-right: 4px;
     cursor: pointer;
 }
