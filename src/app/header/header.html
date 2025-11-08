@@ -86,15 +86,76 @@
         </div>
     </div>
     <div #burgerMenuContent id="burger-menu-content">
-        <a class="burger-menu-green-item" href="">Photography</a>
-        <a class="burger-menu-blue-item" href="https://career.christian-boehme.com">Career</a>
-        <div id="burger-menu-bottom-area">
-            <span #moonIconBurger (click)="toggleDarkMode()" id="moon-icon-burger"><img
-                    src="/assets/img/icons/darkmode.png" alt="Darkmode Icon">
-            </span>
-            <span #lightIconBurger (click)="toggleDarkMode()" id="light-icon-burger"><img
-                    src="/assets/img/icons/brightmode.png" alt="Brightmode Icon">
-            </span>
+        <div #burgerMenuMainContent id="burger-menu-main-content">
+            <a (click)="goBackToMainMobileMenuFunc()" #goBackToMainMobileMenu class="goBackToMainMobileMenu"
+                href="javascript:void(0)">
+                < go back </a>
+                    <!-- Mobile Photography Menu -->
+                    <a (click)="toggleMobileDropdownMenu('photography')" #mobilePhotographyLink
+                        class="burger-menu-green-item" href="javascript:void(0);">Photography</a>
+                    <div #mobilePhotographyDropdown id="mobile-photography-dropdown">
+                        <a target="_blank" class="mobile-dropdown-link"
+                            href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail">
+                            <img id="adobe-stock-mobile-logo" #adobeStockLogoMobileDropDownMenu
+                                src="/assets/img/logos/adobe-stock-logo-black.png" alt="adobe stock logo">Buy my photos
+                            on
+                            adobe
+                            stock
+                        </a>
+                        <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-photography">
+                            Landscape Gallery
+                        </a>
+                        <a href="javascript:void(0);"
+                            class="mobile-dropdown-link dropdown-link-photography last-link-in-dropdown">
+                            Aviation Gallery
+                        </a>
+                    </div>
+
+                    <!-- Mobile Blog Menu -->
+                    <a (click)="toggleMobileDropdownMenu('blog')" #mobileBlogLink class="burger-menu-orange-item"
+                        href="javascript:void(0);">Blog</a>
+
+                    <div #mobileBlogDropdown id="mobile-blog-dropdown">
+                        <a href="javascript:void(0);"
+                            class="mobile-dropdown-link dropdown-link-blog last-link-in-dropdown">
+                            MSFS Career addons comparison
+                        </a>
+                    </div>
+
+                    <!-- Mobile Career Menu -->
+                    <a (click)="toggleMobileDropdownMenu('career')" #mobileCareerLink class="burger-menu-blue-item"
+                        href="javascript:void(0);">Career</a>
+                    <div #mobileCareerDropdown id="mobile-career-dropdown">
+
+                        <a target="_blank" href="https://career.christian-boehme.com"
+                            class="mobile-dropdown-link dropdown-link-career">
+                            <img #openInNewTabIconMobileDropdown class="open-in-new-tab-icon"
+                                src="/assets/img/icons/open-in-new-tab-icon-black.png" alt="open in new tab icon">Career
+                            Website
+                        </a>
+                        <a target="_blank" href="https://github.com/WorldChris380"
+                            class="mobile-dropdown-link dropdown-link-career">
+                            <img #githubLogoMobileDropDownMenu class="github-logo"
+                                src="/assets/img/logos/GitHub-logo-black.png" alt="GitHub Logo">GitHub
+                            Profile
+                        </a>
+                        <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
+                            class="mobile-dropdown-link dropdown-link-career last-link-in-dropdown">
+                            <img #linkedInLogoMobileDropDownMenu class="linkedIn-Logo"
+                                src="/assets/img/logos/linkedIn-logo-black.png" alt="LinkedIn Logo">
+                            LinkedIn Profile
+                        </a>
+                    </div>
+        </div>
+        <div id="mobileBottomMenu">
+            <div id="mobile-bottom-Menu-first-coloum">
+                <span #moonIconBurger (click)="toggleDarkMode()" id="moon-icon-burger"><img
+                        src="/assets/img/icons/darkmode.png" alt="Darkmode Icon">
+                </span>
+                <span #lightIconBurger (click)="toggleDarkMode()" id="light-icon-burger"><img
+                        src="/assets/img/icons/brightmode.png" alt="Brightmode Icon">
+                </span>
+            </div>
         </div>
     </div>
 </header>

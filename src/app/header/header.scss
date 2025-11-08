@@ -229,6 +229,7 @@ nav {
 #burger-menu-content {
     display: none;
     flex-direction: column;
+    justify-content: space-between;
     position: absolute;
     left: 0;
     top: 41px;
@@ -241,11 +242,64 @@ nav {
     a {
         color: $cb-grey-ish;
         padding: 4px;
+        width: 100%;
+        text-align: start;
 
-        &:hover {
+        &.burger-menu-green-item:hover {
             background-color: $cb-green-ish;
         }
+
+        &.burger-menu-orange-item:hover {
+            background-color: $cb-orange-ish;
+        }
+
+        &.burger-menu-blue-item:hover {
+            background-color: $cb-blue-ish;
+        }
     }
+}
+
+#burger-menu-main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    text-align: end;
+    width: 100%;
+}
+
+.mobile-dropdown-link {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+}
+
+// Mobile Dropdown Menus
+#mobile-photography-dropdown,
+#mobile-blog-dropdown,
+#mobile-career-dropdown {
+    display: none;
+}
+
+.goBackToMainMobileMenu {
+    display: none;
+}
+
+#adobe-stock-mobile-logo {
+    width: 16px;
+    height: 16px;
+}
+
+#mobileBottomMenu {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding-left: 4px;
+}
+
+#mobile-bottom-Menu-first-coloum {
+    width: 33%;
 }
 
 // Dark Mode Toggle Elements
