@@ -79,7 +79,7 @@ export class Header {
   }
 
   toggleBurgerMenu() {
-    const isOpen = this.burgerMenuContent.nativeElement.style.display === 'flex';
+    const isOpen = this.burgerMenuOpenIcon.nativeElement.style.display === 'none';
     if (isOpen === true) {
       this.closeBurgerMenu();
     }
@@ -92,12 +92,23 @@ export class Header {
     this.burgerMenuOpenIcon.nativeElement.style.display = 'none';
     this.burgerMenuCloseIcon.nativeElement.style.display = 'flex';
     this.burgerMenuContent.nativeElement.style.display = 'flex';
+    this.burgerMenuContent.nativeElement.style.top = '41px';
+    this.burgerMenuContent.nativeElement.style.overflow = 'visible';
+    this.burgerMenuContent.nativeElement.style.setProperty('width', '100vw', 'important');
+    this.burgerMenuContent.nativeElement.classList.add('open')
+    this.burgerMenuContent.nativeElement.classList.remove('close');
+    this.burgerMenuContent.nativeElement.style.paddingTop = '8px';
   }
 
   closeBurgerMenu() {
     this.burgerMenuCloseIcon.nativeElement.style.display = 'none';
     this.burgerMenuOpenIcon.nativeElement.style.display = 'flex';
-    this.burgerMenuContent.nativeElement.style.display = 'none';
+    this.burgerMenuContent.nativeElement.style.overflow = 'hidden';
+    this.burgerMenuContent.nativeElement.classList.remove('open')
+    this.burgerMenuContent.nativeElement.classList.add('close');
+    setTimeout(() => {
+      this.burgerMenuContent.nativeElement.style.paddingTop = '0px';
+    }, 800);
   }
 
   // Close burger menu on window resize

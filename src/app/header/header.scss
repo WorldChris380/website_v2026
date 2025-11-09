@@ -227,17 +227,18 @@ nav {
 }
 
 #burger-menu-content {
-    display: none;
     flex-direction: column;
     justify-content: space-between;
     position: absolute;
+    width: 0;
+    height: 0;
     left: 0;
-    top: 41px;
-    padding-top: 8px;
+    top: 0;
+    padding-top: 0px;
     gap: 8px;
     background-color: $cb-white-ish;
-    width: 100vw;
-    height: calc(100vh - 41px);
+    overflow: hidden;
+    transition: height 0.8s ease;
 
     a {
         color: $cb-grey-ish;
@@ -259,12 +260,23 @@ nav {
     }
 }
 
+#burger-menu-content.open {
+    height: calc(100vh - 41px);
+    width: 100vw;
+}
+
+#burger-menu-content.close {
+    height: 0;
+    width: 0;
+}
+
 #burger-menu-main-content {
     display: flex;
     flex-direction: column;
     align-items: start;
     text-align: end;
     width: 100%;
+    background-color: $cb-white-ish;
 }
 
 .mobile-dropdown-link {
@@ -280,6 +292,7 @@ nav {
 #mobile-blog-dropdown,
 #mobile-career-dropdown {
     display: none;
+    width: 100%;
 }
 
 .goBackToMainMobileMenu {
@@ -289,17 +302,6 @@ nav {
 #adobe-stock-mobile-logo {
     width: 16px;
     height: 16px;
-}
-
-#mobileBottomMenu {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    padding-left: 4px;
-}
-
-#mobile-bottom-Menu-first-coloum {
-    width: 33%;
 }
 
 // Dark Mode Toggle Elements
@@ -324,13 +326,32 @@ nav {
     }
 }
 
+#mobileBottomMenu {
+    display: flex;
+    align-items: center;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    height: 80px;
+    width: 100%;
+    padding-left: 4px;
+    border-top: 1px solid $cb-grey-ish;
+    background-color: $cb-white-ish;
+}
+
+#mobile-bottom-Menu-first-coloum {
+    width: 33%;
+    display: flex;
+    display: flex;
+    justify-content: center;
+}
+
 #light-icon-burger {
     display: none;
     cursor: pointer;
 
     & img {
-        height: 20px;
-        width: 20px;
+        height: 28px;
+        width: 28px;
     }
 }
 
@@ -338,8 +359,8 @@ nav {
     cursor: pointer;
 
     & img {
-        height: 20px;
-        width: 20px;
+        height: 28px;
+        width: 28px;
     }
 }
 

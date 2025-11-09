@@ -93,3 +93,8 @@ body.dark-mode #burger-menu-content {
         background-color: $cb-blue-ish !important;
     }
 }
+
+body.dark-mode #mobileBottomMenu {
+    border-top: 1px solid $cb-white-ish;
+    background-color: $cb-grey-ish !important;
+}

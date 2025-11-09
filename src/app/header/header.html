@@ -87,6 +87,7 @@
     </div>
     <div #burgerMenuContent id="burger-menu-content">
         <div #burgerMenuMainContent id="burger-menu-main-content">
+
             <a (click)="goBackToMainMobileMenuFunc()" #goBackToMainMobileMenu class="goBackToMainMobileMenu"
                 href="javascript:void(0)">
                 < go back </a>
@@ -105,8 +106,7 @@
                         <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-photography">
                             Landscape Gallery
                         </a>
-                        <a href="javascript:void(0);"
-                            class="mobile-dropdown-link dropdown-link-photography last-link-in-dropdown">
+                        <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-photography">
                             Aviation Gallery
                         </a>
                     </div>
@@ -116,8 +116,7 @@
                         href="javascript:void(0);">Blog</a>
 
                     <div #mobileBlogDropdown id="mobile-blog-dropdown">
-                        <a href="javascript:void(0);"
-                            class="mobile-dropdown-link dropdown-link-blog last-link-in-dropdown">
+                        <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-blog">
                             MSFS Career addons comparison
                         </a>
                     </div>
@@ -140,7 +139,7 @@
                             Profile
                         </a>
                         <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
-                            class="mobile-dropdown-link dropdown-link-career last-link-in-dropdown">
+                            class="mobile-dropdown-link dropdown-link-career">
                             <img #linkedInLogoMobileDropDownMenu class="linkedIn-Logo"
                                 src="/assets/img/logos/linkedIn-logo-black.png" alt="LinkedIn Logo">
                             LinkedIn Profile
@@ -157,5 +156,6 @@
                 </span>
             </div>
         </div>
+
     </div>
 </header>
