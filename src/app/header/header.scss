@@ -261,11 +261,11 @@ nav {
 }
 
 #burger-menu-content.open {
-    height: calc(100vh - 41px);
+    height: calc(100dvh - 41px);
     width: 100vw;
 }
 
-#burger-menu-content.close {
+#burger-menu-content.closing {
     height: 0;
     width: 0;
 }

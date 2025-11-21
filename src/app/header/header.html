@@ -2,7 +2,7 @@
     <div id="header-content-limitation">
         <div id="header-logo-div">
             <a id="header-logo-link" href=""><img id="header-logo-img"
-                    src="/assets/img/logos/christian-boehme-logo-512px.png" alt="Logo of Christian Boehme">
+                    src="/assets/img/icons-and-logos/christian-boehme-logo.png" alt="Logo of Christian Boehme">
                 <span id="page-heading">Christian Böhme</span>
             </a>
         </div>
@@ -18,8 +18,9 @@
                     <a target="_blank"
                         href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
                         class="dropdown-link dropdown-link-photography">
-                        <img #adobeStockLogoDropDownMenu class="adobe-stock-logo"
-                            src="/assets/img/logos/adobe-stock-logo-black.png" alt="adobe stock logo">Buy my photos on
+                        <img class="adobe-stock-logo" [src]="darkmodePNG('adobe-stock-logo')" alt="adobe stock logo">Buy
+                        my
+                        photos on
                         adobe stock
                     </a>
                     <a href="/" class="dropdown-link dropdown-link-photography">
@@ -51,41 +52,39 @@
                 <div #careerDropdownList class="dropdown-list">
                     <a target="_blank" href="https://career.christian-boehme.com"
                         class="dropdown-link dropdown-link-career">
-                        <img #openInNewTabIcon class="open-in-new-tab-icon"
-                            src="/assets/img/icons/open-in-new-tab-icon-black.png" alt="open in new tab icon">Career
+                        <img class="open-in-new-tab-icon" [src]="darkmodePNG('open-in-new-tab-icon')"
+                            alt="open in new tab icon">Career
                         Website
                     </a>
                     <a target="_blank" href="https://github.com/WorldChris380"
                         class="dropdown-link dropdown-link-career">
-                        <img #githubLogoDropDownMenu class="github-logo" src="/assets/img/logos/GitHub-logo-black.png"
-                            alt="GitHub Logo">GitHub
-                        Profile
+                        <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">GitHub Profile
                     </a>
                     <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
                         class="dropdown-link dropdown-link-career last-link-in-dropdown">
-                        <img #linkedInLogoDropDownMenu class="linkedIn-Logo"
-                            src="/assets/img/logos/linkedIn-logo-black.png" alt="LinkedIn Logo">
+                        <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">
                         LinkedIn Profile
                     </a>
                 </div>
             </div>
         </div>
         <div id="header-3rd-row-div">
-            <span #moonIcon (click)="toggleDarkMode()" id="moon-icon"><img src="/assets/img/icons/darkmode.png"
-                    alt="Darkmode Icon">
+            <span (click)="toggleDarkMode()" id="moon-icon"><img [src]="darkmodePNG('mode-icon')" alt="Darkmode Icon">
             </span>
-            <span #lightIcon (click)="toggleDarkMode()" id="light-icon"><img src="/assets/img/icons/brightmode.png"
+            <span (click)="toggleDarkMode()" id="light-icon"><img [src]="darkmodePNG('mode-icon')"
                     alt="Brightmode Icon">
             </span>
         </div>
         <div id="burger-menu-icon">
-            <button #burgerMenuOpenIcon (click)="toggleBurgerMenu()" id="burger-menu-open-icon" type="button">☰
+            <button (click)="toggleBurgerMenu()" id="burger-menu-open-icon" type="button"
+                [style.display]="burgerMenuOpen ? 'none' : 'flex'">☰
             </button>
-            <button #burgerMenuCloseIcon (click)="toggleBurgerMenu()" id="burger-menu-close-icon" type="button">X
+            <button (click)="toggleBurgerMenu()" id="burger-menu-close-icon" type="button"
+                [style.display]="burgerMenuOpen ? 'flex' : 'none'">X
             </button>
         </div>
     </div>
-    <div #burgerMenuContent id="burger-menu-content">
+    <div id="burger-menu-content" [class.open]="burgerMenuOpen" [class.closing]="burgerMenuClosing">
         <div #burgerMenuMainContent id="burger-menu-main-content">
 
             <a (click)="goBackToMainMobileMenuFunc()" #goBackToMainMobileMenu class="goBackToMainMobileMenu"
@@ -97,8 +96,8 @@
                     <div #mobilePhotographyDropdown id="mobile-photography-dropdown">
                         <a target="_blank" class="mobile-dropdown-link"
                             href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail">
-                            <img id="adobe-stock-mobile-logo" #adobeStockLogoMobileDropDownMenu
-                                src="/assets/img/logos/adobe-stock-logo-black.png" alt="adobe stock logo">Buy my photos
+                            <img id="adobe-stock-mobile-logo" [src]="darkmodePNG('adobe-stock-logo')"
+                                alt="adobe stock logo">Buy my photos
                             on
                             adobe
                             stock
@@ -128,31 +127,29 @@
 
                         <a target="_blank" href="https://career.christian-boehme.com"
                             class="mobile-dropdown-link dropdown-link-career">
-                            <img #openInNewTabIconMobileDropdown class="open-in-new-tab-icon"
-                                src="/assets/img/icons/open-in-new-tab-icon-black.png" alt="open in new tab icon">Career
+                            <img class="open-in-new-tab-icon" [src]="darkmodePNG('open-in-new-tab-icon')"
+                                alt="open in new tab icon">Career
                             Website
                         </a>
                         <a target="_blank" href="https://github.com/WorldChris380"
                             class="mobile-dropdown-link dropdown-link-career">
-                            <img #githubLogoMobileDropDownMenu class="github-logo"
-                                src="/assets/img/logos/GitHub-logo-black.png" alt="GitHub Logo">GitHub
+                            <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">GitHub
                             Profile
                         </a>
                         <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
                             class="mobile-dropdown-link dropdown-link-career">
-                            <img #linkedInLogoMobileDropDownMenu class="linkedIn-Logo"
-                                src="/assets/img/logos/linkedIn-logo-black.png" alt="LinkedIn Logo">
+                            <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">
                             LinkedIn Profile
                         </a>
                     </div>
         </div>
         <div id="mobileBottomMenu">
             <div id="mobile-bottom-Menu-first-coloum">
-                <span #moonIconBurger (click)="toggleDarkMode()" id="moon-icon-burger"><img
-                        src="/assets/img/icons/darkmode.png" alt="Darkmode Icon">
+                <span (click)="toggleDarkMode()" id="moon-icon-burger"><img [src]="darkmodePNG('mode-icon')"
+                        alt="icon for turning on dark mode">
                 </span>
-                <span #lightIconBurger (click)="toggleDarkMode()" id="light-icon-burger"><img
-                        src="/assets/img/icons/brightmode.png" alt="Brightmode Icon">
+                <span (click)="toggleDarkMode()" id="light-icon-burger"><img [src]="darkmodePNG('mode-icon')"
+                        alt="icon for turning on light mode">
                 </span>
             </div>
         </div>

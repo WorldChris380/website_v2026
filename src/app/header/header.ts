@@ -1,51 +1,44 @@
-import { Component, ViewChild, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild, OnInit } from '@angular/core';
+type MenuHeading = 'photography' | 'blog' | 'travel' | 'career';
+
 @Component({
   selector: 'app-header',
   standalone: true,
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
+
 export class Header {
-  @ViewChild('burgerMenuOpenIcon', { static: true }) burgerMenuOpenIcon!: ElementRef<HTMLButtonElement>;
-  @ViewChild('burgerMenuCloseIcon', { static: true }) burgerMenuCloseIcon!: ElementRef<HTMLButtonElement>;
+  darkmode: boolean = false;
+  burgerMenuOpen: boolean = false;
+  burgerMenuClosing: boolean = false;
+  openDesktop: MenuHeading | null = null;
+  openMobile: MenuHeading | null = null;
+
+  // ViewChild references
   @ViewChild('burgerMenuContent', { static: true }) burgerMenuContent!: ElementRef<HTMLDivElement>;
-  @ViewChild('moonIcon', { static: true }) moonIcon!: ElementRef<HTMLSpanElement>;
-  @ViewChild('lightIcon', { static: true }) lightIcon!: ElementRef<HTMLSpanElement>;
-  @ViewChild('moonIconBurger', { static: false }) moonIconBurger!: ElementRef<HTMLSpanElement>;
-  @ViewChild('lightIconBurger', { static: false }) lightIconBurger!: ElementRef<HTMLSpanElement>;
   @ViewChild('photographyDropdownList', { static: true }) photographyDropdownList!: ElementRef<HTMLDivElement>;
   @ViewChild('careerDropdownList', { static: true }) careerDropdownList!: ElementRef<HTMLDivElement>;
   @ViewChild('blogDropdownList', { static: true }) blogDropdownList!: ElementRef<HTMLDivElement>;
-  @ViewChild('adobeStockLogoDropDownMenu', { static: true }) adobeStockLogoDropDownMenu!: ElementRef<HTMLImageElement>;
-  @ViewChild('openInNewTabIcon', { static: true }) openInNewTabIcon!: ElementRef<HTMLImageElement>;
-  @ViewChild('githubLogoDropDownMenu', { static: true }) githubLogoDropDownMenu!: ElementRef<HTMLImageElement>;
-  @ViewChild('linkedInLogoDropDownMenu', { static: true }) linkedInLogoDropDownMenu!: ElementRef<HTMLImageElement>;
   @ViewChild('mobilePhotographyDropdown', { static: true }) mobilePhotographyDropdown!: ElementRef<HTMLDivElement>;
   @ViewChild('mobileBlogDropdown', { static: true }) mobileBlogDropdown!: ElementRef<HTMLDivElement>;
   @ViewChild('mobileCareerDropdown', { static: true }) mobileCareerDropdown!: ElementRef<HTMLDivElement>;
   @ViewChild('mobilePhotographyLink', { static: true }) mobilePhotographyLink!: ElementRef<HTMLAnchorElement>;
   @ViewChild('mobileBlogLink', { static: true }) mobileBlogLink!: ElementRef<HTMLAnchorElement>;
   @ViewChild('mobileCareerLink', { static: true }) mobileCareerLink!: ElementRef<HTMLAnchorElement>;
-  @ViewChild('adobeStockLogoMobileDropDownMenu', { static: false }) adobeStockLogoMobileDropDownMenu!: ElementRef<HTMLImageElement>;
-  @ViewChild('openInNewTabIconMobileDropdown', { static: false }) openInNewTabIconMobileDropdown!: ElementRef<HTMLImageElement>;
-  @ViewChild('githubLogoMobileDropDownMenu', { static: false }) githubLogoMobileDropDownMenu!: ElementRef<HTMLImageElement>
-  @ViewChild('linkedInLogoMobileDropDownMenu', { static: false }) linkedInLogoMobileDropDownMenu!: ElementRef<HTMLImageElement>;
   @ViewChild('burgerMenuMainContent', { static: false }) burgerMenuMainContent!: ElementRef<HTMLDivElement>;
   @ViewChild('goBackToMainMobileMenu', { static: false }) goBackToMainMobileMenu!: ElementRef<HTMLAnchorElement>;
 
-  ngAfterViewInit() {
-    // Set theme to local storage value
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const theme = localStorage.getItem('data-theme');
-      if (theme === 'dark') {
-        this.turnOnDarkMode();
-        document.body.classList.add('dark-mode');
-      } else {
-        this.turnOnLightMode();
-        document.body.classList.remove('dark-mode');
-      }
+  ngOnInit() {
+    let darkmodeLocalStorage = localStorage.getItem('darkmode');
+    if (darkmodeLocalStorage === 'true') {
+      this.darkmode = true;
+    } else {
+      this.darkmode = false;
     }
+    document.body.classList.toggle('dark-mode', this.darkmode);
   }
+
 
   openDropdownMenu(menuItem: string) {
     let dropdown: HTMLElement;
@@ -79,35 +72,14 @@ export class Header {
   }
 
   toggleBurgerMenu() {
-    const isOpen = this.burgerMenuOpenIcon.nativeElement.style.display === 'none';
-    if (isOpen === true) {
-      this.closeBurgerMenu();
+    if (!this.burgerMenuOpen) {
+      this.burgerMenuOpen = true;
+      return;
     }
-    else {
-      this.openBurgerMenu();
-    }
-  }
-
-  openBurgerMenu() {
-    this.burgerMenuOpenIcon.nativeElement.style.display = 'none';
-    this.burgerMenuCloseIcon.nativeElement.style.display = 'flex';
-    this.burgerMenuContent.nativeElement.style.display = 'flex';
-    this.burgerMenuContent.nativeElement.style.top = '41px';
-    this.burgerMenuContent.nativeElement.style.overflow = 'visible';
-    this.burgerMenuContent.nativeElement.style.setProperty('width', '100vw', 'important');
-    this.burgerMenuContent.nativeElement.classList.add('open')
-    this.burgerMenuContent.nativeElement.classList.remove('close');
-    this.burgerMenuContent.nativeElement.style.paddingTop = '8px';
-  }
-
-  closeBurgerMenu() {
-    this.burgerMenuCloseIcon.nativeElement.style.display = 'none';
-    this.burgerMenuOpenIcon.nativeElement.style.display = 'flex';
-    this.burgerMenuContent.nativeElement.style.overflow = 'hidden';
-    this.burgerMenuContent.nativeElement.classList.remove('open')
-    this.burgerMenuContent.nativeElement.classList.add('close');
+    this.burgerMenuClosing = true;
     setTimeout(() => {
-      this.burgerMenuContent.nativeElement.style.paddingTop = '0px';
+      this.burgerMenuOpen = false;
+      this.burgerMenuClosing = false;
     }, 800);
   }
 
@@ -115,7 +87,7 @@ export class Header {
   @HostListener('window:resize', ['$event'])
   onResize(event: Event) {
     const width = (event.target as Window).innerWidth;
-    this.closeBurgerMenu()
+    this.burgerMenuOpen = false;
   }
 
   //Toggle mobile Dropdown menus
@@ -180,47 +152,18 @@ export class Header {
     this.goBackToMainMobileMenu.nativeElement.style.display = 'none';
   }
 
-  // Dark mode implementation
+  // Dark mode implementation and logo and icons change
   toggleDarkMode() {
-    if (this.lightIcon.nativeElement.style.display === 'flex') {
-      this.turnOnLightMode();
-      document.body.classList.remove('dark-mode');
+    this.darkmode = !this.darkmode;
+    document.body.classList.toggle('dark-mode', this.darkmode);
+    localStorage.setItem("darkmode", this.darkmode ? "true" : "false");
+  }
 
-      localStorage.setItem("data-theme", "light");
+  darkmodePNG(name: string) {
+    if (this.darkmode) {
+      return `/assets/img/icons-and-logos/${name}-white.png`;
     } else {
-      this.turnOnDarkMode();
-      document.body.classList.add('dark-mode');
-
-      localStorage.setItem("data-theme", "dark");
+      return `/assets/img/icons-and-logos/${name}-black.png`;
     }
-  }
-  turnOnDarkMode() {
-    this.moonIcon.nativeElement.style.display = 'none';
-    this.lightIcon.nativeElement.style.display = 'flex';
-    this.moonIconBurger.nativeElement.style.display = 'none';
-    this.lightIconBurger.nativeElement.style.display = 'flex';
-    this.adobeStockLogoDropDownMenu.nativeElement.src = "/assets/img/logos/adobe-stock-logo-white.png";
-    this.adobeStockLogoMobileDropDownMenu.nativeElement.src = "/assets/img/logos/adobe-stock-logo-white.png";
-    this.openInNewTabIconMobileDropdown.nativeElement.src = "/assets/img/icons/open-in-new-tab-icon-white.png";
-    this.openInNewTabIcon.nativeElement.src = "/assets/img/icons/open-in-new-tab-icon-white.png";
-    this.githubLogoDropDownMenu.nativeElement.src = "/assets/img/logos/GitHub-logo-white.png";
-    this.githubLogoMobileDropDownMenu.nativeElement.src = "/assets/img/logos/GitHub-logo-white.png";
-    this.linkedInLogoDropDownMenu.nativeElement.src = "/assets/img/logos/linkedIn-logo-white.png";
-    this.linkedInLogoMobileDropDownMenu.nativeElement.src = "/assets/img/logos/linkedIn-logo-white.png";
-  }
-
-  turnOnLightMode() {
-    this.moonIcon.nativeElement.style.display = 'flex';
-    this.lightIcon.nativeElement.style.display = 'none';
-    this.moonIconBurger.nativeElement.style.display = 'flex';
-    this.lightIconBurger.nativeElement.style.display = 'none';
-    this.adobeStockLogoDropDownMenu.nativeElement.src = "/assets/img/logos/adobe-stock-logo-black.png";
-    this.adobeStockLogoMobileDropDownMenu.nativeElement.src = "/assets/img/logos/adobe-stock-logo-black.png";
-    this.openInNewTabIconMobileDropdown.nativeElement.src = "/assets/img/icons/open-in-new-tab-icon-black.png";
-    this.openInNewTabIcon.nativeElement.src = "/assets/img/icons/open-in-new-tab-icon-black.png";
-    this.githubLogoDropDownMenu.nativeElement.src = "/assets/img/logos/GitHub-logo-black.png";
-    this.githubLogoMobileDropDownMenu.nativeElement.src = "/assets/img/logos/GitHub-logo-black.png";
-    this.linkedInLogoDropDownMenu.nativeElement.src = "/assets/img/logos/linkedIn-logo-black.png";
-    this.linkedInLogoMobileDropDownMenu.nativeElement.src = "/assets/img/logos/linkedIn-logo-black.png";
   }
 }
