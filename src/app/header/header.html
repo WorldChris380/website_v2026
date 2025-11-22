@@ -9,12 +9,12 @@
 
         <div id="header-navigation-div">
             <!-- Photography Menu -->
-            <div class="complete-menu-div" (mouseenter)="openDropdownMenu('photography')"
-                (mouseleave)="closeDropdownMenu('photography')">
-                <a class="menu-link" id="menu-link-photography" href="javascript:void(0);">
+            <div class="complete-menu-div" (mouseenter)="setDesktopDropdown('photography')"
+                (mouseleave)="setDesktopDropdown(null)">
+                <a class=" menu-link" id="menu-link-photography" href="javascript:void(0);">
                     <nav class="nav-item" id="photography-nav">Photography</nav>
                 </a>
-                <div #photographyDropdownList class="dropdown-list">
+                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'photography'">
                     <a target="_blank"
                         href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
                         class="dropdown-link dropdown-link-photography">
@@ -32,24 +32,24 @@
                 </div>
             </div>
             <!-- Blog Menu -->
-            <div class="complete-menu-div" (mouseenter)="openDropdownMenu('blog')"
-                (mouseleave)="closeDropdownMenu('blog')">
+            <div class="complete-menu-div" (mouseenter)="setDesktopDropdown('blog')"
+                (mouseleave)="setDesktopDropdown(null)">
                 <a class="menu-link" id="menu-link-blog" href="javascript:void(0);">
                     <nav class="nav-item" id="blog-nav">Blog</nav>
                 </a>
-                <div #blogDropdownList class="dropdown-list">
+                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'blog'">
                     <a href="/" class="dropdown-link dropdown-link-blog last-link-in-dropdown">
                         MSFS Career addons comparison
                     </a>
                 </div>
             </div>
             <!-- Career Menu -->
-            <div (mouseenter)="openDropdownMenu('career')" (mouseleave)="closeDropdownMenu('career')"
+            <div (mouseenter)="setDesktopDropdown('career')" (mouseleave)="setDesktopDropdown(null)"
                 class="complete-menu-div">
                 <a class="menu-link" id="menu-link-career" href="javascript:void(0);">
                     <nav id="career-nav">Career</nav>
                 </a>
-                <div #careerDropdownList class="dropdown-list">
+                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'career'">
                     <a target="_blank" href="https://career.christian-boehme.com"
                         class="dropdown-link dropdown-link-career">
                         <img class="open-in-new-tab-icon" [src]="darkmodePNG('open-in-new-tab-icon')"
@@ -85,22 +85,19 @@
         </div>
     </div>
     <div id="burger-menu-content" [class.open]="burgerMenuOpen" [class.closing]="burgerMenuClosing">
-        <div #burgerMenuMainContent id="burger-menu-main-content">
+        <div id="burger-menu-main-content">
 
-            <a (click)="goBackToMainMobileMenuFunc()" #goBackToMainMobileMenu class="goBackToMainMobileMenu"
-                href="javascript:void(0)">
+            <a (click)="goBackToMainMobileMenuFunc()" class="goBackToMainMobileMenu" href="javascript:void(0)">
                 < go back </a>
                     <!-- Mobile Photography Menu -->
-                    <a (click)="toggleMobileDropdownMenu('photography')" #mobilePhotographyLink
-                        class="burger-menu-green-item" href="javascript:void(0);">Photography</a>
-                    <div #mobilePhotographyDropdown id="mobile-photography-dropdown">
+                    <a (click)="toggleMobileDropdownMenu('photography')" class="burger-menu-green-item"
+                        href="javascript:void(0);">Photography</a>
+                    <div *ngIf="openMobileDropdownMenu === 'photography'" id="mobile-photography-dropdown"
+                        [class.open]="openMobileDropdownMenu === 'photography'">
                         <a target="_blank" class="mobile-dropdown-link"
                             href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail">
                             <img id="adobe-stock-mobile-logo" [src]="darkmodePNG('adobe-stock-logo')"
-                                alt="adobe stock logo">Buy my photos
-                            on
-                            adobe
-                            stock
+                                alt="adobe stock logo">Buy my photos on adobe stock
                         </a>
                         <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-photography">
                             Landscape Gallery
@@ -111,20 +108,20 @@
                     </div>
 
                     <!-- Mobile Blog Menu -->
-                    <a (click)="toggleMobileDropdownMenu('blog')" #mobileBlogLink class="burger-menu-orange-item"
+                    <a (click)="toggleMobileDropdownMenu('blog')" class="burger-menu-orange-item"
                         href="javascript:void(0);">Blog</a>
-
-                    <div #mobileBlogDropdown id="mobile-blog-dropdown">
-                        <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-blog">
+                    <div *ngIf="openMobileDropdownMenu === 'blog'" id="mobile-blog-dropdown"
+                        [class.open]="openMobileDropdownMenu === 'blog'">
+                        <a href="javascript:void(0);" [class.open]="openMobileDropdownMenu === 'blog'">
                             MSFS Career addons comparison
                         </a>
                     </div>
 
                     <!-- Mobile Career Menu -->
-                    <a (click)="toggleMobileDropdownMenu('career')" #mobileCareerLink class="burger-menu-blue-item"
+                    <a (click)="toggleMobileDropdownMenu('career')" class="burger-menu-blue-item"
                         href="javascript:void(0);">Career</a>
-                    <div #mobileCareerDropdown id="mobile-career-dropdown">
-
+                    <div *ngIf="openMobileDropdownMenu === 'career'" id="mobile-career-dropdown"
+                        [class.open]="openMobileDropdownMenu === 'career'">
                         <a target="_blank" href="https://career.christian-boehme.com"
                             class="mobile-dropdown-link dropdown-link-career">
                             <img class="open-in-new-tab-icon" [src]="darkmodePNG('open-in-new-tab-icon')"
