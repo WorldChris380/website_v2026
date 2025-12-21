@@ -34,7 +34,7 @@ a {
 body.dark-mode #header-full-width {
     background-color: $cb-grey-ish !important;
     color: $cb-white-ish;
-    border-bottom: $cb-white-ish;
+    border-bottom: solid 1px $cb-white-ish;
 }
 
 body.dark-mode #page-heading {
@@ -51,6 +51,10 @@ body.dark-mode .dropdown-list {
 
 body.dark-mode .dropdown-link-photography:hover {
     background-color: $cb-green-ish !important;
+}
+
+body.dark-mode .dropdown-link-blog:hover {
+    background-color: $cb-orange-ish !important;
 }
 
 body.dark-mode .dropdown-link-career:hover {
@@ -92,6 +96,23 @@ body.dark-mode #burger-menu-content {
     & .burger-menu-blue-item:hover {
         background-color: $cb-blue-ish !important;
     }
+
+    & .burger-menu-orange-item:hover {
+        background-color: $cb-orange-ish !important;
+    }
+
+    & .dropdown-link-photography:hover {
+        background-color: $cb-green-ish !important;
+    }
+
+    & .dropdown-link-blog:hover {
+        background-color: $cb-orange-ish !important;
+    }
+
+    & .dropdown-link-career:hover {
+        background-color: $cb-blue-ish !important;
+    }
+
 }
 
 body.dark-mode #mobileBottomMenu {

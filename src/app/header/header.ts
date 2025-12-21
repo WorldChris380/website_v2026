@@ -59,53 +59,6 @@ export class Header {
     }
   }
 
-
-  //   if(menuItem === 'photography') {
-  //   if (this.mobilePhotographyDropdown.nativeElement.style.display === 'flex') {
-  //     this.burgerMenuMainContent.nativeElement.style.display = 'flex';
-  //     this.mobilePhotographyDropdown.nativeElement.style.display = 'none';
-  //     this.mobileBlogLink.nativeElement.style.display = 'flex';
-  //     this.mobileCareerLink.nativeElement.style.display = 'flex';
-  //     this.mobilePhotographyLink.nativeElement.style.fontWeight = 'normal';
-  //     this.goBackToMainMobileMenu.nativeElement.style.display = 'none';
-  //     return;
-  //   }
-  //   this.goBackToMainMobileMenu.nativeElement.style.display = 'flex';
-  //   this.mobilePhotographyDropdown.nativeElement.style.display = 'flex';
-  //   this.mobilePhotographyDropdown.nativeElement.style.flexDirection = 'column';
-  //   this.mobilePhotographyLink.nativeElement.style.fontWeight = 'bold';
-  //   this.mobileBlogLink.nativeElement.style.display = 'none';
-  //   this.mobileCareerLink.nativeElement.style.display = 'none';
-  // } else if (menuItem === 'blog') {
-  //   if (this.mobileBlogDropdown.nativeElement.style.display === 'flex') {
-  //     this.mobileBlogDropdown.nativeElement.style.display = 'none';
-  //     this.mobilePhotographyLink.nativeElement.style.display = 'flex';
-  //     this.mobileCareerLink.nativeElement.style.display = 'flex';
-  //     this.mobileBlogLink.nativeElement.style.fontWeight = 'normal';
-  //     return;
-  //   }
-  //   this.goBackToMainMobileMenu.nativeElement.style.display = 'flex';
-  //   this.mobileBlogDropdown.nativeElement.style.display = 'flex';
-  //   this.mobileBlogDropdown.nativeElement.style.flexDirection = 'column';
-  //   this.mobilePhotographyLink.nativeElement.style.display = 'none';
-  //   this.mobileCareerLink.nativeElement.style.display = 'none';
-  //   this.mobileBlogLink.nativeElement.style.fontWeight = 'bold';
-  // } else if (menuItem === 'career') {
-  //   if (this.mobileCareerDropdown.nativeElement.style.display === 'flex') {
-  //     this.mobileCareerDropdown.nativeElement.style.display = 'none';
-  //     this.mobilePhotographyLink.nativeElement.style.display = 'flex';
-  //     this.mobileBlogLink.nativeElement.style.display = 'flex';
-  //     this.mobileCareerLink.nativeElement.style.fontWeight = 'normal';
-  //     return;
-  //   } this.goBackToMainMobileMenu.nativeElement.style.display = 'flex';
-  //   this.mobileCareerDropdown.nativeElement.style.display = 'flex';
-  //   this.mobileCareerDropdown.nativeElement.style.flexDirection = 'column';
-  //   this.mobilePhotographyLink.nativeElement.style.display = 'none';
-  //   this.mobileBlogLink.nativeElement.style.display = 'none';
-  //   this.mobileCareerLink.nativeElement.style.fontWeight = 'bold';
-  // } return;
-  //   }
-
   goBackToMainMobileMenuFunc() {
     this.openMobileDropdownMenu = null;
   }

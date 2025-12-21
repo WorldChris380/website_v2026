@@ -94,7 +94,7 @@
                         href="javascript:void(0);">Photography</a>
                     <div *ngIf="openMobileDropdownMenu === 'photography'" id="mobile-photography-dropdown"
                         [class.open]="openMobileDropdownMenu === 'photography'">
-                        <a target="_blank" class="mobile-dropdown-link"
+                        <a target="_blank" class="mobile-dropdown-link dropdown-link-photography"
                             href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail">
                             <img id="adobe-stock-mobile-logo" [src]="darkmodePNG('adobe-stock-logo')"
                                 alt="adobe stock logo">Buy my photos on adobe stock
@@ -112,7 +112,8 @@
                         href="javascript:void(0);">Blog</a>
                     <div *ngIf="openMobileDropdownMenu === 'blog'" id="mobile-blog-dropdown"
                         [class.open]="openMobileDropdownMenu === 'blog'">
-                        <a href="javascript:void(0);" [class.open]="openMobileDropdownMenu === 'blog'">
+                        <a class="mobile-dropdown-link dropdown-link-blog" href="javascript:void(0);"
+                            [class.open]="openMobileDropdownMenu === 'blog'">
                             MSFS Career addons comparison
                         </a>
                     </div>
