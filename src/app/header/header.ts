@@ -1,34 +1,55 @@
-import { Component, ElementRef, HostListener, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-type MenuHeading = 'photography' | 'blog' | 'travel' | 'career';
+import { RouterModule } from '@angular/router';
+import { DarkModeService } from '../dark-mode.service';
+import { LanguageService, Language } from '../language.service';
+type MenuHeading = 'aviation' | 'blog' | 'travel' | 'career';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 
-export class Header {
+export class Header implements OnInit {
   darkmode: boolean = false;
+  currentLanguage: Language = 'en';
   burgerMenuOpen: boolean = false;
   burgerMenuClosing: boolean = false;
   openDesktopDropdownMenu: MenuHeading | null = null;
+  openDesktopSubDropdownMenu: string | null = null;
   openMobileDropdownMenu: MenuHeading | null = null;
 
+  constructor(
+    private darkModeService: DarkModeService,
+    private languageService: LanguageService,
+    private cdr: ChangeDetectorRef
+  ) { }
+
   ngOnInit() {
-    let darkmodeLocalStorage = localStorage.getItem('darkmode');
-    if (darkmodeLocalStorage === 'true') {
-      this.darkmode = true;
-    } else {
-      this.darkmode = false;
-    }
-    document.body.classList.toggle('dark-mode', this.darkmode);
+    // Subscribe to Dark Mode changes
+    this.darkmode = this.darkModeService.isDarkMode();
+    this.darkModeService.darkmode$.subscribe((isDark) => {
+      this.darkmode = isDark;
+      this.cdr.markForCheck();
+    });
+
+    // Subscribe to Language changes
+    this.currentLanguage = this.languageService.getCurrentLanguage();
+    this.languageService.language$.subscribe((lang) => {
+      this.currentLanguage = lang;
+      this.cdr.markForCheck();
+    });
   }
 
   setDesktopDropdown(menuItem: MenuHeading | null) {
     this.openDesktopDropdownMenu = menuItem;
+  }
+
+  setDesktopSubDropdown(submenuItem: string | null) {
+    this.openDesktopSubDropdownMenu = submenuItem;
   }
 
   toggleBurgerMenu() {
@@ -63,18 +84,25 @@ export class Header {
     this.openMobileDropdownMenu = null;
   }
 
-  // Dark mode implementation and logo and icons adjustments
+  // Dark mode implementation
   toggleDarkMode() {
-    this.darkmode = !this.darkmode;
-    document.body.classList.toggle('dark-mode', this.darkmode);
-    localStorage.setItem("darkmode", this.darkmode ? "true" : "false");
+    this.darkModeService.toggleDarkMode();
+  }
+
+  // Language implementation
+  toggleLanguage() {
+    this.languageService.toggleLanguage();
+  }
+
+  getTranslation(key: string): string {
+    return this.languageService.getTranslation(key);
   }
 
   darkmodePNG(name: string) {
-    if (this.darkmode) {
-      return `/assets/img/icons-and-logos/${name}-white.png`;
-    } else {
-      return `/assets/img/icons-and-logos/${name}-black.png`;
-    }
+    return this.darkModeService.darkmodePNG(name);
+  }
+
+  darkmodeSVG(name: string) {
+    return this.darkModeService.darkmodeSVG(name);
   }
 }

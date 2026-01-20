@@ -1,3 +1,33 @@
+app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+app-root {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
 app-header {
-    position: sticky;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    width: 100%;
+}
+
+router-outlet {
+    flex: 1;
+    display: block;
+}
+
+app-footer {
+    margin-top: auto;
+}
+
+app-footer {
+    margin-top: auto;
 }

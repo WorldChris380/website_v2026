@@ -2,9 +2,22 @@
 $cb-white-ish: white;
 $cb-grey-ish: #1f1f1f;
 $cb-green-ish: #d2ee82;
+$cb-dark-green-ish: #5e784d;
 $cb-blue-ish: #89BCD9;
 $cb-orange-ish: #fbc093;
 $cb-red-ish: #f28c8c;
+
+/* Expose key colors as CSS variables so component scss can consume them */
+:root {
+    --cb-dark-grey: #{$cb-grey-ish};
+    --cb-white-ish: #{$cb-white-ish};
+}
+
+/* Dark mode CSS variables override */
+body.dark-mode {
+    --cb-dark-grey: #{$cb-white-ish};
+    --cb-white-ish: #{$cb-grey-ish};
+}
 
 // Font import
 @font-face {
@@ -20,16 +33,38 @@ $cb-red-ish: #f28c8c;
     font-family: "Quicksand", sans-serif;
 }
 
+html {
+    height: 100%;
+}
+
 body {
+    height: 100%;
     margin: 0 !important;
     padding: 0;
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
 }
 
 a {
     text-decoration: none;
 }
 
+a:visited {
+    color: $cb-grey-ish;
+}
+
 // Dark mode styles
+
+/* Global dark background + base text color */
+body.dark-mode {
+    background-color: #121212;
+    color: #e5e5e5;
+}
+
+body.dark-mode a:visited {
+    color: $cb-white-ish;
+}
 
 body.dark-mode #header-full-width {
     background-color: $cb-grey-ish !important;
@@ -53,12 +88,20 @@ body.dark-mode .dropdown-link-photography:hover {
     background-color: $cb-green-ish !important;
 }
 
+body.dark-mode .dropdown-link-aviation:hover {
+    background-color: $cb-blue-ish !important;
+}
+
 body.dark-mode .dropdown-link-blog:hover {
     background-color: $cb-orange-ish !important;
 }
 
 body.dark-mode .dropdown-link-career:hover {
     background-color: $cb-blue-ish !important;
+}
+
+body.dark-mode .dropdown-link-travel:hover {
+    background-color: $cb-dark-green-ish !important;
 }
 
 body.dark-mode .dropdown-link {
@@ -97,12 +140,20 @@ body.dark-mode #burger-menu-content {
         background-color: $cb-blue-ish !important;
     }
 
+    & .burger-menu-dark-green-item:hover {
+        background-color: $cb-dark-green-ish !important;
+    }
+
     & .burger-menu-orange-item:hover {
         background-color: $cb-orange-ish !important;
     }
 
     & .dropdown-link-photography:hover {
         background-color: $cb-green-ish !important;
+    }
+
+    & .dropdown-link-aviation:hover {
+        background-color: $cb-blue-ish !important;
     }
 
     & .dropdown-link-blog:hover {
@@ -118,4 +169,34 @@ body.dark-mode #burger-menu-content {
 body.dark-mode #mobileBottomMenu {
     border-top: 1px solid $cb-white-ish;
     background-color: $cb-grey-ish !important;
+}
+
+// Dark mode for counters
+body.dark-mode .counter-card {
+    background: #2a2a2a;
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .counter-number {
+    color: #fff;
+}
+
+body.dark-mode .counter-label {
+    color: #fff;
+    opacity: 0.9;
+}
+
+body.dark-mode .placeholder {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.05) 75%);
+}
+
+// Footer
+
+body.dark-mode #footer-full-width {
+    background-color: $cb-grey-ish;
+
+    & div {
+        color: $cb-white-ish;
+    }
 }

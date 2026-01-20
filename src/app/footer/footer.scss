@@ -1,0 +1,61 @@
+@use '../../styles.scss' as *;
+
+#footer-full-width {
+    border-top: solid 1px $cb-grey-ish;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80px;
+    background-color: $cb-white-ish;
+}
+
+#footer-content-limitation {
+    max-width: 1920px;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
+}
+
+#first-footer-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#second-footer-column {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    gap: 16px;
+
+    a {
+        color: #000000;
+        text-decoration: none;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}
+
+:host-context(.dark-mode) {
+    #second-footer-column {
+        a {
+            color: $cb-white-ish;
+        }
+    }
+}
+
+#third-footer-column {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+
+    .github-logo {
+        width: 20px;
+        height: 20px;
+    }
+}

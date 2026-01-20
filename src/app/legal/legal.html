@@ -1,0 +1,407 @@
+<div class="legal-container">
+    <div class="legal-header">
+        <h1>{{ currentLanguage === 'en' ? 'Legal Information' : 'Rechtliche Informationen' }}</h1>
+        <p>{{ currentLanguage === 'en' ? 'Impressum, Privacy Policy & Terms of Service' : 'Impressum, Datenschutz &
+            Nutzungsbedingungen' }}</p>
+    </div>
+
+    <div class="legal-tabs">
+        <button class="tab-button" [class.active]="activeTab === 'impressum'" (click)="switchTab('impressum')">
+            {{ currentLanguage === 'en' ? 'Impressum' : 'Impressum' }}
+        </button>
+        <button class="tab-button" [class.active]="activeTab === 'privacy'" (click)="switchTab('privacy')">
+            {{ currentLanguage === 'en' ? 'Privacy Policy' : 'Datenschutz' }}
+        </button>
+        <button class="tab-button" [class.active]="activeTab === 'terms'" (click)="switchTab('terms')">
+            {{ currentLanguage === 'en' ? 'Terms of Service' : 'Nutzungsbedingungen' }}
+        </button>
+    </div>
+
+    <div class="legal-content">
+        <!-- IMPRESSUM -->
+        <div class="tab-content" *ngIf="activeTab === 'impressum'">
+            <h2>{{ currentLanguage === 'en' ? 'Impressum (Legal Notice)' : 'Impressum (Rechtliche Kennzeichnung)' }}
+            </h2>
+
+            <h3>{{ currentLanguage === 'en' ? 'Information Provided According to § 5 TMG (Telemediengesetz)' :
+                'Informationen gemäß § 5 TMG (Telemediengesetz)' }}</h3>
+
+            <div class="section">
+                <h4>{{ currentLanguage === 'en' ? 'Responsible Party' : 'Verantwortlicher' }}</h4>
+                <p>
+                    Christian Böhme<br>
+                    <em>{{ currentLanguage === 'en' ? 'Private Address (on Request)' : 'Private Adresse (auf Anfrage)'
+                        }}</em><br>
+                    Germany
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Contact Information</h4>
+                <p>
+                    Email: <a href="mailto:contact@christian-boehme.com">contact@christian-boehme.com</a><br>
+                    Website: <a href="https://www.christian-boehme.com" target="_blank">www.christian-boehme.com</a>
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>VAT Identification Number</h4>
+                <p>
+                    Upon request, the German VAT identification number will be provided in accordance with § 27a UStG
+                    (Umsatzsteuergesetz - Sales Tax Act).
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Responsible for Content</h4>
+                <p>
+                    Christian Böhme is responsible for the content of this website in accordance with § 7 Abs. 1 TMG
+                    and § 6 Abs. 1 MDStV (Mediendienste-Staatsvertrag).
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Liability for Content</h4>
+                <p>
+                    The contents of this website have been carefully compiled and are provided as-is. However,
+                    Christian Böhme assumes no liability for the accuracy, completeness, or up-to-dateness of the
+                    information provided. This applies in particular to all offers, prices, and descriptions of
+                    services. The operator reserves the right to modify, add to, or delete any part of the website
+                    or its content, or to interrupt or terminate the operation of the website at any time without
+                    notice.
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Liability for Links</h4>
+                <p>
+                    This website contains links to external websites. Christian Böhme is not responsible for the
+                    content of external websites. The website operator is responsible only for the content of his
+                    own website according to general laws. However, the website operator is responsible for ensuring
+                    that linked pages do not violate applicable laws. The linked pages were checked for legal violations
+                    at the time the link was established.
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Copyright and Intellectual Property</h4>
+                <p>
+                    The layout, graphics, logos, and other content of this website are protected by copyright laws.
+                    Reproduction, modification, or distribution of the content is prohibited without the prior written
+                    consent of Christian Böhme. All rights reserved.
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Dispute Resolution</h4>
+                <p>
+                    The European Commission provides a platform for online dispute resolution (ODR) at
+                    <a href="https://ec.europa.eu/consumers/odr/"
+                        target="_blank">https://ec.europa.eu/consumers/odr/</a>.
+                    Christian Böhme is neither obliged nor willing to participate in dispute resolution proceedings
+                    before consumer arbitration boards.
+                </p>
+            </div>
+        </div>
+
+        <!-- PRIVACY POLICY -->
+        <div class="tab-content" *ngIf="activeTab === 'privacy'">
+            <h2>Privacy Policy</h2>
+
+            <h3>1. Introduction</h3>
+            <p>
+                This privacy policy explains how Christian Böhme ("we" or "us" or "our") collects, uses, discloses,
+                and otherwise processes personal information in connection with our website and services.
+            </p>
+
+            <div class="section">
+                <h3>2. Data Controller</h3>
+                <p>
+                    Christian Böhme<br>
+                    Email: <a href="mailto:contact@christian-boehme.com">contact@christian-boehme.com</a>
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>3. Information We Collect</h3>
+                <p><strong>Automatically Collected Information:</strong></p>
+                <ul>
+                    <li>IP address</li>
+                    <li>Browser type and version</li>
+                    <li>Operating system</li>
+                    <li>Pages visited and duration of visit</li>
+                    <li>Referrer URL</li>
+                    <li>Device information</li>
+                </ul>
+                <p><strong>Information You Provide:</strong></p>
+                <ul>
+                    <li>Contact form submissions</li>
+                    <li>Email inquiries</li>
+                    <li>Any other information voluntarily provided</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>4. Purpose of Data Processing</h3>
+                <p>We process personal information for the following purposes:</p>
+                <ul>
+                    <li>Website operation and maintenance</li>
+                    <li>Responding to user inquiries</li>
+                    <li>Improving website functionality and user experience</li>
+                    <li>Analyzing website usage patterns</li>
+                    <li>Complying with legal obligations</li>
+                    <li>Preventing fraud and ensuring security</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>5. Legal Basis for Processing</h3>
+                <p>
+                    According to Article 6 GDPR, we process personal information based on:
+                </p>
+                <ul>
+                    <li>Your consent (Article 6(1)(a))</li>
+                    <li>Legitimate interests (Article 6(1)(f))</li>
+                    <li>Compliance with legal obligations (Article 6(1)(c))</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>6. Data Retention</h3>
+                <p>
+                    We retain personal information only as long as necessary to fulfill the purposes outlined in this
+                    policy or as required by law. Log files are typically retained for 30 days. Contact form data is
+                    retained for 6 months unless a longer retention period is required by law.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>7. Cookies and Tracking Technologies</h3>
+                <p>
+                    Our website may use cookies and similar tracking technologies to enhance user experience. You may
+                    disable cookies through your browser settings. Please note that disabling cookies may affect the
+                    functionality of certain website features.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>8. Third-Party Services</h3>
+                <p>
+                    Our website may integrate third-party services such as:
+                </p>
+                <ul>
+                    <li>Analytics services (e.g., Google Analytics)</li>
+                    <li>Content delivery networks (CDN)</li>
+                    <li>Hosting providers</li>
+                </ul>
+                <p>
+                    These services may process personal information according to their own privacy policies. We are not
+                    responsible for the data practices of third parties.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>9. User Rights</h3>
+                <p>
+                    Under the GDPR, you have the following rights:
+                </p>
+                <ul>
+                    <li><strong>Right to Access:</strong> Request access to your personal information</li>
+                    <li><strong>Right to Rectification:</strong> Request correction of inaccurate data</li>
+                    <li><strong>Right to Erasure:</strong> Request deletion of your data</li>
+                    <li><strong>Right to Restrict Processing:</strong> Request limitation of data processing</li>
+                    <li><strong>Right to Data Portability:</strong> Request export of your data</li>
+                    <li><strong>Right to Object:</strong> Object to certain types of processing</li>
+                    <li><strong>Right to Lodge a Complaint:</strong> File a complaint with a data protection authority
+                    </li>
+                </ul>
+                <p>
+                    To exercise these rights, please contact:
+                    <a href="mailto:contact@christian-boehme.com">contact@christian-boehme.com</a>
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>10. Data Security</h3>
+                <p>
+                    We implement appropriate technical and organizational measures to protect personal information
+                    against unauthorized access, alteration, disclosure, or destruction. However, no method of
+                    transmission over the internet is completely secure, and we cannot guarantee absolute security.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>11. International Data Transfers</h3>
+                <p>
+                    Personal information may be transferred to, stored in, and processed in countries other than your
+                    country of residence. These countries may not have the same data protection laws as your home
+                    country.
+                    By using our website, you consent to any such transfers.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>12. Children's Privacy</h3>
+                <p>
+                    Our website is not intended for children under 13 years of age. We do not knowingly collect personal
+                    information from children under 13. If we become aware that we have collected personal information
+                    from a child under 13, we will take steps to delete such information immediately.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>13. Changes to This Privacy Policy</h3>
+                <p>
+                    We may update this privacy policy from time to time to reflect changes in our practices or
+                    applicable
+                    law. We will notify you of material changes by updating the "Last Updated" date at the bottom of
+                    this
+                    policy. Your continued use of our website constitutes your acceptance of the updated privacy policy.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>14. Contact Us</h3>
+                <p>
+                    If you have questions or concerns about this privacy policy or our data practices, please contact us
+                    at:<br>
+                    Email: <a href="mailto:contact@christian-boehme.com">contact@christian-boehme.com</a>
+                </p>
+                <p><em>Last Updated: January 2026</em></p>
+            </div>
+        </div>
+
+        <!-- TERMS OF SERVICE -->
+        <div class="tab-content" *ngIf="activeTab === 'terms'">
+            <h2>Terms of Service</h2>
+
+            <h3>1. Acceptance of Terms</h3>
+            <p>
+                By accessing and using this website (www.christian-boehme.com), you accept and agree to be bound by
+                the terms and provision of this agreement. If you do not agree to abide by the above,
+                please do not use this service.
+            </p>
+
+            <div class="section">
+                <h3>2. Use License</h3>
+                <p>
+                    Permission is granted to temporarily download one copy of the materials (information or software)
+                    on Christian Böhme's website for personal, non-commercial transitory viewing only. This is the grant
+                    of a license, not a transfer of title, and under this license you may not:
+                </p>
+                <ul>
+                    <li>Modify or copy the materials</li>
+                    <li>Use the materials for any commercial purpose or for any public display</li>
+                    <li>Attempt to decompile or reverse engineer any software on the website</li>
+                    <li>Remove any copyright or other proprietary notations from the materials</li>
+                    <li>Transfer the materials to another person or "mirror" the materials on any other server</li>
+                    <li>Violate any laws or regulations applicable to the website</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>3. Disclaimer</h3>
+                <p>
+                    The materials on Christian Böhme's website are provided on an 'as is' basis. Christian Böhme makes
+                    no warranties, expressed or implied, and hereby disclaims and negates all other warranties
+                    including,
+                    without limitation, implied warranties or conditions of merchantability, fitness for a particular
+                    purpose, or non-infringement of intellectual property or other violation of rights.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>4. Limitations</h3>
+                <p>
+                    In no event shall Christian Böhme or its suppliers be liable for any damages (including, without
+                    limitation,
+                    damages for loss of data or profit, or due to business interruption) arising out of the use or
+                    inability
+                    to use the materials on Christian Böhme's website, even if Christian Böhme or an authorized
+                    representative
+                    has been notified orally or in writing of the possibility of such damage.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>5. Accuracy of Materials</h3>
+                <p>
+                    The materials appearing on Christian Böhme's website could include technical, typographical, or
+                    photographic errors. Christian Böhme does not warrant that any of the materials on the website are
+                    accurate, complete, or current. Christian Böhme may make changes to the materials contained on the
+                    website at any time without notice. However, Christian Böhme does not commit to updating the
+                    materials.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>6. Links</h3>
+                <p>
+                    Christian Böhme has not reviewed all of the sites linked to its website and is not responsible for
+                    the contents of any such linked site. The inclusion of any link does not imply endorsement by
+                    Christian Böhme of the site. Use of any such linked website is at the user's own risk.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>7. Modifications</h3>
+                <p>
+                    Christian Böhme may revise these terms of service for its website at any time without notice.
+                    By using this website, you are agreeing to be bound by the then current version of these terms of
+                    service.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>8. Governing Law</h3>
+                <p>
+                    These terms and conditions are governed by and construed in accordance with the laws of Germany,
+                    and you irrevocably submit to the exclusive jurisdiction of the courts located in Germany.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>9. Prohibited Conduct</h3>
+                <p>
+                    You agree not to use this website:
+                </p>
+                <ul>
+                    <li>To harass, abuse, or threaten others</li>
+                    <li>To post unlawful, obscene, or offensive content</li>
+                    <li>To attempt unauthorized access to the website</li>
+                    <li>To engage in spamming or phishing activities</li>
+                    <li>To spread viruses or malware</li>
+                    <li>To violate intellectual property rights</li>
+                    <li>To use automated tools to scrape or crawl the website</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>10. Limitation of Liability</h3>
+                <p>
+                    To the maximum extent permitted by applicable law, in no case shall Christian Böhme, its owners,
+                    employees, or agents be liable to you for any direct, indirect, incidental, special, punitive,
+                    or consequential damages whatsoever that result from any use of, or inability to use, the website
+                    or any content or service available through the website.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>11. Entire Agreement</h3>
+                <p>
+                    These terms and conditions constitute the entire agreement between you and Christian Böhme and
+                    supersede and render void any prior negotiations, representations, or agreements.
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>12. Contact Information</h3>
+                <p>
+                    If you have any questions about these terms of service, please contact us at:<br>
+                    Email: <a href="mailto:contact@christian-boehme.com">contact@christian-boehme.com</a>
+                </p>
+                <p><em>Last Updated: January 2026</em></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -8,31 +8,52 @@
         </div>
 
         <div id="header-navigation-div">
-            <!-- Photography Menu -->
-            <div class="complete-menu-div" (mouseenter)="setDesktopDropdown('photography')"
+            <!-- Aviation Menu -->
+            <div class="complete-menu-div" (mouseenter)="setDesktopDropdown('aviation')"
                 (mouseleave)="setDesktopDropdown(null)">
-                <a class=" menu-link" id="menu-link-photography" href="javascript:void(0);">
-                    <nav class="nav-item" id="photography-nav">Photography</nav>
+                <a class=" menu-link" id="menu-link-aviation" href="javascript:void(0);">
+                    <nav class="nav-item" id="aviation-nav">{{ getTranslation('aviation') }}</nav>
                 </a>
-                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'photography'">
+                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'aviation'">
                     <a target="_blank"
                         href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
-                        class="dropdown-link dropdown-link-photography">
-                        <img class="adobe-stock-logo" [src]="darkmodePNG('adobe-stock-logo')" alt="adobe stock logo">Buy
-                        my
-                        photos on
-                        adobe stock
+                        class="dropdown-link dropdown-link-aviation">
+                        <img class="adobe-stock-logo" [src]="darkmodePNG('adobe-stock-logo')" alt="adobe stock logo">{{
+                        getTranslation('buyPhotos') }}
                     </a>
-                    <a href="/" class="dropdown-link dropdown-link-photography">
-                        Landscape Gallery
+                    <a [routerLink]="['/gallery']" [queryParams]="{filter: 'aviation'}"
+                        class="dropdown-link dropdown-link-aviation">
+                        {{ getTranslation('aviationGallery') }}
                     </a>
-                    <a href="/" class="dropdown-link dropdown-link-photography last-link-in-dropdown">
-                        Aviation Gallery
+                    <a href="/aviation-spotter-hotels" class="dropdown-link dropdown-link-aviation">
+                        {{ getTranslation('aviationSpotterHotels') }}
+                    </a>
+                    <a href="/" class="dropdown-link dropdown-link-aviation last-link-in-dropdown">
+                        {{ getTranslation('msfsComparison') }}
                     </a>
                 </div>
             </div>
-            <!-- Blog Menu -->
-            <div class="complete-menu-div" (mouseenter)="setDesktopDropdown('blog')"
+            <!-- Travel Menu -->
+            <div class="complete-menu-div" (mouseenter)="setDesktopDropdown('travel')"
+                (mouseleave)="setDesktopDropdown(null)">
+                <a class="menu-link" id="menu-link-travel" href="javascript:void(0);">
+                    <nav class="nav-item" id="travel-nav">{{ getTranslation('travel') }}</nav>
+                </a>
+                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'travel'">
+                    <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}"
+                        class="dropdown-link dropdown-link-travel">
+                        {{ getTranslation('travelGallery') }}
+                    </a>
+                    <a href="/photography-travels" class="dropdown-link dropdown-link-travel">
+                        {{ getTranslation('photographyTravels') }}
+                    </a>
+                    <a href="/my-visited-countries" class="dropdown-link dropdown-link-travel last-link-in-dropdown">
+                        {{ getTranslation('myVisitedCountries') }}
+                    </a>
+                </div>
+            </div>
+            <!-- Blog Menu - Disabled -->
+            <div class="complete-menu-div" style="display: none;" (mouseenter)="setDesktopDropdown('blog')"
                 (mouseleave)="setDesktopDropdown(null)">
                 <a class="menu-link" id="menu-link-blog" href="javascript:void(0);">
                     <nav class="nav-item" id="blog-nav">Blog</nav>
@@ -47,28 +68,54 @@
             <div (mouseenter)="setDesktopDropdown('career')" (mouseleave)="setDesktopDropdown(null)"
                 class="complete-menu-div">
                 <a class="menu-link" id="menu-link-career" href="javascript:void(0);">
-                    <nav id="career-nav">Career</nav>
+                    <nav id="career-nav">{{ getTranslation('myCareer') }}</nav>
                 </a>
                 <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'career'">
+                    <div class="dropdown-submenu-wrapper" (mouseenter)="setDesktopSubDropdown('cv-sections')"
+                        (mouseleave)="setDesktopSubDropdown(null)">
+                        <a [routerLink]="['/career']"
+                            class="dropdown-link dropdown-link-career dropdown-submenu-parent">
+                            {{ getTranslation('viewCV') }}
+                        </a>
+                        <div class="dropdown-sublist" [class.open]="openDesktopSubDropdownMenu === 'cv-sections'">
+                            <a [routerLink]="['/career']" [fragment]="'profile'" class="dropdown-sublink">{{
+                                getTranslation('profile') }}</a>
+                            <a [routerLink]="['/career']" [fragment]="'experience'" class="dropdown-sublink">{{
+                                getTranslation('experience') }}</a>
+                            <a [routerLink]="['/career']" [fragment]="'education'" class="dropdown-sublink">{{
+                                getTranslation('education') }}</a>
+                            <a [routerLink]="['/career']" [fragment]="'skills'" class="dropdown-sublink">{{
+                                getTranslation('skillsCertifications') }}</a>
+                            <a [routerLink]="['/career']" [fragment]="'projects'" class="dropdown-sublink">{{
+                                getTranslation('projects') }}</a>
+                            <a [routerLink]="['/career']" [fragment]="'testimonials'" class="dropdown-sublink">{{
+                                getTranslation('testimonials') }}</a>
+                        </div>
+                    </div>
                     <a target="_blank" href="https://career.christian-boehme.com"
                         class="dropdown-link dropdown-link-career">
                         <img class="open-in-new-tab-icon" [src]="darkmodePNG('open-in-new-tab-icon')"
-                            alt="open in new tab icon">Career
-                        Website
+                            alt="open in new tab icon">{{ getTranslation('myCareerPage') }}
                     </a>
                     <a target="_blank" href="https://github.com/WorldChris380"
                         class="dropdown-link dropdown-link-career">
-                        <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">GitHub Profile
+                        <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">{{
+                        getTranslation('github') }}
                     </a>
                     <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
                         class="dropdown-link dropdown-link-career last-link-in-dropdown">
-                        <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">
-                        LinkedIn Profile
+                        <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">{{
+                        getTranslation('linkedin') }}
                     </a>
                 </div>
             </div>
         </div>
         <div id="header-3rd-row-div">
+            <span (click)="toggleLanguage()" id="language-toggle" [title]="getTranslation('toggleLanguage')">
+                <img class="flag-icon"
+                    [src]="currentLanguage === 'en' ? darkmodeSVG('flag-de') : darkmodeSVG('flag-gb')"
+                    [alt]="currentLanguage === 'en' ? 'German Flag' : 'UK Flag'">
+            </span>
             <span (click)="toggleDarkMode()" id="moon-icon"><img [src]="darkmodePNG('mode-icon')" alt="Darkmode Icon">
             </span>
             <span (click)="toggleDarkMode()" id="light-icon"><img [src]="darkmodePNG('mode-icon')"
@@ -88,61 +135,86 @@
         <div id="burger-menu-main-content">
 
             <a (click)="goBackToMainMobileMenuFunc()" class="goBackToMainMobileMenu" href="javascript:void(0)">
-                < go back </a>
-                    <!-- Mobile Photography Menu -->
-                    <a (click)="toggleMobileDropdownMenu('photography')" class="burger-menu-green-item"
-                        href="javascript:void(0);">Photography</a>
-                    <div *ngIf="openMobileDropdownMenu === 'photography'" id="mobile-photography-dropdown"
-                        [class.open]="openMobileDropdownMenu === 'photography'">
-                        <a target="_blank" class="mobile-dropdown-link dropdown-link-photography"
+                < Go Back </a>
+                    <!-- Mobile Aviation Menu -->
+                    <a (click)="toggleMobileDropdownMenu('aviation')" class="burger-menu-blue-item"
+                        href="javascript:void(0);">{{ getTranslation('aviation') }}</a>
+                    <div *ngIf="openMobileDropdownMenu === 'aviation'" id="mobile-aviation-dropdown"
+                        [class.open]="openMobileDropdownMenu === 'aviation'">
+                        <a target="_blank" class="mobile-dropdown-link dropdown-link-aviation"
                             href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail">
                             <img id="adobe-stock-mobile-logo" [src]="darkmodePNG('adobe-stock-logo')"
-                                alt="adobe stock logo">Buy my photos on adobe stock
+                                alt="adobe stock logo">{{ getTranslation('buyPhotos') }}
                         </a>
-                        <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-photography">
-                            Landscape Gallery
+                        <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-aviation">
+                            {{ getTranslation('aviationGallery') }}
                         </a>
-                        <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-photography">
-                            Aviation Gallery
+                        <a href="/aviation-spotter-hotels" class="mobile-dropdown-link dropdown-link-aviation">
+                            {{ getTranslation('aviationSpotterHotels') }}
+                        </a>
+                        <a href="/" class="mobile-dropdown-link dropdown-link-aviation">
+                            {{ getTranslation('msfsComparison') }}
                         </a>
                     </div>
 
-                    <!-- Mobile Blog Menu -->
-                    <a (click)="toggleMobileDropdownMenu('blog')" class="burger-menu-orange-item"
+                    <!-- Mobile Travel Menu -->
+                    <a (click)="toggleMobileDropdownMenu('travel')" class="burger-menu-dark-green-item"
+                        href="javascript:void(0);">{{ getTranslation('travel') }}</a>
+                    <div *ngIf="openMobileDropdownMenu === 'travel'" id="mobile-travel-dropdown"
+                        [class.open]="openMobileDropdownMenu === 'travel'">
+                        <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-travel">
+                            {{ getTranslation('travelGallery') }}
+                        </a>
+                        <a href="/photography-travels" class="mobile-dropdown-link dropdown-link-travel">
+                            {{ getTranslation('photographyTravels') }}
+                        </a>
+                        <a href="/my-visited-countries" class="mobile-dropdown-link dropdown-link-travel">
+                            {{ getTranslation('myVisitedCountries') }}
+                        </a>
+                    </div>
+
+                    <!-- Mobile Blog Menu - Disabled -->
+                    <a style="display: none;" (click)="toggleMobileDropdownMenu('blog')" class="burger-menu-orange-item"
                         href="javascript:void(0);">Blog</a>
-                    <div *ngIf="openMobileDropdownMenu === 'blog'" id="mobile-blog-dropdown"
+                    <div style="display: none;" *ngIf="openMobileDropdownMenu === 'blog'" id="mobile-blog-dropdown"
                         [class.open]="openMobileDropdownMenu === 'blog'">
-                        <a class="mobile-dropdown-link dropdown-link-blog" href="javascript:void(0);"
-                            [class.open]="openMobileDropdownMenu === 'blog'">
+                        <a class="mobile-dropdown-link dropdown-link-blog" href="javascript:void(0);">
                             MSFS Career addons comparison
                         </a>
                     </div>
 
                     <!-- Mobile Career Menu -->
                     <a (click)="toggleMobileDropdownMenu('career')" class="burger-menu-blue-item"
-                        href="javascript:void(0);">Career</a>
+                        href="javascript:void(0);">{{ getTranslation('myCareer') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'career'" id="mobile-career-dropdown"
                         [class.open]="openMobileDropdownMenu === 'career'">
+                        <a [routerLink]="['/career']" class="mobile-dropdown-link dropdown-link-career">
+                            {{ getTranslation('viewCV') }}
+                        </a>
                         <a target="_blank" href="https://career.christian-boehme.com"
                             class="mobile-dropdown-link dropdown-link-career">
                             <img class="open-in-new-tab-icon" [src]="darkmodePNG('open-in-new-tab-icon')"
-                                alt="open in new tab icon">Career
-                            Website
+                                alt="open in new tab icon">{{ getTranslation('myCareerPage') }}
                         </a>
                         <a target="_blank" href="https://github.com/WorldChris380"
                             class="mobile-dropdown-link dropdown-link-career">
-                            <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">GitHub
-                            Profile
+                            <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">{{
+                            getTranslation('github') }}
                         </a>
                         <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
                             class="mobile-dropdown-link dropdown-link-career">
-                            <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">
-                            LinkedIn Profile
+                            <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">{{
+                            getTranslation('linkedin') }}
                         </a>
                     </div>
         </div>
         <div id="mobileBottomMenu">
             <div id="mobile-bottom-Menu-first-coloum">
+                <span (click)="toggleLanguage()" id="language-toggle-mobile" [title]="getTranslation('toggleLanguage')">
+                    <img class="flag-icon"
+                        [src]="currentLanguage === 'en' ? darkmodeSVG('flag-de') : darkmodeSVG('flag-gb')"
+                        [alt]="currentLanguage === 'en' ? 'German Flag' : 'UK Flag'">
+                </span>
                 <span (click)="toggleDarkMode()" id="moon-icon-burger"><img [src]="darkmodePNG('mode-icon')"
                         alt="icon for turning on dark mode">
                 </span>

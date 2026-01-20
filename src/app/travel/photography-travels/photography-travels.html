@@ -1,0 +1,59 @@
+<div class="page-wrapper">
+    <main class="photography-travels-main">
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Photography Travels</h1>
+                <p>Discover breathtaking destinations through the lens of a professional photographer</p>
+            </div>
+            <div class="hero-background"></div>
+        </section>
+
+        <section class="gallery-section">
+            <div class="section-header">
+                <h2>My Travel Galleries</h2>
+                <p>A collection of photographs from the most beautiful places in the world</p>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="gallery-card">
+                    <div class="card-image placeholder-image-1"></div>
+                    <div class="card-content">
+                        <h3>Mountains & Nature</h3>
+                        <p>Majestic mountain landscapes and natural wonders</p>
+                        <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="card-link">View Gallery
+                            →</a>
+                    </div>
+                </div>
+
+                <div class="gallery-card">
+                    <div class="card-image placeholder-image-2"></div>
+                    <div class="card-content">
+                        <h3>City Explorations</h3>
+                        <p>Urban landscapes and architectural beauty</p>
+                        <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="card-link">View Gallery
+                            →</a>
+                    </div>
+                </div>
+
+                <div class="gallery-card">
+                    <div class="card-image placeholder-image-3"></div>
+                    <div class="card-content">
+                        <h3>Sea & Beach</h3>
+                        <p>Coastal photography and maritime adventures</p>
+                        <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="card-link">View Gallery
+                            →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2>Ready for an Adventure?</h2>
+                <p>Discover more photos and learn more about my travels</p>
+                <a href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com" target="_blank"
+                    class="cta-button">All Photos on Adobe Stock</a>
+            </div>
+        </section>
+    </main>
+</div>

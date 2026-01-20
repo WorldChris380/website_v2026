@@ -11,6 +11,11 @@
     justify-content: center;
     align-items: center;
     border-bottom: 1px solid $cb-grey-ish;
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
 
     &:hover #header-logo-div img {
         transform: rotate(1360deg);
@@ -79,6 +84,10 @@ nav {
     background: $cb-green-ish;
 }
 
+#aviation-nav:hover {
+    background: $cb-blue-ish;
+}
+
 #blog-nav:hover {
     background: $cb-orange-ish;
 }
@@ -92,9 +101,37 @@ nav {
     color: $cb-grey-ish;
     font-size: 20px;
     padding: 4px;
-    min-width: 50px;
+    min-width: 80px;
     display: flex;
     justify-content: end;
+    gap: 12px;
+    align-items: center;
+}
+
+#language-toggle {
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 2px solid transparent;
+    user-select: none;
+
+    .flag-icon {
+        width: 24px;
+        height: 16px;
+        display: inline-block;
+        object-fit: contain;
+    }
+}
+
+// Dark Mode - Language Toggle
+:host-context(body.dark-mode) {
+    #language-toggle {
+        // No additional dark mode styles needed
+    }
 }
 
 //Dropdown menu
@@ -113,10 +150,11 @@ nav {
     border-radius: 0 0 4px 4px;
     border-top: 1px solid $cb-grey-ish;
     gap: 4px;
-    overflow: hidden;
+    overflow: visible;
     max-height: 0;
     opacity: 0;
-    transition: max-height 1.5s ease;
+    z-index: 999;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
     pointer-events: none;
 }
 
@@ -129,6 +167,11 @@ nav {
 .complete-menu-div {
     position: relative;
     min-width: 160px;
+    z-index: 999;
+
+    &:hover .dropdown-list {
+        pointer-events: auto;
+    }
 }
 
 .complete-menu-div:hover .nav-item {
@@ -139,8 +182,12 @@ nav {
     background-color: $cb-green-ish;
 }
 
-.complete-menu-div:hover #blog-nav {
-    background-color: $cb-orange-ish;
+.complete-menu-div:hover #aviation-nav {
+    background-color: $cb-blue-ish;
+}
+
+.complete-menu-div:hover #travel-nav {
+    background-color: $cb-dark-green-ish;
 }
 
 .complete-menu-div:hover #career-nav {
@@ -162,12 +209,96 @@ nav {
     background-color: $cb-green-ish;
 }
 
+.dropdown-link-aviation:hover {
+    background-color: $cb-blue-ish;
+}
+
+.dropdown-link-travel:hover {
+    background-color: $cb-dark-green-ish;
+}
+
 .dropdown-link-blog:hover {
     background-color: $cb-orange-ish !important;
 }
 
 .dropdown-link-career:hover {
     background-color: $cb-blue-ish;
+}
+
+.dropdown-submenu-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    &:hover .dropdown-sublist {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
+    }
+}
+
+.dropdown-submenu-parent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    &::after {
+        content: '›';
+        margin-left: 8px;
+        font-size: 18px;
+        transition: transform 0.2s;
+    }
+}
+
+.dropdown-sublist {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background-color: $cb-white-ish;
+    min-width: 200px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-10px);
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 1000;
+
+    &.open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(0);
+    }
+}
+
+.dropdown-sublink {
+    display: block;
+    padding: 8px 16px;
+    color: $cb-grey-ish !important;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: lighten($cb-blue-ish, 10%);
+    }
+}
+
+/* Dark Mode Submenu */
+:host-context(body.dark-mode) {
+    .dropdown-sublist {
+        background-color: #2a2a2a;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .dropdown-sublink {
+        color: #ddd !important;
+
+        &:hover {
+            background-color: $cb-blue-ish;
+            color: white !important;
+        }
+    }
 }
 
 .last-link-in-dropdown {
@@ -250,6 +381,14 @@ nav {
             background-color: $cb-green-ish;
         }
 
+        &.burger-menu-blue-item:hover {
+            background-color: $cb-blue-ish;
+        }
+
+        &.burger-menu-dark-green-item:hover {
+            background-color: $cb-dark-green-ish;
+        }
+
         &.burger-menu-orange-item:hover {
             background-color: $cb-orange-ish;
         }
@@ -261,7 +400,7 @@ nav {
 }
 
 #burger-menu-content.open {
-    height: calc(100dvh - 41px);
+    height: calc(100dvh - 40px);
     width: 100vw;
     top: 40px;
     opacity: 1;
@@ -293,7 +432,8 @@ nav {
 }
 
 // Mobile Dropdown Menus
-#mobile-photography-dropdown,
+#mobile-aviation-dropdown,
+#mobile-travel-dropdown,
 #mobile-blog-dropdown,
 #mobile-career-dropdown {
     max-height: 0;
@@ -302,7 +442,8 @@ nav {
     transition: max-height 0.5s ease, opacity 0.5s ease;
 }
 
-#mobile-photography-dropdown.open,
+#mobile-aviation-dropdown.open,
+#mobile-travel-dropdown.open,
 #mobile-blog-dropdown.open,
 #mobile-career-dropdown.open {
     max-height: 500px;
@@ -364,6 +505,26 @@ nav {
     display: flex;
     display: flex;
     justify-content: center;
+    gap: 8px;
+    align-items: center;
+}
+
+#language-toggle-mobile {
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    user-select: none;
+
+    .flag-icon {
+        width: 24px;
+        height: 16px;
+        display: inline-block;
+        object-fit: contain;
+    }
 }
 
 #light-icon-burger {

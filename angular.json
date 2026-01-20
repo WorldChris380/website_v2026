@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "photography_manually": {
+    "photography_2026": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -45,8 +45,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "8kB",
+                  "maximumError": "16kB"
                 }
               ],
               "outputHashing": "all"
@@ -63,10 +63,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "photography_manually:build:production"
+              "buildTarget": "photography_2026:build:production"
             },
             "development": {
-              "buildTarget": "photography_manually:build:development"
+              "buildTarget": "photography_2026:build:development"
             }
           },
           "defaultConfiguration": "development"

@@ -1,0 +1,400 @@
+/* Header- und Footer-Höhe als CSS-Variablen, damit sie zentral anpassbar sind */
+/* Maximalbreite und Zentrierung für den Hauptbereich */
+#home-atf {
+    min-height: calc(100vh - var(--header-height, 80px) - var(--footer-height, 40px));
+    max-width: 1920px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+
+    .hero-section {
+        position: relative;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        width: 100%;
+    }
+
+
+    @keyframes slideBackgroundIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .hero-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-size: cover;
+        background-position: center;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        will-change: opacity;
+    }
+
+    .hero-background.active {
+        opacity: 1;
+        animation: slideBackgroundIn 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    .hero-background::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3);
+        pointer-events: none;
+        transition: background 0.8s ease;
+    }
+
+    .hero-content {
+        text-align: center;
+        color: white;
+        z-index: 1;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 80rem;
+        animation: slideContentIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+
+        @media (max-width: 1024px) {
+            padding: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            padding: 1.2rem;
+            height: 60rem;
+        }
+
+        @media (max-width: 480px) {
+            padding: 1rem;
+            height: 50rem;
+        }
+    }
+
+    @keyframes slideContentIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero-title {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 300;
+        margin-bottom: 3rem;
+        letter-spacing: 0.5px;
+        line-height: 1.3;
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+        @media (max-width: 768px) {
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        @media (max-width: 480px) {
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.3px;
+        }
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 4rem;
+
+        @media (max-width: 1024px) {
+            gap: 1.2rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 300px;
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+    }
+
+    .btn {
+        padding: 0.875rem 2.5rem;
+        border-radius: 50px;
+        border: none;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        text-transform: capitalize;
+        position: relative;
+        overflow: hidden;
+
+        @media (max-width: 768px) {
+            padding: 0.75rem 2rem;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 480px) {
+            padding: 0.65rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: -1;
+        }
+
+        &.btn-primary {
+            background-color: white;
+            color: #1a3a2a;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+            &:hover {
+                background-color: white;
+                color: #1a3a2a;
+                transform: translateY(-4px) scale(1.02);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+
+                &::before {
+                    left: 100%;
+                }
+            }
+
+            &:active {
+                transform: translateY(-2px) scale(0.98);
+            }
+        }
+
+        &.btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.15);
+                color: white;
+                border-color: white;
+                transform: translateY(-4px) scale(1.02);
+                box-shadow: 0 8px 20px rgba(255, 255, 255, 0.25);
+
+                &::before {
+                    left: 100%;
+                }
+            }
+
+            &:active {
+                transform: translateY(-2px) scale(0.98);
+            }
+        }
+
+        &.btn-download {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 16px;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.15);
+                transition: left 0.4s ease;
+            }
+
+            &:hover {
+                background: linear-gradient(135deg, #357abd 0%, #4a90e2 100%);
+                transform: translateY(-4px) scale(1.02);
+                box-shadow: 0 8px 25px rgba(74, 144, 226, 0.6);
+
+                &::before {
+                    left: 100%;
+                }
+            }
+
+            &:active {
+                transform: translateY(-2px) scale(0.98);
+            }
+        }
+    }
+
+    .hero-dots {
+        position: absolute;
+        bottom: calc(var(--footer-height, 40px) + 5rem);
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.75rem;
+        z-index: 1;
+
+        @media (max-width: 768px) {
+            bottom: calc(var(--footer-height, 40px) + 3rem);
+            gap: 0.6rem;
+        }
+
+        @media (max-width: 480px) {
+            bottom: calc(var(--footer-height, 40px) + 2rem);
+            gap: 0.5rem;
+        }
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+
+        @media (max-width: 768px) {
+            width: 10px;
+            height: 10px;
+        }
+
+        @media (max-width: 480px) {
+            width: 8px;
+            height: 8px;
+        }
+    }
+
+    .dot.active-dot {
+        background-color: white;
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25);
+        transform: scale(1.25);
+        animation: dotPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    .dot:hover {
+        background-color: white;
+        transform: scale(1.3);
+        box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes dotPulse {
+        0% {
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25);
+        }
+
+        50% {
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.1);
+        }
+
+        100% {
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25);
+        }
+    }
+}
+
+/* Dark mode optimizations for hero section (Angular scoped) */
+:host-context(.dark-mode) {
+
+    /* Darken the image overlay for better contrast */
+    .hero-background::after {
+        background: rgba(0, 0, 0, 0.55);
+        transition: background 0.8s ease;
+    }
+
+    /* Improve text/readability on hero */
+    .hero-content {
+        color: #f2f2f2;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-title {
+        color: #f8f9fa;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Buttons: modern dark mode styling */
+    .btn {
+        &.btn-primary {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+            &:hover {
+                background-color: #f0f0f0;
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        &.btn-secondary {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+                border-color: #ffffff;
+                box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+            }
+        }
+    }
+
+    /* Dots visibility on dark */
+    .dot {
+        background-color: rgba(255, 255, 255, 0.6);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
+
+        &.active-dot {
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+        }
+
+        &:hover {
+            background-color: #ffffff;
+            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.25);
+        }
+    }
+}

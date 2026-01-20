@@ -1,1 +1,67 @@
-<p>home-atf works!</p>
+<div id="home-atf" class="hero-section">
+    <!-- Slide 1: Photography -->
+    <div class="hero-background" [ngClass]="{ 'active': currentSlide === 0 }"
+        [style.opacity]="currentSlide === 0 ? 1 : 0"
+        style="background-image: url('/assets/img/photography/Travel/Australia and Oceania/Fiji/2017.06.01 Do/Paradise in Fiji in the Yasawa near blue lagoon .JPG');">
+    </div>
+    <div class="hero-background" [ngClass]="{ 'active': currentSlide === 1 }"
+        [style.opacity]="currentSlide === 1 ? 1 : 0"
+        style="background-image: url('/assets/img/photography/Travel/Europe/Greece/Kos 2021/Ikaria Seychelles Beach from above .jpg');">
+    </div>
+    <div class="hero-background" [ngClass]="{ 'active': currentSlide === 2 }"
+        [style.opacity]="currentSlide === 2 ? 1 : 0"
+        style="background-image: url('/assets/img/photography/Travel/North America/Costa Rica/2024.06.03 Mo La Fortuna Hot Springs Tabacon/Lake Arenal in the middle of tropical Costa Rica .jpg');">
+    </div>
+
+    <!-- Slide 1 Content -->
+    <div class="hero-content" *ngIf="currentSlide === 0">
+        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Photography' : 'Fotografie' }}</h1>
+        <div class="hero-buttons">
+            <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'travel' }">{{ currentLanguage ===
+                'en' ? 'View travel photos' : 'Reisefotografien ansehen' }}</a>
+            <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'aviation' }">{{ currentLanguage
+                === 'en' ? 'View aviation photos' : 'Luftfahrtfotografien ansehen' }}</a>
+            <button class="btn btn-secondary">{{ currentLanguage === 'en' ? 'Buy photos' : 'Fotos kaufen' }}</button>
+        </div>
+    </div>
+
+    <!-- Slide 2 Content: Travel -->
+    <div class="hero-content" *ngIf="currentSlide === 1">
+        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Travel' : 'Reisen' }}</h1>
+        <div class="hero-buttons">
+            <a class="btn btn-primary" routerLink="/aviation-spotter-hotels">{{ currentLanguage === 'en' ? 'Aviation
+                Tourism' : 'Luftfahrt-Tourismus' }}</a>
+            <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'travel' }">{{ currentLanguage ===
+                'en' ? 'View Travel Pictures' : 'Reisebilder ansehen' }}</a>
+            <a class="btn btn-secondary" routerLink="/photography-travels">{{ currentLanguage === 'en' ? 'Travels' :
+                'Reisen' }}</a>
+        </div>
+    </div>
+
+    <!-- Slide 3 Content: Career -->
+    <div class="hero-content" *ngIf="currentSlide === 2">
+        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'My career' : 'Meine Karriere' }}</h1>
+        <div class="hero-buttons">
+            <a class="btn btn-primary" href="https://github.com/WorldChris380" target="_blank">GitHub</a>
+            <a class="btn btn-primary" href="https://www.linkedin.com/in/christian-boehme-business/"
+                target="_blank">LinkedIn</a>
+            <a class="btn btn-secondary" routerLink="/career">{{ currentLanguage === 'en' ? 'View CV' : 'CV anzeigen'
+                }}</a>
+            <button class="btn btn-download" (click)="downloadPDF()">
+                <span>📥</span>
+                <span>{{ currentLanguage === 'en' ? 'Download CV' : 'CV herunterladen' }}</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="hero-dots">
+        <span class="dot" [class.active-dot]="currentSlide === 0" (click)="goToSlide(0)"></span>
+        <span class="dot" [class.active-dot]="currentSlide === 1" (click)="goToSlide(1)"></span>
+        <span class="dot" [class.active-dot]="currentSlide === 2" (click)="goToSlide(2)"></span>
+    </div>
+</div>
+
+<!-- Counters component showing statistics from assets manifest -->
+<div id="home-counters-wrapper">
+    <app-counters></app-counters>
+</div>

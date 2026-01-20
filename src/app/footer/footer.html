@@ -1,1 +1,18 @@
-<p>footer works!</p>
+<div id="footer-full-width">
+    <div id="footer-content-limitation">
+        <div id="first-footer-column">©2026 Christian Böhme</div>
+        <div id="second-footer-column">
+            <a routerLink="/legal">{{ currentLanguage === 'en' ? 'Legal' : 'Rechtliches' }}</a>
+            <a routerLink="/legal">{{ currentLanguage === 'en' ? 'Privacy Policy' : 'Datenschutz' }}</a>
+        </div>
+        <div id="third-footer-column">
+            <a href="">
+                <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">
+            </a><a href="">
+                <img src="" alt="">
+            </a><a href="">
+                <img src="" alt="">
+            </a>
+        </div>
+    </div>
+</div>

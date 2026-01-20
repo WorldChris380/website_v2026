@@ -1,0 +1,100 @@
+.counters {
+    max-width: 1920px;
+    margin: 2.5rem auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    align-items: stretch;
+    width: calc(100% - 2rem);
+    padding: 0.5rem 1rem 2rem 1rem;
+
+    @media (max-width: 1024px) {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.2rem;
+    }
+
+    @media (max-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin: 2rem auto;
+    }
+
+    @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+        margin: 1.5rem auto;
+        padding: 0.5rem 0.5rem 1.5rem 0.5rem;
+    }
+}
+
+.counter-card {
+    background: #fff;
+    color: var(--cb-dark-grey);
+    border-radius: 16px;
+    padding: 1.6rem 1.2rem;
+    box-shadow: 0 6px 18px rgba(10, 10, 10, 0.06);
+    text-align: center;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    @media (max-width: 768px) {
+        padding: 1.4rem 1rem;
+        min-height: 90px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 1.2rem 0.8rem;
+        min-height: 80px;
+        border-radius: 12px;
+    }
+}
+
+.counter-number {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: var(--cb-dark-grey);
+
+    @media (max-width: 768px) {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 1.6rem;
+        margin-bottom: 0.4rem;
+    }
+}
+
+.counter-label {
+    font-size: 0.95rem;
+    color: var(--cb-dark-grey);
+    opacity: 0.85;
+
+    @media (max-width: 768px) {
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 0.85rem;
+    }
+}
+
+.placeholder {
+    min-height: 90px;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.03) 25%, rgba(0, 0, 0, 0.05) 50%, rgba(0, 0, 0, 0.03) 75%);
+    animation: shimmer 1.2s infinite linear;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+
+    100% {
+        background-position: 200px 0;
+    }
+}

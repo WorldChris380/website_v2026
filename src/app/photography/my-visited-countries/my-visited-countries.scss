@@ -1,0 +1,374 @@
+.travels-counter-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px;
+
+    @media (max-width: 768px) {
+        padding: 40px 15px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 30px 12px;
+    }
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 50px;
+
+    @media (max-width: 768px) {
+        margin-bottom: 35px;
+    }
+
+    h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin: 0 0 15px 0;
+        color: #1a1a1a;
+
+        @media (max-width: 768px) {
+            font-size: 28px;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 24px;
+        }
+    }
+
+    .stats {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-size: 16px;
+        color: #666;
+
+        @media (max-width: 768px) {
+            font-size: 14px;
+            gap: 10px;
+        }
+
+        @media (max-width: 480px) {
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stat-item {
+            font-weight: 500;
+        }
+
+        .stat-separator {
+            color: #ccc;
+
+            @media (max-width: 480px) {
+                display: none;
+            }
+        }
+    }
+
+    .legend {
+        margin-top: 12px;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        font-size: 13px;
+        color: #555;
+        flex-wrap: wrap;
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            .status-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: #aaa;
+            }
+
+            &.available .status-dot {
+                background: #2e7d32;
+            }
+
+            &.unavailable .status-dot {
+                background: #c0392b;
+            }
+        }
+    }
+}
+
+.continents-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.continent-card {
+    background: #f8f9fa;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+}
+
+.continent-header {
+    padding: 20px 24px;
+    background: #e8f5e9;
+    font-weight: 600;
+    font-size: 18px;
+    color: #2d5016;
+    border-bottom: 1px solid #c8e6c9;
+}
+
+.countries-list {
+    padding: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    @media (max-width: 768px) {
+        padding: 18px;
+        gap: 10px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 15px;
+        gap: 8px;
+    }
+
+    &.expanded {
+        min-height: 60px;
+    }
+}
+
+.country-btn {
+    padding: 10px 20px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    @media (max-width: 768px) {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 6px 12px;
+        font-size: 12px;
+        gap: 6px;
+    }
+
+    &:hover {
+        background: #f5f5f5;
+        border-color: #ccc;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #aaa;
+        display: inline-block;
+
+        @media (max-width: 480px) {
+            width: 8px;
+            height: 8px;
+        }
+    }
+
+    &.available {
+        border-color: #2e7d32;
+        color: #1f4b20;
+        background: #e9f5ec;
+
+        .status-dot {
+            background: #2e7d32;
+        }
+    }
+
+    &.unavailable {
+        border-color: #d7d7d7;
+        color: #9b9b9b;
+        background: #f9f9f9;
+
+        &:hover {
+            background: #f9f9f9;
+            border-color: #d7d7d7;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-dot {
+            background: #c0392b;
+        }
+
+        .country-name {
+            opacity: 0.8;
+        }
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.8;
+        transform: none;
+        box-shadow: none;
+    }
+}
+
+/* Dark Mode */
+:host-context(.dark-mode) {
+    .travels-counter-container {
+        .header h2 {
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .header .stats {
+            color: #a3a3a3;
+
+            .stat-separator {
+                color: #404040;
+            }
+        }
+
+        .header .legend {
+            color: #bdc3c7;
+
+            .legend-item.available .status-dot {
+                background: #69f0ae;
+                box-shadow: 0 0 6px rgba(105, 240, 174, 0.4);
+            }
+
+            .legend-item.unavailable .status-dot {
+                background: #e57373;
+            }
+        }
+    }
+
+    .continent-card {
+        background: #121212;
+        border: 1px solid #2a2a2a;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .continent-header {
+        background: #1a1a1a;
+        color: #e0e0e0;
+        border-bottom-color: #2a2a2a;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    .country-btn {
+        background: #1e1e1e;
+        border-color: #333;
+        color: #d1d1d1;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+        &:hover {
+            background: #2a2a2a;
+            border-color: #555;
+            color: #fff;
+        }
+
+        .status-dot {
+            background: #666;
+        }
+
+        &.available {
+            border-color: #00bf72;
+            color: #e0f2f1;
+            background: rgba(0, 191, 114, 0.1);
+
+            &:hover {
+                background: rgba(0, 191, 114, 0.2);
+                border-color: #00e676;
+                box-shadow: 0 4px 12px rgba(0, 230, 118, 0.15);
+            }
+
+            .status-dot {
+                background: #69f0ae;
+                box-shadow: 0 0 4px rgba(105, 240, 174, 0.5);
+            }
+        }
+
+        &.unavailable {
+            border-color: #2a2a2a;
+            color: #555;
+            background: #141414;
+            box-shadow: none;
+
+            &:hover {
+                background: #141414;
+                border-color: #2a2a2a;
+                transform: none;
+                box-shadow: none;
+            }
+
+            .status-dot {
+                background: #b71c1c;
+                opacity: 0.6;
+            }
+
+            .country-name {
+                opacity: 0.6;
+            }
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none;
+            box-shadow: none;
+        }
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .travels-counter-container {
+        padding: 40px 16px;
+    }
+
+    .header h2 {
+        font-size: 28px;
+    }
+
+    .header .stats {
+        font-size: 14px;
+    }
+
+    .continent-header {
+        padding: 16px 20px;
+        font-size: 16px;
+    }
+
+    .countries-list {
+        padding: 16px;
+        gap: 8px;
+    }
+
+    .country-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+}

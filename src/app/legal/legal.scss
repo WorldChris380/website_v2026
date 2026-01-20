@@ -1,0 +1,281 @@
+.legal-container {
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    min-height: calc(100vh - 200px);
+}
+
+.legal-header {
+    text-align: center;
+    margin-bottom: 50px;
+
+    h1 {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #121212;
+    }
+
+    p {
+        font-size: 18px;
+        color: #666;
+    }
+}
+
+.legal-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 40px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.tab-button {
+    padding: 12px 24px;
+    background-color: #f5f5f5;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: #333;
+
+    &:hover {
+        background-color: #e8e8e8;
+        border-color: #333;
+    }
+
+    &.active {
+        background-color: #121212;
+        color: white;
+        border-color: #121212;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.legal-content {
+    background-color: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    line-height: 1.8;
+}
+
+.tab-content {
+    animation: fadeIn 0.3s ease-in;
+
+    h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #121212;
+    }
+
+    h3 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    h4 {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    p {
+        font-size: 15px;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    ul,
+    ol {
+        margin-left: 25px;
+        margin-bottom: 20px;
+
+        li {
+            margin-bottom: 10px;
+            color: #555;
+            font-size: 15px;
+        }
+    }
+
+    a {
+        color: #121212;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+
+        &:hover {
+            color: #555;
+            text-decoration: underline;
+        }
+    }
+
+    em {
+        color: #999;
+        font-style: italic;
+    }
+}
+
+.section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Dark Mode */
+:host-context(body.dark-mode) {
+    .legal-container {
+        color: #e0e0e0;
+    }
+
+    .legal-header {
+        h1 {
+            color: #4a90e2;
+        }
+
+        p {
+            color: #999;
+        }
+    }
+
+    .tab-button {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+        border-color: transparent;
+
+        &:hover {
+            background-color: #252525;
+            border-color: #4a90e2;
+        }
+
+        &.active {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            border-color: #4a90e2;
+        }
+    }
+
+    .legal-content {
+        background-color: #121212;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .tab-content {
+        h2 {
+            color: #fff;
+        }
+
+        h3 {
+            color: #e0e0e0;
+        }
+
+        h4 {
+            color: #4a90e2;
+        }
+
+        p {
+            color: #bbb;
+        }
+
+        ul,
+        ol {
+            li {
+                color: #bbb;
+            }
+        }
+
+        a {
+            color: #4a90e2;
+
+            &:hover {
+                color: #6ba3d4;
+            }
+        }
+
+        em {
+            color: #666;
+        }
+    }
+
+    .section {
+        border-bottom-color: #222;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .legal-container {
+        padding: 40px 15px;
+    }
+
+    .legal-header {
+        h1 {
+            font-size: 32px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+    }
+
+    .legal-tabs {
+        gap: 10px;
+    }
+
+    .tab-button {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+
+    .legal-content {
+        padding: 25px;
+    }
+
+    .tab-content {
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 18px;
+        }
+
+        h4 {
+            font-size: 15px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        ul,
+        ol {
+            li {
+                font-size: 14px;
+            }
+        }
+    }
+}

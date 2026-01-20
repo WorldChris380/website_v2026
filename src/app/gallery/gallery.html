@@ -1,0 +1,138 @@
+<div class="gallery-container">
+    <!-- Filter Section -->
+    <div class="gallery-header">
+        <!-- Breadcrumb Navigation -->
+        <div class="filter-breadcrumb"
+            *ngIf="selectedCategory !== 'All' || selectedContinent !== 'All' || selectedCountry !== 'All'">
+            <button class="breadcrumb-btn" (click)="resetFilters()">{{ getTranslation('all') }}</button>
+            <span class="breadcrumb-separator" *ngIf="selectedCategory !== 'All'">›</span>
+            <button class="breadcrumb-btn" *ngIf="selectedCategory !== 'All'"
+                (click)="onCategoryChange(selectedCategory)">
+                {{ currentLanguage === 'en' ? selectedCategory : (selectedCategory === 'Aviation' ? 'Luftfahrt' :
+                'Reisen') }}
+            </button>
+            <span class="breadcrumb-separator" *ngIf="selectedContinent !== 'All'">›</span>
+            <button class="breadcrumb-btn" *ngIf="selectedContinent !== 'All'"
+                (click)="onContinentChange(selectedContinent)">
+                {{ selectedContinent }}
+            </button>
+            <span class="breadcrumb-separator" *ngIf="selectedCountry !== 'All'">›</span>
+            <span class="breadcrumb-current" *ngIf="selectedCountry !== 'All'">{{ selectedCountry }}</span>
+        </div>
+
+        <!-- Category Filter Buttons -->
+        <div class="filter-buttons" *ngIf="selectedCategory === 'All'">
+            <button *ngFor="let category of categories" [ngClass]="{ active: selectedCategory === category }"
+                (click)="onCategoryChange(category)" class="filter-btn">
+                {{ currentLanguage === 'en' ? category : (category === 'All' ? 'Alle' : category === 'Aviation' ?
+                'Luftfahrt' : 'Reisen') }}
+            </button>
+        </div>
+
+        <!-- Continent Filter Buttons -->
+        <div class="filter-buttons"
+            *ngIf="selectedCategory !== 'All' && selectedContinent === 'All' && continents.length > 0">
+            <button *ngFor="let continent of continents" (click)="onContinentChange(continent)" class="filter-btn">
+                {{ continent }}
+            </button>
+        </div>
+
+        <!-- Country Filter Buttons -->
+        <div class="filter-buttons"
+            *ngIf="selectedContinent !== 'All' && selectedCountry === 'All' && countries.length > 0">
+            <button *ngFor="let country of countries" (click)="onCountryChange(country)" class="filter-btn">
+                {{ country }}
+            </button>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-container">
+            <input type="text" class="search-input" [placeholder]="getTranslation('searchPlaceholder')"
+                [(ngModel)]="searchQuery" (input)="onSearchChange(searchQuery)" />
+        </div>
+
+        <!-- Results Count -->
+        <div class="results-count">
+            {{ filteredImages.length }} {{ currentLanguage === 'en' ? 'images found' : 'Bilder gefunden' }}
+        </div>
+    </div>
+
+    <div *ngIf="isLoading" class="gallery-loading">
+        <div class="spinner"></div>
+        <div class="loading-text">{{ currentLanguage === 'en' ? 'Loading photos…' : 'Fotos werden geladen…' }}</div>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="gallery-grid" *ngIf="!isLoading">
+        <div *ngFor="let image of paginatedImages; let i = index" class="gallery-item">
+            <div class="image-wrapper" (click)="openLightbox(image)">
+                <img [src]="image.url" [alt]="image.title" class="gallery-image"
+                    [attr.loading]="i < 6 ? 'eager' : 'lazy'" [attr.fetchpriority]="i < 6 ? 'high' : 'auto'"
+                    decoding="async" />
+                <div class="image-overlay">
+                    <div class="overlay-content">
+                        <h3>{{ image.title }}</h3>
+                        <p>{{ image.country }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="!isLoading">
+        <button class="pagination-btn prev-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+            ←
+        </button>
+
+        <button *ngFor="let page of pageNumbers" [ngClass]="{ active: currentPage === page }" (click)="goToPage(page)"
+            class="pagination-btn">
+            {{ page }}
+        </button>
+
+        <button class="pagination-btn next-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">
+            →
+        </button>
+    </div>
+
+    <!-- Lightbox -->
+    <div *ngIf="isLightboxOpen" class="lightbox-overlay" (click)="closeLightbox()">
+        <div class="lightbox-container" (click)="$event.stopPropagation()">
+            <!-- Close Button -->
+            <button class="lightbox-close" (click)="closeLightbox()">
+                ✕
+            </button>
+
+            <!-- Main Image -->
+            <div class="lightbox-main">
+                <img *ngIf="currentLightboxImage" [src]="currentLightboxImage.url" [alt]="currentLightboxImage.title"
+                    class="lightbox-image" />
+            </div>
+
+            <!-- Navigation Arrows -->
+            <button class="lightbox-nav lightbox-nav-prev" (click)="previousLightboxImage()">
+                ← A
+            </button>
+            <button class="lightbox-nav lightbox-nav-next" (click)="nextLightboxImage()">
+                D →
+            </button>
+
+            <!-- Image Info -->
+            <div class="lightbox-info" *ngIf="currentLightboxImage">
+                <h2>{{ currentLightboxImage.title }}</h2>
+                <p>{{ currentLightboxImage.country }}</p>
+                <span class="lightbox-counter">
+                    {{ currentLightboxImageIndex + 1 }} / {{ allImages.length }}
+                </span>
+            </div>
+
+            <!-- Keyboard Help -->
+            <div class="lightbox-help">
+                <span>{{ currentLanguage === 'en' ? 'Use' : 'Nutze' }} <kbd>A</kbd> / <kbd>←</kbd> {{ currentLanguage
+                    === 'en' ? 'to go back' : 'um zurückzugehen' }} • <kbd>D</kbd> / <kbd>→</kbd> {{ currentLanguage ===
+                    'en' ? 'to go next' : 'um weiterzugehen' }} •
+                    <kbd>ESC</kbd> {{ currentLanguage === 'en' ? 'to close' : 'zum Schließen' }}</span>
+            </div>
+        </div>
+    </div>
+</div>
