@@ -28,9 +28,21 @@
                     <a href="/aviation-spotter-hotels" class="dropdown-link dropdown-link-aviation">
                         {{ getTranslation('aviationSpotterHotels') }}
                     </a>
-                    <a [routerLink]="['/airlinesim-ceo-tools']" class="dropdown-link dropdown-link-aviation">
-                        {{ getTranslation('airlineSimCeoTools') }}
-                    </a>
+                    <div class="dropdown-submenu-wrapper" (mouseenter)="setDesktopSubDropdown('airline-sim')"
+                        (mouseleave)="setDesktopSubDropdown(null)">
+                        <a href="javascript:void(0);"
+                            class="dropdown-link dropdown-link-aviation dropdown-submenu-parent">
+                            {{ getTranslation('airlineSim') }}
+                        </a>
+                        <div class="dropdown-sublist" [class.open]="openDesktopSubDropdownMenu === 'airline-sim'">
+                            <a [routerLink]="['/air-germany']" class="dropdown-sublink">
+                                {{ getTranslation('airGermany') }}
+                            </a>
+                            <a [routerLink]="['/airlinesim-ceo-tools']" class="dropdown-sublink">
+                                {{ getTranslation('airlineSimCeoTools') }}
+                            </a>
+                        </div>
+                    </div>
                     <a href="/" class="dropdown-link dropdown-link-aviation last-link-in-dropdown">
                         {{ getTranslation('msfsComparison') }}
                     </a>
@@ -157,10 +169,20 @@
                             class="mobile-dropdown-link dropdown-link-aviation">
                             {{ getTranslation('aviationSpotterHotels') }}
                         </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/airlinesim-ceo-tools']"
-                            class="mobile-dropdown-link dropdown-link-aviation">
-                            {{ getTranslation('airlineSimCeoTools') }}
+                        <a (click)="toggleMobileSubDropdownMenu('airline-sim')"
+                            class="mobile-dropdown-link dropdown-link-aviation" href="javascript:void(0);">
+                            {{ getTranslation('airlineSim') }}
                         </a>
+                        <div *ngIf="openMobileSubDropdownMenu === 'airline-sim'" class="mobile-dropdown-sublist">
+                            <a (click)="closeMenuAfterNavigation()" [routerLink]="['/air-germany']"
+                                class="mobile-dropdown-sublink">
+                                {{ getTranslation('airGermany') }}
+                            </a>
+                            <a (click)="closeMenuAfterNavigation()" [routerLink]="['/airlinesim-ceo-tools']"
+                                class="mobile-dropdown-sublink">
+                                {{ getTranslation('airlineSimCeoTools') }}
+                            </a>
+                        </div>
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/']"
                             class="mobile-dropdown-link dropdown-link-aviation">
                             {{ getTranslation('msfsComparison') }}

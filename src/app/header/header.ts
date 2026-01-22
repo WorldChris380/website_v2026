@@ -21,6 +21,7 @@ export class Header implements OnInit {
   openDesktopDropdownMenu: MenuHeading | null = null;
   openDesktopSubDropdownMenu: string | null = null;
   openMobileDropdownMenu: MenuHeading | null = null;
+  openMobileSubDropdownMenu: string | null = null;
 
   constructor(
     private darkModeService: DarkModeService,
@@ -77,6 +78,15 @@ export class Header implements OnInit {
       this.openMobileDropdownMenu = null;
     } else {
       this.openMobileDropdownMenu = menuItem;
+    }
+  }
+
+  //Toggle mobile Submenu
+  toggleMobileSubDropdownMenu(submenuItem: string) {
+    if (this.openMobileSubDropdownMenu === submenuItem) {
+      this.openMobileSubDropdownMenu = null;
+    } else {
+      this.openMobileSubDropdownMenu = submenuItem;
     }
   }
 

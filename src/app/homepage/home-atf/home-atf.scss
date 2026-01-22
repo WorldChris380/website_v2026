@@ -1,14 +1,12 @@
 /* Header- und Footer-Höhe als CSS-Variablen, damit sie zentral anpassbar sind */
 /* Maximalbreite und Zentrierung für den Hauptbereich */
 #home-atf {
-    min-height: calc(100vh - var(--header-height, 80px) - var(--footer-height, 40px));
-    width: 100vw;
+    min-height: calc(100vh - var(--header-height, 40px) - var(--footer-height, 40px));
+    width: 100%;
+    max-width: 100%;
     position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
     overflow: hidden;
+    box-sizing: border-box;
 
     .hero-section {
         position: relative;
@@ -19,6 +17,8 @@
         justify-content: center;
         overflow: hidden;
         width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
 
@@ -74,37 +74,33 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        min-height: calc(100vh - 120px);
+        min-height: calc(100vh - var(--header-height, 40px));
         max-height: 80rem;
         animation: slideContentIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        width: 100vw;
+        width: 100%;
+        max-width: 100%;
         position: relative;
-        left: 50%;
-        right: 50%;
-        margin-left: -50vw;
-        margin-right: -50vw;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
 
         @media (max-width: 1024px) {
             padding: 1.5rem;
-            min-height: calc(100vh - 100px);
             max-height: 70rem;
         }
 
         @media (max-width: 768px) {
             padding: 1.2rem;
-            min-height: calc(100vh - 80px);
             max-height: 60rem;
         }
 
         @media (max-width: 480px) {
             padding: 1rem;
-            min-height: calc(100vh - 60px);
             max-height: 50rem;
         }
 
         @media (max-width: 320px) {
             padding: 0.8rem;
-            min-height: calc(100vh - 50px);
             max-height: 45rem;
         }
     }

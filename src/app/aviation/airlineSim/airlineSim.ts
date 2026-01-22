@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LanguageService, Language } from '../language.service';
+import { LanguageService, Language } from '../../language.service';
 
 @Component({
     selector: 'app-airline-sim',
@@ -67,8 +67,7 @@ export class AirlineSim implements OnInit {
 
     links = {
         github: 'https://github.com/WorldChris380/airlinesim-ceo-tools',
-        chromeStore: '#', // Update with actual Chrome Web Store link
-        forum: 'https://forums.airlinesim.aero/t/introducing-airlinesim-enhancement-suite-beta/',
+        chromeStore: '#',
         discord: 'https://discord.com/channels/113555701774749696/1249639537450160138',
     };
 

@@ -1,4 +1,4 @@
-<div id="home-atf" class="hero-section">
+<div id="home-atf" class="hero-section" role="main" aria-label="Homepage hero with photography, travel and career slides">
     <!-- Slide 1: Photography -->
     <div class="hero-background" [ngClass]="{ 'active': currentSlide === 0 }"
         [style.opacity]="currentSlide === 0 ? 1 : 0"
@@ -6,11 +6,11 @@
     </div>
     <div class="hero-background" [ngClass]="{ 'active': currentSlide === 1 }"
         [style.opacity]="currentSlide === 1 ? 1 : 0"
-        style="background-image: url('/assets/img/photography/Travel/Europe/Greece/Kos 2021/Ikaria Seychelles Beach from above .jpg');">
+        style="background-image: url('/assets/img/photography/Travel/North America/Costa Rica/2024.06.02 So Butterfly Garden, La Fortuna Hotel/Tropic vulcano Arenal view from La Fortuna .jpg');">
     </div>
     <div class="hero-background" [ngClass]="{ 'active': currentSlide === 2 }"
         [style.opacity]="currentSlide === 2 ? 1 : 0"
-        style="background-image: url('/assets/img/photography/Travel/North America/Costa Rica/2024.06.03 Mo La Fortuna Hot Springs Tabacon/Lake Arenal in the middle of tropical Costa Rica .jpg');">
+        style="background-image: url('/assets/img/other/Dresden Skyline.jpg');">
     </div>
 
     <!-- Slide 1 Content -->
@@ -21,7 +21,9 @@
                 'en' ? 'View travel photos' : 'Reisefotografien ansehen' }}</a>
             <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'aviation' }">{{ currentLanguage
                 === 'en' ? 'View aviation photos' : 'Luftfahrtfotografien ansehen' }}</a>
-            <button class="btn btn-secondary">{{ currentLanguage === 'en' ? 'Buy photos' : 'Fotos kaufen' }}</button>
+            <a href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
+                target="_blank" rel="noopener noreferrer" class="btn btn-secondary">{{ currentLanguage === 'en' ? 'Buy
+                photos' : 'Fotos kaufen' }}</a>
         </div>
     </div>
 

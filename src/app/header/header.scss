@@ -95,6 +95,7 @@ nav {
 #career-nav:hover {
     background: $cb-career-grey;
     color: $cb-white-ish;
+    border-radius: 4px 4px 0 0;
 }
 
 // 3rd Header Column
@@ -128,10 +129,10 @@ nav {
     }
 }
 
-// Dark Mode - Language Toggle
+// Dark Mode - Moon Icon
 :host-context(body.dark-mode) {
-    #language-toggle {
-        // No additional dark mode styles needed
+    #moon-icon {
+        display: block;
     }
 }
 
@@ -194,6 +195,7 @@ nav {
 .complete-menu-div:hover #career-nav {
     background-color: $cb-career-grey;
     color: $cb-white-ish;
+    border-radius: 4px 4px 0 0;
 }
 
 .dropdown-link {
@@ -226,6 +228,12 @@ nav {
 .dropdown-link-career:hover {
     background-color: $cb-career-grey;
     color: $cb-white-ish !important;
+
+    .open-in-new-tab-icon,
+    .github-logo,
+    .linkedIn-Logo {
+        filter: brightness(0) invert(1);
+    }
 }
 
 .dropdown-submenu-wrapper {
@@ -283,23 +291,24 @@ nav {
     transition: background-color 0.2s;
 
     &:hover {
-        background-color: lighten($cb-blue-ish, 10%);
+        background-color: $cb-career-grey;
+        color: $cb-white-ish !important;
     }
 }
 
 /* Dark Mode Submenu */
 :host-context(body.dark-mode) {
     .dropdown-sublist {
-        background-color: #2a2a2a;
+        background-color: $cb-career-grey;
         box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     .dropdown-sublink {
-        color: #ddd !important;
+        color: $cb-white-ish !important;
 
         &:hover {
-            background-color: $cb-blue-ish;
-            color: white !important;
+            background-color: lighten($cb-career-grey, 20%);
+            color: $cb-white-ish !important;
         }
     }
 }

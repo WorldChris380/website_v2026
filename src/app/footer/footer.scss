@@ -54,7 +54,9 @@
     gap: 12px;
     align-items: center;
 
-    .github-logo {
+    .github-logo,
+    .linkedIn-Logo,
+    .adobe-stock-logo {
         width: 20px;
         height: 20px;
     }
@@ -77,7 +79,9 @@
     #third-footer-column {
         gap: 8px;
 
-        .github-logo {
+        .github-logo,
+        .linkedIn-Logo,
+        .adobe-stock-logo {
             width: 16px;
             height: 16px;
         }

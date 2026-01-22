@@ -3,21 +3,23 @@
         <!-- Hero Section -->
         <section class="hero-section">
             <div class="hero-content">
-                <img src="/assets/img/icons-and-logos/Christian-Boehme-Logo-128px.png" alt="AS CEO Tools Logo"
+                <img src="/assets/img/icons-and-logos/christian-boehme-logo.png" alt="AS CEO Tools Logo"
                     class="hero-logo">
                 <h1>AirlineSim CEO Tools</h1>
                 <p class="hero-subtitle">
-                    {{ currentLanguage === 'en' ? 'Browser extension to enhance your AirlineSim management experience'
-                    : 'Browser-Erweiterung zur Verbesserung Ihres AirlineSim-Management-Erlebnisses' }}
+                    {{ currentLanguage === 'en' ? 'Professional management tools for AirlineSim airline operations'
+                    : 'Professionelle Management-Tools für AirlineSim-Fluggesellschaftsvorgänge' }}
+                </p>
+                <p class="hero-description">
+                    {{ currentLanguage === 'en' ? 'A comprehensive suite designed to streamline operations, track
+                    performance, and make data-driven decisions as an AirlineSim CEO.'
+                    : 'Eine umfassende Suite zur Optimierung des Betriebs, Verfolgung der Leistung und treffen
+                    datengestützter Entscheidungen als AirlineSim-CEO.' }}
                 </p>
                 <div class="hero-buttons">
                     <a [href]="links.github" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
                         <span class="btn-icon">🔗</span>
                         {{ currentLanguage === 'en' ? 'View on GitHub' : 'Auf GitHub ansehen' }}
-                    </a>
-                    <a [href]="links.forum" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-                        <span class="btn-icon">💬</span>
-                        {{ currentLanguage === 'en' ? 'Forum Discussion' : 'Forum-Diskussion' }}
                     </a>
                 </div>
             </div>
@@ -148,13 +150,6 @@
                         <h3>GitHub</h3>
                         <p>{{ currentLanguage === 'en' ? 'Report issues and contribute' : 'Melden Sie Probleme und
                             tragen Sie bei' }}</p>
-                    </a>
-                    <a [href]="links.forum" target="_blank" rel="noopener noreferrer" class="community-link">
-                        <div class="community-icon">💬</div>
-                        <h3>Forum</h3>
-                        <p>{{ currentLanguage === 'en' ? 'Discuss features and get support' : 'Diskutieren Sie
-                            Funktionen
-                            und erhalten Sie Unterstützung' }}</p>
                     </a>
                     <a [href]="links.discord" target="_blank" rel="noopener noreferrer" class="community-link">
                         <div class="community-icon">💬</div>

@@ -6,7 +6,8 @@ import { HomeAtf } from './homepage/home-atf/home-atf';
 import { MyVisitedCountries } from './photography/my-visited-countries/my-visited-countries';
 import { Career } from './career-preview/career/career';
 import { Legal } from './legal/legal';
-import { AirlineSim } from './aviation/airlineSim';
+import { AirlineSim } from './aviation/airlineSim/airlineSim';
+import { AirGermany } from './aviation/airlineSim/airGermany';
 
 export const routes: Routes = [
     { path: '', component: HomeAtf },
@@ -14,6 +15,7 @@ export const routes: Routes = [
     { path: 'photography-travels', component: PhotographyTravels },
     { path: 'aviation-spotter-hotels', component: AviationSpotterHotels },
     { path: 'airlinesim-ceo-tools', component: AirlineSim },
+    { path: 'air-germany', component: AirGermany },
     { path: 'my-visited-countries', component: MyVisitedCountries },
     { path: 'career', component: Career },
     { path: 'legal', component: Legal }
