@@ -1,0 +1,181 @@
+<div class="page-wrapper">
+    <main class="airline-sim-main">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <img src="/assets/img/icons-and-logos/Christian-Boehme-Logo-128px.png" alt="AS CEO Tools Logo"
+                    class="hero-logo">
+                <h1>AirlineSim CEO Tools</h1>
+                <p class="hero-subtitle">
+                    {{ currentLanguage === 'en' ? 'Browser extension to enhance your AirlineSim management experience'
+                    : 'Browser-Erweiterung zur Verbesserung Ihres AirlineSim-Management-Erlebnisses' }}
+                </p>
+                <div class="hero-buttons">
+                    <a [href]="links.github" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                        <span class="btn-icon">🔗</span>
+                        {{ currentLanguage === 'en' ? 'View on GitHub' : 'Auf GitHub ansehen' }}
+                    </a>
+                    <a [href]="links.forum" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                        <span class="btn-icon">💬</span>
+                        {{ currentLanguage === 'en' ? 'Forum Discussion' : 'Forum-Diskussion' }}
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <h2 class="section-title">
+                    {{ currentLanguage === 'en' ? 'Key Features' : 'Hauptfunktionen' }}
+                </h2>
+                <div class="features-grid">
+                    <div class="feature-card" *ngFor="let feature of features">
+                        <div class="feature-icon">{{ feature.icon }}</div>
+                        <h3 class="feature-title">{{ currentLanguage === 'en' ? feature.titleEN : feature.titleDE }}
+                        </h3>
+                        <p class="feature-description">{{ currentLanguage === 'en' ? feature.descriptionEN :
+                            feature.descriptionDE }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshots Section -->
+        <section class="screenshots-section">
+            <div class="container">
+                <h2 class="section-title">
+                    {{ currentLanguage === 'en' ? 'Extension in Action' : 'Erweiterung in Aktion' }}
+                </h2>
+                <div class="screenshots-info">
+                    <div class="info-box">
+                        <h3>{{ currentLanguage === 'en' ? 'Fleet Management' : 'Flottenverwaltung' }}</h3>
+                        <ul>
+                            <li>{{ currentLanguage === 'en' ? 'Create and manage custom tags' : 'Erstellen und verwalten
+                                Sie benutzerdefinierte Tags' }}</li>
+                            <li>{{ currentLanguage === 'en' ? 'Drag & drop tag assignment' : 'Tag-Zuweisung per Drag &
+                                Drop' }}</li>
+                            <li>{{ currentLanguage === 'en' ? 'Filter aircraft by tags' : 'Flugzeuge nach Tags filtern'
+                                }}</li>
+                            <li>{{ currentLanguage === 'en' ? 'Track last viewed timestamps' : 'Zeitstempel der letzten
+                                Ansicht verfolgen' }}</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h3>{{ currentLanguage === 'en' ? 'Ranking System' : 'Ranking-System' }}</h3>
+                        <ul>
+                            <li>{{ currentLanguage === 'en' ? 'World ranking position' : 'Weltranglistenposition' }}
+                            </li>
+                            <li>{{ currentLanguage === 'en' ? 'Continent ranking' : 'Kontinentrankings' }}</li>
+                            <li>{{ currentLanguage === 'en' ? 'Country ranking' : 'Länderrankings' }}</li>
+                            <li>{{ currentLanguage === 'en' ? 'Automatic updates with timestamps' : 'Automatische
+                                Updates mit Zeitstempeln' }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack Section -->
+        <section class="tech-section">
+            <div class="container">
+                <h2 class="section-title">
+                    {{ currentLanguage === 'en' ? 'Technology Stack' : 'Technologie-Stack' }}
+                </h2>
+                <div class="tech-grid">
+                    <div class="tech-item" *ngFor="let tech of techStack">
+                        <span class="tech-icon">{{ tech.icon }}</span>
+                        <span class="tech-name">{{ tech.name }}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Installation Section -->
+        <section class="installation-section">
+            <div class="container">
+                <h2 class="section-title">
+                    {{ currentLanguage === 'en' ? 'Installation' : 'Installation' }}
+                </h2>
+                <div class="installation-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>{{ currentLanguage === 'en' ? 'Download' : 'Herunterladen' }}</h3>
+                            <p>{{ currentLanguage === 'en' ? 'Clone or download the repository from GitHub' : 'Klonen
+                                oder laden Sie das Repository von GitHub herunter' }}</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>{{ currentLanguage === 'en' ? 'Load Extension' : 'Erweiterung laden' }}</h3>
+                            <p>{{ currentLanguage === 'en' ? 'Open chrome://extensions/ and enable Developer Mode' :
+                                'Öffnen Sie chrome://extensions/ und aktivieren Sie den Entwicklermodus' }}</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>{{ currentLanguage === 'en' ? 'Install' : 'Installieren' }}</h3>
+                            <p>{{ currentLanguage === 'en' ? 'Click "Load unpacked" and select the extension folder' :
+                                'Klicken Sie auf "Entpackte Erweiterung laden" und wählen Sie den Erweiterungsordner
+                                aus' }}</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>{{ currentLanguage === 'en' ? 'Enjoy' : 'Genießen' }}</h3>
+                            <p>{{ currentLanguage === 'en' ? 'Navigate to AirlineSim and start using the enhanced
+                                features!' : 'Navigieren Sie zu AirlineSim und nutzen Sie die erweiterten Funktionen!'
+                                }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section class="community-section">
+            <div class="container">
+                <h2 class="section-title">
+                    {{ currentLanguage === 'en' ? 'Join the Community' : 'Treten Sie der Community bei' }}
+                </h2>
+                <div class="community-links">
+                    <a [href]="links.github" target="_blank" rel="noopener noreferrer" class="community-link">
+                        <div class="community-icon">🔗</div>
+                        <h3>GitHub</h3>
+                        <p>{{ currentLanguage === 'en' ? 'Report issues and contribute' : 'Melden Sie Probleme und
+                            tragen Sie bei' }}</p>
+                    </a>
+                    <a [href]="links.forum" target="_blank" rel="noopener noreferrer" class="community-link">
+                        <div class="community-icon">💬</div>
+                        <h3>Forum</h3>
+                        <p>{{ currentLanguage === 'en' ? 'Discuss features and get support' : 'Diskutieren Sie
+                            Funktionen
+                            und erhalten Sie Unterstützung' }}</p>
+                    </a>
+                    <a [href]="links.discord" target="_blank" rel="noopener noreferrer" class="community-link">
+                        <div class="community-icon">💬</div>
+                        <h3>Discord</h3>
+                        <p>{{ currentLanguage === 'en' ? 'Chat with other users' : 'Chatten Sie mit anderen Nutzern' }}
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <h2>{{ currentLanguage === 'en' ? 'Ready to enhance your AirlineSim experience?' : 'Bereit, Ihr
+                    AirlineSim-Erlebnis zu verbessern?' }}</h2>
+                <a [href]="links.github" target="_blank" rel="noopener noreferrer" class="btn btn-cta">
+                    <span class="btn-icon">🚀</span>
+                    {{ currentLanguage === 'en' ? 'Get Started on GitHub' : 'Starten Sie auf GitHub' }}
+                </a>
+            </div>
+        </section>
+    </main>
+</div>

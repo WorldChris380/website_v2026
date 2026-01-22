@@ -84,6 +84,15 @@ export class Header implements OnInit {
     this.openMobileDropdownMenu = null;
   }
 
+  closeMenuAfterNavigation() {
+    this.burgerMenuClosing = true;
+    setTimeout(() => {
+      this.burgerMenuOpen = false;
+      this.burgerMenuClosing = false;
+      this.openMobileDropdownMenu = null;
+    }, 300);
+  }
+
   // Dark mode implementation
   toggleDarkMode() {
     this.darkModeService.toggleDarkMode();

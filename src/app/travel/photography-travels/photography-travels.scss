@@ -24,6 +24,22 @@
     background: linear-gradient(135deg, rgba(45, 80, 22, 0.8), rgba(210, 238, 130, 0.2));
     z-index: 1;
 
+    @media (max-width: 1024px) {
+        height: 350px;
+    }
+
+    @media (max-width: 768px) {
+        height: 300px;
+    }
+
+    @media (max-width: 480px) {
+        height: 250px;
+    }
+
+    @media (max-width: 320px) {
+        height: 200px;
+    }
+
     .hero-background {
         position: absolute;
         top: 0;
@@ -48,12 +64,43 @@
             font-weight: 700;
             margin: 0 0 20px 0;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+
+            @media (max-width: 1024px) {
+                font-size: 48px;
+            }
+
+            @media (max-width: 768px) {
+                font-size: 36px;
+                margin: 0 0 15px 0;
+            }
+
+            @media (max-width: 480px) {
+                font-size: 28px;
+                margin: 0 0 12px 0;
+            }
+
+            @media (max-width: 320px) {
+                font-size: 22px;
+                margin: 0 0 10px 0;
+            }
         }
 
         p {
             font-size: 18px;
             margin: 0;
             opacity: 0.95;
+
+            @media (max-width: 768px) {
+                font-size: 16px;
+            }
+
+            @media (max-width: 480px) {
+                font-size: 14px;
+            }
+
+            @media (max-width: 320px) {
+                font-size: 12px;
+            }
         }
     }
 }

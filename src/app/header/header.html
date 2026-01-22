@@ -28,6 +28,9 @@
                     <a href="/aviation-spotter-hotels" class="dropdown-link dropdown-link-aviation">
                         {{ getTranslation('aviationSpotterHotels') }}
                     </a>
+                    <a [routerLink]="['/airlinesim-ceo-tools']" class="dropdown-link dropdown-link-aviation">
+                        {{ getTranslation('airlineSimCeoTools') }}
+                    </a>
                     <a href="/" class="dropdown-link dropdown-link-aviation last-link-in-dropdown">
                         {{ getTranslation('msfsComparison') }}
                     </a>
@@ -97,15 +100,15 @@
                         <img class="open-in-new-tab-icon" [src]="darkmodePNG('open-in-new-tab-icon')"
                             alt="open in new tab icon">{{ getTranslation('myCareerPage') }}
                     </a>
-                    <a target="_blank" href="https://github.com/WorldChris380"
-                        class="dropdown-link dropdown-link-career">
-                        <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">{{
-                        getTranslation('github') }}
-                    </a>
                     <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
-                        class="dropdown-link dropdown-link-career last-link-in-dropdown">
+                        class="dropdown-link dropdown-link-career">
                         <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">{{
                         getTranslation('linkedin') }}
+                    </a>
+                    <a target="_blank" href="https://github.com/WorldChris380"
+                        class="dropdown-link dropdown-link-career last-link-in-dropdown">
+                        <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">{{
+                        getTranslation('github') }}
                     </a>
                 </div>
             </div>
@@ -146,13 +149,20 @@
                             <img id="adobe-stock-mobile-logo" [src]="darkmodePNG('adobe-stock-logo')"
                                 alt="adobe stock logo">{{ getTranslation('buyPhotos') }}
                         </a>
-                        <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-aviation">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"
+                            [queryParams]="{ filter: 'aviation' }" class="mobile-dropdown-link dropdown-link-aviation">
                             {{ getTranslation('aviationGallery') }}
                         </a>
-                        <a href="/aviation-spotter-hotels" class="mobile-dropdown-link dropdown-link-aviation">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/aviation-spotter-hotels']"
+                            class="mobile-dropdown-link dropdown-link-aviation">
                             {{ getTranslation('aviationSpotterHotels') }}
                         </a>
-                        <a href="/" class="mobile-dropdown-link dropdown-link-aviation">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/airlinesim-ceo-tools']"
+                            class="mobile-dropdown-link dropdown-link-aviation">
+                            {{ getTranslation('airlineSimCeoTools') }}
+                        </a>
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/']"
+                            class="mobile-dropdown-link dropdown-link-aviation">
                             {{ getTranslation('msfsComparison') }}
                         </a>
                     </div>
@@ -162,13 +172,16 @@
                         href="javascript:void(0);">{{ getTranslation('travel') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'travel'" id="mobile-travel-dropdown"
                         [class.open]="openMobileDropdownMenu === 'travel'">
-                        <a href="javascript:void(0);" class="mobile-dropdown-link dropdown-link-travel">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"
+                            [queryParams]="{ filter: 'travel' }" class="mobile-dropdown-link dropdown-link-travel">
                             {{ getTranslation('travelGallery') }}
                         </a>
-                        <a href="/photography-travels" class="mobile-dropdown-link dropdown-link-travel">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography-travels']"
+                            class="mobile-dropdown-link dropdown-link-travel">
                             {{ getTranslation('photographyTravels') }}
                         </a>
-                        <a href="/my-visited-countries" class="mobile-dropdown-link dropdown-link-travel">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/my-visited-countries']"
+                            class="mobile-dropdown-link dropdown-link-travel">
                             {{ getTranslation('myVisitedCountries') }}
                         </a>
                     </div>
@@ -178,7 +191,8 @@
                         href="javascript:void(0);">Blog</a>
                     <div style="display: none;" *ngIf="openMobileDropdownMenu === 'blog'" id="mobile-blog-dropdown"
                         [class.open]="openMobileDropdownMenu === 'blog'">
-                        <a class="mobile-dropdown-link dropdown-link-blog" href="javascript:void(0);">
+                        <a (click)="closeMenuAfterNavigation()" class="mobile-dropdown-link dropdown-link-blog"
+                            [routerLink]="['/']">
                             MSFS Career addons comparison
                         </a>
                     </div>
@@ -188,7 +202,8 @@
                         href="javascript:void(0);">{{ getTranslation('myCareer') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'career'" id="mobile-career-dropdown"
                         [class.open]="openMobileDropdownMenu === 'career'">
-                        <a [routerLink]="['/career']" class="mobile-dropdown-link dropdown-link-career">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']"
+                            class="mobile-dropdown-link dropdown-link-career">
                             {{ getTranslation('viewCV') }}
                         </a>
                         <a target="_blank" href="https://career.christian-boehme.com"

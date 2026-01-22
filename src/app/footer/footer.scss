@@ -59,3 +59,27 @@
         height: 20px;
     }
 }
+
+@media (max-width: 320px) {
+    #footer-full-width {
+        min-height: 60px;
+    }
+
+    #footer-content-limitation {
+        gap: 12px;
+        font-size: 12px;
+    }
+
+    #second-footer-column {
+        gap: 8px;
+    }
+
+    #third-footer-column {
+        gap: 8px;
+
+        .github-logo {
+            width: 16px;
+            height: 16px;
+        }
+    }
+}

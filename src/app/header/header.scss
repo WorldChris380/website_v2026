@@ -93,7 +93,8 @@ nav {
 }
 
 #career-nav:hover {
-    background: $cb-blue-ish;
+    background: $cb-career-grey;
+    color: $cb-white-ish;
 }
 
 // 3rd Header Column
@@ -191,7 +192,8 @@ nav {
 }
 
 .complete-menu-div:hover #career-nav {
-    background-color: $cb-blue-ish;
+    background-color: $cb-career-grey;
+    color: $cb-white-ish;
 }
 
 .dropdown-link {
@@ -222,7 +224,8 @@ nav {
 }
 
 .dropdown-link-career:hover {
-    background-color: $cb-blue-ish;
+    background-color: $cb-career-grey;
+    color: $cb-white-ish !important;
 }
 
 .dropdown-submenu-wrapper {
@@ -381,8 +384,12 @@ nav {
             background-color: $cb-green-ish;
         }
 
+        &.burger-menu-blue-item {
+            color: $cb-career-grey;
+        }
+
         &.burger-menu-blue-item:hover {
-            background-color: $cb-blue-ish;
+            background-color: lighten($cb-career-grey, 25%);
         }
 
         &.burger-menu-dark-green-item:hover {
@@ -391,10 +398,6 @@ nav {
 
         &.burger-menu-orange-item:hover {
             background-color: $cb-orange-ish;
-        }
-
-        &.burger-menu-blue-item:hover {
-            background-color: $cb-blue-ish;
         }
     }
 }
@@ -573,6 +576,64 @@ nav {
     }
 }
 
+@media(max-width: 480px) {
+    #page-heading {
+        font-size: 18px;
+        margin-left: 6px;
+    }
 
+    #header-logo-img {
+        height: 26px;
+        width: 26px;
+    }
+}
 
-@media(max-width: 480px) {}
+@media(max-width: 320px) {
+    #header-full-width {
+        height: 36px;
+    }
+
+    #page-heading {
+        font-size: 14px;
+        margin-left: 4px;
+    }
+
+    #header-logo-img {
+        height: 22px;
+        width: 22px;
+    }
+
+    #burger-menu-open-icon,
+    #burger-menu-close-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 20px;
+        margin-right: 2px;
+    }
+
+    #burger-menu-content.open {
+        height: calc(100dvh - 36px);
+        top: 36px;
+    }
+
+    #mobileBottomMenu {
+        height: 70px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    #language-toggle-mobile .flag-icon {
+        width: 20px;
+        height: 14px;
+    }
+
+    #light-icon-burger img,
+    #moon-icon-burger img {
+        height: 24px;
+        width: 24px;
+    }
+
+    body {
+        padding-top: 36px;
+    }
+}

@@ -4,6 +4,7 @@ $cb-grey-ish: #1f1f1f;
 $cb-green-ish: #d2ee82;
 $cb-dark-green-ish: #5e784d;
 $cb-blue-ish: #89BCD9;
+$cb-career-grey: #2d2d2d;
 $cb-orange-ish: #fbc093;
 $cb-red-ish: #f28c8c;
 
@@ -54,6 +55,17 @@ a:visited {
     color: $cb-grey-ish;
 }
 
+// Responsive Design
+@media(max-width: 320px) {
+    body {
+        padding-top: 36px;
+    }
+
+    * {
+        font-size: 14px;
+    }
+}
+
 // Dark mode styles
 
 /* Global dark background + base text color */
@@ -97,7 +109,8 @@ body.dark-mode .dropdown-link-blog:hover {
 }
 
 body.dark-mode .dropdown-link-career:hover {
-    background-color: $cb-blue-ish !important;
+    background-color: lighten($cb-career-grey, 15%) !important;
+    color: $cb-white-ish !important;
 }
 
 body.dark-mode .dropdown-link-travel:hover {
@@ -161,7 +174,8 @@ body.dark-mode #burger-menu-content {
     }
 
     & .dropdown-link-career:hover {
-        background-color: $cb-blue-ish !important;
+        background-color: $cb-career-grey !important;
+        color: $cb-white-ish !important;
     }
 
 }
