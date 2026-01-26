@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    
+    <!-- Homepage -->
+    <url>
+        <loc>https://www.christian-boehme.com/</loc>
+        <lastmod>2026-01-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- Gallery -->
+    <url>
+        <loc>https://www.christian-boehme.com/gallery</loc>
+        <lastmod>2026-01-26</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Photography Travels -->
+    <url>
+        <loc>https://www.christian-boehme.com/photography-travels</loc>
+        <lastmod>2026-01-26</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Aviation Spotter Hotels -->
+    <url>
+        <loc>https://www.christian-boehme.com/aviation-spotter-hotels</loc>
+        <lastmod>2026-01-26</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- AirlineSim CEO Tools -->
+    <url>
+        <loc>https://www.christian-boehme.com/airlinesim-ceo-tools</loc>
+        <lastmod>2026-01-26</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Air Germany -->
+    <url>
+        <loc>https://www.christian-boehme.com/air-germany</loc>
+        <lastmod>2026-01-26</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- My Visited Countries -->
+    <url>
+        <loc>https://www.christian-boehme.com/my-visited-countries</loc>
+        <lastmod>2026-01-26</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Career -->
+    <url>
+        <loc>https://www.christian-boehme.com/career</loc>
+        <lastmod>2026-01-26</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Legal (Impressum, Privacy, Terms) -->
+    <url>
+        <loc>https://www.christian-boehme.com/legal</loc>
+        <lastmod>2026-01-26</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.5</priority>
+    </url>
+
+</urlset>

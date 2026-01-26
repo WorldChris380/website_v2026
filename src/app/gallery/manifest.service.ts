@@ -14,10 +14,12 @@ export interface ImageManifest {
     images: Array<{
         url: string;
         title: string;
+        titleDE?: string;
         category: string;
         continent: string;
         country: string;
         fileName: string;
+        fileNameDE?: string;
         path: string;
     }>;
 }

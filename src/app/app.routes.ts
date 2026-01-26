@@ -4,7 +4,7 @@ import { AviationSpotterHotels } from './travel/aviation-spotter-hotels/aviation
 import { Gallery } from './gallery/gallery';
 import { HomeAtf } from './homepage/home-atf/home-atf';
 import { MyVisitedCountries } from './photography/my-visited-countries/my-visited-countries';
-import { Career } from './career-preview/career/career';
+import { Career } from './career/career/career';
 import { Legal } from './legal/legal';
 import { AirlineSim } from './aviation/airlineSim/airlineSim';
 import { AirGermany } from './aviation/airlineSim/airGermany';

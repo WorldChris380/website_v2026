@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LanguageService, Language } from '../../language.service';
+import { MetaService } from '../../services/meta.service';
 
 @Component({
     selector: 'app-air-germany',
@@ -52,9 +53,33 @@ export class AirGermany implements OnInit {
         { city: 'Amsterdam', country: 'Netherlands', type: 'Regional', icon: '🚲' },
     ];
 
-    constructor(private languageService: LanguageService) { }
+    constructor(
+        private languageService: LanguageService,
+        private metaService: MetaService
+    ) { }
 
     ngOnInit() {
+        // SEO Meta Tags
+        this.metaService.updateSEO(
+            {
+                title: 'Air Germany - AirlineSim Virtual Airline | Christian Böhme',
+                description: 'Air Germany virtual airline in AirlineSim. Explore fleet details, routes, and airline operations in the simulation game.',
+                image: 'https://www.christian-boehme.com/assets/img/icons-and-logos/christian-boehme-logo.png',
+                url: 'https://www.christian-boehme.com/air-germany',
+                type: 'website'
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": "Air Germany",
+                "description": "Virtual airline in AirlineSim simulation game",
+                "founder": {
+                    "@type": "Person",
+                    "name": "Christian Böhme"
+                }
+            }
+        );
+
         this.currentLanguage = this.languageService.getCurrentLanguage();
         this.languageService.language$.subscribe((lang) => {
             this.currentLanguage = lang;

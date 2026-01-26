@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LanguageService, Language } from '../../language.service';
+import { MetaService } from '../../services/meta.service';
 
 @Component({
     selector: 'app-airline-sim',
@@ -71,9 +72,40 @@ export class AirlineSim implements OnInit {
         discord: 'https://discord.com/channels/113555701774749696/1249639537450160138',
     };
 
-    constructor(private languageService: LanguageService) { }
+    constructor(
+        private languageService: LanguageService,
+        private metaService: MetaService
+    ) { }
 
     ngOnInit() {
+        // SEO Meta Tags
+        this.metaService.updateSEO(
+            {
+                title: 'AirlineSim CEO Tools - Chrome Extension | Christian Böhme',
+                description: 'Powerful Chrome extension for AirlineSim with fleet management, ranking tracker, load factor analysis and more. Enhance your airline management experience.',
+                image: 'https://www.christian-boehme.com/assets/img/icons-and-logos/christian-boehme-logo.png',
+                url: 'https://www.christian-boehme.com/airlinesim-ceo-tools',
+                type: 'website'
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "SoftwareApplication",
+                "name": "AirlineSim CEO Tools",
+                "applicationCategory": "BrowserExtension",
+                "operatingSystem": "Chrome",
+                "description": "Chrome extension for AirlineSim fleet management and analytics",
+                "author": {
+                    "@type": "Person",
+                    "name": "Christian Böhme"
+                },
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "USD"
+                }
+            }
+        );
+
         this.currentLanguage = this.languageService.getCurrentLanguage();
         this.languageService.language$.subscribe((lang) => {
             this.currentLanguage = lang;

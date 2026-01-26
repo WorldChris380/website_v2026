@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { MetaService } from '../../services/meta.service';
 
 interface Continent {
     name: string;
@@ -112,9 +113,31 @@ export class MyVisitedCountries implements OnInit {
     ];
     availabilityReady = false;
 
-    constructor(private router: Router, private http: HttpClient, private cdr: ChangeDetectorRef) { }
+    constructor(
+        private router: Router,
+        private http: HttpClient,
+        private cdr: ChangeDetectorRef,
+        private metaService: MetaService
+    ) { }
 
     ngOnInit(): void {
+        // SEO Meta Tags
+        this.metaService.updateSEO(
+            {
+                title: 'My Visited Countries - Travel Map | Christian Böhme',
+                description: 'Interactive world map showing countries I have visited and photographed. Explore my travel journey across continents with photography from each destination.',
+                image: 'https://www.christian-boehme.com/assets/img/other/Dresden%20Skyline.jpg',
+                url: 'https://www.christian-boehme.com/my-visited-countries',
+                type: 'website'
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "Map",
+                "name": "Visited Countries Map",
+                "description": "Interactive map of countries visited and photographed by Christian Böhme"
+            }
+        );
+
         this.http.get<{ images: Array<{ country: string }>, statistics?: { countries?: string[] } }>('assets/img/photography/images-manifest.json').subscribe({
             next: (manifest) => {
                 (manifest.images || []).forEach(img => {

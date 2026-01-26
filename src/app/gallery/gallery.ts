@@ -5,16 +5,19 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ManifestService } from './manifest.service';
 import { LanguageService, Language } from '../language.service';
+import { MetaService } from '../services/meta.service';
 
 interface GalleryImage {
     id: number;
     url: string;
     title: string;
+    titleDE?: string;
     category: 'Aviation' | 'Travel' | 'All';
     continent: string;
     country: string;
     description: string;
     fileName: string;
+    fileNameDE?: string;
     path: string;
 }
 
@@ -30,6 +33,7 @@ interface ImageManifest {
     images: Array<{
         url: string;
         title: string;
+        titleDE?: string;
         category: string;
         continent: string;
         country: string;
@@ -74,15 +78,43 @@ export class Gallery implements OnInit {
         'czechia': 'czech republic'
     };
 
+    // Touch Events for Swipe
+    private touchStartX: number = 0;
+    private touchEndX: number = 0;
+
     constructor(
         private route: ActivatedRoute,
         private http: HttpClient,
         private manifestService: ManifestService,
         private languageService: LanguageService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private metaService: MetaService
     ) { }
 
     ngOnInit() {
+        // SEO Meta Tags
+        this.metaService.updateSEO(
+            {
+                title: 'Photography Gallery - Aviation & Travel | Christian Böhme',
+                description: 'Browse aviation and travel photography from around the world. High-quality photos from Asia, Europe, America, Africa and Oceania featuring aircraft, landscapes, and travel destinations.',
+                image: 'https://www.christian-boehme.com/assets/img/other/Dresden%20Skyline.jpg',
+                url: 'https://www.christian-boehme.com/gallery',
+                type: 'website'
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "ImageGallery",
+                "name": "Aviation & Travel Photography Gallery",
+                "description": "Collection of aviation and travel photographs from around the world",
+                "author": {
+                    "@type": "Person",
+                    "name": "Christian Böhme",
+                    "url": "https://www.christian-boehme.com"
+                },
+                "url": "https://www.christian-boehme.com/gallery"
+            }
+        );
+
         this.currentLanguage = this.languageService.getCurrentLanguage();
         this.languageService.language$.subscribe((lang) => {
             this.currentLanguage = lang;
@@ -160,11 +192,13 @@ export class Gallery implements OnInit {
                     id: index + 1,
                     url: img.url,
                     title: this.cleanTitle(img.title),
+                    titleDE: img.titleDE,
                     category: img.category as 'Aviation' | 'Travel' | 'All',
                     continent: img.continent,
                     country: img.country,
                     description: `${img.country} - ${img.continent}`,
                     fileName: img.fileName,
+                    fileNameDE: img.fileNameDE,
                     path: img.path
                 }));
 
@@ -318,7 +352,7 @@ export class Gallery implements OnInit {
     openLightbox(image: GalleryImage) {
         this.isLightboxOpen = true;
         this.currentLightboxImage = image;
-        this.currentLightboxImageIndex = this.allImages.findIndex(img => img.id === image.id);
+        this.currentLightboxImageIndex = this.filteredImages.findIndex(img => img.id === image.id);
         document.body.style.overflow = 'hidden';
     }
 
@@ -329,22 +363,157 @@ export class Gallery implements OnInit {
     }
 
     nextLightboxImage() {
-        if (this.currentLightboxImageIndex < this.allImages.length - 1) {
+        if (this.currentLightboxImageIndex < this.filteredImages.length - 1) {
             this.currentLightboxImageIndex++;
-            this.currentLightboxImage = this.allImages[this.currentLightboxImageIndex];
+            this.currentLightboxImage = this.filteredImages[this.currentLightboxImageIndex];
         } else {
             this.currentLightboxImageIndex = 0;
-            this.currentLightboxImage = this.allImages[0];
+            this.currentLightboxImage = this.filteredImages[0];
         }
     }
 
     previousLightboxImage() {
         if (this.currentLightboxImageIndex > 0) {
             this.currentLightboxImageIndex--;
-            this.currentLightboxImage = this.allImages[this.currentLightboxImageIndex];
+            this.currentLightboxImage = this.filteredImages[this.currentLightboxImageIndex];
         } else {
-            this.currentLightboxImageIndex = this.allImages.length - 1;
-            this.currentLightboxImage = this.allImages[this.currentLightboxImageIndex];
+            this.currentLightboxImageIndex = this.filteredImages.length - 1;
+            this.currentLightboxImage = this.filteredImages[this.currentLightboxImageIndex];
         }
     }
+
+    // Touch Event Handlers for Swipe Gestures
+    onTouchStart(event: TouchEvent) {
+        this.touchStartX = event.changedTouches[0].screenX;
+    }
+
+    onTouchEnd(event: TouchEvent) {
+        this.touchEndX = event.changedTouches[0].screenX;
+        this.handleSwipe();
+    }
+
+    private handleSwipe() {
+        const swipeThreshold = 50; // Minimum distance for a swipe
+        const difference = this.touchStartX - this.touchEndX;
+
+        if (Math.abs(difference) > swipeThreshold) {
+            if (difference > 0) {
+                // Swipe left - next image
+                this.nextLightboxImage();
+            } else {
+                // Swipe right - previous image
+                this.previousLightboxImage();
+            }
+        }
+    }
+
+    // Translation functions for continents and countries
+    translateContinent(continent: string): string {
+        if (this.currentLanguage === 'de') {
+            const translations: Record<string, string> = {
+                'Africa': 'Afrika',
+                'Asia': 'Asien',
+                'Australia and Oceania': 'Australien und Ozeanien',
+                'Europe': 'Europa',
+                'North America': 'Nordamerika',
+                'South America': 'Südamerika'
+            };
+            return translations[continent] || continent;
+        }
+        return continent;
+    }
+
+    translateCountry(country: string): string {
+        if (this.currentLanguage === 'de') {
+            const translations: Record<string, string> = {
+                // Africa
+                'Cape Verde': 'Kap Verde',
+                'Egypt': 'Ägypten',
+                // Asia
+                'Indonesia': 'Indonesien',
+                'Israel': 'Israel',
+                'Malaysia': 'Malaysia',
+                'Oman': 'Oman',
+                'Philippines': 'Philippinen',
+                'Qatar': 'Katar',
+                'Singapore': 'Singapur',
+                'Thailand': 'Thailand',
+                'United Arab Emirates (UAE)': 'Vereinigte Arabische Emirate (VAE)',
+                'South Korea': 'Südkorea',
+                'Japan': 'Japan',
+                'China': 'China',
+                'Vietnam': 'Vietnam',
+                // Australia and Oceania
+                'Australia': 'Australien',
+                'Fiji': 'Fidschi',
+                'New Zealand': 'Neuseeland',
+                // Europe
+                'Austria': 'Österreich',
+                'Belarus': 'Belarus',
+                'Belgium': 'Belgien',
+                'Bulgaria': 'Bulgarien',
+                'Croatia': 'Kroatien',
+                'Czech Republic': 'Tschechien',
+                'Denmark': 'Dänemark',
+                'England': 'England',
+                'Estonia': 'Estland',
+                'Finland': 'Finnland',
+                'France': 'Frankreich',
+                'Germany': 'Deutschland',
+                'Greece': 'Griechenland',
+                'Hungary': 'Ungarn',
+                'Iceland': 'Island',
+                'Ireland': 'Irland',
+                'Italy': 'Italien',
+                'Latvia': 'Lettland',
+                'Lithuania': 'Litauen',
+                'Luxembourg': 'Luxemburg',
+                'Montenegro': 'Montenegro',
+                'Netherlands': 'Niederlande',
+                'Norway': 'Norwegen',
+                'Poland': 'Polen',
+                'Portugal': 'Portugal',
+                'Romania': 'Rumänien',
+                'Russia': 'Russland',
+                'Serbia': 'Serbien',
+                'Slovakia': 'Slowakei',
+                'Slovenia': 'Slowenien',
+                'Spain': 'Spanien',
+                'Sweden': 'Schweden',
+                'Switzerland': 'Schweiz',
+                'Turkey': 'Türkei',
+                'Ukraine': 'Ukraine',
+                'United Kingdom': 'Vereinigtes Königreich',
+                'Vatican City': 'Vatikanstadt',
+                // North America
+                'Canada': 'Kanada',
+                'Costa Rica': 'Costa Rica',
+                'Dominican Republic': 'Dominikanische Republik',
+                'Mexico': 'Mexiko',
+                'United States': 'Vereinigte Staaten'
+            };
+            return translations[country] || country;
+        }
+        return country;
+    }
+
+    translateCategory(category: string): string {
+        if (this.currentLanguage === 'de') {
+            const translations: Record<string, string> = {
+                'Aviation': 'Luftfahrt',
+                'Travel': 'Reisen',
+                'All': 'Alle'
+            };
+            return translations[category] || category;
+        }
+        return category;
+    }
+
+    getImageTitle(image: GalleryImage): string {
+        if (this.currentLanguage === 'de' && image.titleDE) {
+            return image.titleDE;
+        }
+        return image.title;
+    }
 }
+

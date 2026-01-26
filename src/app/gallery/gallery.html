@@ -8,24 +8,23 @@
             <span class="breadcrumb-separator" *ngIf="selectedCategory !== 'All'">›</span>
             <button class="breadcrumb-btn" *ngIf="selectedCategory !== 'All'"
                 (click)="onCategoryChange(selectedCategory)">
-                {{ currentLanguage === 'en' ? selectedCategory : (selectedCategory === 'Aviation' ? 'Luftfahrt' :
-                'Reisen') }}
+                {{ translateCategory(selectedCategory) }}
             </button>
             <span class="breadcrumb-separator" *ngIf="selectedContinent !== 'All'">›</span>
             <button class="breadcrumb-btn" *ngIf="selectedContinent !== 'All'"
                 (click)="onContinentChange(selectedContinent)">
-                {{ selectedContinent }}
+                {{ translateContinent(selectedContinent) }}
             </button>
             <span class="breadcrumb-separator" *ngIf="selectedCountry !== 'All'">›</span>
-            <span class="breadcrumb-current" *ngIf="selectedCountry !== 'All'">{{ selectedCountry }}</span>
+            <span class="breadcrumb-current" *ngIf="selectedCountry !== 'All'">{{ translateCountry(selectedCountry)
+                }}</span>
         </div>
 
         <!-- Category Filter Buttons -->
         <div class="filter-buttons" *ngIf="selectedCategory === 'All'">
             <button *ngFor="let category of categories" [ngClass]="{ active: selectedCategory === category }"
                 (click)="onCategoryChange(category)" class="filter-btn">
-                {{ currentLanguage === 'en' ? category : (category === 'All' ? 'Alle' : category === 'Aviation' ?
-                'Luftfahrt' : 'Reisen') }}
+                {{ translateCategory(category) }}
             </button>
         </div>
 
@@ -33,7 +32,7 @@
         <div class="filter-buttons"
             *ngIf="selectedCategory !== 'All' && selectedContinent === 'All' && continents.length > 0">
             <button *ngFor="let continent of continents" (click)="onContinentChange(continent)" class="filter-btn">
-                {{ continent }}
+                {{ translateContinent(continent) }}
             </button>
         </div>
 
@@ -41,7 +40,7 @@
         <div class="filter-buttons"
             *ngIf="selectedContinent !== 'All' && selectedCountry === 'All' && countries.length > 0">
             <button *ngFor="let country of countries" (click)="onCountryChange(country)" class="filter-btn">
-                {{ country }}
+                {{ translateCountry(country) }}
             </button>
         </div>
 
@@ -71,8 +70,8 @@
                     decoding="async" />
                 <div class="image-overlay">
                     <div class="overlay-content">
-                        <h3>{{ image.title }}</h3>
-                        <p>{{ image.country }}</p>
+                        <h3>{{ getImageTitle(image) }}</h3>
+                        <p>{{ translateCountry(image.country) }}</p>
                     </div>
                 </div>
             </div>
@@ -104,7 +103,7 @@
             </button>
 
             <!-- Main Image -->
-            <div class="lightbox-main">
+            <div class="lightbox-main" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
                 <img *ngIf="currentLightboxImage" [src]="currentLightboxImage.url" [alt]="currentLightboxImage.title"
                     class="lightbox-image" />
             </div>
@@ -119,10 +118,13 @@
 
             <!-- Image Info -->
             <div class="lightbox-info" *ngIf="currentLightboxImage">
-                <h2>{{ currentLightboxImage.title }}</h2>
-                <p>{{ currentLightboxImage.country }}</p>
+                <h2>{{ getImageTitle(currentLightboxImage) }}</h2>
+                <p>{{ translateCountry(currentLightboxImage.country) }}</p>
+                <p class="lightbox-filename" *ngIf="currentLightboxImage.fileNameDE && currentLanguage === 'de'">{{
+                    currentLightboxImage.fileNameDE }}</p>
+                <p class="lightbox-filename" *ngIf="currentLanguage === 'en'">{{ currentLightboxImage.fileName }}</p>
                 <span class="lightbox-counter">
-                    {{ currentLightboxImageIndex + 1 }} / {{ allImages.length }}
+                    {{ currentLightboxImageIndex + 1 }} / {{ filteredImages.length }}
                 </span>
             </div>
 

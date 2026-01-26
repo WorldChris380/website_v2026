@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LanguageService, Language } from '../language.service';
+import { MetaService } from '../services/meta.service';
 
 @Component({
     selector: 'app-legal',
@@ -15,10 +16,22 @@ export class Legal implements OnInit {
 
     constructor(
         private languageService: LanguageService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private metaService: MetaService
     ) { }
 
     ngOnInit(): void {
+        // SEO Meta Tags
+        this.metaService.updateSEO(
+            {
+                title: 'Legal - Impressum, Privacy Policy, Terms | Christian Böhme',
+                description: 'Legal information including impressum, privacy policy and terms of service for christian-boehme.com',
+                image: 'https://www.christian-boehme.com/assets/img/other/Dresden%20Skyline.jpg',
+                url: 'https://www.christian-boehme.com/legal',
+                type: 'website'
+            }
+        );
+
         this.currentLanguage = this.languageService.getCurrentLanguage();
         this.languageService.language$.subscribe((lang) => {
             this.currentLanguage = lang;

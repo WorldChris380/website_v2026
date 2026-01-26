@@ -1,0 +1,34 @@
+# robots.txt for christian-boehme.com
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin or private areas (if any)
+# Disallow: /admin/
+
+# Sitemap location
+Sitemap: https://www.christian-boehme.com/sitemap.xml
+
+# Crawl-delay (optional, in seconds)
+# Crawl-delay: 1
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Block access to specific file types if needed
+# Disallow: /*.json$
+# Disallow: /*.xml$
+
+# Allow access to all images for Google Image Search
+User-agent: Googlebot-Image
+Allow: /assets/img/
+
+# Allow access to CSS and JS for proper rendering
+User-agent: *
+Allow: /*.css$
+Allow: /*.js$

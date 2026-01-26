@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { LanguageService, Language } from '../../language.service';
+import { MetaService } from '../../services/meta.service';
 
 @Component({
     selector: 'app-career',
@@ -17,10 +18,36 @@ export class Career implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private languageService: LanguageService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private metaService: MetaService
     ) { }
 
     ngOnInit() {
+        // SEO Meta Tags
+        this.metaService.updateSEO(
+            {
+                title: 'Christian Böhme - Career & CV | IT Support, Project Manager, Frontend Developer',
+                description: 'Professional career profile of Christian Böhme: IT Support, Project Manager and Frontend Developer with expertise in automation, E-Government solutions, and web development.',
+                image: 'https://www.christian-boehme.com/assets/img/other/Christian%20Boehme%20profile%20picture%20for%20web.jpg',
+                url: 'https://www.christian-boehme.com/career',
+                type: 'profile'
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "Person",
+                "name": "Christian Böhme",
+                "jobTitle": "IT Support | Project Manager | Frontend Developer",
+                "email": "career@christian-boehme.com",
+                "url": "https://www.christian-boehme.com",
+                "image": "https://www.christian-boehme.com/assets/img/other/Christian%20Boehme%20profile%20picture%20for%20web.jpg",
+                "sameAs": [
+                    "https://www.linkedin.com/in/christian-boehme",
+                    "https://github.com/WorldChris380"
+                ],
+                "knowsAbout": ["IT Support", "Project Management", "Frontend Development", "Angular", "TypeScript", "Automation"]
+            }
+        );
+
         this.currentLanguage = this.languageService.getCurrentLanguage();
         this.languageService.language$.subscribe((lang) => {
             this.currentLanguage = lang;
@@ -48,7 +75,7 @@ export class Career implements OnInit {
         name: 'Christian Böhme',
         title: 'IT-Support | Projektmanager | Frontend-Entwickler',
         about: 'Vielseitiger Fachmann mit langjähriger Erfahrung in IT-Support, Projektmanagement und Frontend-Entwicklung. Leidenschaftlich beim Automatisieren von Workflows, Optimieren von Systemen und beim Erstellen benutzerfreundlicher Webanwendungen. Erfahrung in Software-Rollouts, E-Government-Lösungen und digitalem Produktmanagement.',
-        email: 'contact@christian-boehme.com',
+        email: 'career@christian-boehme.com',
         location: 'Deutschland',
         website: 'www.christian-boehme.com',
     };
@@ -57,7 +84,7 @@ export class Career implements OnInit {
         name: 'Christian Böhme',
         title: 'IT Support | Project Manager | Frontend Developer',
         about: 'Versatile professional with a robust background in IT Support, Project Management, and Frontend Development. Passionate about automating workflows, optimizing systems, and building user-friendly web applications. Experienced in software roll-outs, E-Government solutions, and digital product management.',
-        email: 'contact@christian-boehme.com',
+        email: 'career@christian-boehme.com',
         location: 'Germany',
         website: 'www.christian-boehme.com',
     };
