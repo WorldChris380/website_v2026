@@ -1,4 +1,11 @@
 <div class="gallery-container">
+    <app-shop-cart></app-shop-cart>
+
+    <!-- Counters component showing statistics -->
+    <div class="gallery-counters-wrapper">
+        <app-counters></app-counters>
+    </div>
+
     <!-- Filter Section -->
     <div class="gallery-header">
         <!-- Breadcrumb Navigation -->
@@ -72,6 +79,10 @@
                     <div class="overlay-content">
                         <h3>{{ getImageTitle(image) }}</h3>
                         <p>{{ translateCountry(image.country) }}</p>
+                        <div class="overlay-actions">
+                            <button class="gallery-shop-btn" (click)="addToCart(image); $event.stopPropagation()">Add to
+                                cart</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -97,43 +108,47 @@
     <!-- Lightbox -->
     <div *ngIf="isLightboxOpen" class="lightbox-overlay" (click)="closeLightbox()">
         <div class="lightbox-container" (click)="$event.stopPropagation()">
-            <!-- Close Button -->
-            <button class="lightbox-close" (click)="closeLightbox()">
-                ✕
-            </button>
-
             <!-- Main Image -->
             <div class="lightbox-main" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
-                <img *ngIf="currentLightboxImage" [src]="currentLightboxImage.url" [alt]="currentLightboxImage.title"
-                    class="lightbox-image" />
-            </div>
+                <!-- Close Button -->
+                <div class="lightbox-image-wrapper">
+                    <!-- Close Button -->
+                    <button class="lightbox-close" (click)="closeLightbox()">
+                        ✕
+                    </button>
 
-            <!-- Navigation Arrows -->
-            <button class="lightbox-nav lightbox-nav-prev" (click)="previousLightboxImage()">
-                ← A
-            </button>
-            <button class="lightbox-nav lightbox-nav-next" (click)="nextLightboxImage()">
-                D →
-            </button>
+                    <img *ngIf="currentLightboxImage" [src]="currentLightboxImage.url"
+                        [alt]="currentLightboxImage.title" class="lightbox-image" #lightboxImg />
 
-            <!-- Image Info -->
-            <div class="lightbox-info" *ngIf="currentLightboxImage">
-                <h2>{{ getImageTitle(currentLightboxImage) }}</h2>
-                <p>{{ translateCountry(currentLightboxImage.country) }}</p>
-                <p class="lightbox-filename" *ngIf="currentLightboxImage.fileNameDE && currentLanguage === 'de'">{{
-                    currentLightboxImage.fileNameDE }}</p>
-                <p class="lightbox-filename" *ngIf="currentLanguage === 'en'">{{ currentLightboxImage.fileName }}</p>
-                <span class="lightbox-counter">
-                    {{ currentLightboxImageIndex + 1 }} / {{ filteredImages.length }}
-                </span>
-            </div>
+                    <!-- Navigation Buttons -->
+                    <button class="lightbox-nav lightbox-nav-prev" (click)="previousLightboxImage()"
+                        *ngIf="filteredImages.length > 1">
+                        ← {{ currentLanguage === 'en' ? 'Back' : 'Zurück' }}
+                    </button>
+                    <button class="lightbox-nav lightbox-nav-next" (click)="nextLightboxImage()"
+                        *ngIf="filteredImages.length > 1">
+                        {{ currentLanguage === 'en' ? 'Next' : 'Weiter' }} →
+                    </button>
+                </div>
 
-            <!-- Keyboard Help -->
-            <div class="lightbox-help">
-                <span>{{ currentLanguage === 'en' ? 'Use' : 'Nutze' }} <kbd>A</kbd> / <kbd>←</kbd> {{ currentLanguage
-                    === 'en' ? 'to go back' : 'um zurückzugehen' }} • <kbd>D</kbd> / <kbd>→</kbd> {{ currentLanguage ===
-                    'en' ? 'to go next' : 'um weiterzugehen' }} •
-                    <kbd>ESC</kbd> {{ currentLanguage === 'en' ? 'to close' : 'zum Schließen' }}</span>
+                <div class="lightbox-info" *ngIf="currentLightboxImage">
+                    <h2>{{ getImageTitle(currentLightboxImage) }}</h2>
+                    <p>{{ translateCountry(currentLightboxImage.country) }}</p>
+                    <button class="lightbox-purchase" (click)="addToCart(currentLightboxImage)">Add to cart</button>
+                    <span class="lightbox-counter">
+                        {{ currentLightboxImageIndex + 1 }} / {{ filteredImages.length }}
+                    </span>
+                </div>
+
+                <!-- Keyboard Help -->
+                <div class="lightbox-help">
+                    <span>{{ currentLanguage === 'en' ? 'Use' : 'Nutze' }} <kbd>A</kbd> / <kbd>←</kbd> {{
+                        currentLanguage
+                        === 'en' ? 'to go back' : 'um zurückzugehen' }} • <kbd>D</kbd> / <kbd>→</kbd> {{ currentLanguage
+                        ===
+                        'en' ? 'to go next' : 'um weiterzugehen' }} •
+                        <kbd>ESC</kbd> {{ currentLanguage === 'en' ? 'to close' : 'zum Schließen' }}</span>
+                </div>
             </div>
         </div>
     </div>

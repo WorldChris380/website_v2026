@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -6,6 +6,9 @@ import { HttpClient } from '@angular/common/http';
 import { ManifestService } from './manifest.service';
 import { LanguageService, Language } from '../language.service';
 import { MetaService } from '../services/meta.service';
+import { ShopService } from '../shop/shop.service';
+import { ShopCart } from '../shop/shop-cart';
+import { Counters } from '../homepage/counters/counters';
 
 interface GalleryImage {
     id: number;
@@ -45,7 +48,7 @@ interface ImageManifest {
 @Component({
     selector: 'app-gallery',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, ShopCart, Counters],
     templateUrl: './gallery.html',
     styleUrls: ['./gallery.scss'],
 })
@@ -88,7 +91,8 @@ export class Gallery implements OnInit {
         private manifestService: ManifestService,
         private languageService: LanguageService,
         private cdr: ChangeDetectorRef,
-        private metaService: MetaService
+        private metaService: MetaService,
+        private shopService: ShopService
     ) { }
 
     ngOnInit() {
@@ -347,6 +351,17 @@ export class Gallery implements OnInit {
 
     nextPage() {
         this.goToPage(this.currentPage + 1);
+    }
+
+    addToCart(image: GalleryImage | null) {
+        if (!image) return;
+        this.shopService.addImageToCart({
+            id: String(image.id),
+            title: this.getImageTitle(image),
+            imageUrl: image.url,
+            price: 19,
+            currency: 'EUR'
+        });
     }
 
     openLightbox(image: GalleryImage) {

@@ -1,0 +1,318 @@
+.shop-page {
+    min-height: 100vh;
+    padding: 80px 20px 40px;
+    display: flex;
+    justify-content: center;
+    background: #f8fafc;
+
+    @media (max-width: 768px) {
+        padding: 60px 16px 32px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 50px 12px 24px;
+    }
+}
+
+.shop-shell {
+    width: min(100%, 1920px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.shop-hero {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #ffffff;
+    padding: 32px 24px;
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgba(30, 58, 138, 0.2);
+    margin-bottom: 24px;
+
+    @media (max-width: 768px) {
+        padding: 24px 20px;
+        border-radius: 12px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 20px 16px;
+    }
+
+    h1 {
+        @media (max-width: 480px) {
+            font-size: 24px;
+        }
+    }
+}
+
+.eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+
+.lede {
+    margin: 8px 0 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.shop-body {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 20px;
+    color: #1e293b;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+    @media (max-width: 768px) {
+        padding: 16px;
+    }
+}
+
+.hint {
+    color: #64748b;
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+
+    @media (max-width: 1024px) {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.product-card {
+    background: #f8fafc;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    display: grid;
+    gap: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    &.featured {
+        border: 2px solid #1e3a8a;
+        background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        box-shadow: 0 8px 24px rgba(30, 58, 138, 0.15);
+        order: -1;
+
+        &:hover {
+            box-shadow: 0 12px 32px rgba(30, 58, 138, 0.25);
+        }
+    }
+}
+
+.badge-new {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.product-price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    .price {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1e3a8a;
+    }
+
+    .stock-indicator {
+        background: #ecfdf5;
+        color: #047857;
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+}
+
+.product-header h3 {
+    margin: 4px 0 0;
+    font-size: 20px;
+    color: #0f172a;
+
+    @media (max-width: 480px) {
+        font-size: 18px;
+    }
+}
+
+.product-copy {
+    margin: 0;
+    color: #475569;
+    line-height: 1.5;
+    font-size: 15px;
+}
+
+.product-meta {
+    margin: 0;
+    padding-left: 18px;
+    color: #64748b;
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.product-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.product-actions .primary,
+.product-actions .secondary {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.product-actions .primary {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+    font-size: 14px;
+}
+
+.product-actions .secondary {
+    background: transparent;
+    color: #1e3a8a;
+    border-color: #1e3a8a;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.product-actions .primary:hover,
+.product-actions .secondary:hover {
+    transform: translateY(-1px);
+}
+
+.product-actions .primary:hover {
+    box-shadow: 0 6px 16px rgba(30, 58, 138, 0.35);
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+}
+
+.product-actions .secondary:hover {
+    background: rgba(30, 58, 138, 0.08);
+    color: #1e40af;
+}
+
+:host-context(body.dark-mode) {
+    .shop-page {
+        background: #0b1220;
+    }
+
+    .shop-hero {
+        background: linear-gradient(135deg, #1e3a8a, #1e40af);
+        color: #ffffff;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+
+        .lede {
+            color: rgba(255, 255, 255, 0.9);
+        }
+    }
+
+    .shop-body {
+        background: #0f172a;
+        border-color: rgba(255, 255, 255, 0.08);
+        color: #f8fafc;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .hint {
+        color: #cbd5e1;
+    }
+
+    .product-card {
+        background: #111827;
+        border-color: rgba(255, 255, 255, 0.08);
+
+        &:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        &.featured {
+            border: 2px solid #3b82f6;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+
+            &:hover {
+                box-shadow: 0 12px 32px rgba(59, 130, 246, 0.3);
+            }
+        }
+    }
+
+    .product-header h3 {
+        color: #f8fafc;
+    }
+
+    .product-copy {
+        color: #d1d5db;
+    }
+
+    .product-meta {
+        color: #cbd5e1;
+    }
+
+    .product-price {
+        border-color: rgba(255, 255, 255, 0.08);
+
+        .price {
+            color: #93c5fd;
+        }
+
+        .stock-indicator {
+            background: rgba(16, 185, 129, 0.1);
+            color: #6ee7b7;
+        }
+    }
+
+    .product-actions .primary {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+
+        &:hover {
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
+        }
+    }
+
+    .product-actions .secondary {
+        color: #93c5fd;
+        border-color: #3b82f6;
+
+        &:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #bfdbfe;
+        }
+    }
+}

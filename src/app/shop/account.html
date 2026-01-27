@@ -1,0 +1,38 @@
+<div class="account-page">
+    <div class="account-shell">
+        <header class="account-hero">
+            <p class="eyebrow">Shop</p>
+            <h1>My Account</h1>
+            <p class="lede">Manage your purchases. Authentication placeholder — hook up your preferred auth later.</p>
+        </header>
+        <section class="account-body">
+            <nav class="account-nav">
+                <button class="nav-btn active">Overview</button>
+                <button class="nav-btn">My Purchases</button>
+                <button class="nav-btn">My Downloads</button>
+                <button class="nav-btn">Billing</button>
+            </nav>
+
+            <div class="account-section">
+                <h2>Recent Orders</h2>
+                <div class="empty-state">
+                    <p>No orders yet. Visit the <a [routerLink]="['/shop']">shop</a> to browse products.</p>
+                </div>
+            </div>
+
+            <div class="account-section">
+                <h2>My Downloads</h2>
+                <div class="empty-state">
+                    <p>Your purchased photos and print-ready files will appear here.</p>
+                </div>
+            </div>
+
+            <div class="account-section">
+                <h2>Billing Information</h2>
+                <div class="empty-state">
+                    <p>Payment history and invoices will be displayed once you make a purchase.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

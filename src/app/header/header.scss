@@ -10,12 +10,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid $cb-grey-ish;
+    border-bottom: 0;
     z-index: 999;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    border-bottom: solid 1px $cb-white-ish;
 
     &:hover #header-logo-div img {
         transform: rotate(1360deg);
@@ -88,6 +89,11 @@ nav {
     background: $cb-blue-ish;
 }
 
+#shop-nav:hover {
+    background: #1e3a8a;
+    color: $cb-white-ish;
+}
+
 #blog-nav:hover {
     background: $cb-orange-ish;
 }
@@ -108,6 +114,55 @@ nav {
     justify-content: end;
     gap: 12px;
     align-items: center;
+}
+
+.header-cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 32px;
+    font-size: 18px;
+    color: $cb-grey-ish;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    position: relative;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.06);
+        border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .cart-badge {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #ef4444;
+        color: white;
+        display: grid;
+        place-items: center;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 0 4px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+}
+
+:host-context(body.dark-mode) {
+    .header-cart {
+        color: $cb-white-ish;
+        border-color: transparent;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+    }
 }
 
 #language-toggle {
@@ -150,7 +205,7 @@ nav {
     left: 0;
     background-color: $cb-white-ish;
     border-radius: 0 0 4px 4px;
-    border-top: 1px solid $cb-grey-ish;
+    border-top: 1px solid $cb-white-ish;
     gap: 4px;
     overflow: visible;
     max-height: 0;
@@ -188,8 +243,14 @@ nav {
     background-color: $cb-blue-ish;
 }
 
+.complete-menu-div:hover #shop-nav {
+    background-color: #1e3a8a;
+    color: $cb-white-ish;
+}
+
 .complete-menu-div:hover #travel-nav {
     background-color: $cb-dark-green-ish;
+    color: $cb-white-ish;
 }
 
 .complete-menu-div:hover #career-nav {
@@ -217,8 +278,14 @@ nav {
     background-color: $cb-blue-ish;
 }
 
+.dropdown-link-shop:hover {
+    background-color: #1e3a8a;
+    color: $cb-white-ish !important;
+}
+
 .dropdown-link-travel:hover {
     background-color: $cb-dark-green-ish;
+    color: $cb-white-ish !important;
 }
 
 .dropdown-link-blog:hover {
@@ -274,11 +341,16 @@ nav {
     transform: translateX(-10px);
     transition: opacity 0.2s, transform 0.2s;
     z-index: 1000;
+    border-radius: 0 4px 4px 4px;
 
     &.open {
         opacity: 1;
         pointer-events: auto;
         transform: translateX(0);
+    }
+
+    :last-child {
+        border-radius: 0 0 4px 4px;
     }
 }
 
@@ -294,6 +366,19 @@ nav {
         background-color: $cb-career-grey;
         color: $cb-white-ish !important;
     }
+
+    &:last-child {
+        border-radius: 0 0 4px 4px;
+    }
+}
+
+.dropdown-link-aviation .dropdown-sublink {
+    color: $cb-white-ish !important;
+}
+
+.dropdown-link-aviation .dropdown-sublink:hover {
+    background-color: $cb-blue-ish;
+    color: $cb-white-ish !important;
 }
 
 /* Dark Mode Submenu */
@@ -303,12 +388,92 @@ nav {
         box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
     }
 
+    .dropdown-link-aviation .dropdown-sublist {
+        background-color: $cb-blue-ish;
+    }
+
     .dropdown-sublink {
         color: $cb-white-ish !important;
 
         &:hover {
-            background-color: lighten($cb-career-grey, 20%);
-            color: $cb-white-ish !important;
+            background-color: $cb-white-ish;
+            color: $cb-grey-ish !important;
+        }
+    }
+
+    .dropdown-link-aviation .dropdown-sublink {
+        color: $cb-white-ish !important;
+    }
+
+    .dropdown-link-aviation .dropdown-sublink:hover {
+        background-color: $cb-blue-ish;
+        color: $cb-white-ish !important;
+    }
+
+    .dropdown-link-career:hover {
+        background-color: $cb-white-ish;
+        color: $cb-grey-ish !important;
+
+        .open-in-new-tab-icon,
+        .github-logo,
+        .linkedIn-Logo {
+            filter: none;
+        }
+    }
+
+    .dropdown-link-photography {
+        color: $cb-white-ish;
+    }
+
+    .dropdown-link-photography:hover {
+        color: black !important;
+    }
+
+    #menu-link-photography {
+        color: $cb-grey-ish !important;
+    }
+
+    .dropdown-link-shop:hover {
+        background-color: #1e3a8a;
+    }
+
+    .complete-menu-div:hover #career-nav {
+        background-color: $cb-white-ish;
+        color: $cb-career-grey;
+    }
+
+    // All career dropdown-list items get white background on hover
+    .complete-menu-div:hover .dropdown-list {
+        background-color: $cb-career-grey;
+    }
+
+    .dropdown-list .dropdown-link:hover {
+        background-color: $cb-white-ish;
+        color: $cb-white-ish !important;
+
+        .open-in-new-tab-icon,
+        .github-logo,
+        .linkedIn-Logo {
+            filter: none;
+        }
+    }
+
+    .dropdown-list .dropdown-link-aviation:hover {
+        background-color: $cb-blue-ish;
+        color: $cb-white-ish !important;
+    }
+
+    .dropdown-list .dropdown-link-photography:hover {
+        color: $cb-grey-ish !important;
+    }
+
+    .dropdown-list .dropdown-link-career:hover {
+        color: $cb-grey-ish !important;
+
+        .open-in-new-tab-icon,
+        .github-logo,
+        .linkedIn-Logo {
+            filter: brightness(0);
         }
     }
 }
@@ -342,16 +507,48 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     font-size: 24px;
     color: $cb-grey-ish;
     background-color: $cb-white-ish;
-    border: none;
-    border-radius: 4px;
-    padding: 4px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 6px;
     margin: 0 4px 0 0;
     cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.05);
+        transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    &:hover {
+        border-color: $cb-grey-ish;
+        transform: scale(1.05);
+
+        &::before {
+            left: 100%;
+        }
+    }
+
+    &:focus {
+        outline: 2px solid $cb-blue-ish;
+        outline-offset: 2px;
+    }
+
+    @media (min-width: 769px) {
+        display: none;
+    }
 }
 
 #burger-menu-close-icon {
@@ -359,54 +556,146 @@ nav {
     align-items: center;
     justify-content: center;
     background-color: $cb-white-ish;
-    border: none;
+    border: 2px solid transparent;
     font-weight: 900;
     font-size: 24px;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     color: $cb-red-ish;
     margin-right: 4px;
     cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    padding: 6px;
+
+    &:hover {
+        border-color: $cb-red-ish;
+        transform: scale(1.05) rotate(90deg);
+    }
+
+    &:focus {
+        outline: 2px solid $cb-blue-ish;
+        outline-offset: 2px;
+    }
+
+    @media (min-width: 769px) {
+        display: none !important;
+    }
 }
 
 #burger-menu-content {
     flex-direction: column;
-    justify-content: space-between;
-    position: absolute;
+    justify-content: flex-start;
+    position: fixed;
     width: 0;
     height: 0;
     left: 0;
-    top: 0;
-    padding-top: 0px;
-    gap: 8px;
+    top: 40px;
+    padding: 0;
+    gap: 0;
     background-color: $cb-white-ish;
     overflow: hidden;
-    transition: height 1s ease, opacity 1s ease;
+    overflow-y: auto;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
     a {
         color: $cb-grey-ish;
-        padding: 4px;
+        padding: 14px 16px;
         width: 100%;
         text-align: start;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        font-size: 15px;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
 
-        &.burger-menu-green-item:hover {
-            background-color: $cb-green-ish;
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            transition: left 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: -1;
+        }
+
+        &.burger-menu-green-item {
+            color: $cb-dark-green-ish;
+            font-weight: 600;
+
+            &::before {
+                background-color: rgba($cb-green-ish, 0.15);
+            }
+
+            &:hover {
+                background-color: rgba($cb-green-ish, 0.2);
+
+                &::before {
+                    left: 100%;
+                }
+            }
         }
 
         &.burger-menu-blue-item {
-            color: $cb-career-grey;
+            color: $cb-blue-ish;
+            font-weight: 600;
+
+            &::before {
+                background-color: rgba($cb-blue-ish, 0.1);
+            }
+
+            &:hover {
+                background-color: rgba($cb-blue-ish, 0.15);
+
+                &::before {
+                    left: 100%;
+                }
+            }
         }
 
-        &.burger-menu-blue-item:hover {
-            background-color: lighten($cb-career-grey, 25%);
+        &.burger-menu-dark-green-item {
+            color: $cb-dark-green-ish;
+            font-weight: 600;
+
+            &::before {
+                background-color: rgba($cb-dark-green-ish, 0.1);
+            }
+
+            &:hover {
+                background-color: rgba($cb-dark-green-ish, 0.15);
+
+                &::before {
+                    left: 100%;
+                }
+            }
         }
 
-        &.burger-menu-dark-green-item:hover {
-            background-color: $cb-dark-green-ish;
+        &.burger-menu-orange-item {
+            color: $cb-orange-ish;
+            font-weight: 600;
+
+            &::before {
+                background-color: rgba($cb-orange-ish, 0.1);
+            }
+
+            &:hover {
+                background-color: rgba($cb-orange-ish, 0.15);
+
+                &::before {
+                    left: 100%;
+                }
+            }
         }
 
-        &.burger-menu-orange-item:hover {
-            background-color: $cb-orange-ish;
+        &:focus {
+            outline: 2px solid $cb-blue-ish;
+            outline-offset: -2px;
         }
     }
 }
@@ -414,24 +703,49 @@ nav {
 #burger-menu-content.open {
     height: calc(100dvh - 40px);
     width: 100vw;
-    top: 40px;
     opacity: 1;
+    padding: 8px 0;
+    animation: slideInFromLeft 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 #burger-menu-content.closing {
     height: 0;
     width: 0;
     opacity: 0;
-    transition: height 1s ease, opacity 1s ease;
+    padding: 0;
+    animation: slideOutToLeft 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slideOutToLeft {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
 }
 
 #burger-menu-main-content {
     display: flex;
     flex-direction: column;
-    align-items: start;
-    text-align: end;
+    align-items: stretch;
+    text-align: start;
     width: 100%;
     background-color: $cb-white-ish;
+    max-width: 100vw;
 }
 
 .mobile-dropdown-link {
@@ -440,25 +754,29 @@ nav {
     justify-content: flex-end;
     align-items: center;
     gap: 8px;
-    padding-left: 16px !important;
+    padding-left: 24px !important;
 }
 
 // Mobile Dropdown Menus
 #mobile-aviation-dropdown,
+#mobile-shop-dropdown,
 #mobile-travel-dropdown,
 #mobile-blog-dropdown,
 #mobile-career-dropdown {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    transition: max-height 0.5s ease, opacity 0.5s ease;
+    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
 #mobile-aviation-dropdown.open,
+#mobile-shop-dropdown.open,
 #mobile-travel-dropdown.open,
 #mobile-blog-dropdown.open,
 #mobile-career-dropdown.open {
-    max-height: 500px;
+    max-height: 600px;
     opacity: 1;
     display: flex;
     flex-direction: column;
@@ -471,6 +789,30 @@ nav {
 
 .goBackToMainMobileMenu {
     display: none;
+    padding: 12px 16px !important;
+    background-color: rgba(0, 0, 0, 0.05);
+    color: $cb-grey-ish;
+    font-weight: 600;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '← ';
+        margin-right: 8px;
+        font-weight: 700;
+    }
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.08);
+        padding-left: 20px !important;
+    }
+
+    &:active {
+        background-color: rgba(0, 0, 0, 0.12);
+    }
 }
 
 #adobe-stock-mobile-logo {
@@ -589,6 +931,8 @@ nav {
     #page-heading {
         font-size: 18px;
         margin-left: 6px;
+        padding: 4px 0;
+        line-height: 1.2;
     }
 
     #header-logo-img {

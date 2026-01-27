@@ -117,6 +117,396 @@
     }
 }
 
+// Dream Trip Section
+.dream-trip-section {
+    padding: 80px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    background: linear-gradient(135deg, rgba(210, 238, 130, 0.1), rgba(45, 80, 22, 0.05));
+
+    @media (max-width: 768px) {
+        padding: 50px 15px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 40px 12px;
+    }
+
+    .dream-trip-content {
+        width: 100%;
+    }
+
+    .dream-trip-header {
+        text-align: center;
+        margin-bottom: 50px;
+
+        h2 {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 0 0 15px 0;
+            color: $cb-dark-green-ish;
+
+            @media (max-width: 768px) {
+                font-size: 36px;
+            }
+
+            @media (max-width: 480px) {
+                font-size: 28px;
+            }
+        }
+
+        .trip-subtitle {
+            font-size: 22px;
+            color: #555;
+            margin: 0;
+
+            @media (max-width: 768px) {
+                font-size: 18px;
+            }
+        }
+    }
+
+    .trip-description {
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 50px;
+
+        @media (max-width: 768px) {
+            padding: 30px;
+        }
+
+        @media (max-width: 480px) {
+            padding: 20px;
+        }
+
+        .description-text {
+            color: #333;
+            line-height: 1.8;
+
+            h3 {
+                font-size: 28px;
+                color: $cb-dark-green-ish;
+                margin-top: 0;
+                margin-bottom: 15px;
+            }
+
+            h4 {
+                font-size: 20px;
+                color: $cb-dark-green-ish;
+                margin-top: 30px;
+                margin-bottom: 15px;
+            }
+
+            p {
+                margin: 15px 0;
+                font-size: 16px;
+            }
+
+            ul {
+                margin: 15px 0;
+                padding-left: 25px;
+
+                li {
+                    margin: 10px 0;
+                    font-size: 16px;
+
+                    strong {
+                        color: $cb-dark-green-ish;
+                    }
+                }
+            }
+
+            .important-note {
+                background: rgba(210, 238, 130, 0.3);
+                padding: 20px;
+                border-left: 4px solid $cb-dark-green-ish;
+                border-radius: 4px;
+                margin: 30px 0;
+                font-style: italic;
+            }
+        }
+    }
+
+    // Registration Form Section
+    .registration-form-section {
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+        @media (max-width: 768px) {
+            padding: 30px;
+        }
+
+        @media (max-width: 480px) {
+            padding: 20px;
+        }
+
+        h3 {
+            font-size: 28px;
+            color: $cb-dark-green-ish;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        >p {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .registration-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+
+            @media (max-width: 768px) {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+
+                &:nth-child(5),
+                &:nth-child(6) {
+                    @media (min-width: 769px) {}
+                }
+
+                label {
+                    font-weight: 600;
+                    margin-bottom: 8px;
+                    color: $cb-grey-ish;
+                    font-size: 14px;
+                }
+
+                input,
+                select,
+                textarea {
+                    padding: 12px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    font-size: 14px;
+                    font-family: inherit;
+                    transition: border-color 0.3s ease;
+
+                    &:focus {
+                        outline: none;
+                        border-color: $cb-dark-green-ish;
+                        box-shadow: 0 0 0 3px rgba(210, 238, 130, 0.2);
+                    }
+                }
+
+                textarea {
+                    resize: vertical;
+                    min-height: 120px;
+                    grid-column: 1 / -1;
+                }
+
+                &.checkbox {
+                    flex-direction: row;
+                    align-items: flex-start;
+                    grid-column: 1 / -1;
+                    margin-bottom: 20px;
+
+                    input[type="checkbox"] {
+                        width: 20px;
+                        height: 20px;
+                        margin-right: 10px;
+                        margin-top: 2px;
+                        cursor: pointer;
+                    }
+
+                    label {
+                        margin: 0;
+                        font-weight: 400;
+                    }
+                }
+            }
+
+            .submit-button {
+                grid-column: 1 / -1;
+                background: $cb-dark-green-ish;
+                color: white;
+                padding: 14px 40px;
+                border: none;
+                border-radius: 4px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                margin-top: 10px;
+
+                &:hover {
+                    background: $cb-green-ish;
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 20px rgba(45, 80, 22, 0.2);
+                }
+
+                &:active {
+                    transform: translateY(0);
+                }
+            }
+
+            .form-note {
+                grid-column: 1 / -1;
+                font-size: 12px;
+                color: #999;
+                margin-top: -10px;
+                text-align: center;
+            }
+        }
+
+        .form-success {
+            text-align: center;
+            padding: 40px 20px;
+
+            h4 {
+                font-size: 24px;
+                color: $cb-dark-green-ish;
+                margin: 0 0 15px 0;
+            }
+
+            p {
+                color: #555;
+                font-size: 16px;
+                margin: 0 0 20px 0;
+            }
+
+            .reset-button {
+                background: $cb-dark-green-ish;
+                color: white;
+                padding: 12px 30px;
+                border: none;
+                border-radius: 4px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background: $cb-green-ish;
+                }
+            }
+        }
+    }
+}
+
+// Dark Mode for Dream Trip Section
+:host-context(body.dark-mode) {
+    .dream-trip-section {
+        background: linear-gradient(135deg, rgba(45, 80, 22, 0.1), rgba(210, 238, 130, 0.05));
+
+        .dream-trip-header h2 {
+            color: $cb-green-ish;
+        }
+
+        .dream-trip-header .trip-subtitle {
+            color: #aaa;
+        }
+
+        .trip-description {
+            background: lighten($cb-grey-ish, 8%);
+
+            .description-text {
+                color: $cb-white-ish;
+
+                h3,
+                h4 {
+                    color: $cb-green-ish;
+                }
+
+                p {
+                    color: #ccc;
+                }
+
+                ul li {
+                    color: #ccc;
+
+                    strong {
+                        color: $cb-green-ish;
+                    }
+                }
+
+                .important-note {
+                    background: rgba(210, 238, 130, 0.15);
+                    border-left-color: $cb-green-ish;
+                    color: #ddd;
+                }
+            }
+        }
+
+        .registration-form-section {
+            background: lighten($cb-grey-ish, 8%);
+
+            h3 {
+                color: $cb-green-ish;
+            }
+
+            >p {
+                color: #aaa;
+            }
+
+            .registration-form {
+                .form-group {
+                    label {
+                        color: $cb-white-ish;
+                    }
+
+                    input,
+                    select,
+                    textarea {
+                        background: lighten($cb-grey-ish, 2%);
+                        color: $cb-white-ish;
+                        border-color: #444;
+
+                        &:focus {
+                            border-color: $cb-green-ish;
+                            box-shadow: 0 0 0 3px rgba(210, 238, 130, 0.1);
+                        }
+                    }
+
+                    &.checkbox label {
+                        color: $cb-white-ish;
+                    }
+                }
+
+                .submit-button {
+                    background: $cb-green-ish;
+                    color: $cb-dark-green-ish;
+
+                    &:hover {
+                        background: lighten($cb-green-ish, 10%);
+                    }
+                }
+            }
+
+            .form-success {
+                h4 {
+                    color: $cb-green-ish;
+                }
+
+                p {
+                    color: #ccc;
+                }
+
+                .reset-button {
+                    background: $cb-green-ish;
+                    color: $cb-dark-green-ish;
+
+                    &:hover {
+                        background: lighten($cb-green-ish, 10%);
+                    }
+                }
+            }
+        }
+    }
+}
+
 // Gallery Section
 .gallery-section {
     padding: 80px 20px;

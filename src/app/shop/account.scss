@@ -1,0 +1,211 @@
+.account-page {
+    min-height: 100vh;
+    padding: 80px 20px 40px;
+    display: flex;
+    justify-content: center;
+    background: #f8fafc;
+
+    @media (max-width: 768px) {
+        padding: 60px 16px 32px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 50px 12px 24px;
+    }
+}
+
+.account-shell {
+    width: min(100%, 1920px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.account-hero {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #ffffff;
+    padding: 32px 24px;
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgba(30, 58, 138, 0.2);
+    margin-bottom: 24px;
+
+    @media (max-width: 768px) {
+        padding: 24px 20px;
+        border-radius: 12px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 20px 16px;
+    }
+
+    h1 {
+        @media (max-width: 480px) {
+            font-size: 24px;
+        }
+    }
+}
+
+.eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+
+.lede {
+    margin: 8px 0 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.account-body {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 20px;
+    color: #1e293b;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    display: grid;
+    gap: 24px;
+
+    @media (max-width: 768px) {
+        padding: 16px;
+    }
+}
+
+.account-nav {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+    @media (max-width: 640px) {
+        gap: 8px;
+    }
+}
+
+.nav-btn {
+    background: transparent;
+    color: #475569;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+
+    @media (max-width: 640px) {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    &:hover {
+        background: rgba(30, 58, 138, 0.06);
+        border-color: #1e3a8a;
+        color: #1e3a8a;
+    }
+
+    &.active {
+        background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        color: #ffffff;
+        border-color: transparent;
+    }
+}
+
+.account-section {
+    h2 {
+        margin: 0 0 12px;
+        font-size: 20px;
+        color: #0f172a;
+
+        @media (max-width: 480px) {
+            font-size: 18px;
+        }
+    }
+}
+
+.empty-state {
+    background: #f8fafc;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    color: #64748b;
+    font-size: 15px;
+
+    @media (max-width: 480px) {
+        padding: 20px 16px;
+    }
+
+    a {
+        color: #1e3a8a;
+        text-decoration: underline;
+        font-weight: 600;
+
+        &:hover {
+            color: #1e40af;
+        }
+    }
+}
+
+:host-context(body.dark-mode) {
+    .account-page {
+        background: #0b1220;
+    }
+
+    .account-hero {
+        background: linear-gradient(135deg, #1e3a8a, #1e40af);
+        color: #ffffff;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+
+        .lede {
+            color: rgba(255, 255, 255, 0.9);
+        }
+    }
+
+    .account-body {
+        background: #0f172a;
+        border-color: rgba(255, 255, 255, 0.08);
+        color: #f8fafc;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .account-nav {
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-btn {
+        color: #cbd5e1;
+        border-color: rgba(255, 255, 255, 0.12);
+
+        &:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+            color: #93c5fd;
+        }
+
+        &.active {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: #ffffff;
+        }
+    }
+
+    .account-section h2 {
+        color: #f8fafc;
+    }
+
+    .empty-state {
+        background: #111827;
+        border-color: rgba(255, 255, 255, 0.06);
+        color: #cbd5e1;
+
+        a {
+            color: #93c5fd;
+
+            &:hover {
+                color: #bfdbfe;
+            }
+        }
+    }
+}

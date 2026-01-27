@@ -57,7 +57,7 @@
     <div class="career-grid" *ngIf="activeSection === 'experience' || activeSection === 'education'">
         <main class="main-content">
             <section class="section" *ngIf="activeSection === 'experience'">
-                <h3 class="section-title">Experience</h3>
+                <h3 class="section-title">{{ getTranslation('experience') }}</h3>
                 <div class="timeline">
                     <div class="timeline-item" *ngFor="let exp of experiences">
                         <div class="timeline-marker"></div>
@@ -74,7 +74,7 @@
             </section>
 
             <section class="section" *ngIf="activeSection === 'education'">
-                <h3 class="section-title">Education</h3>
+                <h3 class="section-title">{{ getTranslation('education') }}</h3>
                 <div class="timeline">
                     <div class="timeline-item" *ngFor="let edu of education">
                         <div class="timeline-marker"></div>
@@ -95,14 +95,14 @@
     <!-- Skills and Certifications Section -->
     <div class="skills-certifications-container" *ngIf="activeSection === 'skills'">
         <section class="section">
-            <h3 class="section-title">Skills</h3>
+            <h3 class="section-title">{{ getTranslation('skills') }}</h3>
             <div class="skills-wrapper">
                 <span class="skill-tag" *ngFor="let skill of skills">{{ skill }}</span>
             </div>
         </section>
 
         <section class="section">
-            <h3 class="section-title">Certifications</h3>
+            <h3 class="section-title">{{ getTranslation('certifications') }}</h3>
             <ul class="cert-list">
                 <li class="cert-item" *ngFor="let cert of certifications">
                     <span class="icon">📜</span>
@@ -112,7 +112,7 @@
         </section>
 
         <section class="section">
-            <h3 class="section-title">Languages</h3>
+            <h3 class="section-title">{{ getTranslation('languages') }}</h3>
             <div class="languages-list">
                 <div class="language-item" *ngFor="let lang of languages">
                     <span class="lang-name">{{ lang.name }}</span>
@@ -125,7 +125,7 @@
 
     <!-- Projects Section -->
     <section class="section projects-section" *ngIf="projects.length > 0 && activeSection === 'projects'">
-        <h3 class="section-title">My Projects</h3>
+        <h3 class="section-title">{{ getTranslation('projects') }}</h3>
         <div class="projects-grid">
             <div class="project-card" *ngFor="let project of projects">
                 <h4 class="project-name">{{ project.name }}</h4>
@@ -133,27 +133,27 @@
 
                 <div class="project-meta">
                     <div class="meta-item">
-                        <strong>Technologies:</strong> {{ project.technologies }}
+                        <strong>{{ getTranslation('technologies') }}:</strong> {{ project.technologies }}
                     </div>
                     <div class="meta-item">
-                        <strong>Duration:</strong> {{ project.duration }}
+                        <strong>{{ getTranslation('duration') }}:</strong> {{ project.duration }}
                     </div>
                 </div>
 
                 <div class="project-details">
                     <div class="detail-block" *ngIf="project.workProcess">
-                        <h5>Work Process</h5>
+                        <h5>{{ getTranslation('process') }}</h5>
                         <p>{{ project.workProcess }}</p>
                     </div>
                     <div class="detail-block" *ngIf="project.teamExperience">
-                        <h5>Team Experience</h5>
+                        <h5>{{ getTranslation('teamExperience') }}</h5>
                         <p>{{ project.teamExperience }}</p>
                     </div>
                 </div>
 
                 <div class="project-links">
                     <a [href]="project.liveUrl" target="_blank" class="project-link" *ngIf="project.liveUrl">
-                        <span class="icon">🔗</span> Live Test
+                        <span class="icon">🔗</span> {{ getTranslation('liveTest') }}
                     </a>
                     <a [href]="project.githubUrl" target="_blank" class="project-link" *ngIf="project.githubUrl">
                         <img src="/assets/img/icons-and-logos/GitHub-logo-black.png" alt="GitHub" class="link-icon">
@@ -166,13 +166,14 @@
 
     <!-- Testimonials Section -->
     <section class="section testimonials-section" *ngIf="testimonials.length > 0 && activeSection === 'testimonials'">
-        <h3 class="section-title">What Colleagues Say</h3>
+        <h3 class="section-title">{{ getTranslation('whatColleaguesSay') }}</h3>
         <div class="testimonials-grid">
             <div class="testimonial-card" *ngFor="let testimonial of testimonials">
                 <p class="testimonial-quote">"{{ testimonial.quote }}"</p>
                 <div class="testimonial-author">
                     <strong>{{ testimonial.name }}</strong>
-                    <span class="testimonial-project">Project: {{ testimonial.project }}</span>
+                    <span class="testimonial-project">{{ getTranslation('projectLabel') }} {{ testimonial.project
+                        }}</span>
                 </div>
                 <a [href]="testimonial.link" target="_blank" class="testimonial-link" *ngIf="testimonial.link">
                     <img *ngIf="testimonial.linkText === 'LinkedIn'"

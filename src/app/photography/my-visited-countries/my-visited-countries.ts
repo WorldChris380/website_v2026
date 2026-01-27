@@ -124,17 +124,22 @@ export class MyVisitedCountries implements OnInit {
         // SEO Meta Tags
         this.metaService.updateSEO(
             {
-                title: 'My Visited Countries - Travel Map | Christian Böhme',
-                description: 'Interactive world map showing countries I have visited and photographed. Explore my travel journey across continents with photography from each destination.',
+                title: 'My Visited Countries - Interactive Travel Map | Christian Böhme',
+                description: 'Interactive world map showing 40+ countries I have visited and photographed across 6 continents. Explore my travel journey with photography from each destination including Europe, Asia, America, Africa, and Oceania.',
                 image: 'https://www.christian-boehme.com/assets/img/other/Dresden%20Skyline.jpg',
                 url: 'https://www.christian-boehme.com/my-visited-countries',
                 type: 'website'
             },
             {
                 "@context": "https://schema.org",
-                "@type": "Map",
-                "name": "Visited Countries Map",
-                "description": "Interactive map of countries visited and photographed by Christian Böhme"
+                "@type": "TravelAction",
+                "name": "World Travel Map",
+                "description": "Interactive map of countries visited and photographed by Christian Böhme across Europe, Asia, North America, Africa, and Australia/Oceania",
+                "agent": {
+                    "@type": "Person",
+                    "name": "Christian Böhme",
+                    "url": "https://www.christian-boehme.com"
+                }
             }
         );
 

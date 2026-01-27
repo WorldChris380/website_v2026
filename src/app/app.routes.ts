@@ -5,18 +5,28 @@ import { Gallery } from './gallery/gallery';
 import { HomeAtf } from './homepage/home-atf/home-atf';
 import { MyVisitedCountries } from './photography/my-visited-countries/my-visited-countries';
 import { Career } from './career/career/career';
+import { CareerHome } from './career/career-home/career-home';
 import { Legal } from './legal/legal';
 import { AirlineSim } from './aviation/airlineSim/airlineSim';
-import { AirGermany } from './aviation/airlineSim/airGermany';
+import { AirGermany } from './aviation/airlineSim/airGermany/airGermany';
+import { TwaHotelJfk } from './travel/aviation-spotter-hotels/twa-hotel-jfk/twa-hotel-jfk';
+import { ShopHome } from './shop/shop-home';
+import { Account } from './shop/account';
+import { ShopCartPage } from './shop/shop-cart-page';
 
 export const routes: Routes = [
     { path: '', component: HomeAtf },
     { path: 'gallery', component: Gallery },
     { path: 'photography-travels', component: PhotographyTravels },
     { path: 'aviation-spotter-hotels', component: AviationSpotterHotels },
+    { path: 'aviation-spotter-hotels/twa-hotel-jfk', component: TwaHotelJfk },
+    { path: 'shop', component: ShopHome },
+    { path: 'shop/cart', component: ShopCartPage },
+    { path: 'shop/account', component: Account },
     { path: 'airlinesim-ceo-tools', component: AirlineSim },
     { path: 'air-germany', component: AirGermany },
     { path: 'my-visited-countries', component: MyVisitedCountries },
+    { path: 'career-home', component: CareerHome },
     { path: 'career', component: Career },
     { path: 'legal', component: Legal }
 ];

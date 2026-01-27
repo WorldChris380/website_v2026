@@ -55,6 +55,8 @@ export class LanguageService {
             'travelGallery': 'Travel Gallery',
             'photographyTravels': 'Photography Travels',
             'myVisitedCountries': 'My Visited Countries',
+            'shop': 'Shop',
+            'myAccount': 'My Account',
             'profile': 'Profile',
             'experience': 'Experience',
             'education': 'Education',
@@ -82,6 +84,10 @@ export class LanguageService {
             'technologies': 'Technologies',
             'duration': 'Duration',
             'process': 'Process',
+            'teamExperience': 'Team Experience',
+            'liveTest': 'Live Test',
+            'whatColleaguesSay': 'What colleagues say',
+            'projectLabel': 'Project:',
 
             // Footer
             'legal': 'Legal',
@@ -136,6 +142,8 @@ export class LanguageService {
             'travelGallery': 'Reise Galerie',
             'photographyTravels': 'Fotografie Reisen',
             'myVisitedCountries': 'Meine besuchten Länder',
+            'shop': 'Shop',
+            'myAccount': 'Mein Konto',
             'profile': 'Profil',
             'experience': 'Erfahrung',
             'education': 'Ausbildung',
@@ -163,6 +171,10 @@ export class LanguageService {
             'technologies': 'Technologien',
             'duration': 'Dauer',
             'process': 'Vorgehensweise',
+            'teamExperience': 'Team-Erfahrung',
+            'liveTest': 'Live-Test',
+            'whatColleaguesSay': 'Das sagen Kollegen',
+            'projectLabel': 'Projekt:',
 
             // Footer
             'legal': 'Rechtliches',

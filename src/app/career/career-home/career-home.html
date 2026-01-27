@@ -1,0 +1,94 @@
+<div class="career-home-container">
+    <!-- Hero Section -->
+    <section class="career-hero">
+        <div class="hero-glassmorphic-card">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="welcome-text">{{ getTranslation('welcome') }}</span>
+                    <span class="career-text">{{ getTranslation('careerJourney') }}</span>
+                </h1>
+                <p class="hero-subtitle">Christian Böhme</p>
+                <p class="hero-role">Senior Software Engineer & IT Professional</p>
+                <div class="hero-actions">
+                    <a routerLink="/career" class="btn btn-primary">
+                        {{ getTranslation('viewFullCV') }}
+                    </a>
+                    <a href="https://www.linkedin.com/in/christian-boehme-business/" target="_blank"
+                        class="btn btn-secondary">
+                        {{ getTranslation('contactMe') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="glassmorphic-card">
+            <h2 class="section-title">{{ getTranslation('about') }}</h2>
+            <p class="about-text">{{ getTranslation('aboutText') }}</p>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="achievements-section">
+        <h2 class="section-title">{{ getTranslation('achievements') }}</h2>
+        <div class="achievements-grid">
+            <div class="achievement-card glassmorphic-card" *ngFor="let achievement of achievements">
+                <div class="achievement-icon">{{ achievement.icon }}</div>
+                <div class="achievement-value">{{ achievement.value }}</div>
+                <div class="achievement-label">{{ achievement.label }}</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills-section">
+        <h2 class="section-title">{{ getTranslation('mySkills') }}</h2>
+        <div class="skills-grid">
+            <div class="skill-card glassmorphic-card" *ngFor="let skill of skills">
+                <div class="skill-header">
+                    <span class="skill-icon">{{ skill.icon }}</span>
+                    <span class="skill-name">{{ skill.name }}</span>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-progress" [style.width.%]="skill.level"></div>
+                </div>
+                <div class="skill-level">{{ skill.level }}%</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section class="experience-section">
+        <h2 class="section-title">{{ getTranslation('experience') }}</h2>
+        <div class="experience-timeline">
+            <div class="experience-card glassmorphic-card" *ngFor="let exp of experiences; let i = index"
+                [class.alternate]="i % 2 === 1">
+                <div class="experience-icon">{{ exp.icon }}</div>
+                <div class="experience-content">
+                    <h3 class="experience-title">{{ exp.title }}</h3>
+                    <p class="experience-company">{{ exp.company }}</p>
+                    <p class="experience-period">{{ exp.period }}</p>
+                    <p class="experience-description">{{ exp.description }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="glassmorphic-card cta-card">
+            <h2 class="cta-title">Ready to Work Together?</h2>
+            <p class="cta-text">Let's build something amazing together. View my full CV or get in touch!</p>
+            <div class="cta-buttons">
+                <a routerLink="/career" class="btn btn-primary">
+                    {{ getTranslation('viewFullCV') }}
+                </a>
+                <a href="https://github.com/WorldChris380" target="_blank" class="btn btn-secondary">
+                    GitHub Profile
+                </a>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,40 @@
+<div class="cart-drawer" [class.open]="isOpen()">
+    <div class="cart-header">
+        <div>
+            <p class="eyebrow">Shop</p>
+            <h3>Your selection</h3>
+        </div>
+        <button class="close" (click)="toggle()">✕</button>
+    </div>
+
+    <div class="cart-body" *ngIf="totalQuantity > 0; else emptyState">
+        <div class="cart-item" *ngFor="let item of items">
+            <img [src]="item.imageUrl" [alt]="item.title">
+            <div class="info">
+                <p class="title">{{ item.title }}</p>
+                <p class="price">{{ item.price | number:'1.2-2' }} {{ item.currency }}</p>
+                <div class="qty">
+                    <button (click)="decrement(item.id)">−</button>
+                    <span>{{ item.quantity }}</span>
+                    <button (click)="increment(item.id)">+</button>
+                </div>
+            </div>
+            <button class="remove" (click)="remove(item.id)">Remove</button>
+        </div>
+    </div>
+
+    <ng-template #emptyState>
+        <div class="empty">
+            <p>No items yet. Add photos from the gallery.</p>
+        </div>
+    </ng-template>
+
+    <div class="cart-footer">
+        <div class="total">
+            <span>Total</span>
+            <strong>{{ total | number:'1.2-2' }} EUR</strong>
+        </div>
+        <app-paypal-button [amount]="total" currency="EUR"></app-paypal-button>
+        <button class="clear" (click)="clear()" *ngIf="totalQuantity > 0">Clear cart</button>
+    </div>
+</div>

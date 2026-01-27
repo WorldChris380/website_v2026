@@ -46,6 +46,7 @@ export class DarkModeService {
             if (stored === 'true') return true;
             if (stored === 'false') return false;
         } catch { }
-        return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        // Default to false instead of system preference
+        return false;
     }
 }

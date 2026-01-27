@@ -409,59 +409,113 @@
 
 // Dark Mode
 body.dark-mode .aviation-spotter-hotels-main {
-    background-color: $cb-grey-ish;
-    color: $cb-white-ish;
+    background-color: #0b1220;
+    color: #e5e7eb;
 }
 
 body.dark-mode .hero-section {
-    background: linear-gradient(135deg, rgba(89, 156, 195, 0.9), rgba(90, 138, 181, 0.2));
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.32), rgba(16, 185, 129, 0.22));
+
+    .hero-content {
+        color: #e5e7eb;
+
+        h1 {
+            color: #fff;
+        }
+
+        p {
+            color: #cbd5e1;
+        }
+    }
 }
 
-body.dark-mode .section-header {
-    h2 {
-        color: $cb-white-ish;
+body.dark-mode .hotels-section {
+    background: #0b1220;
+
+    .section-header {
+        h2 {
+            color: #e5e7eb;
+        }
+
+        p {
+            color: #a1a1aa;
+        }
     }
 
-    p {
-        color: #aaa;
+    .hotel-card {
+        background: #111827;
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
+
+        .card-content {
+            color: #e5e7eb;
+
+            h3 {
+                color: #f8fafc;
+            }
+
+            p {
+                color: #cbd5e1;
+            }
+
+            .location {
+                color: #a5b4fc;
+            }
+
+            .hotel-features .feature {
+                background: rgba(148, 163, 184, 0.15);
+                color: #e5e7eb;
+            }
+        }
+
+        .hotel-badge {
+            background: linear-gradient(135deg, #60a5fa, #34d399);
+            color: #0b1220;
+        }
+
+        .card-link {
+            color: #93c5fd;
+
+            &:hover {
+                color: #bfdbfe;
+            }
+        }
     }
 }
 
 body.dark-mode .features-section {
-    background: lighten($cb-grey-ish, 10%);
-}
+    background: #0f172a;
 
-body.dark-mode .hotel-card {
-    background: lighten($cb-grey-ish, 5%);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-
-    .card-content {
+    .feature-item {
         h3 {
-            color: $cb-white-ish;
+            color: #e5e7eb;
         }
 
         p {
-            color: #ccc;
+            color: #cbd5e1;
         }
-
-        .hotel-features .feature {
-            background: lighten($cb-grey-ish, 15%);
-            color: $cb-white-ish;
-        }
-    }
-
-    &:hover {
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
     }
 }
 
-body.dark-mode .feature-item {
-    h3 {
-        color: $cb-white-ish;
+body.dark-mode .cta-section {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+
+    .cta-content {
+        h2 {
+            color: #fff;
+        }
+
+        p {
+            color: #cbd5e1;
+        }
     }
 
-    p {
-        color: #ccc;
+    .cta-button {
+        background: #e2e8f0;
+        color: #0f172a;
+
+        &:hover {
+            background: #f1f5f9;
+        }
     }
 }
 

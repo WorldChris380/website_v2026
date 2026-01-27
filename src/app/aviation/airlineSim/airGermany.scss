@@ -67,11 +67,34 @@
     font-size: 72px;
     font-weight: 700;
     margin: 0 0 15px 0;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
     letter-spacing: 2px;
 
     @media (max-width: 768px) {
         font-size: 42px;
+    }
+}
+
+// Dark mode veil overlay
+:host-context(body.dark-mode) {
+    .hero-section {
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.08);
+            z-index: 2;
+            pointer-events: none;
+        }
+    }
+
+    .hero-section h1 {
+        position: relative;
+        z-index: 3;
     }
 }
 

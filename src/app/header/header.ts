@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DarkModeService } from '../dark-mode.service';
 import { LanguageService, Language } from '../language.service';
-type MenuHeading = 'aviation' | 'blog' | 'travel' | 'career';
+import { ShopService } from '../shop/shop.service';
+type MenuHeading = 'aviation' | 'blog' | 'travel' | 'shop' | 'career' | 'photography';
 
 @Component({
   selector: 'app-header',
@@ -23,9 +24,14 @@ export class Header implements OnInit {
   openMobileDropdownMenu: MenuHeading | null = null;
   openMobileSubDropdownMenu: string | null = null;
 
+  get cartQuantity(): number {
+    return this.shopService.totalQuantity();
+  }
+
   constructor(
     private darkModeService: DarkModeService,
     private languageService: LanguageService,
+    private shopService: ShopService,
     private cdr: ChangeDetectorRef
   ) { }
 

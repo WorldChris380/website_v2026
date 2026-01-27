@@ -1,69 +1,111 @@
-<div id="home-atf" class="hero-section" role="main" aria-label="Homepage hero with photography, travel and career slides">
-    <!-- Slide 1: Photography -->
+<div id="home-atf" class="hero-section" role="main"
+    aria-label="Homepage hero with photography, travel and career slides">
+    <!-- Slide 1: Travel -->
     <div class="hero-background" [ngClass]="{ 'active': currentSlide === 0 }"
         [style.opacity]="currentSlide === 0 ? 1 : 0"
-        style="background-image: url('/assets/img/photography/Travel/Australia and Oceania/Fiji/2017.06.01 Do/Paradise in Fiji in the Yasawa near blue lagoon .JPG');">
-    </div>
-    <div class="hero-background" [ngClass]="{ 'active': currentSlide === 1 }"
-        [style.opacity]="currentSlide === 1 ? 1 : 0"
         style="background-image: url('/assets/img/photography/Travel/North America/Costa Rica/2024.06.02 So Butterfly Garden, La Fortuna Hotel/Tropic vulcano Arenal view from La Fortuna .jpg');">
     </div>
+    <!-- Slide 2: Aviation -->
+    <div class="hero-background" [ngClass]="{ 'active': currentSlide === 1 }"
+        [style.opacity]="currentSlide === 1 ? 1 : 0"
+        style="background-image: url('/assets/img/photography/Aviation/Australia and Oceania/Australia/Fraser Island/Arriving small plane at an airstrip on Fraser Island in Australia .JPG');">
+    </div>
+    <!-- Slide 3: Photography -->
     <div class="hero-background" [ngClass]="{ 'active': currentSlide === 2 }"
-        [style.opacity]="currentSlide === 2 ? 1 : 0"
-        style="background-image: url('/assets/img/other/Dresden Skyline.jpg');">
+        [style.opacity]="currentSlide === 2 ? 1 : 0" style="background-image: url('/assets/img/other/CRB_8567B.JPG');">
+    </div>
+    <!-- Slide 4: Career - Bright Mode -->
+    <div class="hero-background hero-background-bright" [ngClass]="{ 'active': currentSlide === 3 }"
+        [style.opacity]="currentSlide === 3 ? 1 : 0"
+        style="background-image: url('/assets/img/other/cloudsurfing.JPG');">
+    </div>
+    <!-- Slide 4: Career - Dark Mode -->
+    <div class="hero-background hero-background-dark" [ngClass]="{ 'active': currentSlide === 3 }"
+        [style.opacity]="currentSlide === 3 ? 1 : 0"
+        style="background-image: url('/assets/img/other/Sydney Skyline Black n orange.JPG');">
     </div>
 
-    <!-- Slide 1 Content -->
+    <!-- Slide 1 Content: Travel -->
     <div class="hero-content" *ngIf="currentSlide === 0">
-        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Photography' : 'Fotografie' }}</h1>
+        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Travels.' : 'Reisen.' }}</h1>
+        <div class="hero-quotes">
+            <p class="hero-quote">{{ currentQuote }}</p>
+        </div>
         <div class="hero-buttons">
-            <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'travel' }">{{ currentLanguage ===
-                'en' ? 'View travel photos' : 'Reisefotografien ansehen' }}</a>
+            <a class="btn btn-primary" routerLink="/photography-travels">{{ currentLanguage === 'en' ? 'Travels' :
+                'Reisen' }}</a>
+            <a class="btn btn-secondary" routerLink="/gallery" [queryParams]="{ filter: 'travel' }">{{ currentLanguage
+                === 'en' ? 'Travel Gallery' : 'Reisefotos' }}</a>
+        </div>
+    </div>
+
+    <!-- Slide 2 Content: Aviation -->
+    <div class="hero-content" *ngIf="currentSlide === 1">
+        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Aviation.' : 'Luftfahrt.' }}</h1>
+        <div class="hero-quotes">
+            <p class="hero-quote">{{ currentQuote }}</p>
+        </div>
+        <div class="hero-buttons">
             <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'aviation' }">{{ currentLanguage
                 === 'en' ? 'View aviation photos' : 'Luftfahrtfotografien ansehen' }}</a>
+            <a class="btn btn-primary" routerLink="/aviation-spotter-hotels">{{ currentLanguage === 'en' ? 'Aviation
+                Tourism' : 'Luftfahrt-Tourismus' }}</a>
             <a href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
                 target="_blank" rel="noopener noreferrer" class="btn btn-secondary">{{ currentLanguage === 'en' ? 'Buy
                 photos' : 'Fotos kaufen' }}</a>
         </div>
     </div>
 
-    <!-- Slide 2 Content: Travel -->
-    <div class="hero-content" *ngIf="currentSlide === 1">
-        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Travel' : 'Reisen' }}</h1>
+    <!-- Slide 3 Content: Photography -->
+    <div class="hero-content" *ngIf="currentSlide === 2">
+        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Photography.' : 'Fotografie.' }}</h1>
+        <div class="hero-quotes">
+            <p class="hero-quote">{{ currentQuote }}</p>
+        </div>
         <div class="hero-buttons">
-            <a class="btn btn-primary" routerLink="/aviation-spotter-hotels">{{ currentLanguage === 'en' ? 'Aviation
-                Tourism' : 'Luftfahrt-Tourismus' }}</a>
+            <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'aviation' }">{{ currentLanguage
+                === 'en' ? 'Aviation Gallery' : 'Luftfahrt Galerie' }}</a>
             <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'travel' }">{{ currentLanguage ===
-                'en' ? 'View Travel Pictures' : 'Reisebilder ansehen' }}</a>
-            <a class="btn btn-secondary" routerLink="/photography-travels">{{ currentLanguage === 'en' ? 'Travels' :
-                'Reisen' }}</a>
+                'en' ? 'Travel Gallery' : 'Reise Galerie' }}</a>
+            <a class="btn btn-secondary"
+                href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
+                target="_blank" rel="noopener noreferrer">{{ currentLanguage === 'en' ? 'Buy Photos' : 'Fotos kaufen'
+                }}</a>
         </div>
     </div>
 
-    <!-- Slide 3 Content: Career -->
-    <div class="hero-content" *ngIf="currentSlide === 2">
-        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'My career' : 'Meine Karriere' }}</h1>
+    <!-- Slide 4 Content: Career -->
+    <div class="hero-content" *ngIf="currentSlide === 3">
+        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'My career.' : 'Meine Karriere.' }}</h1>
+        <div class="hero-quotes">
+            <p class="hero-quote">{{ currentQuote }}</p>
+        </div>
         <div class="hero-buttons">
             <a class="btn btn-primary" href="https://github.com/WorldChris380" target="_blank">GitHub</a>
             <a class="btn btn-primary" href="https://www.linkedin.com/in/christian-boehme-business/"
                 target="_blank">LinkedIn</a>
-            <a class="btn btn-secondary" routerLink="/career">{{ currentLanguage === 'en' ? 'View CV' : 'CV anzeigen'
+            <a class="btn btn-view-cv" routerLink="/career">{{ currentLanguage === 'en' ? 'View CV' : 'CV anzeigen'
                 }}</a>
-            <button class="btn btn-download" (click)="downloadPDF()">
-                <span>📥</span>
-                <span>{{ currentLanguage === 'en' ? 'Download CV' : 'CV herunterladen' }}</span>
-            </button>
         </div>
     </div>
 
     <div class="hero-dots">
-        <span class="dot" [class.active-dot]="currentSlide === 0" (click)="goToSlide(0)"></span>
-        <span class="dot" [class.active-dot]="currentSlide === 1" (click)="goToSlide(1)"></span>
-        <span class="dot" [class.active-dot]="currentSlide === 2" (click)="goToSlide(2)"></span>
+        <button class="play-pause-btn" (click)="togglePlayPause()"
+            [attr.aria-label]="isPaused ? 'Play slideshow' : 'Pause slideshow'" title="Toggle slideshow">
+            <span *ngIf="!isPaused">⏸</span>
+            <span *ngIf="isPaused">▶</span>
+        </button>
+        <button class="dot" [class.active-dot]="currentSlide === 0" (click)="goToSlide(0)"
+            [attr.aria-label]="'Go to slide 1: ' + (currentLanguage === 'en' ? 'Travels' : 'Reisen')"
+            [attr.aria-pressed]="currentSlide === 0" title="Slide 1: Travels"></button>
+        <button class="dot" [class.active-dot]="currentSlide === 1" (click)="goToSlide(1)"
+            [attr.aria-label]="'Go to slide 2: ' + (currentLanguage === 'en' ? 'Aviation' : 'Luftfahrt')"
+            [attr.aria-pressed]="currentSlide === 1" title="Slide 2: Aviation"></button>
+        <button class="dot" [class.active-dot]="currentSlide === 2" (click)="goToSlide(2)"
+            [attr.aria-label]="'Go to slide 3: ' + (currentLanguage === 'en' ? 'Photography' : 'Fotografie')"
+            [attr.aria-pressed]="currentSlide === 2" title="Slide 3: Photography"></button>
+        <button class="dot" [class.active-dot]="currentSlide === 3" (click)="goToSlide(3)"
+            [attr.aria-label]="'Go to slide 4: ' + (currentLanguage === 'en' ? 'My career' : 'Meine Karriere')"
+            [attr.aria-pressed]="currentSlide === 3" title="Slide 4: Career"></button>
     </div>
-</div>
-
-<!-- Counters component showing statistics from assets manifest -->
-<div id="home-counters-wrapper">
-    <app-counters></app-counters>
 </div>

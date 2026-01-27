@@ -8,6 +8,144 @@
             <div class="hero-background"></div>
         </section>
 
+        <!-- Australia 2030 Dream Trip Section -->
+        <section class="dream-trip-section">
+            <div class="dream-trip-content">
+                <div class="dream-trip-header">
+                    <h2>🌏 Australia 2030 - A Photography Expedition</h2>
+                    <p class="trip-subtitle">Experience the Land Down Under Through a Photographer's Eyes</p>
+                </div>
+
+                <div class="trip-description">
+                    <div class="description-text">
+                        <h3>The Ultimate Photography Dream Journey</h3>
+                        <p>
+                            Join us on an exclusive photography expedition to Australia in 2030, crafted specifically
+                            for photography enthusiasts and visual storytellers. This isn't just a tour—it's an
+                            immersive journey through one of the world's most diverse and photogenic landscapes.
+                        </p>
+
+                        <h4>What Awaits You</h4>
+                        <ul>
+                            <li><strong>Sydney to Melbourne:</strong> Urban landscapes, iconic architecture, and harbor
+                                photography at golden hour</li>
+                            <li><strong>Great Barrier Reef:</strong> Underwater photography workshops and marine life
+                                documentation</li>
+                            <li><strong>Uluru & Red Centre:</strong> Sunrise and sunset expeditions capturing the raw
+                                beauty of the Australian outback</li>
+                            <li><strong>Daintree Rainforest:</strong> Macro photography and wildlife capture in the
+                                world's oldest tropical rainforest</li>
+                            <li><strong>Tasmania Wilderness:</strong> Dramatic landscapes, waterfalls, and pristine
+                                natural environments</li>
+                        </ul>
+
+                        <h4>Included in Your Journey</h4>
+                        <ul>
+                            <li>14 days of guided photography expeditions</li>
+                            <li>Expert photography workshops led by professionals</li>
+                            <li>All transportation within Australia (flights, transfers, and travel)</li>
+                            <li>Accommodation at carefully selected locations optimized for photography</li>
+                            <li>Daily group meals and refreshments</li>
+                            <li>Photography critique sessions and portfolio reviews</li>
+                            <li>Sunset and sunrise guided photo shoots</li>
+                            <li>Exclusive access to photography locations</li>
+                            <li>Digital download of group photography memories</li>
+                        </ul>
+
+                        <h4>Trip Highlights</h4>
+                        <p>
+                            Experience the contrast between bustling modern cities and untouched wilderness. Capture the
+                            iconic Sydney Opera House, dive beneath crystal waters to photograph coral gardens, stand in
+                            awe at Uluru as the red rocks transform under changing light, and trek through ancient
+                            rainforests teeming with unique wildlife. Each moment is a frame waiting to be captured.
+                        </p>
+
+                        <h4>Investment & Dates</h4>
+                        <p>
+                            <strong>Journey Dates:</strong> September 15-29, 2030<br>
+                            <strong>Investment:</strong> €4,990 per person (double occupancy) | €5,490 (single
+                            occupancy)<br>
+                            <strong>Early Bird Discount:</strong> Book before June 30, 2030 and save €300
+                        </p>
+
+                        <p class="important-note">
+                            Limited to 12 participants to ensure personalized attention and exclusive photography
+                            opportunities. Previous photography experience is not required—only passion and curiosity!
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Registration Form -->
+                <div class="registration-form-section">
+                    <h3>Interested? Start Your Adventure!</h3>
+                    <p>Fill out the form below to request more information and reserve your spot on this incredible
+                        photography journey.</p>
+
+                    <form class="registration-form" (ngSubmit)="submitRegistration()" *ngIf="!formSubmitted">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" name="firstName" required placeholder="Your first name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" required placeholder="Your last name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required placeholder="your@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+49 123 456789">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="country">Country of Residence</label>
+                            <input type="text" id="country" name="country" placeholder="Your country">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="experience">Photography Experience Level *</label>
+                            <select id="experience" name="experience" required>
+                                <option value="">Select your level</option>
+                                <option value="beginner">Beginner - I'm new to photography</option>
+                                <option value="intermediate">Intermediate - I have some experience</option>
+                                <option value="advanced">Advanced - I photograph regularly</option>
+                                <option value="professional">Professional - This is my profession</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Tell us about your photography interests and why Australia appeals to
+                                you</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Share your story..."></textarea>
+                        </div>
+
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <label for="terms">I'd like to receive more information about this and future photography
+                                journeys</label>
+                        </div>
+
+                        <button type="submit" class="submit-button">Request Information</button>
+                        <p class="form-note">We'll respond to your inquiry within 48 hours at
+                            travel@christian-boehme.com</p>
+                    </form>
+
+                    <div class="form-success" *ngIf="formSubmitted">
+                        <h4>Thank You for Your Interest! ✓</h4>
+                        <p>Your registration request has been received. We'll be in touch shortly at
+                            travel@christian-boehme.com with more details about the Australia 2030 photography
+                            expedition.</p>
+                        <button (click)="resetForm()" class="reset-button">Submit Another Inquiry</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section class="gallery-section">
             <div class="section-header">
                 <h2>My Travel Galleries</h2>

@@ -1,0 +1,437 @@
+@use '../../../../styles.scss' as *;
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.air-germany-main {
+    flex: 1;
+    width: 100%;
+}
+
+// Hero Section
+.hero-section {
+    background: linear-gradient(135deg, #CE0E2D 0%, #003DA5 100%);
+    height: 100vh;
+    margin-top: -40px;
+    padding-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+
+    @media (max-width: 768px) {
+        height: 100vh;
+        margin-top: -40px;
+        padding-top: 40px;
+    }
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><path d="M0 200 Q300 100 600 200 T1200 200" stroke="rgba(255,255,255,0.1)" stroke-width="2" fill="none"/><path d="M0 250 Q300 150 600 250 T1200 250" stroke="rgba(255,255,255,0.05)" stroke-width="2" fill="none"/></svg>');
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.hero-content {
+    max-width: 800px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
+
+.hero-section h1 {
+    font-size: 72px;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+    letter-spacing: 2px;
+
+    @media (max-width: 768px) {
+        font-size: 42px;
+    }
+}
+
+// Dark mode veil overlay
+:host-context(body.dark-mode) {
+    .hero-section {
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.08);
+            z-index: 2;
+            pointer-events: none;
+        }
+    }
+
+    .hero-section h1 {
+        position: relative;
+        z-index: 3;
+    }
+}
+
+.hero-subtitle {
+    font-size: 24px;
+    margin: 0 0 15px 0;
+    opacity: 0.95;
+    font-weight: 300;
+
+    @media (max-width: 768px) {
+        font-size: 18px;
+    }
+}
+
+.hero-description {
+    font-size: 16px;
+    margin: 0 0 30px 0;
+    opacity: 0.9;
+    line-height: 1.6;
+    max-width: 600px;
+
+    @media (max-width: 768px) {
+        font-size: 14px;
+    }
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+// Buttons
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+
+    @media (max-width: 768px) {
+        padding: 12px 28px;
+        font-size: 14px;
+    }
+}
+
+.btn-primary {
+    background: white;
+    color: #CE0E2D;
+    border: 2px solid white;
+
+    &:hover {
+        background: transparent;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+
+    &:hover {
+        background: white;
+        color: #CE0E2D;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+}
+
+// Container
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+// Section Title
+.section-title {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0 0 50px 0;
+    color: $cb-grey-ish;
+
+    @media (max-width: 768px) {
+        font-size: 28px;
+        margin: 0 0 30px 0;
+    }
+}
+
+// Fleet Section
+.fleet-section {
+    padding: 80px 20px;
+    background: $cb-white-ish;
+
+    @media (max-width: 768px) {
+        padding: 50px 20px;
+    }
+}
+
+.fleet-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 60px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #CE0E2D 0%, #003DA5 100%);
+    color: white;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+    .stat-number {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .stat-label {
+        font-size: 16px;
+        opacity: 0.9;
+    }
+}
+
+.fleet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.fleet-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    text-align: center;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .aircraft-icon {
+        font-size: 64px;
+        margin-bottom: 15px;
+    }
+
+    .aircraft-model {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0 0 8px 0;
+        color: #CE0E2D;
+    }
+
+    .aircraft-count {
+        font-size: 14px;
+        color: $cb-grey-ish;
+        font-weight: 500;
+        margin-bottom: 12px;
+    }
+
+    .aircraft-description {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #666;
+        margin: 0;
+    }
+}
+
+// Routes Section
+.routes-section {
+    padding: 80px 20px;
+    background: #f5f7fa;
+
+    @media (max-width: 768px) {
+        padding: 50px 20px;
+    }
+}
+
+.routes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.route-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        border-left: 4px solid #CE0E2D;
+    }
+
+    .route-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+    }
+
+    h3 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0 0 8px 0;
+        color: $cb-grey-ish;
+    }
+
+    .route-country {
+        font-size: 14px;
+        color: #666;
+        margin: 0 0 10px 0;
+    }
+
+    .route-type {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #CE0E2D;
+        color: white;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+}
+
+// Services Section
+.services-section {
+    padding: 80px 20px;
+    background: $cb-white-ish;
+
+    @media (max-width: 768px) {
+        padding: 50px 20px;
+    }
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 30px;
+}
+
+.service-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    text-align: center;
+    border-top: 4px solid transparent;
+
+    &:hover {
+        border-top-color: #CE0E2D;
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .service-icon {
+        font-size: 56px;
+        margin-bottom: 20px;
+    }
+
+    h3 {
+        font-size: 22px;
+        font-weight: 600;
+        margin: 0 0 12px 0;
+        color: $cb-grey-ish;
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #666;
+        margin: 0;
+    }
+}
+
+// Dark Mode
+:host-context(body.dark-mode) {
+
+    .fleet-section,
+    .services-section {
+        background: #1a1a1a;
+    }
+
+    .routes-section {
+        background: #242424;
+    }
+
+    .section-title {
+        color: $cb-white-ish;
+    }
+
+    .fleet-card,
+    .route-card,
+    .service-card {
+        background: #2a2a2a;
+        color: #e5e5e5;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+
+        &:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        h3 {
+            color: $cb-white-ish;
+        }
+
+        p {
+            color: #ddd;
+        }
+    }
+
+    .aircraft-model,
+    .route-card h3,
+    .service-card h3 {
+        color: #CE0E2D;
+    }
+
+    .aircraft-count,
+    .route-country {
+        color: #aaa;
+    }
+}
