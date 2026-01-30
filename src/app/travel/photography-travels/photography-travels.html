@@ -2,145 +2,164 @@
     <main class="photography-travels-main">
         <section class="hero-section">
             <div class="hero-content">
-                <h1>Photography Travels</h1>
-                <p>Discover breathtaking destinations through the lens of a professional photographer</p>
+                <h1>{{ currentLanguage === 'en' ? 'Photography Travels' : 'Fotografie Reisen' }}</h1>
+                <p>{{ currentLanguage === 'en' ? 'Discover breathtaking destinations through the lens of a professional
+                    photographer' : 'Entdecken Sie atemberaubende Ziele durch die Linse eines professionellen
+                    Fotografen' }}</p>
             </div>
             <div class="hero-background"></div>
         </section>
 
-        <!-- Australia 2030 Dream Trip Section -->
+        <!-- Upcoming Dream Trip Section -->
         <section class="dream-trip-section">
             <div class="dream-trip-content">
                 <div class="dream-trip-header">
-                    <h2>🌏 Australia 2030 - A Photography Expedition</h2>
-                    <p class="trip-subtitle">Experience the Land Down Under Through a Photographer's Eyes</p>
+                    <h2>{{ currentLanguage === 'en' ? '🌏 Upcoming Photography Expedition - TBA' : '🌏 Kommende
+                        Fotografie Expedition - TBA' }}</h2>
+                    <p class="trip-subtitle">{{ currentLanguage === 'en' ? 'An exclusive photography journey to a
+                        breathtaking destination' : 'Eine exklusive Fotografie-Reise zu einem atemberaubenden Ziel' }}
+                    </p>
                 </div>
 
                 <div class="trip-description">
                     <div class="description-text">
-                        <h3>The Ultimate Photography Dream Journey</h3>
+                        <h3>{{ currentLanguage === 'en' ? 'Coming Soon - Express Your Interest!' : 'Kommt bald -
+                            Bekundung Ihres Interesses!' }}</h3>
                         <p>
-                            Join us on an exclusive photography expedition to Australia in 2030, crafted specifically
-                            for photography enthusiasts and visual storytellers. This isn't just a tour—it's an
-                            immersive journey through one of the world's most diverse and photogenic landscapes.
+                            {{ currentLanguage === 'en' ?
+                            'We are currently planning an exclusive photography expedition to an amazing destination!
+                            Are you interested in joining us on an unforgettable photography adventure? Fill out the
+                            interest form below to express your interest and be among the first to hear about the
+                            details, dates, and special pricing for early supporters.' :
+                            'Wir planen derzeit eine exklusive Fotografie-Expedition zu einem fantastischen Ziel!
+                            Möchten Sie uns auf einem unvergesslichen Fotografie-Abenteuer begleiten? Füllen Sie das
+                            Interessensformular unten aus, um Ihr Interesse zu bekunden und gehören Sie zu den Ersten,
+                            die Details, Termine und Sonderpreise für frühe Unterstützer erfahren.' }}
                         </p>
 
-                        <h4>What Awaits You</h4>
+                        <h4>{{ currentLanguage === 'en' ? 'What to Expect' : 'Was Sie erwarten können' }}</h4>
                         <ul>
-                            <li><strong>Sydney to Melbourne:</strong> Urban landscapes, iconic architecture, and harbor
-                                photography at golden hour</li>
-                            <li><strong>Great Barrier Reef:</strong> Underwater photography workshops and marine life
-                                documentation</li>
-                            <li><strong>Uluru & Red Centre:</strong> Sunrise and sunset expeditions capturing the raw
-                                beauty of the Australian outback</li>
-                            <li><strong>Daintree Rainforest:</strong> Macro photography and wildlife capture in the
-                                world's oldest tropical rainforest</li>
-                            <li><strong>Tasmania Wilderness:</strong> Dramatic landscapes, waterfalls, and pristine
-                                natural environments</li>
+                            <li>{{ currentLanguage === 'en' ? 'Expert-guided photography expeditions to stunning
+                                locations' : 'Von Experten geleitete Fotografie-Expeditionen zu atemberaubenden Orten'
+                                }}</li>
+                            <li>{{ currentLanguage === 'en' ? 'Professional photography workshops and critique sessions'
+                                : 'Professionelle Fotografie-Workshops und Kritikrunden' }}</li>
+                            <li>{{ currentLanguage === 'en' ? 'All-inclusive accommodations and transportation' :
+                                'Vollständig inklusive Unterkunft und Transport' }}</li>
+                            <li>{{ currentLanguage === 'en' ? 'Sunrise and sunset photo shoots at iconic locations' :
+                                'Sonnenaufgangs- und Sonnenuntergangs-Fotoshootings an ikonischen Orten' }}</li>
+                            <li>{{ currentLanguage === 'en' ? 'Portfolio reviews and mentoring from professionals' :
+                                'Portfolio-Überprüfungen und Mentoring durch Profis' }}</li>
+                            <li>{{ currentLanguage === 'en' ? 'Small group size for personalized attention' : 'Kleine
+                                Gruppengröße für persönliche Betreuung' }}</li>
                         </ul>
 
-                        <h4>Included in Your Journey</h4>
-                        <ul>
-                            <li>14 days of guided photography expeditions</li>
-                            <li>Expert photography workshops led by professionals</li>
-                            <li>All transportation within Australia (flights, transfers, and travel)</li>
-                            <li>Accommodation at carefully selected locations optimized for photography</li>
-                            <li>Daily group meals and refreshments</li>
-                            <li>Photography critique sessions and portfolio reviews</li>
-                            <li>Sunset and sunrise guided photo shoots</li>
-                            <li>Exclusive access to photography locations</li>
-                            <li>Digital download of group photography memories</li>
-                        </ul>
-
-                        <h4>Trip Highlights</h4>
+                        <h4>{{ currentLanguage === 'en' ? 'Early Bird Benefits' : 'Frühbucher-Vorteile' }}</h4>
                         <p>
-                            Experience the contrast between bustling modern cities and untouched wilderness. Capture the
-                            iconic Sydney Opera House, dive beneath crystal waters to photograph coral gardens, stand in
-                            awe at Uluru as the red rocks transform under changing light, and trek through ancient
-                            rainforests teeming with unique wildlife. Each moment is a frame waiting to be captured.
-                        </p>
-
-                        <h4>Investment & Dates</h4>
-                        <p>
-                            <strong>Journey Dates:</strong> September 15-29, 2030<br>
-                            <strong>Investment:</strong> €4,990 per person (double occupancy) | €5,490 (single
-                            occupancy)<br>
-                            <strong>Early Bird Discount:</strong> Book before June 30, 2030 and save €300
-                        </p>
-
-                        <p class="important-note">
-                            Limited to 12 participants to ensure personalized attention and exclusive photography
-                            opportunities. Previous photography experience is not required—only passion and curiosity!
+                            {{ currentLanguage === 'en' ?
+                            'By expressing your interest now, you will receive: exclusive updates about the destination,
+                            early-bird discount notifications, flexible deposit options, and priority booking when the
+                            expedition is officially launched.' :
+                            'Durch Interessensbekundung erhalten Sie: exklusive Updates zum Ziel, Benachrichtigungen
+                            über Frühbucher-Rabatte, flexible Anzahlungsoptionen und bevorzugte Buchung, wenn die
+                            Expedition offiziell gestartet wird.' }}
                         </p>
                     </div>
                 </div>
 
-                <!-- Registration Form -->
+                <!-- Interest Form -->
                 <div class="registration-form-section">
-                    <h3>Interested? Start Your Adventure!</h3>
-                    <p>Fill out the form below to request more information and reserve your spot on this incredible
-                        photography journey.</p>
+                    <h3>{{ currentLanguage === 'en' ? 'Express Your Interest!' : 'Bekundung Ihres Interesses!' }}</h3>
+                    <p>{{ currentLanguage === 'en' ?
+                        'Fill out the form below to tell us about your photography interests and be notified when the
+                        expedition details are confirmed.' :
+                        'Füllen Sie das Formular unten aus, um uns von Ihren Fotografie-Interessen zu erzählen und eine
+                        Benachrichtigung zu erhalten, wenn die Expeditionsdetails bestätigt sind.' }}</p>
 
                     <form class="registration-form" (ngSubmit)="submitRegistration()" *ngIf="!formSubmitted">
                         <div class="form-group">
-                            <label for="firstName">First Name *</label>
-                            <input type="text" id="firstName" name="firstName" required placeholder="Your first name">
+                            <label for="firstName">{{ currentLanguage === 'en' ? 'First Name *' : 'Vorname *' }}</label>
+                            <input type="text" id="firstName" name="firstName" required
+                                [placeholder]="currentLanguage === 'en' ? 'Your first name' : 'Ihr Vorname'">
                         </div>
 
                         <div class="form-group">
-                            <label for="lastName">Last Name *</label>
-                            <input type="text" id="lastName" name="lastName" required placeholder="Your last name">
+                            <label for="lastName">{{ currentLanguage === 'en' ? 'Last Name *' : 'Nachname *' }}</label>
+                            <input type="text" id="lastName" name="lastName" required
+                                [placeholder]="currentLanguage === 'en' ? 'Your last name' : 'Ihr Nachname'">
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required placeholder="your@email.com">
+                            <label for="email">{{ currentLanguage === 'en' ? 'Email Address *' : 'E-Mail-Adresse *'
+                                }}</label>
+                            <input type="email" id="email" name="email" required
+                                [placeholder]="currentLanguage === 'en' ? 'your@email.com' : 'ihre@email.com'">
                         </div>
 
                         <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" placeholder="+49 123 456789">
+                            <label for="phone">{{ currentLanguage === 'en' ? 'Phone Number' : 'Telefonnummer' }}</label>
+                            <input type="tel" id="phone" name="phone"
+                                [placeholder]="currentLanguage === 'en' ? '+1 234 567 8900' : '+49 123 456789'">
                         </div>
 
                         <div class="form-group">
-                            <label for="country">Country of Residence</label>
-                            <input type="text" id="country" name="country" placeholder="Your country">
+                            <label for="country">{{ currentLanguage === 'en' ? 'Country of Residence' : 'Wohnland'
+                                }}</label>
+                            <input type="text" id="country" name="country"
+                                [placeholder]="currentLanguage === 'en' ? 'Your country' : 'Ihr Land'">
                         </div>
 
                         <div class="form-group">
-                            <label for="experience">Photography Experience Level *</label>
+                            <label for="experience">{{ currentLanguage === 'en' ? 'Photography Experience Level *' :
+                                'Fotografische Erfahrung *' }}</label>
                             <select id="experience" name="experience" required>
-                                <option value="">Select your level</option>
-                                <option value="beginner">Beginner - I'm new to photography</option>
-                                <option value="intermediate">Intermediate - I have some experience</option>
-                                <option value="advanced">Advanced - I photograph regularly</option>
-                                <option value="professional">Professional - This is my profession</option>
+                                <option value="">{{ currentLanguage === 'en' ? 'Select your level' : 'Wählen Sie Ihr
+                                    Niveau' }}</option>
+                                <option value="beginner">{{ currentLanguage === 'en' ? 'Beginner - I\'m new to
+                                    photography' : 'Anfänger - Ich bin neu in der Fotografie' }}</option>
+                                <option value="intermediate">{{ currentLanguage === 'en' ? 'Intermediate - I have some
+                                    experience' : 'Mittelstufe - Ich habe Erfahrung' }}</option>
+                                <option value="advanced">{{ currentLanguage === 'en' ? 'Advanced - I photograph
+                                    regularly' : 'Fortgeschritten - Ich fotografiere regelmäßig' }}</option>
+                                <option value="professional">{{ currentLanguage === 'en' ? 'Professional - This is my
+                                    profession' : 'Profi - Das ist mein Beruf' }}</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="message">Tell us about your photography interests and why Australia appeals to
-                                you</label>
-                            <textarea id="message" name="message" rows="5" placeholder="Share your story..."></textarea>
+                            <label for="message">{{ currentLanguage === 'en' ? 'Tell us about your photography interests
+                                and what destinations appeal to you' : 'Erzählen Sie uns von Ihren Fotografie-Interessen
+                                und welche Ziele Sie interessieren' }}</label>
+                            <textarea id="message" name="message" rows="5"
+                                [placeholder]="currentLanguage === 'en' ? 'Share your story...' : 'Teilen Sie Ihre Geschichte...'"></textarea>
                         </div>
 
                         <div class="form-group checkbox">
                             <input type="checkbox" id="terms" name="terms" required>
-                            <label for="terms">I'd like to receive more information about this and future photography
-                                journeys</label>
+                            <label for="terms">{{ currentLanguage === 'en' ? 'I\'d like to receive updates about
+                                upcoming photography expeditions' : 'Ich möchte Updates über kommende
+                                Fotografie-Expeditionen erhalten' }}</label>
                         </div>
 
-                        <button type="submit" class="submit-button">Request Information</button>
-                        <p class="form-note">We'll respond to your inquiry within 48 hours at
-                            travel@christian-boehme.com</p>
+                        <button type="submit" class="submit-button">{{ currentLanguage === 'en' ? 'Express Interest' :
+                            'Interesse bekundung' }}</button>
+                        <p class="form-note">{{ currentLanguage === 'en' ? 'We\'ll respond to your inquiry within 48
+                            hours at travel@christian-boehme.com' : 'Wir werden Ihre Anfrage innerhalb von 48 Stunden
+                            unter travel@christian-boehme.com beantworten' }}</p>
                     </form>
 
                     <div class="form-success" *ngIf="formSubmitted">
-                        <h4>Thank You for Your Interest! ✓</h4>
-                        <p>Your registration request has been received. We'll be in touch shortly at
-                            travel@christian-boehme.com with more details about the Australia 2030 photography
-                            expedition.</p>
-                        <button (click)="resetForm()" class="reset-button">Submit Another Inquiry</button>
+                        <h4>{{ currentLanguage === 'en' ? 'Thank You for Your Interest! ✓' : 'Danke für Ihr Interesse!
+                            ✓' }}</h4>
+                        <p>{{ currentLanguage === 'en' ?
+                            'Your interest form has been received. We\'ll be in touch shortly at
+                            travel@christian-boehme.com with more details as soon as the expedition details are
+                            confirmed.' :
+                            'Ihr Interessensformular wurde empfangen. Wir werden Sie bald unter
+                            travel@christian-boehme.com kontaktieren, sobald die Expeditionsdetails bestätigt sind.' }}
+                        </p>
+                        <button (click)="resetForm()" class="reset-button">{{ currentLanguage === 'en' ? 'Submit Another
+                            Inquiry' : 'Eine weitere Anfrage einreichen' }}</button>
                     </div>
                 </div>
             </div>
@@ -148,38 +167,42 @@
 
         <section class="gallery-section">
             <div class="section-header">
-                <h2>My Travel Galleries</h2>
-                <p>A collection of photographs from the most beautiful places in the world</p>
+                <h2>{{ currentLanguage === 'en' ? 'My Travel Galleries' : 'Meine Reise-Galerien' }}</h2>
+                <p>{{ currentLanguage === 'en' ? 'A collection of photographs from the most beautiful places in the
+                    world' : 'Eine Sammlung von Fotografien aus den schönsten Orten der Welt' }}</p>
             </div>
 
             <div class="gallery-grid">
                 <div class="gallery-card">
                     <div class="card-image placeholder-image-1"></div>
                     <div class="card-content">
-                        <h3>Mountains & Nature</h3>
-                        <p>Majestic mountain landscapes and natural wonders</p>
-                        <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="card-link">View Gallery
-                            →</a>
+                        <h3>{{ currentLanguage === 'en' ? 'Mountains & Nature' : 'Berge & Natur' }}</h3>
+                        <p>{{ currentLanguage === 'en' ? 'Majestic mountain landscapes and natural wonders' :
+                            'Majestätische Berglandschaften und Naturwunder' }}</p>
+                        <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="card-link">{{
+                            currentLanguage === 'en' ? 'View Gallery →' : 'Galerie ansehen →' }}</a>
                     </div>
                 </div>
 
                 <div class="gallery-card">
                     <div class="card-image placeholder-image-2"></div>
                     <div class="card-content">
-                        <h3>City Explorations</h3>
-                        <p>Urban landscapes and architectural beauty</p>
-                        <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="card-link">View Gallery
-                            →</a>
+                        <h3>{{ currentLanguage === 'en' ? 'City Explorations' : 'Stadt-Erkundungen' }}</h3>
+                        <p>{{ currentLanguage === 'en' ? 'Urban landscapes and architectural beauty' : 'Urbane
+                            Landschaften und architektonische Schönheit' }}</p>
+                        <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="card-link">{{
+                            currentLanguage === 'en' ? 'View Gallery →' : 'Galerie ansehen →' }}</a>
                     </div>
                 </div>
 
                 <div class="gallery-card">
                     <div class="card-image placeholder-image-3"></div>
                     <div class="card-content">
-                        <h3>Sea & Beach</h3>
-                        <p>Coastal photography and maritime adventures</p>
-                        <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="card-link">View Gallery
-                            →</a>
+                        <h3>{{ currentLanguage === 'en' ? 'Sea & Beach' : 'Meer & Strand' }}</h3>
+                        <p>{{ currentLanguage === 'en' ? 'Coastal photography and maritime adventures' :
+                            'Küstenfotografie und maritime Abenteuer' }}</p>
+                        <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="card-link">{{
+                            currentLanguage === 'en' ? 'View Gallery →' : 'Galerie ansehen →' }}</a>
                     </div>
                 </div>
             </div>
@@ -187,10 +210,12 @@
 
         <section class="cta-section">
             <div class="cta-content">
-                <h2>Ready for an Adventure?</h2>
-                <p>Discover more photos and learn more about my travels</p>
+                <h2>{{ currentLanguage === 'en' ? 'Ready for an Adventure?' : 'Bereit für ein Abenteuer?' }}</h2>
+                <p>{{ currentLanguage === 'en' ? 'Discover more photos and learn more about my travels' : 'Entdecken Sie
+                    mehr Fotos und erfahren Sie mehr über meine Reisen' }}</p>
                 <a href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com" target="_blank"
-                    class="cta-button">All Photos on Adobe Stock</a>
+                    class="cta-button">{{ currentLanguage === 'en' ? 'All Photos on Adobe Stock' : 'Alle Fotos auf Adobe
+                    Stock' }}</a>
             </div>
         </section>
     </main>

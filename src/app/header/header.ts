@@ -23,6 +23,7 @@ export class Header implements OnInit {
   openDesktopSubDropdownMenu: string | null = null;
   openMobileDropdownMenu: MenuHeading | null = null;
   openMobileSubDropdownMenu: string | null = null;
+  isLoading: boolean = false;
 
   get cartQuantity(): number {
     return this.shopService.totalQuantity();
@@ -47,6 +48,13 @@ export class Header implements OnInit {
     this.currentLanguage = this.languageService.getCurrentLanguage();
     this.languageService.language$.subscribe((lang) => {
       this.currentLanguage = lang;
+      this.cdr.markForCheck();
+    });
+
+    // Track page loading state
+    this.isLoading = true;
+    window.addEventListener('load', () => {
+      this.isLoading = false;
       this.cdr.markForCheck();
     });
   }

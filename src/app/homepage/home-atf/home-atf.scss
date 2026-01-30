@@ -1,3 +1,5 @@
+@use '../../../styles.scss' as *;
+
 /* Header- und Footer-Höhe als CSS-Variablen, damit sie zentral anpassbar sind */
 /* Maximalbreite und Zentrierung für den Hauptbereich */
 #home-atf {
@@ -7,6 +9,25 @@
     position: relative;
     overflow: hidden;
     box-sizing: border-box;
+
+    /* Skip link for keyboard accessibility */
+    .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: #000;
+        color: white;
+        padding: 8px;
+        text-decoration: none;
+        z-index: 100;
+        border-radius: 0 0 4px 0;
+
+        &:focus {
+            top: 0;
+            outline: 2px solid $photography-orange-bright;
+            outline-offset: 2px;
+        }
+    }
 
     .hero-section {
         position: relative;
@@ -22,27 +43,60 @@
     }
 
 
-    @keyframes slideBackgroundIn {
+    @keyframes h1TextShadowPulse {
         0% {
-            opacity: 0;
-            transform: scale(1.1);
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 4px 20px rgba(0, 0, 0, 0.2),
+                0 8px 40px rgba(0, 0, 0, 0.1),
+                0 0 60px rgba(255, 255, 255, 0.1);
+            letter-spacing: 0.5px;
+        }
+
+        50% {
+            text-shadow:
+                0 2px 15px rgba(0, 0, 0, 0.4),
+                0 4px 25px rgba(0, 0, 0, 0.3),
+                0 8px 50px rgba(0, 0, 0, 0.15),
+                0 0 80px rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.8px;
         }
 
         100% {
-            opacity: 1;
-            transform: scale(1);
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.3),
+                0 4px 20px rgba(0, 0, 0, 0.2),
+                0 8px 40px rgba(0, 0, 0, 0.1),
+                0 0 60px rgba(255, 255, 255, 0.1);
+            letter-spacing: 0.5px;
         }
     }
 
-    @keyframes slideBackgroundOut {
+    @keyframes h1ColorGlow {
         0% {
-            opacity: 1;
-            transform: scale(1);
+            filter: brightness(1);
+        }
+
+        50% {
+            filter: brightness(1.15);
         }
 
         100% {
-            opacity: 0;
-            transform: scale(0.95);
+            filter: brightness(1);
+        }
+    }
+
+    @keyframes h1Rotate {
+        0% {
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+        }
+
+        50% {
+            transform: perspective(1000px) rotateX(0deg) rotateY(2deg);
+        }
+
+        100% {
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
         }
     }
 
@@ -58,10 +112,12 @@
         background-position: center;
         z-index: -1;
         opacity: 0;
-        transform: scale(1.1);
-        transition: opacity 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-            transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        will-change: opacity, transform;
+        transform: scale(1.15) rotateZ(2deg);
+        transition: opacity 2s cubic-bezier(0.34, 1.56, 0.64, 1),
+            transform 2s cubic-bezier(0.34, 1.56, 0.64, 1),
+            filter 2s ease;
+        will-change: opacity, transform, filter;
+        contain: layout style paint;
 
         &.hero-background-bright {
             filter: grayscale(100%);
@@ -74,8 +130,7 @@
 
     .hero-background.active {
         opacity: 1;
-        transform: scale(1);
-        animation: slideBackgroundIn 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        transform: scale(1) rotateZ(0deg);
     }
 
     .hero-background::after {
@@ -101,15 +156,14 @@
         justify-content: center;
         min-height: calc(100vh - var(--header-height, 40px));
         max-height: 80rem;
-        animation: slideContentIn 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         width: 100%;
         max-width: 100%;
         position: relative;
         box-sizing: border-box;
         overflow-wrap: break-word;
         word-wrap: break-word;
-        opacity: 0;
-        transform: translateY(50px);
+        opacity: 1;
+        transform: none;
 
         @media (max-width: 1440px) {
             padding: 1.8rem;
@@ -144,43 +198,7 @@
         }
     }
 
-    @keyframes slideContentIn {
-        0% {
-            opacity: 0;
-            transform: translateY(60px) scale(0.94);
-            filter: blur(10px);
-        }
 
-        40% {
-            opacity: 0.3;
-            filter: blur(5px);
-        }
-
-        70% {
-            opacity: 0.9;
-            filter: blur(1px);
-        }
-
-        100% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            filter: blur(0);
-        }
-    }
-
-    @keyframes slideContentOut {
-        0% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            filter: blur(0);
-        }
-
-        100% {
-            opacity: 0;
-            transform: translateY(-40px) scale(0.94);
-            filter: blur(8px);
-        }
-    }
 
     .hero-title {
         font-size: clamp(4rem, 10vw, 7rem);
@@ -189,11 +207,11 @@
         margin-bottom: 2rem;
         letter-spacing: 0.5px;
         line-height: 1.3;
-        transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.6s ease-in-out;
         position: relative;
         display: inline-block;
-        animation: titleFadeInScale 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        opacity: 0;
+        opacity: 1;
+        animation: h1TextShadowPulse 3s ease-in-out infinite, h1ColorGlow 4s ease-in-out infinite, h1Rotate 5s ease-in-out infinite;
 
         /* Elegant layered text shadow */
         text-shadow:
@@ -226,24 +244,7 @@
         }
     }
 
-    @keyframes titleFadeInScale {
-        0% {
-            opacity: 0;
-            transform: scale(0.95) translateY(20px);
-            filter: blur(6px);
-        }
 
-        60% {
-            opacity: 0.8;
-            filter: blur(1px);
-        }
-
-        100% {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-            filter: blur(0);
-        }
-    }
 }
 
 .hero-quotes {
@@ -256,8 +257,7 @@
     min-height: 100px;
     position: relative;
     margin-right: auto;
-    animation: quotesFadeIn 2s 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    opacity: 0;
+    opacity: 1;
 
     @media (max-width: 768px) {
         gap: 0.6rem;
@@ -288,9 +288,8 @@
         0 4px 16px rgba(0, 0, 0, 0.2),
         0 8px 32px rgba(0, 0, 0, 0.15),
         0 16px 60px rgba(0, 0, 0, 0.1);
-    animation: quoteFadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    opacity: 0;
-    transform: translateY(15px);
+    opacity: 1;
+    transform: none;
     position: relative;
 
     &::before {
@@ -349,34 +348,7 @@
     }
 }
 
-@keyframes quotesFadeIn {
-    0% {
-        opacity: 0;
-    }
 
-    100% {
-        opacity: 1;
-    }
-}
-
-@keyframes quoteFadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(15px);
-        filter: blur(3px);
-    }
-
-    70% {
-        opacity: 0.9;
-        filter: blur(0.5px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-        filter: blur(0);
-    }
-}
 
 .hero-buttons {
     display: flex;
@@ -561,11 +533,11 @@
     }
 
     &.btn-download {
-        background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+        background: linear-gradient(135deg, $aviation-blue-bright 0%, $aviation-blue 100%);
         color: white;
         border: none;
         padding: 14px 28px;
-        box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+        box-shadow: 0 4px 15px rgba($aviation-blue, 0.4);
         position: relative;
         overflow: hidden;
         display: flex;
@@ -586,9 +558,9 @@
         }
 
         &:hover {
-            background: linear-gradient(135deg, #357abd 0%, #4a90e2 100%);
+            background: linear-gradient(135deg, $aviation-blue 0%, $aviation-blue-bright 100%);
             transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(74, 144, 226, 0.6);
+            box-shadow: 0 8px 25px rgba($aviation-blue, 0.6);
 
             &::before {
                 left: 100%;
@@ -689,6 +661,12 @@
     &:focus {
         outline: 2px solid rgba(255, 255, 255, 0.8);
         outline-offset: 2px;
+    }
+
+    &:focus-visible {
+        outline: 3px solid $photography-orange-bright;
+        outline-offset: 3px;
+        box-shadow: 0 0 0 8px rgba(210, 238, 130, 0.2);
     }
 
     &:hover {
@@ -829,6 +807,74 @@
         &:hover {
             background-color: #ffffff;
             box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.25);
+        }
+    }
+}
+
+/* Accessibility: Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    #home-atf {
+        @keyframes slideBackgroundIn {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes slideBackgroundOut {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes slideContentIn {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes titleFadeInScale {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes quoteFadeInUp {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .hero-background,
+        .hero-content,
+        .hero-quote {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        .hero-title {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        .dot {
+            animation: none !important;
         }
     }
 }

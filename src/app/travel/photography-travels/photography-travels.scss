@@ -21,7 +21,7 @@
     align-items: center;
     justify-content: center;
     overflow: visible;
-    background: linear-gradient(135deg, rgba(45, 80, 22, 0.8), rgba(210, 238, 130, 0.2));
+    background: linear-gradient(135deg, rgba($travel-green-dark, 0.8), rgba($travel-green-bright, 0.2));
     z-index: 1;
 
     @media (max-width: 1024px) {
@@ -46,8 +46,8 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: radial-gradient(circle at 30% 50%, rgba(210, 238, 130, 0.1), transparent),
-            radial-gradient(circle at 70% 50%, rgba(45, 80, 22, 0.1), transparent);
+        background: radial-gradient(circle at 30% 50%, rgba($travel-green-bright, 0.1), transparent),
+            radial-gradient(circle at 70% 50%, rgba($travel-green-dark, 0.1), transparent);
         animation: drift 20s ease-in-out infinite;
     }
 
@@ -123,7 +123,7 @@
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
-    background: linear-gradient(135deg, rgba(210, 238, 130, 0.1), rgba(45, 80, 22, 0.05));
+    background: linear-gradient(135deg, rgba($travel-green-bright, 0.1), rgba($travel-green-dark, 0.05));
 
     @media (max-width: 768px) {
         padding: 50px 15px;
@@ -145,7 +145,7 @@
             font-size: 48px;
             font-weight: 700;
             margin: 0 0 15px 0;
-            color: $cb-dark-green-ish;
+            color: $travel-green;
 
             @media (max-width: 768px) {
                 font-size: 36px;
@@ -188,14 +188,14 @@
 
             h3 {
                 font-size: 28px;
-                color: $cb-dark-green-ish;
+                color: $travel-green;
                 margin-top: 0;
                 margin-bottom: 15px;
             }
 
             h4 {
                 font-size: 20px;
-                color: $cb-dark-green-ish;
+                color: $travel-green;
                 margin-top: 30px;
                 margin-bottom: 15px;
             }
@@ -214,15 +214,15 @@
                     font-size: 16px;
 
                     strong {
-                        color: $cb-dark-green-ish;
+                        color: $travel-green;
                     }
                 }
             }
 
             .important-note {
-                background: rgba(210, 238, 130, 0.3);
+                background: rgba($travel-green-bright, 0.3);
                 padding: 20px;
-                border-left: 4px solid $cb-dark-green-ish;
+                border-left: 4px solid $travel-green;
                 border-radius: 4px;
                 margin: 30px 0;
                 font-style: italic;
@@ -247,7 +247,7 @@
 
         h3 {
             font-size: 28px;
-            color: $cb-dark-green-ish;
+            color: $travel-green;
             margin-top: 0;
             margin-bottom: 10px;
         }
@@ -296,8 +296,8 @@
 
                     &:focus {
                         outline: none;
-                        border-color: $cb-dark-green-ish;
-                        box-shadow: 0 0 0 3px rgba(210, 238, 130, 0.2);
+                        border-color: $travel-green;
+                        box-shadow: 0 0 0 3px rgba($travel-green-bright, 0.2);
                     }
                 }
 
@@ -330,7 +330,7 @@
 
             .submit-button {
                 grid-column: 1 / -1;
-                background: $cb-dark-green-ish;
+                background: $travel-green;
                 color: white;
                 padding: 14px 40px;
                 border: none;
@@ -342,9 +342,9 @@
                 margin-top: 10px;
 
                 &:hover {
-                    background: $cb-green-ish;
+                    background: $travel-green-bright;
                     transform: translateY(-2px);
-                    box-shadow: 0 8px 20px rgba(45, 80, 22, 0.2);
+                    box-shadow: 0 8px 20px rgba($travel-green-dark, 0.2);
                 }
 
                 &:active {
@@ -367,7 +367,7 @@
 
             h4 {
                 font-size: 24px;
-                color: $cb-dark-green-ish;
+                color: $travel-green;
                 margin: 0 0 15px 0;
             }
 
@@ -378,7 +378,7 @@
             }
 
             .reset-button {
-                background: $cb-dark-green-ish;
+                background: $travel-green;
                 color: white;
                 padding: 12px 30px;
                 border: none;
@@ -389,7 +389,7 @@
                 transition: all 0.3s ease;
 
                 &:hover {
-                    background: $cb-green-ish;
+                    background: $travel-green-bright;
                 }
             }
         }
@@ -399,10 +399,10 @@
 // Dark Mode for Dream Trip Section
 :host-context(body.dark-mode) {
     .dream-trip-section {
-        background: linear-gradient(135deg, rgba(45, 80, 22, 0.1), rgba(210, 238, 130, 0.05));
+        background: linear-gradient(135deg, rgba($travel-green-dark, 0.1), rgba($travel-green-bright, 0.05));
 
         .dream-trip-header h2 {
-            color: $cb-green-ish;
+            color: $travel-green-bright;
         }
 
         .dream-trip-header .trip-subtitle {
@@ -417,7 +417,7 @@
 
                 h3,
                 h4 {
-                    color: $cb-green-ish;
+                    color: $travel-green-bright;
                 }
 
                 p {
@@ -428,13 +428,13 @@
                     color: #ccc;
 
                     strong {
-                        color: $cb-green-ish;
+                        color: $travel-green-bright;
                     }
                 }
 
                 .important-note {
-                    background: rgba(210, 238, 130, 0.15);
-                    border-left-color: $cb-green-ish;
+                    background: rgba($travel-green-bright, 0.15);
+                    border-left-color: $travel-green-bright;
                     color: #ddd;
                 }
             }
@@ -444,7 +444,7 @@
             background: lighten($cb-grey-ish, 8%);
 
             h3 {
-                color: $cb-green-ish;
+                color: $travel-green-bright;
             }
 
             >p {
@@ -465,8 +465,8 @@
                         border-color: #444;
 
                         &:focus {
-                            border-color: $cb-green-ish;
-                            box-shadow: 0 0 0 3px rgba(210, 238, 130, 0.1);
+                            border-color: $travel-green-bright;
+                            box-shadow: 0 0 0 3px rgba($travel-green-bright, 0.1);
                         }
                     }
 
@@ -476,18 +476,18 @@
                 }
 
                 .submit-button {
-                    background: $cb-green-ish;
-                    color: $cb-dark-green-ish;
+                    background: $travel-green-bright;
+                    color: $travel-green-dark;
 
                     &:hover {
-                        background: lighten($cb-green-ish, 10%);
+                        background: lighten($travel-green-bright, 10%);
                     }
                 }
             }
 
             .form-success {
                 h4 {
-                    color: $cb-green-ish;
+                    color: $travel-green-bright;
                 }
 
                 p {
@@ -495,11 +495,11 @@
                 }
 
                 .reset-button {
-                    background: $cb-green-ish;
-                    color: $cb-dark-green-ish;
+                    background: $travel-green-bright;
+                    color: $travel-green-dark;
 
                     &:hover {
-                        background: lighten($cb-green-ish, 10%);
+                        background: lighten($travel-green-bright, 10%);
                     }
                 }
             }
@@ -597,7 +597,7 @@
         .card-image {
             height: 250px;
             overflow: hidden;
-            background: linear-gradient(135deg, #d2ee82, #2d5016);
+            background: linear-gradient(135deg, $travel-green-bright, $travel-green-dark);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -617,15 +617,15 @@
         }
 
         .placeholder-image-1 {
-            background: linear-gradient(135deg, #d2ee82 0%, #90c940 100%);
+            background: linear-gradient(135deg, $travel-green-bright 0%, $travel-green 100%);
         }
 
         .placeholder-image-2 {
-            background: linear-gradient(135deg, #89BCD9 0%, #5a8ab5 100%);
+            background: linear-gradient(135deg, $aviation-blue-bright 0%, $aviation-blue 100%);
         }
 
         .placeholder-image-3 {
-            background: linear-gradient(135deg, #fbc093 0%, #e8945c 100%);
+            background: linear-gradient(135deg, $photography-orange-bright 0%, $photography-orange 100%);
         }
 
         .card-content {
@@ -647,13 +647,13 @@
 
             .card-link {
                 display: inline-block;
-                color: $cb-dark-green-ish;
+                color: $travel-green;
                 font-weight: 600;
                 text-decoration: none;
                 transition: color 0.3s ease;
 
                 &:hover {
-                    color: $cb-green-ish;
+                    color: $travel-green-bright;
                 }
             }
         }
@@ -662,7 +662,7 @@
 
 // CTA Section
 .cta-section {
-    background: linear-gradient(135deg, $cb-dark-green-ish, rgba(45, 80, 22, 0.8));
+    background: linear-gradient(135deg, $travel-green, rgba($travel-green-dark, 0.8));
     padding: 80px 20px;
     text-align: center;
     color: $cb-white-ish;
@@ -685,8 +685,8 @@
 
         .cta-button {
             display: inline-block;
-            background: $cb-green-ish;
-            color: $cb-dark-green-ish;
+            background: $travel-green-bright;
+            color: $travel-green-dark;
             padding: 15px 40px;
             border-radius: 4px;
             font-weight: 600;
@@ -695,7 +695,7 @@
             font-size: 16px;
 
             &:hover {
-                background: darken($cb-green-ish, 10%);
+                background: darken($travel-green-bright, 10%);
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             }
@@ -710,7 +710,7 @@ body.dark-mode .photography-travels-main {
 }
 
 body.dark-mode .hero-section {
-    background: linear-gradient(135deg, rgba(45, 80, 22, 0.95), rgba(210, 238, 130, 0.1));
+    background: linear-gradient(135deg, rgba($travel-green-dark, 0.95), rgba($travel-green-bright, 0.1));
 }
 
 body.dark-mode .section-header {

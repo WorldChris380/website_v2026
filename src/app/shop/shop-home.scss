@@ -1,3 +1,5 @@
+@use '../../styles.scss' as *;
+
 .shop-page {
     min-height: 100vh;
     padding: 80px 20px 40px;
@@ -22,11 +24,11 @@
 }
 
 .shop-hero {
-    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    background: linear-gradient(135deg, $shop-blue-dark, $shop-blue);
     color: #ffffff;
     padding: 32px 24px;
     border-radius: 16px;
-    box-shadow: 0 16px 40px rgba(30, 58, 138, 0.2);
+    box-shadow: 0 16px 40px rgba($shop-blue, 0.2);
     margin-bottom: 24px;
 
     @media (max-width: 768px) {
@@ -62,7 +64,7 @@
     border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 12px;
     padding: 20px;
-    color: #1e293b;
+    color: $career-black;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 
     @media (max-width: 768px) {
@@ -106,19 +108,19 @@
     }
 
     &.featured {
-        border: 2px solid #1e3a8a;
-        background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-        box-shadow: 0 8px 24px rgba(30, 58, 138, 0.15);
+        border: 2px solid $shop-blue-dark;
+        background: linear-gradient(135deg, $shop-blue-bright, lighten($shop-blue-bright, 6%));
+        box-shadow: 0 8px 24px rgba($shop-blue, 0.15);
         order: -1;
 
         &:hover {
-            box-shadow: 0 12px 32px rgba(30, 58, 138, 0.25);
+            box-shadow: 0 12px 32px rgba($shop-blue, 0.25);
         }
     }
 }
 
 .badge-new {
-    background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+    background: linear-gradient(135deg, $warning-red, $warning-red-dark);
     color: white;
     padding: 4px 12px;
     border-radius: 20px;
@@ -138,12 +140,12 @@
     .price {
         font-size: 24px;
         font-weight: 700;
-        color: #1e3a8a;
+        color: $shop-blue-dark;
     }
 
     .stock-indicator {
-        background: #ecfdf5;
-        color: #047857;
+        background: $travel-green-bright;
+        color: $travel-green;
         padding: 4px 12px;
         border-radius: 8px;
         font-size: 12px;
@@ -154,7 +156,7 @@
 .product-header h3 {
     margin: 4px 0 0;
     font-size: 20px;
-    color: #0f172a;
+    color: $career-black;
 
     @media (max-width: 480px) {
         font-size: 18px;
@@ -194,17 +196,17 @@
 }
 
 .product-actions .primary {
-    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    background: linear-gradient(135deg, $shop-blue-dark, $shop-blue);
     color: #ffffff;
     border-color: transparent;
-    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+    box-shadow: 0 4px 12px rgba($shop-blue, 0.25);
     font-size: 14px;
 }
 
 .product-actions .secondary {
     background: transparent;
-    color: #1e3a8a;
-    border-color: #1e3a8a;
+    color: $shop-blue-dark;
+    border-color: $shop-blue-dark;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -218,22 +220,22 @@
 }
 
 .product-actions .primary:hover {
-    box-shadow: 0 6px 16px rgba(30, 58, 138, 0.35);
-    background: linear-gradient(135deg, #1e40af, #3b82f6);
+    box-shadow: 0 6px 16px rgba($shop-blue, 0.35);
+    background: linear-gradient(135deg, darken($shop-blue, 10%), $shop-blue);
 }
 
 .product-actions .secondary:hover {
-    background: rgba(30, 58, 138, 0.08);
-    color: #1e40af;
+    background: rgba($shop-blue, 0.08);
+    color: darken($shop-blue, 10%);
 }
 
 :host-context(body.dark-mode) {
     .shop-page {
-        background: #0b1220;
+        background: $shop-blue-dark;
     }
 
     .shop-hero {
-        background: linear-gradient(135deg, #1e3a8a, #1e40af);
+        background: linear-gradient(135deg, $shop-blue-dark, darken($shop-blue, 10%));
         color: #ffffff;
         box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
 
@@ -243,18 +245,18 @@
     }
 
     .shop-body {
-        background: #0f172a;
+        background: $shop-blue-dark;
         border-color: rgba(255, 255, 255, 0.08);
-        color: #f8fafc;
+        color: $shop-blue-bright;
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
     }
 
     .hint {
-        color: #cbd5e1;
+        color: $shop-blue-bright;
     }
 
     .product-card {
-        background: #111827;
+        background: $shop-blue-dark;
         border-color: rgba(255, 255, 255, 0.08);
 
         &:hover {
@@ -262,57 +264,57 @@
         }
 
         &.featured {
-            border: 2px solid #3b82f6;
-            background: linear-gradient(135deg, #0f172a, #1e3a8a);
-            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+            border: 2px solid $shop-blue;
+            background: linear-gradient(135deg, $shop-blue-dark, $shop-blue);
+            box-shadow: 0 8px 24px rgba($shop-blue, 0.2);
 
             &:hover {
-                box-shadow: 0 12px 32px rgba(59, 130, 246, 0.3);
+                box-shadow: 0 12px 32px rgba($shop-blue, 0.3);
             }
         }
     }
 
     .product-header h3 {
-        color: #f8fafc;
+        color: $shop-blue-bright;
     }
 
     .product-copy {
-        color: #d1d5db;
+        color: $shop-blue-bright;
     }
 
     .product-meta {
-        color: #cbd5e1;
+        color: $shop-blue-bright;
     }
 
     .product-price {
         border-color: rgba(255, 255, 255, 0.08);
 
         .price {
-            color: #93c5fd;
+            color: $shop-blue-bright;
         }
 
         .stock-indicator {
-            background: rgba(16, 185, 129, 0.1);
-            color: #6ee7b7;
+            background: rgba($travel-green, 0.1);
+            color: $travel-green-bright;
         }
     }
 
     .product-actions .primary {
-        background: linear-gradient(135deg, #1e3a8a, #2563eb);
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        background: linear-gradient(135deg, $shop-blue-dark, $shop-blue);
+        box-shadow: 0 4px 12px rgba($shop-blue, 0.4);
 
         &:hover {
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
+            box-shadow: 0 6px 16px rgba($shop-blue, 0.5);
         }
     }
 
     .product-actions .secondary {
-        color: #93c5fd;
-        border-color: #3b82f6;
+        color: $shop-blue-bright;
+        border-color: $shop-blue;
 
         &:hover {
-            background: rgba(59, 130, 246, 0.1);
-            color: #bfdbfe;
+            background: rgba($shop-blue, 0.1);
+            color: lighten($shop-blue-bright, 10%);
         }
     }
 }

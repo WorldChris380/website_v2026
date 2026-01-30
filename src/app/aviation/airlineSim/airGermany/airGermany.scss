@@ -14,7 +14,7 @@
 
 // Hero Section
 .hero-section {
-    background: linear-gradient(135deg, #CE0E2D 0%, #003DA5 100%);
+    background: linear-gradient(135deg, $warning-red 0%, $aviation-blue 100%);
     height: 100vh;
     margin-top: -40px;
     padding-top: 40px;
@@ -150,7 +150,7 @@
 
 .btn-primary {
     background: white;
-    color: #CE0E2D;
+    color: $warning-red;
     border: 2px solid white;
 
     &:hover {
@@ -168,7 +168,7 @@
 
     &:hover {
         background: white;
-        color: #CE0E2D;
+        color: $warning-red;
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
@@ -213,7 +213,7 @@
 }
 
 .stat-card {
-    background: linear-gradient(135deg, #CE0E2D 0%, #003DA5 100%);
+    background: linear-gradient(135deg, $warning-red 0%, $aviation-blue 100%);
     color: white;
     padding: 40px;
     border-radius: 12px;
@@ -260,7 +260,7 @@
         font-size: 24px;
         font-weight: 600;
         margin: 0 0 8px 0;
-        color: #CE0E2D;
+        color: $warning-red;
     }
 
     .aircraft-count {
@@ -305,7 +305,7 @@
     &:hover {
         transform: translateY(-3px);
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-        border-left: 4px solid #CE0E2D;
+        border-left: 4px solid $warning-red;
     }
 
     .route-icon {
@@ -329,7 +329,7 @@
     .route-type {
         display: inline-block;
         padding: 6px 12px;
-        background: #CE0E2D;
+        background: $warning-red;
         color: white;
         border-radius: 20px;
         font-size: 12px;
@@ -363,7 +363,7 @@
     border-top: 4px solid transparent;
 
     &:hover {
-        border-top-color: #CE0E2D;
+        border-top-color: $warning-red;
         transform: translateY(-5px);
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
     }
@@ -427,7 +427,7 @@
     .aircraft-model,
     .route-card h3,
     .service-card h3 {
-        color: #CE0E2D;
+        color: $warning-red;
     }
 
     .aircraft-count,

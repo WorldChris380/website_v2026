@@ -1,3 +1,5 @@
+@use '../../../styles.scss' as *;
+
 .travels-counter-container {
     width: 100%;
     max-width: 1200px;
@@ -89,11 +91,11 @@
             }
 
             &.available .status-dot {
-                background: #2e7d32;
+                background: $travel-green;
             }
 
             &.unavailable .status-dot {
-                background: #c0392b;
+                background: $warning-red;
             }
         }
     }
@@ -118,11 +120,11 @@
 
 .continent-header {
     padding: 20px 24px;
-    background: #e8f5e9;
+    background: $travel-green-bright;
     font-weight: 600;
     font-size: 18px;
-    color: #2d5016;
-    border-bottom: 1px solid #c8e6c9;
+    color: $travel-green-dark;
+    border-bottom: 1px solid lighten($travel-green-bright, 8%);
 }
 
 .countries-list {
@@ -196,12 +198,12 @@
     }
 
     &.available {
-        border-color: #2e7d32;
-        color: #1f4b20;
-        background: #e9f5ec;
+        border-color: $travel-green;
+        color: $travel-green-dark;
+        background: $travel-green-bright;
 
         .status-dot {
-            background: #2e7d32;
+            background: $travel-green;
         }
     }
 
@@ -218,7 +220,7 @@
         }
 
         .status-dot {
-            background: #c0392b;
+            background: $warning-red;
         }
 
         .country-name {
@@ -254,12 +256,12 @@
             color: #bdc3c7;
 
             .legend-item.available .status-dot {
-                background: #69f0ae;
-                box-shadow: 0 0 6px rgba(105, 240, 174, 0.4);
+                background: $travel-green-bright;
+                box-shadow: 0 0 6px rgba($travel-green-bright, 0.4);
             }
 
             .legend-item.unavailable .status-dot {
-                background: #e57373;
+                background: $warning-red-bright;
             }
         }
     }
@@ -295,19 +297,19 @@
         }
 
         &.available {
-            border-color: #00bf72;
-            color: #e0f2f1;
-            background: rgba(0, 191, 114, 0.1);
+            border-color: $travel-green;
+            color: $travel-green-bright;
+            background: rgba($travel-green, 0.1);
 
             &:hover {
-                background: rgba(0, 191, 114, 0.2);
-                border-color: #00e676;
-                box-shadow: 0 4px 12px rgba(0, 230, 118, 0.15);
+                background: rgba($travel-green, 0.2);
+                border-color: lighten($travel-green, 10%);
+                box-shadow: 0 4px 12px rgba($travel-green-bright, 0.15);
             }
 
             .status-dot {
-                background: #69f0ae;
-                box-shadow: 0 0 4px rgba(105, 240, 174, 0.5);
+                background: $travel-green-bright;
+                box-shadow: 0 0 4px rgba($travel-green-bright, 0.5);
             }
         }
 
@@ -325,7 +327,7 @@
             }
 
             .status-dot {
-                background: #b71c1c;
+                background: $warning-red-dark;
                 opacity: 0.6;
             }
 

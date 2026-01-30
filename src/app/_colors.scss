@@ -1,0 +1,60 @@
+// ====================================
+// CI/CD Farbprofil 2026
+// ====================================
+// Diese Datei enthält alle Farbdefinitionen für das gesamte Projekt
+// Verwende diese Variablen in allen SCSS-Dateien für konsistentes Branding
+
+// ====================================
+// Hauptfarben (Primary Colors)
+// ====================================
+$career-black: #0b0b0dff;
+$shop-blue: #2f3740ff;
+$aviation-blue: #2171a6ff;
+$travel-green: #659968ff;
+$photography-orange: #ffb300ff;
+$warning-red: #fa003eff;
+
+// ====================================
+// Helle Variationen (Bright Variants)
+// ====================================
+// Für Text auf dunklem Hintergrund, Hover-Effekte, etc.
+$career-black-bright: #cbcbd2ff;
+$shop-blue-bright: #d1d7ddff;
+$aviation-blue-bright: #cbe4f5ff;
+$travel-green-bright: #e0ebe1ff;
+$photography-orange-bright: #fff0ccff;
+$warning-red-bright: #ffcbd8ff;
+
+// ====================================
+// Dunkle Variationen (Dark Variants)
+// ====================================
+// Für Hintergründe, Schatten, Dark Mode, etc.
+$career-black-dark: #131316ff;
+$shop-blue-dark: #121519ff;
+$aviation-blue-dark: #071926ff;
+$travel-green-dark: #121c13ff;
+$photography-orange-dark: #2e2000ff;
+$warning-red-dark: #2e000bff;
+
+// ====================================
+// Basis-Farben (Legacy Compatibility)
+// ====================================
+// Für Kompatibilität mit bestehendem Code
+$cb-white-ish: white;
+$cb-grey-ish: $career-black;
+$cb-green-ish: $photography-orange;
+$cb-dark-green-ish: $travel-green;
+$cb-blue-ish: $aviation-blue;
+$cb-career-grey: $career-black;
+$cb-orange-ish: $photography-orange-bright;
+$cb-red-ish: $warning-red;
+
+// ====================================
+// Verwendungshinweise
+// ====================================
+// Career/Hauptfarbe: Verwende $career-black für Header, Footer, Haupttexte
+// Shop: Verwende $shop-blue für Shop-Komponenten
+// Aviation: Verwende $aviation-blue für Luftfahrt-Bereiche
+// Travel: Verwende $travel-green für Reise-Bereiche
+// Photography: Verwende $photography-orange für Fotografie-Bereiche
+// Warnung/Fehler: Verwende $warning-red für Fehler und Warnungen

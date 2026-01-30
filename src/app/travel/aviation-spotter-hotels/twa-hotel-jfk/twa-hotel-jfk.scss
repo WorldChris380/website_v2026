@@ -1,7 +1,9 @@
+@use '../../../../styles.scss' as *;
+
 .twa-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #0f172a, #1f2937);
-    color: #e5e7eb;
+    background: linear-gradient(135deg, $aviation-blue-dark, $career-black-dark);
+    color: $aviation-blue-bright;
     font-family: 'Segoe UI', sans-serif;
 }
 
@@ -21,7 +23,7 @@
 .twa-hero__content .eyebrow {
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #93c5fd;
+    color: $aviation-blue-bright;
     margin: 0 0 8px;
     font-size: 12px;
 }
@@ -34,7 +36,7 @@
 
 .twa-hero__content .lede {
     margin: 0 0 20px;
-    color: #cbd5e1;
+    color: $aviation-blue-bright;
     line-height: 1.6;
     max-width: 680px;
 }
@@ -56,9 +58,9 @@
 
 .hero-actions .primary,
 .cta-actions .primary {
-    background: linear-gradient(135deg, #60a5fa, #34d399);
-    color: #0b1021;
-    box-shadow: 0 8px 24px rgba(96, 165, 250, 0.35);
+    background: linear-gradient(135deg, $aviation-blue-bright, $travel-green-bright);
+    color: $aviation-blue-dark;
+    box-shadow: 0 8px 24px rgba($aviation-blue, 0.35);
 }
 
 .hero-actions .ghost,
@@ -76,7 +78,7 @@
 .twa-hero__photo {
     height: 280px;
     border-radius: 18px;
-    background: linear-gradient(135deg, rgba(96, 165, 250, 0.25), rgba(52, 211, 153, 0.2)),
+    background: linear-gradient(135deg, rgba($aviation-blue, 0.25), rgba($travel-green, 0.2)),
         url('https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=1200&q=80') center/cover;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
 
@@ -113,7 +115,7 @@
 .tips-header p,
 .cta p {
     margin: 0;
-    color: #cbd5e1;
+    color: $aviation-blue-bright;
 }
 
 .facts-grid {
@@ -128,7 +130,7 @@
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    color: #e5e7eb;
+    color: $aviation-blue-bright;
     line-height: 1.5;
 }
 
@@ -144,14 +146,14 @@
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    color: #e5e7eb;
+    color: $aviation-blue-bright;
     line-height: 1.6;
 }
 
 .tip-label {
     display: inline-block;
-    background: rgba(96, 165, 250, 0.15);
-    color: #bfdbfe;
+    background: rgba($aviation-blue, 0.15);
+    color: lighten($aviation-blue-bright, 10%);
     padding: 6px 10px;
     border-radius: 999px;
     font-weight: 600;
@@ -173,7 +175,7 @@
 }
 
 .cta .eyebrow {
-    color: #93c5fd;
+    color: $aviation-blue-bright;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     margin: 0 0 6px;

@@ -1,3 +1,5 @@
+@use '../../styles.scss' as *;
+
 .paypal-box {
     display: grid;
     gap: 8px;
@@ -10,11 +12,11 @@
 }
 
 .paypal-success {
-    color: #22c55e;
+    color: $travel-green;
     font-weight: 600;
 }
 
 .paypal-error {
-    color: #ef4444;
+    color: $warning-red;
     font-weight: 600;
 }

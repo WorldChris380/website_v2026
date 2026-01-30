@@ -1,6 +1,21 @@
 //General styles
 @use '../../styles.scss' as *;
 
+// Loading animation for header border
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 // 1st Header Column
 
 #header-full-width {
@@ -17,6 +32,32 @@
     left: 0;
     right: 0;
     border-bottom: solid 1px $cb-white-ish;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg,
+                #ff6b6b,
+                #4ecdc4,
+                #45b7d1,
+                #f9ca24,
+                #6c5ce7,
+                #a29bfe,
+                #ff6b6b);
+        background-size: 200% 100%;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        animation: none;
+    }
+
+    &.loading::after {
+        opacity: 1;
+        animation: gradientShift 2s ease infinite;
+    }
 
     &:hover #header-logo-div img {
         transform: rotate(1360deg);
@@ -52,7 +93,7 @@
 }
 
 #page-heading {
-    color: $cb-grey-ish;
+    color: $career-black;
     font-size: 20px;
     margin-left: 8px;
 }
@@ -713,6 +754,7 @@ nav {
         opacity: 0;
         transform: translateX(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -732,6 +774,7 @@ nav {
         opacity: 1;
         transform: translateX(0);
     }
+
     to {
         opacity: 0;
         transform: translateX(-20px);
@@ -766,8 +809,8 @@ nav {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     background-color: rgba(0, 0, 0, 0.02);
 }
 

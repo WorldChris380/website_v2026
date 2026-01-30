@@ -1,3 +1,5 @@
+@use '../../styles.scss' as *;
+
 .gallery-container {
     width: 100%;
     max-width: 1920px;
@@ -338,7 +340,7 @@ app-gallery {
         margin-top: 10px;
 
         .gallery-shop-btn {
-            background: linear-gradient(135deg, #5a8ab5, #34d399);
+            background: linear-gradient(135deg, $shop-blue, $photography-orange);
             color: white;
             border: none;
             border-radius: 10px;
@@ -821,8 +823,8 @@ app-gallery {
     }
 
     .lightbox-purchase {
-        background: linear-gradient(135deg, #5a8ab5, #34d399);
-        color: #0b1220;
+        background: linear-gradient(135deg, $shop-blue, $photography-orange);
+        color: $career-black-dark;
         border: none;
         border-radius: 12px;
         padding: 10px 16px;

@@ -2,67 +2,85 @@
     <main class="aviation-spotter-hotels-main">
         <section class="hero-section">
             <div class="hero-content">
-                <h1>Aviation Spotter Hotels</h1>
-                <p>The best hotels with spectacular views of air traffic and airports worldwide</p>
+                <h1>{{ currentLanguage === 'en' ? 'Aviation Spotter Hotels' : 'Luftfahrt-Beobachter Hotels' }}</h1>
+                <p>{{ currentLanguage === 'en' ? 'The best hotels with spectacular views of air traffic and airports
+                    worldwide' : 'Die besten Hotels mit spektakulären Blicken auf Luftverkehr und Flughäfen weltweit' }}
+                </p>
             </div>
             <div class="hero-background"></div>
         </section>
 
         <section class="hotels-section">
             <div class="section-header">
-                <h2>Recommended Spotter Hotels</h2>
-                <p>Perfectly located for aviation photography and spotting</p>
+                <h2>{{ currentLanguage === 'en' ? 'Recommended Spotter Hotels' : 'Empfohlene Beobachter-Hotels' }}</h2>
+                <p>{{ currentLanguage === 'en' ? 'Perfectly located for aviation photography and spotting' : 'Perfekt
+                    gelegen für Luftfahrtfotografie und Beobachtung' }}</p>
             </div>
 
             <div class="hotels-grid">
                 <div class="hotel-card">
                     <div class="card-image placeholder-image-1"></div>
                     <div class="card-content">
-                        <div class="hotel-badge">Featured</div>
+                        <div class="hotel-badge">{{ currentLanguage === 'en' ? 'Featured' : 'Empfohlen' }}</div>
                         <h3>TWA Hotel – JFK</h3>
                         <p class="location">📍 New York, USA</p>
-                        <p>Runway-view rooms, rooftop pool deck, and unbeatable access to JFK movements from Terminal 5.
+                        <p>{{ currentLanguage === 'en' ? 'Runway-view rooms, rooftop pool deck, and unbeatable access to
+                            JFK movements from Terminal 5.' : 'Zimmer mit Startbahnblick, Dachpool-Deck und
+                            unschlagbarer Zugang zu JFK-Bewegungen von Terminal 5.' }}
                         </p>
                         <div class="hotel-features">
-                            <span class="feature">👀 Runway view rooms</span>
-                            <span class="feature">📸 Rooftop angles</span>
-                            <span class="feature">✈️ 24/7 traffic</span>
+                            <span class="feature">👀 {{ currentLanguage === 'en' ? 'Runway view rooms' : 'Zimmer mit
+                                Bahnblick' }}</span>
+                            <span class="feature">📸 {{ currentLanguage === 'en' ? 'Rooftop angles' : 'Dachwinkel'
+                                }}</span>
+                            <span class="feature">✈️ {{ currentLanguage === 'en' ? '24/7 traffic' : '24/7 Verkehr'
+                                }}</span>
                         </div>
-                        <a [routerLink]="['/aviation-spotter-hotels/twa-hotel-jfk']" class="card-link">Learn more →</a>
+                        <a [routerLink]="['/aviation-spotter-hotels/twa-hotel-jfk']" class="card-link">{{
+                            currentLanguage === 'en' ? 'Learn more →' : 'Mehr erfahren →' }}</a>
                     </div>
                 </div>
 
                 <div class="hotel-card">
                     <div class="card-image placeholder-image-2"></div>
                     <div class="card-content">
-                        <div class="hotel-badge">Premium</div>
+                        <div class="hotel-badge">{{ currentLanguage === 'en' ? 'Premium' : 'Premium' }}</div>
                         <h3>Bangkok Suvarnabhumi Spotters</h3>
                         <p class="location">📍 Bangkok, Thailand</p>
-                        <p>Direct view of one of the largest and busiest airports in Southeast Asia with exotic
-                            aircraft.</p>
+                        <p>{{ currentLanguage === 'en' ? 'Direct view of one of the largest and busiest airports in
+                            Southeast Asia with exotic aircraft.' : 'Direkter Blick auf einen der größten und
+                            verkehrsreichsten Flughäfen Südostasiens mit exotischen Flugzeugen.' }}</p>
                         <div class="hotel-features">
-                            <span class="feature">🎥 Sky Deck</span>
-                            <span class="feature">✈️ Exotic Airlines</span>
-                            <span class="feature">🛏️ 5-Star</span>
+                            <span class="feature">🎥 {{ currentLanguage === 'en' ? 'Sky Deck' : 'Himmels-Deck' }}</span>
+                            <span class="feature">✈️ {{ currentLanguage === 'en' ? 'Exotic Airlines' : 'Exotische
+                                Fluggesellschaften' }}</span>
+                            <span class="feature">🛏️ {{ currentLanguage === 'en' ? '5-Star' : '5-Stern' }}</span>
                         </div>
-                        <a href="/" class="card-link">Learn more →</a>
+                        <a href="/" class="card-link">{{ currentLanguage === 'en' ? 'Learn more →' : 'Mehr erfahren →'
+                            }}</a>
                     </div>
                 </div>
 
                 <div class="hotel-card">
                     <div class="card-image placeholder-image-3"></div>
                     <div class="card-content">
-                        <div class="hotel-badge">Recommended</div>
+                        <div class="hotel-badge">{{ currentLanguage === 'en' ? 'Recommended' : 'Empfohlen' }}</div>
                         <h3>Frankfurt Skyline Suites</h3>
-                        <p class="location">📍 Frankfurt, Germany</p>
-                        <p>Spectacular view of Europe's largest airport with constant air traffic from all continents.
+                        <p class="location">📍 {{ currentLanguage === 'en' ? 'Frankfurt, Germany' : 'Frankfurt,
+                            Deutschland' }}</p>
+                        <p>{{ currentLanguage === 'en' ? 'Spectacular view of Europe\'s largest airport with constant
+                            air traffic from all continents.' : 'Spektakulärer Blick auf Europas größten Flughafen mit
+                            ständigem Luftverkehr von allen Kontinenten.' }}
                         </p>
                         <div class="hotel-features">
-                            <span class="feature">🎥 Panorama Windows</span>
-                            <span class="feature">📊 High Traffic</span>
-                            <span class="feature">🛏️ 4-Star</span>
+                            <span class="feature">🎥 {{ currentLanguage === 'en' ? 'Panorama Windows' :
+                                'Panoramafenster' }}</span>
+                            <span class="feature">📊 {{ currentLanguage === 'en' ? 'High Traffic' : 'Hoher Verkehr'
+                                }}</span>
+                            <span class="feature">🛏️ {{ currentLanguage === 'en' ? '4-Star' : '4-Stern' }}</span>
                         </div>
-                        <a href="/" class="card-link">Learn more →</a>
+                        <a href="/" class="card-link">{{ currentLanguage === 'en' ? 'Learn more →' : 'Mehr erfahren →'
+                            }}</a>
                     </div>
                 </div>
             </div>
@@ -70,39 +88,46 @@
 
         <section class="features-section">
             <div class="section-header">
-                <h2>What makes a great spotter hotel?</h2>
+                <h2>{{ currentLanguage === 'en' ? 'What makes a great spotter hotel?' : 'Was macht ein großartiges
+                    Beobachter-Hotel aus?' }}</h2>
             </div>
 
             <div class="features-grid">
                 <div class="feature-item">
                     <div class="feature-icon">📸</div>
-                    <h3>Optimal Views</h3>
-                    <p>Unobstructed view of runways without obstacles</p>
+                    <h3>{{ currentLanguage === 'en' ? 'Optimal Views' : 'Optimale Aussichten' }}</h3>
+                    <p>{{ currentLanguage === 'en' ? 'Unobstructed view of runways without obstacles' : 'Ungehinderter
+                        Blick auf Startbahnen ohne Hindernisse' }}</p>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">🌅</div>
-                    <h3>Best Lighting Conditions</h3>
-                    <p>East or south-facing orientation for optimal photography</p>
+                    <h3>{{ currentLanguage === 'en' ? 'Best Lighting Conditions' : 'Beste Lichtverhältnisse' }}</h3>
+                    <p>{{ currentLanguage === 'en' ? 'East or south-facing orientation for optimal photography' : 'Ost-
+                        oder Südausrichtung für optimale Fotografie' }}</p>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">✈️</div>
-                    <h3>High Air Traffic</h3>
-                    <p>Many different aircraft types and airlines at one location</p>
+                    <h3>{{ currentLanguage === 'en' ? 'High Air Traffic' : 'Hoher Flugverkehr' }}</h3>
+                    <p>{{ currentLanguage === 'en' ? 'Many different aircraft types and airlines at one location' :
+                        'Viele verschiedene Flugzeugtypen und Fluggesellschaften an einem Ort' }}</p>
                 </div>
                 <div class="feature-item">
                     <div class="feature-icon">🛏️</div>
-                    <h3>Comfort & Amenities</h3>
-                    <p>Comfortable rooms with professional observation spots</p>
+                    <h3>{{ currentLanguage === 'en' ? 'Comfort & Amenities' : 'Komfort & Ausstattung' }}</h3>
+                    <p>{{ currentLanguage === 'en' ? 'Comfortable rooms with professional observation spots' :
+                        'Komfortable Zimmer mit professionellen Beobachtungsplätzen' }}</p>
                 </div>
             </div>
         </section>
 
         <section class="cta-section">
             <div class="cta-content">
-                <h2>Ready for Spotting?</h2>
-                <p>Discover amazing aviation photography at the best locations in the world</p>
+                <h2>{{ currentLanguage === 'en' ? 'Ready for Spotting?' : 'Bereit zum Beobachten?' }}</h2>
+                <p>{{ currentLanguage === 'en' ? 'Discover amazing aviation photography at the best locations in the
+                    world' : 'Entdecken Sie erstaunliche Luftfahrtfotografie an den besten Orten der Welt' }}</p>
                 <a href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com" target="_blank"
-                    class="cta-button">My Aviation Gallery</a>
+                    class="cta-button">{{ currentLanguage === 'en' ? 'My Aviation Gallery' : 'Meine Luftfahrt-Galerie'
+                    }}</a>
             </div>
         </section>
     </main>

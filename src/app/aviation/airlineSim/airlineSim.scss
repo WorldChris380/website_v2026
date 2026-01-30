@@ -14,7 +14,7 @@
 
 // Hero Section
 .hero-section {
-    background: linear-gradient(135deg, #89BCD9 0%, #5a8ab5 100%);
+    background: linear-gradient(135deg, $aviation-blue-bright 0%, $aviation-blue 100%);
     height: 100vh;
     margin-top: -40px;
     padding-top: 40px;
@@ -128,7 +128,7 @@
 
 .btn-primary {
     background: white;
-    color: #5a8ab5;
+    color: $aviation-blue;
     border: 2px solid white;
 
     &:hover {
@@ -146,14 +146,14 @@
 
     &:hover {
         background: white;
-        color: #5a8ab5;
+        color: $aviation-blue;
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 }
 
 .btn-cta {
-    background: linear-gradient(135deg, $cb-green-ish 0%, #9bc75f 100%);
+    background: linear-gradient(135deg, $aviation-blue-bright 0%, $aviation-blue 100%);
     color: $cb-grey-ish;
     border: none;
     padding: 16px 40px;
@@ -473,7 +473,7 @@
 // CTA Section
 .cta-section {
     padding: 80px 20px;
-    background: linear-gradient(135deg, #89BCD9 0%, #5a8ab5 100%);
+    background: linear-gradient(135deg, $aviation-blue-bright 0%, $aviation-blue 100%);
     text-align: center;
     color: white;
 

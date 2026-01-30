@@ -21,7 +21,7 @@
     align-items: center;
     justify-content: center;
     overflow: visible;
-    background: linear-gradient(135deg, rgba(137, 188, 217, 0.8), rgba(90, 138, 181, 0.3));
+    background: linear-gradient(135deg, rgba($aviation-blue-bright, 0.8), rgba($aviation-blue, 0.3));
     z-index: 1;
 
     @media (max-width: 1024px) {
@@ -46,8 +46,8 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: radial-gradient(circle at 30% 50%, rgba(137, 188, 217, 0.1), transparent),
-            radial-gradient(circle at 70% 50%, rgba(90, 138, 181, 0.1), transparent);
+        background: radial-gradient(circle at 30% 50%, rgba($aviation-blue-bright, 0.1), transparent),
+            radial-gradient(circle at 70% 50%, rgba($aviation-blue, 0.1), transparent);
         animation: drift 20s ease-in-out infinite;
     }
 
@@ -207,7 +207,7 @@
         .card-image {
             height: 280px;
             overflow: hidden;
-            background: linear-gradient(135deg, #89BCD9, #5a8ab5);
+            background: linear-gradient(135deg, $aviation-blue-bright, $aviation-blue);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -235,22 +235,22 @@
         }
 
         .placeholder-image-1 {
-            background: linear-gradient(135deg, #89BCD9 0%, #5a8ab5 100%);
+            background: linear-gradient(135deg, $aviation-blue-bright 0%, $aviation-blue 100%);
         }
 
         .placeholder-image-2 {
-            background: linear-gradient(135deg, #6fa3c9 0%, #3d5f8f 100%);
+            background: linear-gradient(135deg, lighten($aviation-blue, 10%) 0%, darken($aviation-blue, 10%) 100%);
         }
 
         .placeholder-image-3 {
-            background: linear-gradient(135deg, #a8cce0 0%, #5a8ab5 100%);
+            background: linear-gradient(135deg, lighten($aviation-blue-bright, 6%) 0%, $aviation-blue 100%);
         }
 
         .hotel-badge {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: $cb-blue-ish;
+            background: $aviation-blue;
             color: white;
             padding: 6px 12px;
             border-radius: 20px;
@@ -272,7 +272,7 @@
 
             .location {
                 font-size: 14px;
-                color: $cb-blue-ish;
+                color: $aviation-blue;
                 margin: 0 0 12px 0;
                 font-weight: 500;
             }
@@ -292,7 +292,7 @@
 
                 .feature {
                     font-size: 12px;
-                    background: #f0f5f9;
+                    background: $aviation-blue-bright;
                     padding: 6px 12px;
                     border-radius: 4px;
                     color: $cb-grey-ish;
@@ -301,13 +301,13 @@
 
             .card-link {
                 display: inline-block;
-                color: $cb-blue-ish;
+                color: $aviation-blue;
                 font-weight: 600;
                 text-decoration: none;
                 transition: color 0.3s ease;
 
                 &:hover {
-                    color: darken($cb-blue-ish, 15%);
+                    color: darken($aviation-blue, 15%);
                 }
             }
         }
@@ -366,7 +366,7 @@
 
 // CTA Section
 .cta-section {
-    background: linear-gradient(135deg, $cb-blue-ish, rgba(90, 138, 181, 0.8));
+    background: linear-gradient(135deg, $aviation-blue, rgba($aviation-blue-dark, 0.8));
     padding: 80px 20px;
     text-align: center;
     color: $cb-white-ish;
@@ -390,7 +390,7 @@
         .cta-button {
             display: inline-block;
             background: white;
-            color: $cb-blue-ish;
+            color: $aviation-blue;
             padding: 15px 40px;
             border-radius: 4px;
             font-weight: 600;
@@ -409,32 +409,32 @@
 
 // Dark Mode
 body.dark-mode .aviation-spotter-hotels-main {
-    background-color: #0b1220;
-    color: #e5e7eb;
+    background-color: $aviation-blue-dark;
+    color: $aviation-blue-bright;
 }
 
 body.dark-mode .hero-section {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.32), rgba(16, 185, 129, 0.22));
+    background: linear-gradient(135deg, rgba($aviation-blue, 0.32), rgba($travel-green, 0.22));
 
     .hero-content {
-        color: #e5e7eb;
+        color: $aviation-blue-bright;
 
         h1 {
             color: #fff;
         }
 
         p {
-            color: #cbd5e1;
+            color: $aviation-blue-bright;
         }
     }
 }
 
 body.dark-mode .hotels-section {
-    background: #0b1220;
+    background: $aviation-blue-dark;
 
     .section-header {
         h2 {
-            color: #e5e7eb;
+            color: $aviation-blue-bright;
         }
 
         p {
@@ -450,54 +450,54 @@ body.dark-mode .hotels-section {
             color: #e5e7eb;
 
             h3 {
-                color: #f8fafc;
+                color: $cb-white-ish;
             }
 
             p {
-                color: #cbd5e1;
+                color: $aviation-blue-bright;
             }
 
             .location {
-                color: #a5b4fc;
+                color: $aviation-blue-bright;
             }
 
             .hotel-features .feature {
-                background: rgba(148, 163, 184, 0.15);
-                color: #e5e7eb;
+                background: rgba($aviation-blue-bright, 0.15);
+                color: $aviation-blue-bright;
             }
         }
 
         .hotel-badge {
-            background: linear-gradient(135deg, #60a5fa, #34d399);
-            color: #0b1220;
+            background: linear-gradient(135deg, $aviation-blue-bright, $travel-green-bright);
+            color: $aviation-blue-dark;
         }
 
         .card-link {
-            color: #93c5fd;
+            color: $aviation-blue-bright;
 
             &:hover {
-                color: #bfdbfe;
+                color: lighten($aviation-blue-bright, 10%);
             }
         }
     }
 }
 
 body.dark-mode .features-section {
-    background: #0f172a;
+    background: $aviation-blue-dark;
 
     .feature-item {
         h3 {
-            color: #e5e7eb;
+            color: $aviation-blue-bright;
         }
 
         p {
-            color: #cbd5e1;
+            color: $aviation-blue-bright;
         }
     }
 }
 
 body.dark-mode .cta-section {
-    background: linear-gradient(135deg, #1e293b, #0f172a);
+    background: linear-gradient(135deg, $aviation-blue-dark, $career-black-dark);
 
     .cta-content {
         h2 {
@@ -505,16 +505,16 @@ body.dark-mode .cta-section {
         }
 
         p {
-            color: #cbd5e1;
+            color: $aviation-blue-bright;
         }
     }
 
     .cta-button {
-        background: #e2e8f0;
-        color: #0f172a;
+        background: $aviation-blue-bright;
+        color: $aviation-blue-dark;
 
         &:hover {
-            background: #f1f5f9;
+            background: lighten($aviation-blue-bright, 8%);
         }
     }
 }

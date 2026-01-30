@@ -1,21 +1,82 @@
-// Color definitions
+// ====================================
+// CI/CD Farbprofil 2026
+// ====================================
+
+// Hauptfarben
+$career-black: #0b0b0dff;
+$shop-blue: #2f3740ff;
+$aviation-blue: #2171a6ff;
+$travel-green: #659968ff;
+$photography-orange: #ffb300ff;
+$warning-red: #fa003eff;
+
+// Helle Variationen
+$career-black-bright: #cbcbd2ff;
+$shop-blue-bright: #d1d7ddff;
+$aviation-blue-bright: #cbe4f5ff;
+$travel-green-bright: #e0ebe1ff;
+$photography-orange-bright: #fff0ccff;
+$warning-red-bright: #ffcbd8ff;
+
+// Dunkle Variationen
+$career-black-dark: #131316ff;
+$shop-blue-dark: #121519ff;
+$aviation-blue-dark: #071926ff;
+$travel-green-dark: #121c13ff;
+$photography-orange-dark: #2e2000ff;
+$warning-red-dark: #2e000bff;
+
+// Basis-Farben (für Kompatibilität)
 $cb-white-ish: white;
-$cb-grey-ish: #1f1f1f;
-$cb-green-ish: #d2ee82;
-$cb-dark-green-ish: #5e784d;
-$cb-blue-ish: #89BCD9;
-$cb-career-grey: #2d2d2d;
-$cb-orange-ish: #fbc093;
-$cb-red-ish: #f28c8c;
+$cb-grey-ish: $career-black;
+$cb-green-ish: $photography-orange;
+$cb-dark-green-ish: $travel-green;
+$cb-blue-ish: $aviation-blue;
+$cb-career-grey: $career-black;
+$cb-orange-ish: $photography-orange-bright;
+$cb-red-ish: $warning-red;
 
 /* Expose key colors as CSS variables so component scss can consume them */
 :root {
+    // Hauptfarben
+    --career-black: #{$career-black};
+    --shop-blue: #{$shop-blue};
+    --aviation-blue: #{$aviation-blue};
+    --travel-green: #{$travel-green};
+    --photography-orange: #{$photography-orange};
+    --warning-red: #{$warning-red};
+    
+    // Helle Variationen
+    --career-black-bright: #{$career-black-bright};
+    --shop-blue-bright: #{$shop-blue-bright};
+    --aviation-blue-bright: #{$aviation-blue-bright};
+    --travel-green-bright: #{$travel-green-bright};
+    --photography-orange-bright: #{$photography-orange-bright};
+    --warning-red-bright: #{$warning-red-bright};
+    
+    // Dunkle Variationen
+    --career-black-dark: #{$career-black-dark};
+    --shop-blue-dark: #{$shop-blue-dark};
+    --aviation-blue-dark: #{$aviation-blue-dark};
+    --travel-green-dark: #{$travel-green-dark};
+    --photography-orange-dark: #{$photography-orange-dark};
+    --warning-red-dark: #{$warning-red-dark};
+    
+    // Legacy-Kompatibilität
     --cb-dark-grey: #{$cb-grey-ish};
     --cb-white-ish: #{$cb-white-ish};
 }
 
 /* Dark mode CSS variables override */
 body.dark-mode {
+    // Im Dark Mode verwenden wir die hellen Variationen für Text
+    --career-black: #{$career-black-bright};
+    --shop-blue: #{$shop-blue-bright};
+    --aviation-blue: #{$aviation-blue-bright};
+    --travel-green: #{$travel-green-bright};
+    --photography-orange: #{$photography-orange-bright};
+    
+    // Legacy-Kompatibilität
     --cb-dark-grey: #{$cb-white-ish};
     --cb-white-ish: #{$cb-grey-ish};
 }
@@ -59,21 +120,21 @@ a:visited {
 
 // Focus States for Accessibility
 *:focus-visible {
-    outline: 3px solid $cb-blue-ish;
+    outline: 3px solid $aviation-blue;
     outline-offset: 2px;
     border-radius: 2px;
 }
 
 button:focus-visible,
 a:focus-visible {
-    outline: 3px solid $cb-blue-ish;
+    outline: 3px solid $aviation-blue;
     outline-offset: 2px;
 }
 
 body.dark-mode *:focus-visible,
 body.dark-mode button:focus-visible,
 body.dark-mode a:focus-visible {
-    outline-color: $cb-green-ish;
+    outline-color: $photography-orange;
 }
 
 // Remove default focus styles
@@ -96,8 +157,8 @@ body.dark-mode a:focus-visible {
 
 /* Global dark background + base text color */
 body.dark-mode {
-    background-color: #121212;
-    color: #e5e5e5;
+    background-color: $career-black-dark;
+    color: $career-black-bright;
 }
 
 body.dark-mode a:visited {
@@ -105,7 +166,7 @@ body.dark-mode a:visited {
 }
 
 body.dark-mode #header-full-width {
-    background-color: $cb-grey-ish !important;
+    background-color: $career-black !important;
     color: $cb-white-ish;
     border-bottom: solid 1px $cb-white-ish;
 }
@@ -119,101 +180,101 @@ body.dark-mode nav {
 }
 
 body.dark-mode .complete-menu-div:hover #photography-nav {
-    color: $cb-grey-ish !important;
+    color: $career-black !important;
 }
 
 body.dark-mode .dropdown-list {
-    background-color: $cb-grey-ish !important;
+    background-color: $career-black !important;
 }
 
 body.dark-mode #menu-link-photography:hover .dropdown-list {
-    background-color: $cb-green-ish !important;
+    background-color: $photography-orange !important;
 }
 
 body.dark-mode .dropdown-link-photography {
-    background-color: $cb-green-ish !important;
+    background-color: $photography-orange !important;
 }
 
 body.dark-mode .dropdown-link-photography:hover {
-    background-color: $cb-green-ish !important;
-    color: $cb-grey-ish !important;
+    background-color: $photography-orange !important;
+    color: $career-black !important;
 }
 
 body.dark-mode .dropdown-link-aviation:hover {
-    background-color: $cb-blue-ish !important;
+    background-color: $aviation-blue !important;
 }
 
 body.dark-mode .dropdown-link-blog:hover {
-    background-color: $cb-orange-ish !important;
+    background-color: $photography-orange-bright !important;
 }
 
 body.dark-mode .dropdown-link-career:hover {
     background-color: $cb-white-ish !important;
-    color: $cb-career-grey !important;
+    color: $career-black !important;
 }
 
 body.dark-mode .dropdown-link-travel:hover {
-    background-color: $cb-dark-green-ish !important;
+    background-color: $travel-green !important;
 }
 
 body.dark-mode .dropdown-link {
-    background-color: $cb-grey-ish !important;
+    background-color: $career-black !important;
     color: $cb-white-ish !important;
 }
 
 body.dark-mode #burger-menu-icon {
-    background-color: $cb-grey-ish !important;
+    background-color: $career-black !important;
     color: $cb-white-ish !important;
 }
 
 body.dark-mode #burger-menu-open-icon {
-    background-color: $cb-grey-ish !important;
+    background-color: $career-black !important;
     color: $cb-white-ish !important;
 }
 
 body.dark-mode #burger-menu-close-icon {
     color: $cb-white-ish !important;
-    background-color: $cb-grey-ish !important;
+    background-color: $career-black !important;
 }
 
 body.dark-mode #burger-menu-content {
-    background-color: $cb-grey-ish !important;
+    background-color: $career-black !important;
 
     & a {
         color: $cb-white-ish !important;
-        background-color: $cb-grey-ish !important;
+        background-color: $career-black !important;
     }
 
     & .burger-menu-green-item:hover {
-        background-color: $cb-green-ish !important;
+        background-color: $photography-orange !important;
     }
 
     & .burger-menu-blue-item:hover {
-        background-color: $cb-blue-ish !important;
+        background-color: $aviation-blue !important;
     }
 
     & .burger-menu-dark-green-item:hover {
-        background-color: $cb-dark-green-ish !important;
+        background-color: $travel-green !important;
     }
 
     & .burger-menu-orange-item:hover {
-        background-color: $cb-orange-ish !important;
+        background-color: $photography-orange-bright !important;
     }
 
     & .dropdown-link-photography:hover {
-        background-color: $cb-green-ish !important;
+        background-color: $photography-orange !important;
     }
 
     & .dropdown-link-aviation:hover {
-        background-color: $cb-blue-ish !important;
+        background-color: $aviation-blue !important;
     }
 
     & .dropdown-link-blog:hover {
-        background-color: $cb-orange-ish !important;
+        background-color: $photography-orange-bright !important;
     }
 
     & .dropdown-link-career:hover {
-        background-color: $cb-career-grey !important;
+        background-color: $career-black !important;
         color: $cb-white-ish !important;
     }
 
@@ -221,12 +282,12 @@ body.dark-mode #burger-menu-content {
 
 body.dark-mode #mobileBottomMenu {
     border-top: 1px solid $cb-white-ish;
-    background-color: $cb-grey-ish !important;
+    background-color: $career-black !important;
 }
 
 // Dark mode for counters
 body.dark-mode .counter-card {
-    background: #2a2a2a;
+    background: $shop-blue;
     color: #fff;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
@@ -247,7 +308,7 @@ body.dark-mode .placeholder {
 // Footer
 
 body.dark-mode #footer-full-width {
-    background-color: $cb-grey-ish;
+    background-color: $career-black;
 
     & div {
         color: $cb-white-ish;

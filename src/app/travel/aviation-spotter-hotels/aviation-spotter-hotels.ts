@@ -1,20 +1,32 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetaService } from '../../services/meta.service';
+import { LanguageService, Language } from '../../language.service';
 
 @Component({
     selector: 'app-aviation-spotter-hotels',
     standalone: true,
-    imports: [RouterModule],
+    imports: [RouterModule, CommonModule],
     templateUrl: './aviation-spotter-hotels.html',
     styleUrl: './aviation-spotter-hotels.scss'
 })
 export class AviationSpotterHotels implements OnInit {
     protected readonly title = 'Aviation Spotter Hotels';
+    currentLanguage: Language = 'en';
 
-    constructor(private metaService: MetaService) { }
+    constructor(
+        private metaService: MetaService,
+        private languageService: LanguageService
+    ) { }
 
     ngOnInit(): void {
+        // Subscribe to language changes
+        this.currentLanguage = this.languageService.getCurrentLanguage();
+        this.languageService.language$.subscribe((lang) => {
+            this.currentLanguage = lang;
+        });
+
         this.metaService.updateSEO(
             {
                 title: 'Aviation Spotter Hotels - Best Hotels for Plane Spotting | Christian Böhme',

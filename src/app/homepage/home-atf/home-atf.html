@@ -1,28 +1,35 @@
 <div id="home-atf" class="hero-section" role="main"
     aria-label="Homepage hero with photography, travel and career slides">
+    <!-- Skip link for keyboard navigation -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Slide 1: Travel -->
     <div class="hero-background" [ngClass]="{ 'active': currentSlide === 0 }"
         [style.opacity]="currentSlide === 0 ? 1 : 0"
-        style="background-image: url('/assets/img/photography/Travel/North America/Costa Rica/2024.06.02 So Butterfly Garden, La Fortuna Hotel/Tropic vulcano Arenal view from La Fortuna .jpg');">
+        style="background-image: url('/assets/img/photography/Travel/North America/Costa Rica/2024.06.02 So Butterfly Garden, La Fortuna Hotel/Tropic vulcano Arenal view from La Fortuna .jpg');"
+        role="img" aria-label="Tropical volcano Arenal in Costa Rica - Travel destination">
     </div>
     <!-- Slide 2: Aviation -->
     <div class="hero-background" [ngClass]="{ 'active': currentSlide === 1 }"
         [style.opacity]="currentSlide === 1 ? 1 : 0"
-        style="background-image: url('/assets/img/photography/Aviation/Australia and Oceania/Australia/Fraser Island/Arriving small plane at an airstrip on Fraser Island in Australia .JPG');">
+        style="background-image: url('/assets/img/photography/Aviation/Australia and Oceania/Australia/Fraser Island/Arriving small plane at an airstrip on Fraser Island in Australia .JPG');"
+        role="img" aria-label="Small aircraft arriving at Fraser Island airstrip - Aviation photography">
     </div>
     <!-- Slide 3: Photography -->
     <div class="hero-background" [ngClass]="{ 'active': currentSlide === 2 }"
-        [style.opacity]="currentSlide === 2 ? 1 : 0" style="background-image: url('/assets/img/other/CRB_8567B.JPG');">
+        [style.opacity]="currentSlide === 2 ? 1 : 0" style="background-image: url('/assets/img/other/CRB_8567B.JPG');"
+        role="img" aria-label="Professional photography portfolio - Showcasing creative visual storytelling">
     </div>
     <!-- Slide 4: Career - Bright Mode -->
     <div class="hero-background hero-background-bright" [ngClass]="{ 'active': currentSlide === 3 }"
         [style.opacity]="currentSlide === 3 ? 1 : 0"
-        style="background-image: url('/assets/img/other/cloudsurfing.JPG');">
+        style="background-image: url('/assets/img/other/cloudsurfing.JPG');" role="img"
+        aria-label="Creative cloud surfing concept - Innovation and career excellence">
     </div>
     <!-- Slide 4: Career - Dark Mode -->
     <div class="hero-background hero-background-dark" [ngClass]="{ 'active': currentSlide === 3 }"
         [style.opacity]="currentSlide === 3 ? 1 : 0"
-        style="background-image: url('/assets/img/other/Sydney Skyline Black n orange.JPG');">
+        style="background-image: url('/assets/img/other/Sydney Skyline Black n orange.JPG');" role="img"
+        aria-label="Sydney skyline at night - Career inspiration and global perspective">
     </div>
 
     <!-- Slide 1 Content: Travel -->

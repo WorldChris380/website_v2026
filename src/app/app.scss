@@ -1,3 +1,5 @@
+@use '../styles.scss' as *;
+
 app-root {
     display: flex;
     flex-direction: column;
@@ -38,11 +40,11 @@ app-footer {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, rgba(255, 59, 48, 0.95), rgba(255, 45, 85, 0.95));
+    background: linear-gradient(135deg, rgba($warning-red, 0.95), rgba($warning-red-dark, 0.95));
     color: white;
     padding: 20px 40px;
     border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(255, 59, 48, 0.4);
+    box-shadow: 0 8px 32px rgba($warning-red, 0.4);
     z-index: 10000;
     animation: slideInWarning 0.3s ease-out;
     backdrop-filter: blur(10px);
