@@ -45,7 +45,7 @@ $cb-red-ish: $warning-red;
     --travel-green: #{$travel-green};
     --photography-orange: #{$photography-orange};
     --warning-red: #{$warning-red};
-    
+
     // Helle Variationen
     --career-black-bright: #{$career-black-bright};
     --shop-blue-bright: #{$shop-blue-bright};
@@ -53,7 +53,7 @@ $cb-red-ish: $warning-red;
     --travel-green-bright: #{$travel-green-bright};
     --photography-orange-bright: #{$photography-orange-bright};
     --warning-red-bright: #{$warning-red-bright};
-    
+
     // Dunkle Variationen
     --career-black-dark: #{$career-black-dark};
     --shop-blue-dark: #{$shop-blue-dark};
@@ -61,10 +61,44 @@ $cb-red-ish: $warning-red;
     --travel-green-dark: #{$travel-green-dark};
     --photography-orange-dark: #{$photography-orange-dark};
     --warning-red-dark: #{$warning-red-dark};
-    
+
     // Legacy-Kompatibilität
     --cb-dark-grey: #{$cb-grey-ish};
     --cb-white-ish: #{$cb-white-ish};
+
+    // Spacing Tokens
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+
+    // Typography Scale (fluid)
+    --font-size-xs: clamp(0.75rem, 0.72rem + 0.2vw, 0.85rem);
+    --font-size-sm: clamp(0.875rem, 0.84rem + 0.3vw, 0.98rem);
+    --font-size-md: clamp(1rem, 0.95rem + 0.4vw, 1.12rem);
+    --font-size-lg: clamp(1.125rem, 1.05rem + 0.6vw, 1.35rem);
+    --font-size-xl: clamp(1.4rem, 1.2rem + 1.2vw, 2rem);
+    --font-size-2xl: clamp(1.8rem, 1.5rem + 2vw, 2.8rem);
+
+    // Radius & Shadows
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.12);
+    --shadow-strong: 0 10px 26px rgba(0, 0, 0, 0.22);
+
+    // Motion
+    --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --dur-fast: 120ms;
+    --dur-medium: 200ms;
+    --dur-slow: 280ms;
+
+    // Layout
+    --header-offset: 40px;
 }
 
 /* Dark mode CSS variables override */
@@ -75,7 +109,7 @@ body.dark-mode {
     --aviation-blue: #{$aviation-blue-bright};
     --travel-green: #{$travel-green-bright};
     --photography-orange: #{$photography-orange-bright};
-    
+
     // Legacy-Kompatibilität
     --cb-dark-grey: #{$cb-white-ish};
     --cb-white-ish: #{$cb-grey-ish};
@@ -99,23 +133,59 @@ body.dark-mode {
 
 html {
     height: 100%;
+    scroll-behavior: smooth;
 }
 
 body {
     height: 100%;
     margin: 0 !important;
     padding: 0;
-    padding-top: 40px;
+    padding-top: var(--header-offset);
     display: flex;
     flex-direction: column;
+    font-size: var(--font-size-md);
+    line-height: 1.6;
+    color: $career-black;
+    background-color: #fff;
 }
 
 a {
     text-decoration: none;
+    color: inherit;
+    transition: color var(--dur-fast) var(--ease-standard),
+        opacity var(--dur-fast) var(--ease-standard);
 }
 
 a:visited {
     color: $cb-grey-ish;
+}
+
+a:hover,
+a:active {
+    opacity: 0.85;
+}
+
+button,
+[role="button"],
+.btn {
+    cursor: pointer;
+    transition: transform var(--dur-fast) var(--ease-standard),
+        box-shadow var(--dur-fast) var(--ease-standard),
+        opacity var(--dur-fast) var(--ease-standard);
+}
+
+// button:hover,
+// [role="button"]:hover,
+// .btn:hover {
+//     transform: translateY(-1px);
+//     box-shadow: var(--shadow-soft);
+// }
+
+button:active,
+[role="button"]:active,
+.btn:active {
+    transform: translateY(0);
+    opacity: 0.92;
 }
 
 // Focus States for Accessibility
@@ -142,6 +212,23 @@ body.dark-mode a:focus-visible {
     outline: none;
 }
 
+// Better anchor positioning under fixed header
+:target {
+    scroll-margin-top: calc(var(--header-offset) + var(--space-4));
+}
+
+// Improve tap targets on touch devices
+@media (pointer: coarse) {
+
+    a,
+    button,
+    [role="button"],
+    .btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
 // Responsive Design
 @media(max-width: 320px) {
     body {
@@ -150,6 +237,16 @@ body.dark-mode a:focus-visible {
 
     * {
         font-size: 14px;
+    }
+}
+
+// Respect reduced motion preference
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
     }
 }
 
@@ -202,6 +299,11 @@ body.dark-mode .dropdown-link-photography:hover {
 
 body.dark-mode .dropdown-link-aviation:hover {
     background-color: $aviation-blue !important;
+}
+
+body.dark-mode .dropdown-link-shop:hover {
+    background-color: $shop-blue !important;
+    color: $cb-white-ish !important;
 }
 
 body.dark-mode .dropdown-link-blog:hover {

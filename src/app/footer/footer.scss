@@ -13,8 +13,9 @@
     max-width: 1920px;
     display: flex;
     justify-content: space-between;
-    gap: 24px;
+    gap: var(--space-6);
     width: 100%;
+    padding: var(--space-3) var(--space-4);
 }
 
 #first-footer-column {
@@ -27,12 +28,12 @@
     display: flex;
     flex-direction: row;
     text-align: center;
-    gap: 16px;
+    gap: var(--space-4);
 
     a {
         color: #000000;
         text-decoration: none;
-        transition: opacity 0.2s ease;
+        transition: opacity var(--dur-fast) var(--ease-standard);
 
         &:hover {
             opacity: 0.8;
@@ -51,7 +52,7 @@
 #third-footer-column {
     display: flex;
     flex-direction: row;
-    gap: 12px;
+    gap: var(--space-3);
     align-items: center;
 
     .github-logo,
@@ -68,16 +69,16 @@
     }
 
     #footer-content-limitation {
-        gap: 12px;
+        gap: var(--space-3);
         font-size: 12px;
     }
 
     #second-footer-column {
-        gap: 8px;
+        gap: var(--space-2);
     }
 
     #third-footer-column {
-        gap: 8px;
+        gap: var(--space-2);
 
         .github-logo,
         .linkedIn-Logo,

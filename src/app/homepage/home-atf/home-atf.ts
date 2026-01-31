@@ -20,6 +20,11 @@ export class HomeAtf implements OnInit, AfterViewInit, OnDestroy {
   isPaused = false;
   quoteIndex = 0;
   currentQuote = '';
+  private touchStartX = 0;
+  private touchStartY = 0;
+  private touchEndX = 0;
+  private touchEndY = 0;
+  private readonly swipeThreshold = 50;
 
   travelQuotes = {
     en: [
@@ -130,10 +135,7 @@ export class HomeAtf implements OnInit, AfterViewInit, OnDestroy {
 
   startSlideShow() {
     this.slideInterval = setInterval(() => {
-      this.currentSlide = (this.currentSlide + 1) % 4;
-      this.quoteIndex = (this.quoteIndex + 1) % 3; // Rotate through quote sets with main slide
-      this.currentQuote = this.getRandomQuote();
-      this.cdr.detectChanges();
+      this.advanceSlide(1, false);
     }, 8000); // 8 seconds per slide (includes transition time)
   }
 
@@ -158,9 +160,34 @@ export class HomeAtf implements OnInit, AfterViewInit, OnDestroy {
   goToSlide(index: number) {
     this.currentSlide = index;
     this.currentQuote = this.getRandomQuote();
-    if (!this.isPaused) {
-      clearInterval(this.slideInterval);
-      this.startSlideShow();
+    this.resetSlideShow();
+  }
+
+  onTouchStart(event: TouchEvent): void {
+    if (event.touches.length !== 1) return;
+    const touch = event.touches[0];
+    this.touchStartX = touch.clientX;
+    this.touchStartY = touch.clientY;
+    this.touchEndX = touch.clientX;
+    this.touchEndY = touch.clientY;
+  }
+
+  onTouchMove(event: TouchEvent): void {
+    if (event.touches.length !== 1) return;
+    const touch = event.touches[0];
+    this.touchEndX = touch.clientX;
+    this.touchEndY = touch.clientY;
+  }
+
+  onTouchEnd(): void {
+    const deltaX = this.touchEndX - this.touchStartX;
+    const deltaY = this.touchEndY - this.touchStartY;
+    if (Math.abs(deltaX) > this.swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX < 0) {
+        this.advanceSlide(1, true);
+      } else {
+        this.advanceSlide(-1, true);
+      }
     }
   }
 
@@ -176,6 +203,23 @@ export class HomeAtf implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     if (this.slideInterval) {
       clearInterval(this.slideInterval);
+    }
+  }
+
+  private advanceSlide(step: 1 | -1, resetTimer: boolean): void {
+    this.currentSlide = (this.currentSlide + step + 4) % 4;
+    this.quoteIndex = (this.quoteIndex + step + 3) % 3;
+    this.currentQuote = this.getRandomQuote();
+    this.cdr.detectChanges();
+    if (resetTimer) {
+      this.resetSlideShow();
+    }
+  }
+
+  private resetSlideShow(): void {
+    if (!this.isPaused) {
+      clearInterval(this.slideInterval);
+      this.startSlideShow();
     }
   }
 

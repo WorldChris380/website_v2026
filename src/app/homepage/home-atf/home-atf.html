@@ -1,7 +1,7 @@
 <div id="home-atf" class="hero-section" role="main"
-    aria-label="Homepage hero with photography, travel and career slides">
+    aria-label="Homepage hero with photography, travel and career slides" (touchstart)="onTouchStart($event)"
+    (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()">
     <!-- Skip link for keyboard navigation -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Slide 1: Travel -->
     <div class="hero-background" [ngClass]="{ 'active': currentSlide === 0 }"
         [style.opacity]="currentSlide === 0 ? 1 : 0"
@@ -96,23 +96,30 @@
         </div>
     </div>
 
-    <div class="hero-dots">
-        <button class="play-pause-btn" (click)="togglePlayPause()"
-            [attr.aria-label]="isPaused ? 'Play slideshow' : 'Pause slideshow'" title="Toggle slideshow">
-            <span *ngIf="!isPaused">⏸</span>
-            <span *ngIf="isPaused">▶</span>
+    <div class="hero-dots" role="tablist" aria-label="Hero sections">
+        <button class="hero-dot-item dot-travel" [class.active]="currentSlide === 0" (click)="goToSlide(0)"
+            [attr.aria-pressed]="currentSlide === 0"
+            [attr.aria-label]="currentLanguage === 'en' ? 'Travel section' : 'Reisen Abschnitt'">
+            <span class="hero-dot-label">{{ currentLanguage === 'en' ? 'Travel' : 'Reisen' }}</span>
+            <span class="hero-dot-line"></span>
         </button>
-        <button class="dot" [class.active-dot]="currentSlide === 0" (click)="goToSlide(0)"
-            [attr.aria-label]="'Go to slide 1: ' + (currentLanguage === 'en' ? 'Travels' : 'Reisen')"
-            [attr.aria-pressed]="currentSlide === 0" title="Slide 1: Travels"></button>
-        <button class="dot" [class.active-dot]="currentSlide === 1" (click)="goToSlide(1)"
-            [attr.aria-label]="'Go to slide 2: ' + (currentLanguage === 'en' ? 'Aviation' : 'Luftfahrt')"
-            [attr.aria-pressed]="currentSlide === 1" title="Slide 2: Aviation"></button>
-        <button class="dot" [class.active-dot]="currentSlide === 2" (click)="goToSlide(2)"
-            [attr.aria-label]="'Go to slide 3: ' + (currentLanguage === 'en' ? 'Photography' : 'Fotografie')"
-            [attr.aria-pressed]="currentSlide === 2" title="Slide 3: Photography"></button>
-        <button class="dot" [class.active-dot]="currentSlide === 3" (click)="goToSlide(3)"
-            [attr.aria-label]="'Go to slide 4: ' + (currentLanguage === 'en' ? 'My career' : 'Meine Karriere')"
-            [attr.aria-pressed]="currentSlide === 3" title="Slide 4: Career"></button>
+        <button class="hero-dot-item dot-photography" [class.active]="currentSlide === 2" (click)="goToSlide(2)"
+            [attr.aria-pressed]="currentSlide === 2"
+            [attr.aria-label]="currentLanguage === 'en' ? 'Photography section' : 'Fotografie Abschnitt'">
+            <span class="hero-dot-label">{{ currentLanguage === 'en' ? 'Photography' : 'Fotografie' }}</span>
+            <span class="hero-dot-line"></span>
+        </button>
+        <button class="hero-dot-item dot-aviation" [class.active]="currentSlide === 1" (click)="goToSlide(1)"
+            [attr.aria-pressed]="currentSlide === 1"
+            [attr.aria-label]="currentLanguage === 'en' ? 'Aviation section' : 'Luftfahrt Abschnitt'">
+            <span class="hero-dot-label">{{ currentLanguage === 'en' ? 'Aviation' : 'Luftfahrt' }}</span>
+            <span class="hero-dot-line"></span>
+        </button>
+        <button class="hero-dot-item dot-career" [class.active]="currentSlide === 3" (click)="goToSlide(3)"
+            [attr.aria-pressed]="currentSlide === 3"
+            [attr.aria-label]="currentLanguage === 'en' ? 'Career section' : 'Karriere Abschnitt'">
+            <span class="hero-dot-label">{{ currentLanguage === 'en' ? 'Career' : 'Karriere' }}</span>
+            <span class="hero-dot-line"></span>
+        </button>
     </div>
 </div>

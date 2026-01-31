@@ -4,37 +4,37 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 60px 20px;
+    padding: var(--space-8) var(--space-4);
 
     @media (max-width: 768px) {
-        padding: 40px 15px;
+        padding: var(--space-7) var(--space-3);
     }
 
     @media (max-width: 480px) {
-        padding: 30px 12px;
+        padding: var(--space-6) var(--space-3);
     }
 }
 
 .header {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: var(--space-8);
 
     @media (max-width: 768px) {
-        margin-bottom: 35px;
+        margin-bottom: var(--space-6);
     }
 
     h2 {
-        font-size: 36px;
+        font-size: var(--font-size-2xl);
         font-weight: 700;
         margin: 0 0 15px 0;
         color: #1a1a1a;
 
         @media (max-width: 768px) {
-            font-size: 28px;
+            font-size: var(--font-size-xl);
         }
 
         @media (max-width: 480px) {
-            font-size: 24px;
+            font-size: var(--font-size-lg);
         }
     }
 
@@ -42,18 +42,18 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 12px;
-        font-size: 16px;
+        gap: var(--space-3);
+        font-size: var(--font-size-md);
         color: #666;
 
         @media (max-width: 768px) {
-            font-size: 14px;
-            gap: 10px;
+            font-size: var(--font-size-sm);
+            gap: var(--space-2);
         }
 
         @media (max-width: 480px) {
             flex-direction: column;
-            gap: 6px;
+            gap: var(--space-2);
         }
 
         .stat-item {
@@ -70,11 +70,11 @@
     }
 
     .legend {
-        margin-top: 12px;
+        margin-top: var(--space-3);
         display: flex;
         justify-content: center;
-        gap: 16px;
-        font-size: 13px;
+        gap: var(--space-4);
+        font-size: var(--font-size-xs);
         color: #555;
         flex-wrap: wrap;
 
@@ -104,43 +104,45 @@
 .continents-grid {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: var(--space-5);
 }
 
 .continent-card {
     background: #f8f9fa;
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: box-shadow var(--dur-fast) var(--ease-standard),
+        transform var(--dur-fast) var(--ease-standard);
 
     &:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        box-shadow: var(--shadow-soft);
+        transform: translateY(-1px);
     }
 }
 
 .continent-header {
-    padding: 20px 24px;
+    padding: var(--space-5) var(--space-6);
     background: $travel-green-bright;
     font-weight: 600;
-    font-size: 18px;
+    font-size: var(--font-size-lg);
     color: $travel-green-dark;
     border-bottom: 1px solid lighten($travel-green-bright, 8%);
 }
 
 .countries-list {
-    padding: 24px;
+    padding: var(--space-6);
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: var(--space-3);
 
     @media (max-width: 768px) {
-        padding: 18px;
-        gap: 10px;
+        padding: var(--space-4);
+        gap: var(--space-2);
     }
 
     @media (max-width: 480px) {
-        padding: 15px;
-        gap: 8px;
+        padding: var(--space-4);
+        gap: var(--space-2);
     }
 
     &.expanded {
@@ -149,35 +151,39 @@
 }
 
 .country-btn {
-    padding: 10px 20px;
+    padding: var(--space-2) var(--space-5);
     background: white;
     border: 1px solid #e0e0e0;
-    border-radius: 24px;
-    font-size: 14px;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-sm);
     font-weight: 500;
     color: #333;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color var(--dur-fast) var(--ease-standard),
+        border-color var(--dur-fast) var(--ease-standard),
+        color var(--dur-fast) var(--ease-standard),
+        box-shadow var(--dur-fast) var(--ease-standard),
+        transform var(--dur-fast) var(--ease-standard);
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-2);
 
     @media (max-width: 768px) {
-        padding: 8px 16px;
-        font-size: 13px;
+        padding: var(--space-2) var(--space-4);
+        font-size: var(--font-size-xs);
     }
 
     @media (max-width: 480px) {
-        padding: 6px 12px;
-        font-size: 12px;
-        gap: 6px;
+        padding: var(--space-2) var(--space-3);
+        font-size: var(--font-size-xs);
+        gap: var(--space-2);
     }
 
     &:hover {
         background: #f5f5f5;
         border-color: #ccc;
         transform: translateY(-2px);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow-soft);
     }
 
     &:active {

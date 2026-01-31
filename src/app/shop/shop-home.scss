@@ -2,17 +2,17 @@
 
 .shop-page {
     min-height: 100vh;
-    padding: 80px 20px 40px;
+    padding: calc(var(--space-8) + var(--header-offset)) var(--space-4) var(--space-7);
     display: flex;
     justify-content: center;
     background: #f8fafc;
 
     @media (max-width: 768px) {
-        padding: 60px 16px 32px;
+        padding: calc(var(--space-7) + var(--header-offset)) var(--space-4) var(--space-6);
     }
 
     @media (max-width: 480px) {
-        padding: 50px 12px 24px;
+        padding: calc(var(--space-6) + var(--header-offset)) var(--space-3) var(--space-5);
     }
 }
 
@@ -20,29 +20,29 @@
     width: min(100%, 1920px);
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: var(--space-5);
 }
 
 .shop-hero {
     background: linear-gradient(135deg, $shop-blue-dark, $shop-blue);
     color: #ffffff;
-    padding: 32px 24px;
-    border-radius: 16px;
-    box-shadow: 0 16px 40px rgba($shop-blue, 0.2);
-    margin-bottom: 24px;
+    padding: var(--space-6) var(--space-5);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-strong);
+    margin-bottom: var(--space-6);
 
     @media (max-width: 768px) {
-        padding: 24px 20px;
-        border-radius: 12px;
+        padding: var(--space-5) var(--space-4);
+        border-radius: var(--radius-md);
     }
 
     @media (max-width: 480px) {
-        padding: 20px 16px;
+        padding: var(--space-4) var(--space-4);
     }
 
     h1 {
         @media (max-width: 480px) {
-            font-size: 24px;
+            font-size: var(--font-size-xl);
         }
     }
 }
@@ -62,26 +62,26 @@
 .shop-body {
     background: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: var(--radius-md);
+    padding: var(--space-5);
     color: $career-black;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-soft);
 
     @media (max-width: 768px) {
-        padding: 16px;
+        padding: var(--space-4);
     }
 }
 
 .hint {
     color: #64748b;
-    margin-bottom: 16px;
+    margin-bottom: var(--space-4);
     line-height: 1.5;
 }
 
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
+    gap: var(--space-4);
 
     @media (max-width: 1024px) {
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -95,26 +95,27 @@
 .product-card {
     background: #f8fafc;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    padding: 16px;
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
     display: grid;
-    gap: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    gap: var(--space-3);
+    box-shadow: var(--shadow-soft);
+    transition: transform var(--dur-fast) var(--ease-standard),
+        box-shadow var(--dur-fast) var(--ease-standard);
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        box-shadow: var(--shadow-strong);
     }
 
     &.featured {
         border: 2px solid $shop-blue-dark;
         background: linear-gradient(135deg, $shop-blue-bright, lighten($shop-blue-bright, 6%));
-        box-shadow: 0 8px 24px rgba($shop-blue, 0.15);
+        box-shadow: var(--shadow-soft);
         order: -1;
 
         &:hover {
-            box-shadow: 0 12px 32px rgba($shop-blue, 0.25);
+            box-shadow: var(--shadow-strong);
         }
     }
 }
@@ -122,8 +123,8 @@
 .badge-new {
     background: linear-gradient(135deg, $warning-red, $warning-red-dark);
     color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-lg);
     display: inline-block;
     font-size: 12px;
     font-weight: 700;
@@ -133,12 +134,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 0;
+    padding: var(--space-3) 0;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
     .price {
-        font-size: 24px;
+        font-size: var(--font-size-xl);
         font-weight: 700;
         color: $shop-blue-dark;
     }
@@ -146,8 +147,8 @@
     .stock-indicator {
         background: $travel-green-bright;
         color: $travel-green;
-        padding: 4px 12px;
-        border-radius: 8px;
+        padding: var(--space-1) var(--space-3);
+        border-radius: var(--radius-sm);
         font-size: 12px;
         font-weight: 600;
     }
@@ -155,11 +156,11 @@
 
 .product-header h3 {
     margin: 4px 0 0;
-    font-size: 20px;
+    font-size: var(--font-size-lg);
     color: $career-black;
 
     @media (max-width: 480px) {
-        font-size: 18px;
+        font-size: var(--font-size-md);
     }
 }
 
@@ -167,7 +168,7 @@
     margin: 0;
     color: #475569;
     line-height: 1.5;
-    font-size: 15px;
+    font-size: var(--font-size-sm);
 }
 
 .product-meta {
@@ -175,24 +176,27 @@
     padding-left: 18px;
     color: #64748b;
     display: grid;
-    gap: 6px;
-    font-size: 14px;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
 }
 
 .product-actions {
     display: flex;
-    gap: 10px;
+    gap: var(--space-2);
     flex-wrap: wrap;
 }
 
 .product-actions .primary,
 .product-actions .secondary {
-    border-radius: 8px;
-    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
     font-weight: 700;
     cursor: pointer;
     border: 1px solid transparent;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+    transition: transform var(--dur-fast) var(--ease-standard),
+        box-shadow var(--dur-fast) var(--ease-standard),
+        background-color var(--dur-fast) var(--ease-standard),
+        border-color var(--dur-fast) var(--ease-standard);
 }
 
 .product-actions .primary {

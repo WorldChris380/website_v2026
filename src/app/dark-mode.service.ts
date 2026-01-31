@@ -35,7 +35,6 @@ export class DarkModeService {
     private applyBodyClass(enabled: boolean): void {
         if (typeof document !== 'undefined' && document.body) {
             document.body.classList.toggle('dark-mode', enabled);
-            console.log('Dark mode applied:', enabled, 'Classes:', document.body.className);
         }
     }
 

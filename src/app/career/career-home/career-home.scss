@@ -32,7 +32,10 @@
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform var(--dur-medium) var(--ease-standard),
+        box-shadow var(--dur-medium) var(--ease-standard),
+        border-color var(--dur-medium) var(--ease-standard),
+        background-color var(--dur-medium) var(--ease-standard);
     position: relative;
     overflow: hidden;
 
@@ -45,7 +48,7 @@
         height: 200%;
         background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
         opacity: 0;
-        transition: opacity 0.4s ease;
+        transition: opacity var(--dur-medium) var(--ease-standard);
     }
 
     &:hover {
@@ -75,7 +78,10 @@
         border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.2);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transition: transform var(--dur-medium) var(--ease-standard),
+            box-shadow var(--dur-medium) var(--ease-standard),
+            border-color var(--dur-medium) var(--ease-standard),
+            background-color var(--dur-medium) var(--ease-standard);
 
         @media (max-width: 768px) {
             padding: 3rem 1.5rem;
@@ -143,7 +149,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform var(--dur-fast) var(--ease-standard),
+        box-shadow var(--dur-fast) var(--ease-standard),
+        background-color var(--dur-fast) var(--ease-standard),
+        color var(--dur-fast) var(--ease-standard),
+        border-color var(--dur-fast) var(--ease-standard);
     border: none;
     cursor: pointer;
     position: relative;

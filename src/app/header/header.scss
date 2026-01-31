@@ -20,7 +20,7 @@
 
 #header-full-width {
     width: 100%;
-    height: 40px;
+    height: var(--header-offset);
     background-color: $cb-white-ish;
     display: flex;
     justify-content: center;
@@ -32,6 +32,7 @@
     left: 0;
     right: 0;
     border-bottom: solid 1px $cb-white-ish;
+    box-shadow: var(--shadow-soft);
 
     &::after {
         content: '';
@@ -70,12 +71,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 var(--space-4);
 }
 
 #header-logo-div {
     display: flex;
     align-items: center;
-    padding: 0 4px;
+    padding: 0 var(--space-2);
 
     img {
         transition: transform 2s ease-in-out;
@@ -94,8 +96,9 @@
 
 #page-heading {
     color: $career-black;
-    font-size: 20px;
-    margin-left: 8px;
+    font-size: var(--font-size-lg);
+    margin-left: var(--space-2);
+    line-height: 1.2;
 }
 
 // 2nd Header Column
@@ -103,7 +106,7 @@
 #header-navigation-div {
     display: flex;
     justify-content: center;
-    gap: 16px;
+    gap: var(--space-4);
 }
 
 nav {
@@ -111,14 +114,19 @@ nav {
     justify-content: center;
     align-items: center;
     color: $cb-grey-ish;
-    font-size: 20px;
-    height: 39px;
+    font-size: var(--font-size-lg);
+    height: var(--header-offset);
     align-self: center;
-    padding: 4px;
+    padding: 0 var(--space-2);
+    transition: background-color var(--dur-fast) var(--ease-standard),
+        color var(--dur-fast) var(--ease-standard),
+        box-shadow var(--dur-fast) var(--ease-standard),
+        transform var(--dur-fast) var(--ease-standard);
 
     &:hover {
         cursor: pointer;
-        border-radius: 4px 4px 0 0;
+        border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+        box-shadow: var(--shadow-soft);
     }
 }
 
@@ -128,10 +136,11 @@ nav {
 
 #aviation-nav:hover {
     background: $cb-blue-ish;
+    color: $cb-white-ish;
 }
 
 #shop-nav:hover {
-    background: #1e3a8a;
+    background: $shop-blue;
     color: $cb-white-ish;
 }
 
@@ -142,18 +151,18 @@ nav {
 #career-nav:hover {
     background: $cb-career-grey;
     color: $cb-white-ish;
-    border-radius: 4px 4px 0 0;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
 // 3rd Header Column
 #header-3rd-row-div {
     color: $cb-grey-ish;
-    font-size: 20px;
-    padding: 4px;
+    font-size: var(--font-size-lg);
+    padding: var(--space-1);
     min-width: 80px;
     display: flex;
     justify-content: end;
-    gap: 12px;
+    gap: var(--space-3);
     align-items: center;
 }
 
@@ -161,19 +170,25 @@ nav {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 32px;
+    width: 40px;
+    height: 36px;
     font-size: 18px;
     color: $cb-grey-ish;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     border: 1px solid transparent;
     text-decoration: none;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    transition: background-color var(--dur-fast) var(--ease-standard),
+        border-color var(--dur-fast) var(--ease-standard),
+        color var(--dur-fast) var(--ease-standard),
+        box-shadow var(--dur-fast) var(--ease-standard),
+        transform var(--dur-fast) var(--ease-standard);
     position: relative;
 
     &:hover {
         background-color: rgba(0, 0, 0, 0.06);
         border-color: rgba(0, 0, 0, 0.08);
+        box-shadow: var(--shadow-soft);
+        transform: translateY(-1px);
     }
 
     .cart-badge {
@@ -183,7 +198,7 @@ nav {
         min-width: 18px;
         height: 18px;
         border-radius: 50%;
-        background: #ef4444;
+        background: $warning-red;
         color: white;
         display: grid;
         place-items: center;
@@ -208,14 +223,17 @@ nav {
 
 #language-toggle {
     cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 8px;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: transparent;
     border: 2px solid transparent;
     user-select: none;
+    transition: background-color var(--dur-fast) var(--ease-standard),
+        border-color var(--dur-fast) var(--ease-standard),
+        transform var(--dur-fast) var(--ease-standard);
 
     .flag-icon {
         width: 24px;
@@ -245,15 +263,17 @@ nav {
     top: 100%;
     left: 0;
     background-color: $cb-white-ish;
-    border-radius: 0 0 4px 4px;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
     border-top: 1px solid $cb-white-ish;
-    gap: 4px;
+    gap: var(--space-1);
     overflow: visible;
     max-height: 0;
     opacity: 0;
     z-index: 999;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+    transition: max-height var(--dur-medium) var(--ease-standard),
+        opacity var(--dur-medium) var(--ease-standard);
     pointer-events: none;
+    box-shadow: var(--shadow-soft);
 }
 
 .dropdown-list.open {
@@ -273,7 +293,7 @@ nav {
 }
 
 .complete-menu-div:hover .nav-item {
-    border-radius: 4px 4px 0 0;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
 .complete-menu-div:hover #photography-nav {
@@ -282,10 +302,11 @@ nav {
 
 .complete-menu-div:hover #aviation-nav {
     background-color: $cb-blue-ish;
+    color: $cb-white-ish;
 }
 
 .complete-menu-div:hover #shop-nav {
-    background-color: #1e3a8a;
+    background-color: $shop-blue;
     color: $cb-white-ish;
 }
 
@@ -297,7 +318,7 @@ nav {
 .complete-menu-div:hover #career-nav {
     background-color: $cb-career-grey;
     color: $cb-white-ish;
-    border-radius: 4px 4px 0 0;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
 .dropdown-link {
@@ -307,8 +328,10 @@ nav {
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 4px;
-    gap: 4px;
+    padding: var(--space-2);
+    gap: var(--space-1);
+    transition: background-color var(--dur-fast) var(--ease-standard),
+        color var(--dur-fast) var(--ease-standard);
 }
 
 .dropdown-link-photography:hover {
@@ -317,10 +340,11 @@ nav {
 
 .dropdown-link-aviation:hover {
     background-color: $cb-blue-ish;
+    color: $cb-white-ish !important;
 }
 
 .dropdown-link-shop:hover {
-    background-color: #1e3a8a;
+    background-color: $shop-blue;
     color: $cb-white-ish !important;
 }
 
@@ -366,7 +390,7 @@ nav {
         content: '›';
         margin-left: 8px;
         font-size: 18px;
-        transition: transform 0.2s;
+        transition: transform var(--dur-fast) var(--ease-standard);
     }
 }
 
@@ -376,13 +400,14 @@ nav {
     top: 0;
     background-color: $cb-white-ish;
     min-width: 200px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-soft);
     opacity: 0;
     pointer-events: none;
     transform: translateX(-10px);
-    transition: opacity 0.2s, transform 0.2s;
+    transition: opacity var(--dur-fast) var(--ease-standard),
+        transform var(--dur-fast) var(--ease-standard);
     z-index: 1000;
-    border-radius: 0 4px 4px 4px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) var(--radius-sm);
 
     &.open {
         opacity: 1;
@@ -558,7 +583,11 @@ nav {
     padding: 6px;
     margin: 0 4px 0 0;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform var(--dur-fast) var(--ease-standard),
+        border-color var(--dur-fast) var(--ease-standard),
+        background-color var(--dur-fast) var(--ease-standard),
+        color var(--dur-fast) var(--ease-standard),
+        box-shadow var(--dur-fast) var(--ease-standard);
     position: relative;
     overflow: hidden;
 
@@ -606,7 +635,11 @@ nav {
     margin-right: 4px;
     cursor: pointer;
     border-radius: 8px;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform var(--dur-fast) var(--ease-standard),
+        border-color var(--dur-fast) var(--ease-standard),
+        background-color var(--dur-fast) var(--ease-standard),
+        color var(--dur-fast) var(--ease-standard),
+        box-shadow var(--dur-fast) var(--ease-standard);
     padding: 6px;
 
     &:hover {
@@ -637,7 +670,11 @@ nav {
     background-color: $cb-white-ish;
     overflow: hidden;
     overflow-y: auto;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: width var(--dur-medium) var(--ease-standard),
+        height var(--dur-medium) var(--ease-standard),
+        opacity var(--dur-medium) var(--ease-standard),
+        padding var(--dur-medium) var(--ease-standard),
+        box-shadow var(--dur-medium) var(--ease-standard);
     z-index: 999;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
@@ -649,7 +686,8 @@ nav {
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         font-size: 15px;
         font-weight: 500;
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transition: background-color var(--dur-fast) var(--ease-standard),
+            color var(--dur-fast) var(--ease-standard);
         position: relative;
         overflow: hidden;
         display: flex;
@@ -838,7 +876,9 @@ nav {
     font-weight: 600;
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: background-color var(--dur-fast) var(--ease-standard),
+        padding-left var(--dur-fast) var(--ease-standard),
+        color var(--dur-fast) var(--ease-standard);
     position: relative;
     overflow: hidden;
 

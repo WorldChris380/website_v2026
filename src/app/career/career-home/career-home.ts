@@ -15,43 +15,43 @@ export class CareerHome implements OnInit {
     currentLanguage: Language = 'en';
 
     skills = [
-        { name: 'Angular', level: 95, icon: '⚡' },
-        { name: 'TypeScript', level: 92, icon: '📘' },
-        { name: 'Python', level: 88, icon: '🐍' },
-        { name: 'Cloud (AWS/Azure)', level: 85, icon: '☁️' },
-        { name: 'Docker & Kubernetes', level: 82, icon: '🐳' },
-        { name: 'SQL & NoSQL', level: 90, icon: '🗄️' }
+        { name: 'Angular', level: 90, icon: '⚡' },
+        { name: 'TypeScript', level: 88, icon: '📘' },
+        { name: 'JavaScript', level: 86, icon: '✨' },
+        { name: 'HTML5 & CSS3', level: 84, icon: '🎨' },
+        { name: 'Project Management', level: 82, icon: '📌' },
+        { name: 'IT Support', level: 85, icon: '🛠️' }
     ];
 
     experiences = [
         {
-            title: 'Senior Software Engineer',
-            company: 'Tech Corporation',
-            period: '2023 - Present',
-            description: 'Leading development of enterprise-level Angular applications',
+            title: 'IT Support',
+            company: 'TELEPORT-Gruppe',
+            period: 'Oct 2025 - Present',
+            description: 'IT support and consulting for E-Government solutions, user administration and software roll-outs.',
             icon: '💼'
         },
         {
-            title: 'Full Stack Developer',
-            company: 'Digital Agency',
-            period: '2020 - 2023',
-            description: 'Built scalable web applications using modern technologies',
+            title: 'Project Manager',
+            company: 'SZ-Reisen & Service GmbH',
+            period: 'Feb 2023 - Nov 2024',
+            description: 'Product Owner for the PIM system (Voyager) and automation via a custom Chrome extension.',
             icon: '🚀'
         },
         {
-            title: 'Software Developer',
-            company: 'Startup Inc.',
-            period: '2018 - 2020',
-            description: 'Developed innovative solutions for client projects',
+            title: 'Travel Sales Manager',
+            company: 'CHECK24 Travel',
+            period: '2020',
+            description: 'Client consulting for vacation planning with strong airline route expertise.',
             icon: '💡'
         }
     ];
 
     achievements = [
-        { value: '50+', label: 'Projects Completed', icon: '🎯' },
-        { value: '8+', label: 'Years Experience', icon: '⏱️' },
-        { value: '15+', label: 'Technologies', icon: '🛠️' },
-        { value: '100%', label: 'Client Satisfaction', icon: '⭐' }
+        { value: '12+', label: 'Years Experience', icon: '⏱️' },
+        { value: '6', label: 'Professional Roles', icon: '🧭' },
+        { value: '15+', label: 'Core Skills', icon: '🛠️' },
+        { value: '2', label: 'Languages', icon: '🌍' }
     ];
 
     constructor(

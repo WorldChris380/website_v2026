@@ -10,13 +10,13 @@
 .twa-hero {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
-    gap: 32px;
-    padding: 72px clamp(16px, 5vw, 72px) 40px;
+    gap: var(--space-7);
+    padding: calc(var(--space-8) + var(--header-offset)) clamp(16px, 5vw, 72px) var(--space-7);
     align-items: center;
 
     @media (max-width: 900px) {
         grid-template-columns: 1fr;
-        padding: 56px 20px 32px;
+        padding: calc(var(--space-7) + var(--header-offset)) var(--space-5) var(--space-6);
     }
 }
 
@@ -24,13 +24,13 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: $aviation-blue-bright;
-    margin: 0 0 8px;
-    font-size: 12px;
+    margin: 0 0 var(--space-2);
+    font-size: var(--font-size-xs);
 }
 
 .twa-hero__content h1 {
     margin: 0 0 12px;
-    font-size: clamp(32px, 4vw, 44px);
+    font-size: clamp(2rem, 4vw, 2.8rem);
     color: #fff;
 }
 
@@ -39,28 +39,30 @@
     color: $aviation-blue-bright;
     line-height: 1.6;
     max-width: 680px;
+    font-size: var(--font-size-md);
 }
 
 .hero-actions {
     display: flex;
-    gap: 12px;
+    gap: var(--space-3);
     flex-wrap: wrap;
 }
 
 .hero-actions a,
 .cta-actions a {
     text-decoration: none;
-    padding: 12px 18px;
+    padding: var(--space-3) var(--space-4);
     border-radius: 999px;
     font-weight: 600;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform var(--dur-fast) var(--ease-standard),
+        box-shadow var(--dur-fast) var(--ease-standard);
 }
 
 .hero-actions .primary,
 .cta-actions .primary {
     background: linear-gradient(135deg, $aviation-blue-bright, $travel-green-bright);
     color: $aviation-blue-dark;
-    box-shadow: 0 8px 24px rgba($aviation-blue, 0.35);
+    box-shadow: var(--shadow-strong);
 }
 
 .hero-actions .ghost,
@@ -77,10 +79,10 @@
 
 .twa-hero__photo {
     height: 280px;
-    border-radius: 18px;
+    border-radius: var(--radius-lg);
     background: linear-gradient(135deg, rgba($aviation-blue, 0.25), rgba($travel-green, 0.2)),
         url('https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=1200&q=80') center/cover;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    box-shadow: var(--shadow-strong);
 
     @media (max-width: 900px) {
         height: 220px;
@@ -88,10 +90,10 @@
 }
 
 .twa-content {
-    padding: 24px clamp(16px, 4vw, 72px) 64px;
+    padding: var(--space-6) clamp(16px, 4vw, 72px) var(--space-8);
     display: flex;
     flex-direction: column;
-    gap: 36px;
+    gap: var(--space-7);
 }
 
 .quick-facts,
@@ -99,8 +101,8 @@
 .cta {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    padding: 24px;
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
@@ -121,13 +123,13 @@
 .facts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 16px;
-    margin-top: 18px;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
 }
 
 .fact-card {
-    padding: 16px;
-    border-radius: 12px;
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.05);
     color: $aviation-blue-bright;
@@ -137,13 +139,13 @@
 .tips-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 16px;
-    margin-top: 18px;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
 }
 
 .tip {
-    padding: 16px;
-    border-radius: 12px;
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.05);
     color: $aviation-blue-bright;
@@ -154,23 +156,23 @@
     display: inline-block;
     background: rgba($aviation-blue, 0.15);
     color: lighten($aviation-blue-bright, 10%);
-    padding: 6px 10px;
+    padding: var(--space-1) var(--space-2);
     border-radius: 999px;
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: var(--space-2);
 }
 
 .cta-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 18px;
+    gap: var(--space-4);
     flex-wrap: wrap;
 }
 
 .cta-actions {
     display: flex;
-    gap: 10px;
+    gap: var(--space-2);
     flex-wrap: wrap;
 }
 
@@ -178,13 +180,13 @@
     color: $aviation-blue-bright;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    margin: 0 0 6px;
-    font-size: 12px;
+    margin: 0 0 var(--space-2);
+    font-size: var(--font-size-xs);
 }
 
 @media (max-width: 640px) {
     .twa-hero {
-        padding-top: 48px;
+        padding-top: calc(var(--space-7) + var(--header-offset));
     }
 
     .cta-card {
