@@ -28,27 +28,25 @@ export class HomeAtf implements OnInit, AfterViewInit, OnDestroy {
 
   travelQuotes = {
     en: [
-      ['The world is a book, and those who do not travel read only one page.', 'Adventure awaits in 195 countries worldwide.', 'Travel is the only thing you buy that makes you richer.'],
+      ['The world is a book, and those who do not travel read only one page.', 'Travel is the only thing you buy that makes you richer.'],
       ['Not all those who wander are lost.', 'Life is either a daring adventure or nothing at all.', 'To travel is to live.'],
       ['The journey of a thousand miles begins with a single step.', 'Traveling leaves you speechless, then turns you into a storyteller.', 'Collect moments, not things.']
     ],
     de: [
-      ['Die Welt ist ein Buch. Wer nie reist, sieht nur eine Seite davon.', 'Abenteuer warten in 195 Ländern weltweit.', 'Reisen ist das Einzige, das dich reicher macht, wenn du es kaufst.'],
-      ['Nicht alle, die wandern, sind verloren.', 'Leben ist entweder ein gewagtes Abenteuer oder gar nichts.', 'Reisen ist leben.'],
+      ['Die Welt ist ein Buch. Wer nie reist, sieht nur eine Seite davon.', 'Reisen ist das Einzige, das dich reicher macht, wenn du es kaufst.'],
+      ['Leben ist entweder ein gewagtes Abenteuer oder gar nichts.', 'Reisen ist leben.'],
       ['Eine Reise von tausend Meilen beginnt mit einem einzigen Schritt.', 'Reisen macht dich sprachlos und verwandelt dich dann in einen Geschichtenerzähler.', 'Sammle Momente, nicht Dinge.']
     ]
   };
 
   aviationQuotes = {
     en: [
-      ['The Wright Brothers\' first flight lasted only 12 seconds.', 'A Boeing 747 has 6 million parts working together.', 'Commercial jets cruise at approximately 900 km/h.'],
-      ['The Concorde could fly from London to New York in under 3 hours.', 'An airplane\s wings are designed to flex up to 90 degrees.', 'The black box is actually bright orange for visibility.'],
-      ['Pilots and co-pilots eat different meals to avoid food poisoning.', 'Airplanes are struck by lightning about once per year.', 'The Boeing 787 is made of 50% composite materials.']
+      ['The Wright Brothers\' first flight lasted only 12 seconds.'],
+      ['Pilots and co-pilots eat different meals to avoid food poisoning.']
     ],
     de: [
-      ['Der erste Flug der Gebrüder Wright dauerte nur 12 Sekunden.', 'Eine Boeing 747 besteht aus 6 Millionen Teilen.', 'Verkehrsflugzeuge fliegen mit etwa 900 km/h.'],
-      ['Die Concorde flog in unter 3 Stunden von London nach New York.', 'Flugzeugflügel können sich bis zu 90 Grad biegen.', 'Die Black Box ist tatsächlich orange für bessere Sichtbarkeit.'],
-      ['Piloten essen unterschiedliche Mahlzeiten zur Sicherheit.', 'Flugzeuge werden etwa einmal pro Jahr vom Blitz getroffen.', 'Die Boeing 787 besteht zu 50% aus Verbundwerkstoffen.']
+      ['Der erste Flug der Gebrüder Wright dauerte nur 12 Sekunden.'],
+      ['Piloten essen unterschiedliche Mahlzeiten zur Sicherheit.', 'Die Boeing 787 besteht zu 50% aus Verbundwerkstoffen.']
     ]
   };
 
@@ -68,13 +66,11 @@ export class HomeAtf implements OnInit, AfterViewInit, OnDestroy {
   careerQuotes = {
     en: [
       ['Code is poetry written in logic and creativity.', 'The best way to predict the future is to build it.', 'Innovation distinguishes between a leader and a follower.'],
-      ['First, solve the problem. Then, write the code.', 'Make it work, make it right, make it fast.', 'Any fool can write code that a computer can understand.'],
       ['The only way to do great work is to love what you do.', 'Stay hungry, stay foolish.', 'Technology is best when it brings people together.']
     ],
     de: [
       ['Code ist Poesie, geschrieben in Logik und Kreativität.', 'Der beste Weg, die Zukunft vorherzusagen, ist sie zu gestalten.', 'Innovation unterscheidet zwischen einem Anführer und einem Nachfolger.'],
-      ['Erst das Problem lösen. Dann den Code schreiben.', 'Mach es funktionierend, mach es richtig, mach es schnell.', 'Jeder Narr kann Code schreiben, den ein Computer versteht.'],
-      ['Der einzige Weg, großartige Arbeit zu leisten, ist zu lieben, was man tut.', 'Bleib hungrig, bleib verrückt.', 'Technologie ist am besten, wenn sie Menschen zusammenbringt.']
+      ['Der einzige Weg, großartige Arbeit zu leisten, ist zu lieben, was man tut.', 'Technologie ist am besten, wenn sie Menschen zusammenbringt.']
     ]
   };
 
@@ -150,15 +146,30 @@ export class HomeAtf implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  getQuoteGroupsCount(): number {
+    const lang = this.currentLanguage;
+    switch (this.currentSlide) {
+      case 0: return this.travelQuotes[lang].length;
+      case 1: return this.aviationQuotes[lang].length;
+      case 2: return this.photographyQuotes[lang].length;
+      case 3: return this.careerQuotes[lang].length;
+      default: return 0;
+    }
+  }
+
   getRandomQuote(): string {
     const lang = this.currentLanguage;
     const quotes = this.getCurrentQuotes();
-    if (quotes.length === 0) return '';
+    if (!quotes || quotes.length === 0) return '';
     return quotes[Math.floor(Math.random() * quotes.length)];
   }
 
   goToSlide(index: number) {
     this.currentSlide = index;
+    const count = this.getQuoteGroupsCount();
+    if (this.quoteIndex >= count) {
+      this.quoteIndex = 0;
+    }
     this.currentQuote = this.getRandomQuote();
     this.resetSlideShow();
   }
@@ -208,7 +219,8 @@ export class HomeAtf implements OnInit, AfterViewInit, OnDestroy {
 
   private advanceSlide(step: 1 | -1, resetTimer: boolean): void {
     this.currentSlide = (this.currentSlide + step + 4) % 4;
-    this.quoteIndex = (this.quoteIndex + step + 3) % 3;
+    const count = this.getQuoteGroupsCount();
+    this.quoteIndex = (this.quoteIndex + step + count) % count;
     this.currentQuote = this.getRandomQuote();
     this.cdr.detectChanges();
     if (resetTimer) {

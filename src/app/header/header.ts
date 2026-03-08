@@ -24,6 +24,7 @@ export class Header implements OnInit {
   openMobileDropdownMenu: MenuHeading | null = null;
   openMobileSubDropdownMenu: string | null = null;
   isLoading: boolean = false;
+  megamenuOpen: boolean = false;
 
   get cartQuantity(): number {
     return this.shopService.totalQuantity();
@@ -65,6 +66,14 @@ export class Header implements OnInit {
 
   setDesktopSubDropdown(submenuItem: string | null) {
     this.openDesktopSubDropdownMenu = submenuItem;
+  }
+
+  setMegamenuOpen(open: boolean) {
+    this.megamenuOpen = open;
+  }
+
+  toggleMegamenu() {
+    this.megamenuOpen = !this.megamenuOpen;
   }
 
   toggleBurgerMenu() {

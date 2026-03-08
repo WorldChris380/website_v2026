@@ -10,7 +10,7 @@ describe('HomeAtf', () => {
     await TestBed.configureTestingModule({
       imports: [HomeAtf]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(HomeAtf);
     component = fixture.componentInstance;

@@ -101,57 +101,348 @@
     line-height: 1.2;
 }
 
-// 2nd Header Column
+// 2nd Header Column - Megamenu
 
 #header-navigation-div {
     display: flex;
     justify-content: center;
-    gap: var(--space-4);
+    align-items: center;
+    position: relative;
 }
 
-nav {
+// Megamenu Trigger Button
+.megamenu-trigger {
     display: flex;
-    justify-content: center;
     align-items: center;
-    color: $cb-grey-ish;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: transparent;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius-lg);
+    color: $career-black;
     font-size: var(--font-size-lg);
-    height: var(--header-offset);
-    align-self: center;
-    padding: 0 var(--space-2);
-    transition: background-color var(--dur-fast) var(--ease-standard),
-        color var(--dur-fast) var(--ease-standard),
-        box-shadow var(--dur-fast) var(--ease-standard),
-        transform var(--dur-fast) var(--ease-standard);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--dur-fast) var(--ease-standard);
+    height: 44px;
+
+    .menu-text {
+        font-family: inherit;
+    }
+
+    .menu-icon {
+        font-size: 20px;
+        line-height: 1;
+    }
 
     &:hover {
-        cursor: pointer;
-        border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.12);
+        transform: translateY(-1px);
         box-shadow: var(--shadow-soft);
+    }
+
+    &:active {
+        transform: translateY(0);
     }
 }
 
-#photography-nav:hover {
-    background: $cb-green-ish;
+:host-context(body.dark-mode) {
+    .megamenu-trigger {
+        color: $cb-white-ish;
+        border-color: rgba(255, 255, 255, 0.12);
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+    }
 }
 
-#aviation-nav:hover {
-    background: $cb-blue-ish;
-    color: $cb-white-ish;
+// Megamenu Panel
+.megamenu-panel {
+    position: fixed;
+    top: var(--header-offset);
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100vw;
+    background: $cb-white-ish;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: opacity var(--dur-medium) var(--ease-standard),
+        visibility var(--dur-medium) var(--ease-standard),
+        transform var(--dur-medium) var(--ease-standard);
+    z-index: 999;
+    padding: var(--space-6);
+    display: flex;
+    justify-content: center;
+
+    &.open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
 }
 
-#shop-nav:hover {
-    background: $shop-blue;
-    color: $cb-white-ish;
+:host-context(body.dark-mode) {
+    .megamenu-panel {
+        background: $career-black-dark;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
 }
 
-#blog-nav:hover {
-    background: $cb-orange-ish;
+.megamenu-content {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-6);
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
 }
 
-#career-nav:hover {
-    background: $cb-career-grey;
-    color: $cb-white-ish;
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+// Megamenu Section
+.megamenu-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-2);
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        border-radius: var(--radius-sm);
+        opacity: 0.3;
+        transition: opacity var(--dur-fast) var(--ease-standard);
+    }
+
+    &:hover::before {
+        opacity: 0.8;
+    }
+
+    // Category-specific colors
+    &[data-category="travel"]::before {
+        background: $travel-green;
+    }
+
+    &[data-category="aviation"]::before {
+        background: $aviation-blue;
+    }
+
+    &[data-category="photography"]::before {
+        background: $photography-orange;
+    }
+
+    &[data-category="career"]::before {
+        background: $career-black;
+    }
+
+    &[data-category="shop"]::before {
+        background: $shop-blue;
+    }
+}
+
+.megamenu-category {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: $career-black;
+    margin: 0 0 var(--space-2) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding-left: var(--space-2);
+
+    .category-icon {
+        font-size: 18px;
+        opacity: 0.7;
+    }
+}
+
+:host-context(body.dark-mode) {
+    .megamenu-category {
+        color: $cb-white-ish;
+    }
+}
+
+.megamenu-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.megamenu-link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    color: $career-black;
+    text-decoration: none;
+    transition: all var(--dur-fast) var(--ease-standard);
+    position: relative;
+    overflow: hidden;
+
+    .link-title {
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+    }
+
+    .link-description {
+        font-size: var(--font-size-xs);
+        opacity: 0.6;
+        line-height: 1.3;
+    }
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.04);
+        transform: translateX(2px);
+
+        .link-description {
+            opacity: 0.8;
+        }
+    }
+
+    // Category hover colors
+    [data-category="travel"] &:hover {
+        background: rgba($travel-green, 0.08);
+        border-left: 2px solid $travel-green;
+        padding-left: calc(var(--space-3) - 2px);
+    }
+
+    [data-category="aviation"] &:hover {
+        background: rgba($aviation-blue, 0.08);
+        border-left: 2px solid $aviation-blue;
+        padding-left: calc(var(--space-3) - 2px);
+    }
+
+    [data-category="photography"] &:hover {
+        background: rgba($photography-orange, 0.08);
+        border-left: 2px solid $photography-orange;
+        padding-left: calc(var(--space-3) - 2px);
+    }
+
+    [data-category="career"] &:hover {
+        background: rgba($career-black, 0.08);
+        border-left: 2px solid $career-black;
+        padding-left: calc(var(--space-3) - 2px);
+    }
+
+    [data-category="shop"] &:hover {
+        background: rgba($shop-blue, 0.08);
+        border-left: 2px solid $shop-blue;
+        padding-left: calc(var(--space-3) - 2px);
+    }
+}
+
+:host-context(body.dark-mode) {
+    .megamenu-link {
+        color: $cb-white-ish;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        [data-category="travel"] &:hover {
+            background: rgba($travel-green-bright, 0.12);
+        }
+
+        [data-category="aviation"] &:hover {
+            background: rgba($aviation-blue-bright, 0.12);
+        }
+
+        [data-category="photography"] &:hover {
+            background: rgba($photography-orange-bright, 0.12);
+        }
+
+        [data-category="career"] &:hover {
+            background: rgba($career-black-bright, 0.12);
+        }
+
+        [data-category="shop"] &:hover {
+            background: rgba($shop-blue-bright, 0.12);
+        }
+    }
+}
+
+// Subgroup styling
+.megamenu-subgroup {
+    margin-top: var(--space-2);
+    padding-left: var(--space-2);
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+
+    .subgroup-title {
+        font-size: var(--font-size-xs);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        opacity: 0.5;
+        padding: var(--space-1) var(--space-2);
+        display: block;
+    }
+}
+
+:host-context(body.dark-mode) {
+    .megamenu-subgroup {
+        border-left-color: rgba(255, 255, 255, 0.12);
+    }
+}
+
+.megamenu-sublink {
+    font-size: var(--font-size-xs);
+    padding: var(--space-1) var(--space-2);
+
+    .link-title {
+        font-weight: 400;
+    }
+}
+
+// Featured link styling
+.megamenu-link-featured {
+    margin-top: var(--space-2);
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.06);
+        border-color: rgba(0, 0, 0, 0.12);
+    }
+}
+
+:host-context(body.dark-mode) {
+    .megamenu-link-featured {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.08);
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+    }
+}
+
+// Logo images in megamenu
+.megamenu-link {
+
+    .adobe-stock-logo,
+    .linkedIn-Logo,
+    .github-logo {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+    }
 }
 
 // 3rd Header Column
@@ -250,303 +541,8 @@ nav {
     }
 }
 
-//Dropdown menu
-.hide-dropdown {
-    display: none;
-}
-
-.dropdown-list {
-    min-width: 160px;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: $cb-white-ish;
-    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-    border-top: 1px solid $cb-white-ish;
-    gap: var(--space-1);
-    overflow: visible;
-    max-height: 0;
-    opacity: 0;
-    z-index: 999;
-    transition: max-height var(--dur-medium) var(--ease-standard),
-        opacity var(--dur-medium) var(--ease-standard);
-    pointer-events: none;
-    box-shadow: var(--shadow-soft);
-}
-
-.dropdown-list.open {
-    max-height: 500px;
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.complete-menu-div {
-    position: relative;
-    min-width: 160px;
-    z-index: 999;
-
-    &:hover .dropdown-list {
-        pointer-events: auto;
-    }
-}
-
-.complete-menu-div:hover .nav-item {
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-}
-
-.complete-menu-div:hover #photography-nav {
-    background-color: $cb-green-ish;
-}
-
-.complete-menu-div:hover #aviation-nav {
-    background-color: $cb-blue-ish;
-    color: $cb-white-ish;
-}
-
-.complete-menu-div:hover #shop-nav {
-    background-color: $shop-blue;
-    color: $cb-white-ish;
-}
-
-.complete-menu-div:hover #travel-nav {
-    background-color: $cb-dark-green-ish;
-    color: $cb-white-ish;
-}
-
-.complete-menu-div:hover #career-nav {
-    background-color: $cb-career-grey;
-    color: $cb-white-ish;
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-}
-
-.dropdown-link {
-    background-color: $cb-white-ish;
-    color: $cb-grey-ish !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: var(--space-2);
-    gap: var(--space-1);
-    transition: background-color var(--dur-fast) var(--ease-standard),
-        color var(--dur-fast) var(--ease-standard);
-}
-
-.dropdown-link-photography:hover {
-    background-color: $cb-green-ish;
-}
-
-.dropdown-link-aviation:hover {
-    background-color: $cb-blue-ish;
-    color: $cb-white-ish !important;
-}
-
-.dropdown-link-shop:hover {
-    background-color: $shop-blue;
-    color: $cb-white-ish !important;
-}
-
-.dropdown-link-travel:hover {
-    background-color: $cb-dark-green-ish;
-    color: $cb-white-ish !important;
-}
-
-.dropdown-link-blog:hover {
-    background-color: $cb-orange-ish !important;
-}
-
-.dropdown-link-career:hover {
-    background-color: $cb-career-grey;
-    color: $cb-white-ish !important;
-
-    .open-in-new-tab-icon,
-    .github-logo,
-    .linkedIn-Logo {
-        filter: brightness(0) invert(1);
-    }
-}
-
-.dropdown-submenu-wrapper {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-
-    &:hover .dropdown-sublist {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateX(0);
-    }
-}
-
-.dropdown-submenu-parent {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-
-    &::after {
-        content: '›';
-        margin-left: 8px;
-        font-size: 18px;
-        transition: transform var(--dur-fast) var(--ease-standard);
-    }
-}
-
-.dropdown-sublist {
-    position: absolute;
-    left: 100%;
-    top: 0;
-    background-color: $cb-white-ish;
-    min-width: 200px;
-    box-shadow: var(--shadow-soft);
-    opacity: 0;
-    pointer-events: none;
-    transform: translateX(-10px);
-    transition: opacity var(--dur-fast) var(--ease-standard),
-        transform var(--dur-fast) var(--ease-standard);
-    z-index: 1000;
-    border-radius: 0 var(--radius-sm) var(--radius-sm) var(--radius-sm);
-
-    &.open {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateX(0);
-    }
-
-    :last-child {
-        border-radius: 0 0 4px 4px;
-    }
-}
-
-.dropdown-sublink {
-    display: block;
-    padding: 8px 16px;
-    color: $cb-grey-ish !important;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: background-color 0.2s;
-
-    &:hover {
-        background-color: $cb-career-grey;
-        color: $cb-white-ish !important;
-    }
-
-    &:last-child {
-        border-radius: 0 0 4px 4px;
-    }
-}
-
-.dropdown-link-aviation .dropdown-sublink {
-    color: $cb-white-ish !important;
-}
-
-.dropdown-link-aviation .dropdown-sublink:hover {
-    background-color: $cb-blue-ish;
-    color: $cb-white-ish !important;
-}
-
-/* Dark Mode Submenu */
-:host-context(body.dark-mode) {
-    .dropdown-sublist {
-        background-color: $cb-career-grey;
-        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
-    }
-
-    .dropdown-link-aviation .dropdown-sublist {
-        background-color: $cb-blue-ish;
-    }
-
-    .dropdown-sublink {
-        color: $cb-white-ish !important;
-
-        &:hover {
-            background-color: $cb-white-ish;
-            color: $cb-grey-ish !important;
-        }
-    }
-
-    .dropdown-link-aviation .dropdown-sublink {
-        color: $cb-white-ish !important;
-    }
-
-    .dropdown-link-aviation .dropdown-sublink:hover {
-        background-color: $cb-blue-ish;
-        color: $cb-white-ish !important;
-    }
-
-    .dropdown-link-career:hover {
-        background-color: $cb-white-ish;
-        color: $cb-grey-ish !important;
-
-        .open-in-new-tab-icon,
-        .github-logo,
-        .linkedIn-Logo {
-            filter: none;
-        }
-    }
-
-    .dropdown-link-photography {
-        color: $cb-white-ish;
-    }
-
-    .dropdown-link-photography:hover {
-        color: black !important;
-    }
-
-    #menu-link-photography {
-        color: $cb-grey-ish !important;
-    }
-
-    .dropdown-link-shop:hover {
-        background-color: #1e3a8a;
-    }
-
-    .complete-menu-div:hover #career-nav {
-        background-color: $cb-white-ish;
-        color: $cb-career-grey;
-    }
-
-    // All career dropdown-list items get white background on hover
-    .complete-menu-div:hover .dropdown-list {
-        background-color: $cb-career-grey;
-    }
-
-    .dropdown-list .dropdown-link:hover {
-        background-color: $cb-white-ish;
-        color: $cb-white-ish !important;
-
-        .open-in-new-tab-icon,
-        .github-logo,
-        .linkedIn-Logo {
-            filter: none;
-        }
-    }
-
-    .dropdown-list .dropdown-link-aviation:hover {
-        background-color: $cb-blue-ish;
-        color: $cb-white-ish !important;
-    }
-
-    .dropdown-list .dropdown-link-photography:hover {
-        color: $cb-grey-ish !important;
-    }
-
-    .dropdown-list .dropdown-link-career:hover {
-        color: $cb-grey-ish !important;
-
-        .open-in-new-tab-icon,
-        .github-logo,
-        .linkedIn-Logo {
-            filter: brightness(0);
-        }
-    }
-}
-
-.last-link-in-dropdown {
-    border-radius: 0 0 4px 4px;
-}
+//Dropdown menu - DEPRECATED (replaced by Megamenu)
+// Old dropdown menu styles have been removed and replaced with new megamenu implementation
 
 .adobe-stock-logo {
     width: 16px;
@@ -984,6 +980,31 @@ nav {
 }
 
 // Responsive Designs
+
+// Megamenu Responsive Breakpoints
+@media(max-width: 1200px) {
+    .megamenu-content {
+        grid-template-columns: repeat(3, 1fr);
+        min-width: 700px;
+    }
+}
+
+@media(max-width: 900px) {
+    .megamenu-content {
+        grid-template-columns: repeat(2, 1fr);
+        min-width: 500px;
+    }
+}
+
+@media(max-width: 768px) {
+    .megamenu-trigger {
+        display: none;
+    }
+
+    .megamenu-panel {
+        display: none;
+    }
+}
 
 @media(max-width: 1919px) {}
 

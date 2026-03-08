@@ -8,157 +8,172 @@
         </div>
 
         <div id="header-navigation-div">
-            <!-- Travel Menu -->
-            <div class="complete-menu-div" (mouseenter)="setDesktopDropdown('travel')"
-                (mouseleave)="setDesktopDropdown(null)">
-                <a class="menu-link" id="menu-link-travel" href="javascript:void(0);">
-                    <nav class="nav-item" id="travel-nav">{{ getTranslation('travel') }}</nav>
-                </a>
-                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'travel'">
-                    <a href="/photography-travels" class="dropdown-link dropdown-link-travel">
-                        {{ getTranslation('photographyTravels') }}
-                    </a>
-                    <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}"
-                        class="dropdown-link dropdown-link-travel">
-                        {{ getTranslation('travelGallery') }}
-                    </a>
-                    <a href="/my-visited-countries" class="dropdown-link dropdown-link-travel last-link-in-dropdown">
-                        {{ getTranslation('myVisitedCountries') }}
-                    </a>
-                </div>
-            </div>
-            <!-- Aviation Menu -->
-            <div class="complete-menu-div" (mouseenter)="setDesktopDropdown('aviation')"
-                (mouseleave)="setDesktopDropdown(null)">
-                <a class=" menu-link" id="menu-link-aviation" href="javascript:void(0);">
-                    <nav class="nav-item" id="aviation-nav">{{ getTranslation('aviation') }}</nav>
-                </a>
-                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'aviation'">
+            <!-- Megamenu Trigger -->
+            <button class="megamenu-trigger" (mouseenter)="setMegamenuOpen(true)" (click)="toggleMegamenu()">
+                <span class="menu-text">Menu</span>
+                <span class="menu-icon">☰</span>
+            </button>
 
-                    <a [routerLink]="['/gallery']" [queryParams]="{filter: 'aviation'}"
-                        class="dropdown-link dropdown-link-aviation">
-                        {{ getTranslation('aviationGallery') }}
-                    </a>
-                    <a href="/aviation-spotter-hotels" class="dropdown-link dropdown-link-aviation">
-                        {{ getTranslation('aviationSpotterHotels') }}
-                    </a>
-                    <div class="dropdown-submenu-wrapper" (mouseenter)="setDesktopSubDropdown('airline-sim')"
-                        (mouseleave)="setDesktopSubDropdown(null)">
-                        <a href="javascript:void(0);"
-                            class="dropdown-link dropdown-link-aviation dropdown-submenu-parent">
-                            {{ getTranslation('airlineSim') }}
-                        </a>
-                        <div class="dropdown-sublist" [class.open]="openDesktopSubDropdownMenu === 'airline-sim'">
-                            <a [routerLink]="['/air-germany']" class="dropdown-sublink">
-                                {{ getTranslation('airGermany') }}
+            <!-- Megamenu Panel -->
+            <div class="megamenu-panel" [class.open]="megamenuOpen" (mouseenter)="setMegamenuOpen(true)"
+                (mouseleave)="setMegamenuOpen(false)">
+                <div class="megamenu-content">
+
+                    <!-- Travel Section -->
+                    <div class="megamenu-section" data-category="travel">
+                        <h3 class="megamenu-category">
+                            <span class="category-icon">✈️</span>
+                            {{ getTranslation('travel') }}
+                        </h3>
+                        <div class="megamenu-links">
+                            <a href="/photography-travels" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('photographyTravels') }}</span>
+                                <span class="link-description">Reiseberichte & Erlebnisse</span>
                             </a>
-                            <a [routerLink]="['/airlinesim-ceo-tools']" class="dropdown-sublink">
-                                {{ getTranslation('airlineSimCeoTools') }}
+                            <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('travelGallery') }}</span>
+                                <span class="link-description">Fotogalerie meiner Reisen</span>
+                            </a>
+                            <a href="/my-visited-countries" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('myVisitedCountries') }}</span>
+                                <span class="link-description">Weltweite Reisekarte</span>
                             </a>
                         </div>
                     </div>
-                    <a href="/" class="dropdown-link dropdown-link-aviation last-link-in-dropdown">
-                        {{ getTranslation('msfsComparison') }}
-                    </a>
-                </div>
-            </div>
-            <!-- Photography Menu -->
-            <div class="complete-menu-div" (mouseenter)="setDesktopDropdown('photography')"
-                (mouseleave)="setDesktopDropdown(null)">
-                <a class="menu-link" id="menu-link-photography" href="javascript:void(0);">
-                    <nav class="nav-item" id="photography-nav">{{ getTranslation('photography') }}</nav>
-                </a>
-                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'photography'">
-                    <a [routerLink]="['/gallery']" [queryParams]="{filter: 'aviation'}"
-                        class="dropdown-link dropdown-link-photography">
-                        {{ getTranslation('aviationGallery') }}
-                    </a>
-                    <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}"
-                        class="dropdown-link dropdown-link-photography">
-                        {{ getTranslation('travelGallery') }}
-                    </a>
-                    <a target="_blank"
-                        href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
-                        class="dropdown-link dropdown-link-photography last-link-in-dropdown">
-                        <img class="adobe-stock-logo" [src]="darkmodePNG('adobe-stock-logo')" alt="adobe stock logo">
-                        {{ getTranslation('buyPhotos') }}
-                    </a>
-                </div>
-            </div>
-            <!-- Blog Menu - Disabled -->
-            <div class="complete-menu-div" style="display: none;" (mouseenter)="setDesktopDropdown('blog')"
-                (mouseleave)="setDesktopDropdown(null)">
-                <a class="menu-link" id="menu-link-blog" href="javascript:void(0);">
-                    <nav class="nav-item" id="blog-nav">Blog</nav>
-                </a>
-                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'blog'">
-                    <a href="/" class="dropdown-link dropdown-link-blog last-link-in-dropdown">
-                        MSFS Career addons comparison
-                    </a>
-                </div>
-            </div>
-            <!-- Career Menu -->
-            <div (mouseenter)="setDesktopDropdown('career')" (mouseleave)="setDesktopDropdown(null)"
-                class="complete-menu-div">
-                <a class="menu-link" id="menu-link-career" href="javascript:void(0);">
-                    <nav id="career-nav">{{ getTranslation('myCareer') }}</nav>
-                </a>
-                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'career'">
-                    <a [routerLink]="['/career-home']" class="dropdown-link dropdown-link-career">
-                        {{ getTranslation('careerHome') || 'Career Home' }}
-                    </a>
-                    <div class="dropdown-submenu-wrapper" (mouseenter)="setDesktopSubDropdown('cv-sections')"
-                        (mouseleave)="setDesktopSubDropdown(null)">
-                        <a [routerLink]="['/career']"
-                            class="dropdown-link dropdown-link-career dropdown-submenu-parent">
-                            {{ getTranslation('viewCV') }}
-                        </a>
-                        <div class="dropdown-sublist" [class.open]="openDesktopSubDropdownMenu === 'cv-sections'">
-                            <a [routerLink]="['/career']" [fragment]="'profile'" class="dropdown-sublink">{{
-                                getTranslation('profile') }}</a>
-                            <a [routerLink]="['/career']" [fragment]="'experience'" class="dropdown-sublink">{{
-                                getTranslation('experience') }}</a>
-                            <a [routerLink]="['/career']" [fragment]="'education'" class="dropdown-sublink">{{
-                                getTranslation('education') }}</a>
-                            <a [routerLink]="['/career']" [fragment]="'skills'" class="dropdown-sublink">{{
-                                getTranslation('skillsCertifications') }}</a>
-                            <a [routerLink]="['/career']" [fragment]="'projects'" class="dropdown-sublink">{{
-                                getTranslation('projects') }}</a>
-                            <a [routerLink]="['/career']" [fragment]="'testimonials'" class="dropdown-sublink">{{
-                                getTranslation('testimonials') }}</a>
+
+                    <!-- Aviation Section -->
+                    <div class="megamenu-section" data-category="aviation">
+                        <h3 class="megamenu-category">
+                            <span class="category-icon">🛩️</span>
+                            {{ getTranslation('aviation') }}
+                        </h3>
+                        <div class="megamenu-links">
+                            <a [routerLink]="['/gallery']" [queryParams]="{filter: 'aviation'}" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('aviationGallery') }}</span>
+                                <span class="link-description">Flugzeugfotografie</span>
+                            </a>
+                            <a href="/aviation-spotter-hotels" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('aviationSpotterHotels') }}</span>
+                                <span class="link-description">Die besten Spotting-Hotels</span>
+                            </a>
+                            <div class="megamenu-subgroup">
+                                <span class="subgroup-title">{{ getTranslation('airlineSim') }}</span>
+                                <a [routerLink]="['/air-germany']" class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('airGermany') }}</span>
+                                </a>
+                                <a [routerLink]="['/airlinesim-ceo-tools']" class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('airlineSimCeoTools') }}</span>
+                                </a>
+                            </div>
+                            <a href="/" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('msfsComparison') }}</span>
+                                <span class="link-description">Flugsimulator Vergleich</span>
+                            </a>
                         </div>
                     </div>
-                    <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
-                        class="dropdown-link dropdown-link-career">
-                        <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">{{
-                        getTranslation('linkedin') }}
-                    </a>
-                    <a target="_blank" href="https://github.com/WorldChris380"
-                        class="dropdown-link dropdown-link-career last-link-in-dropdown">
-                        <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">{{
-                        getTranslation('github') }}
-                    </a>
-                </div>
-            </div>
-            <!-- Shop Menu -->
-            <div class="complete-menu-div" (mouseenter)="setDesktopDropdown('shop')"
-                (mouseleave)="setDesktopDropdown(null)">
-                <a class="menu-link" id="menu-link-shop" href="javascript:void(0);">
-                    <nav class="nav-item" id="shop-nav">{{ getTranslation('shop') }}</nav>
-                </a>
-                <div class="dropdown-list" [class.open]="openDesktopDropdownMenu === 'shop'">
-                    <a [routerLink]="['/shop']" class="dropdown-link dropdown-link-shop">
-                        {{ getTranslation('shop') }}
-                    </a>
-                    <a [routerLink]="['/shop/account']" class="dropdown-link dropdown-link-shop">
-                        {{ getTranslation('myAccount') }}
-                    </a>
-                    <a [routerLink]="['/shop/account']" class="dropdown-link dropdown-link-shop">
-                        My Downloads
-                    </a>
-                    <a [routerLink]="['/shop/account']" class="dropdown-link dropdown-link-shop last-link-in-dropdown">
-                        My Purchases
-                    </a>
+
+                    <!-- Photography Section -->
+                    <div class="megamenu-section" data-category="photography">
+                        <h3 class="megamenu-category">
+                            <span class="category-icon">📸</span>
+                            {{ getTranslation('photography') }}
+                        </h3>
+                        <div class="megamenu-links">
+                            <a [routerLink]="['/gallery']" [queryParams]="{filter: 'aviation'}" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('aviationGallery') }}</span>
+                                <span class="link-description">Aviation Photography</span>
+                            </a>
+                            <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('travelGallery') }}</span>
+                                <span class="link-description">Travel Photography</span>
+                            </a>
+                            <a target="_blank"
+                                href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
+                                class="megamenu-link megamenu-link-featured">
+                                <img class="adobe-stock-logo" [src]="darkmodePNG('adobe-stock-logo')"
+                                    alt="adobe stock logo">
+                                <span class="link-title">{{ getTranslation('buyPhotos') }}</span>
+                                <span class="link-description">Adobe Stock Portfolio</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Career Section -->
+                    <div class="megamenu-section" data-category="career">
+                        <h3 class="megamenu-category">
+                            <span class="category-icon">💼</span>
+                            {{ getTranslation('myCareer') }}
+                        </h3>
+                        <div class="megamenu-links">
+                            <a [routerLink]="['/career-home']" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('careerHome') || 'Career Home' }}</span>
+                                <span class="link-description">Übersicht meiner Karriere</span>
+                            </a>
+                            <div class="megamenu-subgroup">
+                                <span class="subgroup-title">{{ getTranslation('viewCV') }}</span>
+                                <a [routerLink]="['/career']" [fragment]="'profile'"
+                                    class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('profile') }}</span>
+                                </a>
+                                <a [routerLink]="['/career']" [fragment]="'experience'"
+                                    class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('experience') }}</span>
+                                </a>
+                                <a [routerLink]="['/career']" [fragment]="'education'"
+                                    class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('education') }}</span>
+                                </a>
+                                <a [routerLink]="['/career']" [fragment]="'skills'"
+                                    class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('skillsCertifications') }}</span>
+                                </a>
+                                <a [routerLink]="['/career']" [fragment]="'projects'"
+                                    class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('projects') }}</span>
+                                </a>
+                                <a [routerLink]="['/career']" [fragment]="'testimonials'"
+                                    class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('testimonials') }}</span>
+                                </a>
+                            </div>
+                            <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
+                                class="megamenu-link">
+                                <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">
+                                <span class="link-title">{{ getTranslation('linkedin') }}</span>
+                            </a>
+                            <a target="_blank" href="https://github.com/WorldChris380" class="megamenu-link">
+                                <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">
+                                <span class="link-title">{{ getTranslation('github') }}</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Shop Section -->
+                    <div class="megamenu-section" data-category="shop">
+                        <h3 class="megamenu-category">
+                            <span class="category-icon">🛍️</span>
+                            {{ getTranslation('shop') }}
+                        </h3>
+                        <div class="megamenu-links">
+                            <a [routerLink]="['/shop']" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('shop') }}</span>
+                                <span class="link-description">Produkte durchstöbern</span>
+                            </a>
+                            <a [routerLink]="['/shop/account']" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('myAccount') }}</span>
+                                <span class="link-description">Account-Einstellungen</span>
+                            </a>
+                            <a [routerLink]="['/shop/account']" class="megamenu-link">
+                                <span class="link-title">My Downloads</span>
+                                <span class="link-description">Heruntergeladene Dateien</span>
+                            </a>
+                            <a [routerLink]="['/shop/account']" class="megamenu-link">
+                                <span class="link-title">My Purchases</span>
+                                <span class="link-description">Bestellhistorie</span>
+                            </a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
