@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // ============================================
 // PASSWORT KONFIGURATION
 // ============================================
-define('ADMIN_PASSWORD', 'aev8gf38&763.;w');
+define('ADMIN_PASSWORD', 'aev8gf38&763.;wg3534');
 define('TOKEN_SECRET', 'your_secret_key_change_this_' . md5(ADMIN_PASSWORD));
 define('TOKEN_EXPIRY', 24 * 60 * 60); // 24 Stunden
 
