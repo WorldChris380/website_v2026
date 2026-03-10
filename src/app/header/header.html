@@ -9,7 +9,8 @@
 
         <div id="header-navigation-div">
             <!-- Megamenu Trigger -->
-            <button class="megamenu-trigger" (mouseenter)="setMegamenuOpen(true)" (click)="toggleMegamenu()">
+            <button class="megamenu-trigger" [class.open]="megamenuOpen" [attr.aria-expanded]="megamenuOpen"
+                aria-haspopup="true" (mouseenter)="setMegamenuOpen(true)" (click)="toggleMegamenu()">
                 <span class="menu-text">Menu</span>
                 <span class="menu-icon">☰</span>
             </button>
@@ -22,21 +23,20 @@
                     <!-- Travel Section -->
                     <div class="megamenu-section" data-category="travel">
                         <h3 class="megamenu-category">
-                            <span class="category-icon">✈️</span>
                             {{ getTranslation('travel') }}
                         </h3>
                         <div class="megamenu-links">
                             <a href="/photography-travels" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('photographyTravels') }}</span>
-                                <span class="link-description">Reiseberichte & Erlebnisse</span>
+                                <span class="link-description">{{ getTranslation('menuDescTravelStories') }}</span>
                             </a>
                             <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('travelGallery') }}</span>
-                                <span class="link-description">Fotogalerie meiner Reisen</span>
+                                <span class="link-description">{{ getTranslation('menuDescTravelGallery') }}</span>
                             </a>
                             <a href="/my-visited-countries" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('myVisitedCountries') }}</span>
-                                <span class="link-description">Weltweite Reisekarte</span>
+                                <span class="link-description">{{ getTranslation('menuDescVisitedCountries') }}</span>
                             </a>
                         </div>
                     </div>
@@ -44,17 +44,17 @@
                     <!-- Aviation Section -->
                     <div class="megamenu-section" data-category="aviation">
                         <h3 class="megamenu-category">
-                            <span class="category-icon">🛩️</span>
                             {{ getTranslation('aviation') }}
                         </h3>
                         <div class="megamenu-links">
                             <a [routerLink]="['/gallery']" [queryParams]="{filter: 'aviation'}" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('aviationGallery') }}</span>
-                                <span class="link-description">Flugzeugfotografie</span>
+                                <span class="link-description">{{ getTranslation('menuDescAircraftPhotography')
+                                    }}</span>
                             </a>
                             <a href="/aviation-spotter-hotels" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('aviationSpotterHotels') }}</span>
-                                <span class="link-description">Die besten Spotting-Hotels</span>
+                                <span class="link-description">{{ getTranslation('menuDescSpotterHotels') }}</span>
                             </a>
                             <div class="megamenu-subgroup">
                                 <span class="subgroup-title">{{ getTranslation('airlineSim') }}</span>
@@ -67,7 +67,7 @@
                             </div>
                             <a href="/" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('msfsComparison') }}</span>
-                                <span class="link-description">Flugsimulator Vergleich</span>
+                                <span class="link-description">{{ getTranslation('menuDescMsfsComparison') }}</span>
                             </a>
                         </div>
                     </div>
@@ -75,25 +75,25 @@
                     <!-- Photography Section -->
                     <div class="megamenu-section" data-category="photography">
                         <h3 class="megamenu-category">
-                            <span class="category-icon">📸</span>
                             {{ getTranslation('photography') }}
                         </h3>
                         <div class="megamenu-links">
                             <a [routerLink]="['/gallery']" [queryParams]="{filter: 'aviation'}" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('aviationGallery') }}</span>
-                                <span class="link-description">Aviation Photography</span>
+                                <span class="link-description">{{ getTranslation('menuDescAviationPhotography')
+                                    }}</span>
                             </a>
                             <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('travelGallery') }}</span>
-                                <span class="link-description">Travel Photography</span>
+                                <span class="link-description">{{ getTranslation('menuDescTravelPhotography') }}</span>
                             </a>
                             <a target="_blank"
                                 href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
-                                class="megamenu-link megamenu-link-featured">
+                                class="megamenu-link">
                                 <img class="adobe-stock-logo" [src]="darkmodePNG('adobe-stock-logo')"
                                     alt="adobe stock logo">
                                 <span class="link-title">{{ getTranslation('buyPhotos') }}</span>
-                                <span class="link-description">Adobe Stock Portfolio</span>
+                                <span class="link-description">{{ getTranslation('menuDescAdobeStock') }}</span>
                             </a>
                         </div>
                     </div>
@@ -101,16 +101,10 @@
                     <!-- Career Section -->
                     <div class="megamenu-section" data-category="career">
                         <h3 class="megamenu-category">
-                            <span class="category-icon">💼</span>
                             {{ getTranslation('myCareer') }}
                         </h3>
                         <div class="megamenu-links">
-                            <a [routerLink]="['/career-home']" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('careerHome') || 'Career Home' }}</span>
-                                <span class="link-description">Übersicht meiner Karriere</span>
-                            </a>
                             <div class="megamenu-subgroup">
-                                <span class="subgroup-title">{{ getTranslation('viewCV') }}</span>
                                 <a [routerLink]="['/career']" [fragment]="'profile'"
                                     class="megamenu-link megamenu-sublink">
                                     <span class="link-title">{{ getTranslation('profile') }}</span>
@@ -151,25 +145,24 @@
                     <!-- Shop Section -->
                     <div class="megamenu-section" data-category="shop">
                         <h3 class="megamenu-category">
-                            <span class="category-icon">🛍️</span>
                             {{ getTranslation('shop') }}
                         </h3>
                         <div class="megamenu-links">
                             <a [routerLink]="['/shop']" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('shop') }}</span>
-                                <span class="link-description">Produkte durchstöbern</span>
+                                <span class="link-description">{{ getTranslation('menuDescBrowseProducts') }}</span>
                             </a>
                             <a [routerLink]="['/shop/account']" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('myAccount') }}</span>
-                                <span class="link-description">Account-Einstellungen</span>
+                                <span class="link-description">{{ getTranslation('menuDescAccountSettings') }}</span>
                             </a>
                             <a [routerLink]="['/shop/account']" class="megamenu-link">
                                 <span class="link-title">My Downloads</span>
-                                <span class="link-description">Heruntergeladene Dateien</span>
+                                <span class="link-description">{{ getTranslation('menuDescDownloads') }}</span>
                             </a>
                             <a [routerLink]="['/shop/account']" class="megamenu-link">
                                 <span class="link-title">My Purchases</span>
-                                <span class="link-description">Bestellhistorie</span>
+                                <span class="link-description">{{ getTranslation('menuDescOrderHistory') }}</span>
                             </a>
                         </div>
                     </div>

@@ -1,0 +1,70 @@
+<div class="admin-home">
+    <div class="admin-container">
+        <h1>Admin Panel</h1>
+
+        <!-- Not logged in -->
+        <div *ngIf="!adminService.isAdminLoggedIn()" class="login-section">
+            <h2>{{ languageService.getCurrentLanguage() === 'en' ? 'Admin Login' : 'Admin-Login' }}</h2>
+
+            <!-- wrap fields in a form so the password input is contained in one;
+                 submit handler also makes the Enter key work without manual keydown -->
+            <form class="login-form" (ngSubmit)="attemptLogin()" novalidate>
+                <div class="form-group">
+                    <label for="password">
+                        {{ languageService.getCurrentLanguage() === 'en' ? 'Password' : 'Passwort' }}
+                    </label>
+                    <input id="password" name="password" type="password" [(ngModel)]="passwordInput"
+                        [class.error]="showPasswordError()"
+                        placeholder="{{ languageService.getCurrentLanguage() === 'en' ? 'Enter password' : 'Passwort eingeben' }}"
+                        required />
+
+                    <div *ngIf="showPasswordError()" class="error-message">
+                        {{ languageService.getCurrentLanguage() === 'en' ? 'Wrong password' : 'Falsches Passwort' }}
+                    </div>
+                </div>
+
+                <button type="submit" [disabled]="isLoading()" class="btn btn-primary">
+                    {{ isLoading()
+                    ? (languageService.getCurrentLanguage() === 'en' ? 'Logging in...' : 'Wird angemeldet...')
+                    : (languageService.getCurrentLanguage() === 'en' ? 'Login' : 'Anmelden')
+                    }}
+                </button>
+            </form>
+        </div>
+
+        <!-- Logged in -->
+        <div *ngIf="adminService.isAdminLoggedIn()" class="admin-panel">
+            <p class="login-status">
+                ✓ {{ languageService.getCurrentLanguage() === 'en' ? 'Logged in as Admin' : 'Angemeldet als Admin' }}
+            </p>
+
+            <div class="feature-section">
+                <h2>{{ languageService.getCurrentLanguage() === 'en' ? 'Test Mode' : 'Test-Modus' }}</h2>
+
+                <div class="toggle-container">
+                    <label class="toggle-label">
+                        <input type="checkbox" [checked]="adminService.isTestModeEnabled()" (change)="toggleTestMode()"
+                            class="toggle-input" />
+                        <span class="toggle-text">
+                            {{ languageService.getCurrentLanguage() === 'en'
+                            ? (adminService.isTestModeEnabled() ? 'Test Mode: ON' : 'Test Mode: OFF')
+                            : (adminService.isTestModeEnabled() ? 'Test-Modus: AN' : 'Test-Modus: AUS')
+                            }}
+                        </span>
+                    </label>
+                </div>
+
+                <p class="info-text">
+                    {{ languageService.getCurrentLanguage() === 'en'
+                    ? 'When enabled, a notification shows that this is a test page.'
+                    : 'Wenn aktiviert, wird eine Benachrichtigung angezeigt, dass dies eine Testseite ist.'
+                    }}
+                </p>
+            </div>
+
+            <button (click)="logout()" class="btn btn-secondary">
+                {{ languageService.getCurrentLanguage() === 'en' ? 'Logout' : 'Abmelden' }}
+            </button>
+        </div>
+    </div>
+</div>

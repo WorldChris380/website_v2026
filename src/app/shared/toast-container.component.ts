@@ -3,25 +3,31 @@ import { CommonModule } from '@angular/common';
 import { ToastService } from './toast.service';
 
 @Component({
-    selector: 'app-toast-container',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-toast-container',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <div class="toast-container">
       @for (toast of toastService.toasts(); track toast.id) {
         <div class="toast toast-{{ toast.type }}" 
-             [class.toast-exit]="toast.duration === 0"
-             (click)="toastService.remove(toast.id)">
+             [class.toast-exit]="toast.duration === 0 && !toast.persistent"
+             (click)="toast.persistent ? null : toastService.remove(toast.id)">
           <span class="toast-icon">{{ getIcon(toast.type) }}</span>
           <span class="toast-message">{{ toast.message }}</span>
-          <button class="toast-close" (click)="toastService.remove(toast.id)" aria-label="Close notification">
-            ✕
-          </button>
+          @if (toast.buttonText && toast.onButtonClick) {
+            <button class="toast-button" (click)="handleButtonClick(toast)">
+              {{ toast.buttonText }}
+            </button>
+          } @else {
+            <button class="toast-close" (click)="toastService.remove(toast.id)" aria-label="Close notification">
+              ✕
+            </button>
+          }
         </div>
       }
     </div>
   `,
-    styles: [`
+  styles: [`
     .toast-container {
       position: fixed;
       top: 80px;
@@ -109,6 +115,25 @@ import { ToastService } from './toast.service';
       opacity: 1;
     }
 
+    .toast-button {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: inherit;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .toast-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
     @keyframes slideIn {
       from {
         transform: translateX(400px);
@@ -167,15 +192,22 @@ import { ToastService } from './toast.service';
   `]
 })
 export class ToastContainerComponent {
-    toastService = inject(ToastService);
+  toastService = inject(ToastService);
 
-    getIcon(type: string): string {
-        switch (type) {
-            case 'success': return '✓';
-            case 'error': return '✕';
-            case 'warning': return '⚠';
-            case 'info': return 'ℹ';
-            default: return '';
-        }
+  getIcon(type: string): string {
+    switch (type) {
+      case 'success': return '✓';
+      case 'error': return '✕';
+      case 'warning': return '⚠';
+      case 'info': return 'ℹ';
+      default: return '';
     }
+  }
+
+  handleButtonClick(toast: any): void {
+    if (toast.onButtonClick) {
+      toast.onButtonClick();
+    }
+    this.toastService.remove(toast.id);
+  }
 }

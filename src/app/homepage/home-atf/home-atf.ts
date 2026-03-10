@@ -112,6 +112,8 @@ export class HomeAtf implements OnInit, AfterViewInit, OnDestroy {
     this.currentLanguage = this.languageService.getCurrentLanguage();
     this.languageService.language$.subscribe((lang) => {
       this.currentLanguage = lang;
+      // Update current quote when language changes
+      this.currentQuote = this.getRandomQuote();
       this.cdr.markForCheck();
     });
 
@@ -222,7 +224,7 @@ export class HomeAtf implements OnInit, AfterViewInit, OnDestroy {
     const count = this.getQuoteGroupsCount();
     this.quoteIndex = (this.quoteIndex + step + count) % count;
     this.currentQuote = this.getRandomQuote();
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
     if (resetTimer) {
       this.resetSlideShow();
     }

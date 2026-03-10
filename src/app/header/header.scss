@@ -31,7 +31,6 @@
     top: 0;
     left: 0;
     right: 0;
-    border-bottom: solid 1px $cb-white-ish;
     box-shadow: var(--shadow-soft);
 
     &::after {
@@ -114,47 +113,102 @@
 .megamenu-trigger {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-4);
-    background: transparent;
-    border: 2px solid rgba(0, 0, 0, 0.08);
-    border-radius: var(--radius-lg);
-    color: $career-black;
-    font-size: var(--font-size-lg);
-    font-weight: 500;
+    gap: 0.45rem;
+    justify-content: center;
+    height: 30px;
+    max-height: 30px;
+    min-height: 30px;
+    padding: 0 1.2em;
+    color: #090909;
+    font-size: 18px;
+    line-height: 1;
+    border-radius: 0.5em;
+    background: #ffffff;
     cursor: pointer;
-    transition: all var(--dur-fast) var(--ease-standard);
-    height: 44px;
+    border: 1px solid #e8e8e8;
+    transition: all 0.3s;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
 
     .menu-text {
-        font-family: inherit;
+        font-size: 0.82em;
+        font-weight: 600;
     }
 
     .menu-icon {
-        font-size: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        font-size: 13px;
         line-height: 1;
+        color: inherit;
+        transition: transform 0.3s;
     }
 
     &:hover {
-        background: rgba(0, 0, 0, 0.03);
-        border-color: rgba(0, 0, 0, 0.12);
+        color: #141414;
         transform: translateY(-1px);
-        box-shadow: var(--shadow-soft);
+        box-shadow: 8px 8px 16px #c5c5c5, -8px -8px 16px #ffffff;
+
+        .menu-icon {
+            transform: translateX(1px);
+        }
+    }
+
+    &.open {
+        color: #555;
+        box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
+
+        .menu-icon {
+            transform: translateX(1px);
+        }
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(33, 113, 166, 0.22), 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
     }
 
     &:active {
+        color: #666;
+        box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
         transform: translateY(0);
     }
 }
 
 :host-context(body.dark-mode) {
     .megamenu-trigger {
-        color: $cb-white-ish;
-        border-color: rgba(255, 255, 255, 0.12);
+        color: #f2f2f2;
+        background: #21242a;
+        border-color: #21242a;
+        box-shadow: 6px 6px 12px #17191e, -6px -6px 12px #2b2f36;
+
+        .menu-icon {
+            color: inherit;
+        }
 
         &:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            box-shadow: 8px 8px 16px #17191e, -8px -8px 16px #2b2f36;
+
+            .menu-icon {
+                transform: translateX(1px);
+            }
+        }
+
+        &.open {
+            color: #bfc5cc;
+            box-shadow: inset 4px 4px 12px #17191e, inset -4px -4px 12px #2b2f36;
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.24), 6px 6px 12px #17191e, -6px -6px 12px #2b2f36;
+        }
+
+        &:active {
+            color: #a5acb5;
+            box-shadow: inset 4px 4px 12px #17191e, inset -4px -4px 12px #2b2f36;
         }
     }
 }
@@ -381,7 +435,6 @@
 .megamenu-subgroup {
     margin-top: var(--space-2);
     padding-left: var(--space-2);
-    border-left: 1px solid rgba(0, 0, 0, 0.08);
 
     .subgroup-title {
         font-size: var(--font-size-xs);
@@ -396,7 +449,7 @@
 
 :host-context(body.dark-mode) {
     .megamenu-subgroup {
-        border-left-color: rgba(255, 255, 255, 0.12);
+        // Border entfernt
     }
 }
 
@@ -531,13 +584,6 @@
         height: 16px;
         display: inline-block;
         object-fit: contain;
-    }
-}
-
-// Dark Mode - Moon Icon
-:host-context(body.dark-mode) {
-    #moon-icon {
-        display: block;
     }
 }
 

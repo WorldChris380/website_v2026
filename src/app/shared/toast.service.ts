@@ -5,6 +5,9 @@ export interface Toast {
     message: string;
     type: 'success' | 'error' | 'info' | 'warning';
     duration: number;
+    persistent?: boolean;
+    buttonText?: string;
+    onButtonClick?: () => void;
 }
 
 @Injectable({
@@ -36,10 +39,20 @@ export class ToastService {
     }
 
     /**
-     * Show a warning toast
+     * Show a persistent warning toast with button
      */
-    warning(message: string, duration = 3500): void {
-        this.show(message, 'warning', duration);
+    warningWithButton(message: string, buttonText: string, onButtonClick: () => void): void {
+        const toast: Toast = {
+            id: this.toastId++,
+            message,
+            type: 'warning',
+            duration: 0, // Never auto-remove
+            persistent: true,
+            buttonText,
+            onButtonClick
+        };
+
+        this.toasts.update(toasts => [...toasts, toast]);
     }
 
     /**
