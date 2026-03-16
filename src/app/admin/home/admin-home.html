@@ -13,8 +13,8 @@
                     <label for="password">
                         {{ languageService.getCurrentLanguage() === 'en' ? 'Password' : 'Passwort' }}
                     </label>
-                    <input id="password" name="password" type="password" [(ngModel)]="passwordInput"
-                        [class.error]="showPasswordError()"
+                    <input id="password" name="password" type="password" [ngModel]="passwordInput()"
+                        (ngModelChange)="passwordInput.set($event)" [class.error]="showPasswordError()"
                         placeholder="{{ languageService.getCurrentLanguage() === 'en' ? 'Enter password' : 'Passwort eingeben' }}"
                         required />
 

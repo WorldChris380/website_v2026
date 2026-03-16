@@ -27,7 +27,9 @@ export class AdminHome {
      * Login versuchen
      */
     attemptLogin(): void {
-        if (!this.passwordInput()) {
+        const password = this.passwordInput().trim();
+
+        if (!password) {
             this.showPasswordError.set(true);
             return;
         }
@@ -35,7 +37,7 @@ export class AdminHome {
         this.isLoading.set(true);
         this.showPasswordError.set(false);
 
-        this.adminService.login(this.passwordInput()).subscribe(
+        this.adminService.login(password).subscribe(
             success => {
                 this.isLoading.set(false);
 

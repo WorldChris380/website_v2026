@@ -7,15 +7,17 @@ import { ToastService } from './toast.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="toast-container">
+    <div class="toast-container" aria-live="polite" aria-atomic="false">
       @for (toast of toastService.toasts(); track toast.id) {
-        <div class="toast toast-{{ toast.type }}" 
+        <div class="toast toast-{{ toast.type }}"
+             role="alert"
+             [attr.aria-live]="toast.type === 'warning' || toast.type === 'error' ? 'assertive' : 'polite'"
              [class.toast-exit]="toast.duration === 0 && !toast.persistent"
              (click)="toast.persistent ? null : toastService.remove(toast.id)">
-          <span class="toast-icon">{{ getIcon(toast.type) }}</span>
+          <span class="toast-icon" aria-hidden="true">{{ getIcon(toast.type) }}</span>
           <span class="toast-message">{{ toast.message }}</span>
           @if (toast.buttonText && toast.onButtonClick) {
-            <button class="toast-button" (click)="handleButtonClick(toast)">
+            <button class="toast-button" (click)="handleButtonClick(toast)" [attr.aria-label]="toast.buttonText">
               {{ toast.buttonText }}
             </button>
           } @else {
@@ -95,6 +97,8 @@ import { ToastService } from './toast.service';
       flex: 1;
       font-weight: 500;
       line-height: 1.4;
+      word-break: break-word;
+      min-width: 0;
     }
 
     .toast-close {
@@ -105,10 +109,13 @@ import { ToastService } from './toast.service';
       opacity: 0.7;
       transition: opacity 0.2s;
       padding: 0;
-      width: 24px;
-      height: 24px;
+      width: 36px;
+      height: 36px;
       flex-shrink: 0;
       color: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .toast-close:hover {
@@ -116,22 +123,35 @@ import { ToastService } from './toast.service';
     }
 
     .toast-button {
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: inherit;
-      padding: 4px 12px;
+      background: white;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: #333333;
+      padding: 6px 14px;
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
       flex-shrink: 0;
       margin-left: 8px;
+      min-height: 36px;
+      white-space: nowrap;
     }
 
     .toast-button:hover {
-      background: rgba(255, 255, 255, 0.3);
-      border-color: rgba(255, 255, 255, 0.5);
+      background: #f0f0f0;
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+
+    :host-context(body.dark-mode) .toast-button {
+      background: white;
+      color: #1a1a1a;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    :host-context(body.dark-mode) .toast-button:hover {
+      background: #e8e8e8;
+      color: #000000;
     }
 
     @keyframes slideIn {
@@ -166,6 +186,26 @@ import { ToastService } from './toast.service';
       .toast {
         min-width: unset;
         max-width: unset;
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .toast-message {
+        font-size: 14px;
+      }
+
+      .toast-button {
+        min-height: 40px;
+        font-size: 14px;
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .toast-close {
+        width: 40px;
+        height: 40px;
       }
     }
 

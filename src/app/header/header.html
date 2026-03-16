@@ -26,17 +26,13 @@
                             {{ getTranslation('travel') }}
                         </h3>
                         <div class="megamenu-links">
-                            <a href="/photography-travels" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('photographyTravels') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescTravelStories') }}</span>
+                            <a [routerLink]="['/search-by-budget']" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('searchByBudget') }}</span>
+                                <span class="link-description">{{ getTranslation('menuDescSearchByBudget') }}</span>
                             </a>
-                            <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('travelGallery') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescTravelGallery') }}</span>
-                            </a>
-                            <a href="/my-visited-countries" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('myVisitedCountries') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescVisitedCountries') }}</span>
+                            <a [routerLink]="['/travel-budget-planner']" [queryParams]="{ mode: 'calculate' }" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('budgetCalculator') }}</span>
+                                <span class="link-description">{{ getTranslation('menuDescBudgetCalculator') }}</span>
                             </a>
                         </div>
                     </div>
@@ -130,6 +126,10 @@
                                     <span class="link-title">{{ getTranslation('testimonials') }}</span>
                                 </a>
                             </div>
+                            <a href="/my-visited-countries" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('myVisitedCountries') }}</span>
+                                <span class="link-description">{{ getTranslation('menuDescVisitedCountries') }}</span>
+                            </a>
                             <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
                                 class="megamenu-link">
                                 <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">

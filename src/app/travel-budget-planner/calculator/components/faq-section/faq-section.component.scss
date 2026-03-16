@@ -1,0 +1,123 @@
+@use '../../../../../styles.scss' as *;
+
+:host {
+    display: block;
+}
+
+.faq-section {
+    background: #f8fafc;
+    padding: 52px 0 56px;
+}
+
+:host-context(body.dark-mode) .faq-section {
+    background: #0d1c15;
+}
+
+.faq-inner {
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.faq-title {
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 32px;
+    color: #111827;
+}
+
+:host-context(body.dark-mode) .faq-title {
+    color: #f8fafc;
+}
+
+.faq-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faq-item {
+    background: white;
+    border: 1px solid #dbe3ec;
+    border-radius: 12px;
+    overflow: hidden;
+
+    &[open] .faq-q {
+        color: #166534;
+        background: rgba($travel-green, .07);
+    }
+}
+
+:host-context(body.dark-mode) .faq-item {
+    background: #10221a;
+    border-color: #2b4a38;
+}
+
+:host-context(body.dark-mode) .faq-item[open] .faq-q {
+    background: rgba($travel-green, .14);
+}
+
+.faq-q {
+    padding: 16px 20px;
+    font-weight: 600;
+    font-size: .94rem;
+    cursor: pointer;
+    color: #111827;
+    transition: color .2s, background .2s;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &::marker,
+    &::-webkit-details-marker {
+        display: none
+    }
+
+    &::before {
+        content: '+';
+        font-size: 1.3rem;
+        font-weight: 300;
+        color: $travel-green;
+        flex-shrink: 0;
+        line-height: 1
+    }
+}
+
+details[open] .faq-q::before {
+    content: '−';
+}
+
+:host-context(body.dark-mode) .faq-q {
+    color: #f8fafc;
+}
+
+.faq-a {
+    padding: 0 20px 16px 46px;
+    font-size: .88rem;
+    color: #6b7280;
+    line-height: 1.65;
+    margin: 0;
+}
+
+:host-context(body.dark-mode) .faq-a {
+    color: #9cc9ad;
+}
+
+@media (max-width: 768px) {
+    .faq-inner {
+        padding: 0 16px;
+    }
+
+    .faq-q {
+        padding: 14px 14px;
+        font-size: .9rem;
+    }
+
+    .faq-a {
+        padding: 0 14px 14px 40px;
+        font-size: .84rem;
+    }
+}

@@ -447,12 +447,6 @@
     }
 }
 
-:host-context(body.dark-mode) {
-    .megamenu-subgroup {
-        // Border entfernt
-    }
-}
-
 .megamenu-sublink {
     font-size: var(--font-size-xs);
     padding: var(--space-1) var(--space-2);

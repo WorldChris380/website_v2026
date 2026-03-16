@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { LanguageService, Language } from '../../language.service';
@@ -11,15 +11,78 @@ import { MetaService } from '../../services/meta.service';
     templateUrl: './career.html',
     styleUrl: './career.scss'
 })
-export class Career implements OnInit {
-    activeSection: string | null = 'profile';
+export class Career implements OnInit, OnDestroy {
+    activeSection: string = 'profile';
     currentLanguage: Language = 'en';
+
+    readonly sections = ['profile', 'experience', 'education', 'skills', 'projects', 'testimonials'] as const;
+    private scrollCooldown = false;
+    private touchStartY = 0;
+
+    get currentSectionIndex(): number {
+        return this.sections.indexOf(this.activeSection as any);
+    }
+
+    @HostListener('wheel', ['$event'])
+    onWheel(event: WheelEvent): void {
+        const el = this.elementRef.nativeElement;
+        const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
+        const atTop = el.scrollTop <= 0;
+        const direction = event.deltaY > 0 ? 1 : -1;
+        if ((direction > 0 && atBottom) || (direction < 0 && atTop)) {
+            event.preventDefault();
+            this.navigateSection(direction);
+        }
+    }
+
+    @HostListener('keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent): void {
+        const el = this.elementRef.nativeElement;
+        const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
+        const atTop = el.scrollTop <= 0;
+        if ((event.key === 'ArrowDown' || event.key === 'PageDown') && atBottom) {
+            this.navigateSection(1);
+        } else if ((event.key === 'ArrowUp' || event.key === 'PageUp') && atTop) {
+            this.navigateSection(-1);
+        }
+    }
+
+    @HostListener('touchstart', ['$event'])
+    onTouchStart(event: TouchEvent): void {
+        this.touchStartY = event.touches[0].clientY;
+    }
+
+    @HostListener('touchend', ['$event'])
+    onTouchEnd(event: TouchEvent): void {
+        const el = this.elementRef.nativeElement;
+        const delta = this.touchStartY - event.changedTouches[0].clientY;
+        if (Math.abs(delta) > 60) {
+            const direction = delta > 0 ? 1 : -1;
+            const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
+            const atTop = el.scrollTop <= 0;
+            if ((direction > 0 && atBottom) || (direction < 0 && atTop)) {
+                this.navigateSection(direction);
+            }
+        }
+    }
+
+    navigateSection(direction: 1 | -1): void {
+        if (this.scrollCooldown) return;
+        const nextIndex = this.currentSectionIndex + direction;
+        if (nextIndex < 0 || nextIndex >= this.sections.length) return;
+        this.scrollCooldown = true;
+        this.activeSection = this.sections[nextIndex];
+        this.elementRef.nativeElement.scrollTop = 0;
+        this.cdr.markForCheck();
+        setTimeout(() => { this.scrollCooldown = false; }, 700);
+    }
 
     constructor(
         private route: ActivatedRoute,
         private languageService: LanguageService,
         private cdr: ChangeDetectorRef,
-        private metaService: MetaService
+        private metaService: MetaService,
+        private elementRef: ElementRef
     ) { }
 
     ngOnInit() {
@@ -237,8 +300,11 @@ export class Career implements OnInit {
     ];
 
     toggleSection(section: string): void {
-        this.activeSection = this.activeSection === section ? null : section;
+        this.activeSection = section;
+        window.scrollTo({ top: 0, behavior: 'instant' });
     }
+
+    ngOnDestroy(): void { }
 
     public async downloadPDF(): Promise<void> {
         // Create a temporary container with all content

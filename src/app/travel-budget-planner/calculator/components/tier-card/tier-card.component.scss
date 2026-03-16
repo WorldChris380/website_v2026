@@ -1,0 +1,151 @@
+@use '../../../../../styles.scss' as *;
+
+:host {
+    display: block;
+}
+
+.tier-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 18px rgba(0, 0, 0, .06);
+    animation: slideUp .3s ease;
+}
+
+:host-context(body.dark-mode) .tier-card {
+    background: #111827;
+    border-color: #334155;
+}
+
+.tier-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 2px;
+    color: #111827;
+}
+
+:host-context(body.dark-mode) .tier-title {
+    color: #f8fafc;
+}
+
+.tier-subtitle {
+    font-size: .77rem;
+    color: #9ca3af;
+    margin: 0 0 16px;
+}
+
+:host-context(body.dark-mode) .tier-subtitle {
+    color: #94a3b8;
+}
+
+.tier-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tier-row {
+    display: grid;
+    grid-template-columns: 108px 1fr 78px;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    transition: background .2s;
+
+    &.active-tier {
+        background: rgba($travel-green, .10);
+
+        .tier-amount {
+            color: #166534;
+            font-weight: 800
+        }
+    }
+}
+
+:host-context(body.dark-mode) .tier-row.active-tier {
+    background: rgba($travel-green, .16);
+}
+
+.tier-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .83rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+:host-context(body.dark-mode) .tier-label {
+    color: #e2e8f0;
+}
+
+.tier-icon {
+    font-size: 1rem;
+}
+
+.tier-bar-wrap {
+    height: 8px;
+    background: #f3f4f6;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+:host-context(body.dark-mode) .tier-bar-wrap {
+    background: #1f2937;
+}
+
+.tier-bar {
+    height: 100%;
+    background: #94a3b8;
+    border-radius: 999px;
+    transition: width .55s ease;
+
+    &.mid {
+        background: $travel-green
+    }
+
+    &.lux {
+        background: #334155
+    }
+}
+
+.tier-amount {
+    font-size: .88rem;
+    font-weight: 700;
+    text-align: right;
+    color: #374151;
+}
+
+:host-context(body.dark-mode) .tier-amount {
+    color: #e2e8f0;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(14px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+@media (max-width: 768px) {
+    .tier-card {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .tier-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .tier-amount {
+        text-align: left;
+    }
+}

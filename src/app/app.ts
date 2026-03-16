@@ -24,7 +24,6 @@ export class App {
   showRightClickWarning = false;
   rightClickMessage = '';
   private warningTimeout: any;
-  private isShowingTestModeToast = false;
 
   constructor(
     public router: Router,
@@ -36,8 +35,9 @@ export class App {
     // Watch for test mode changes and show toast
     effect(() => {
       const isTestModeEnabled = this.adminService.isTestModeEnabled();
-      const isLoggedIn = this.adminService.isAdminLoggedIn();
-      if (isTestModeEnabled && isLoggedIn && !this.hasUserAcknowledgedTestMode()) {
+      const hasVisibleToast = this.hasVisibleTestModeToast();
+
+      if (isTestModeEnabled && !this.hasUserAcknowledgedTestMode() && !hasVisibleToast) {
         // Use setTimeout to avoid effect loop issues
         setTimeout(() => this.showTestModeToast(), 0);
       }
@@ -45,10 +45,14 @@ export class App {
 
     // Watch for language changes and update toast if test mode is active
     this.languageService.language$.subscribe(() => {
-      if (this.adminService.isTestModeEnabled() && this.adminService.isAdminLoggedIn() && !this.hasUserAcknowledgedTestMode() && this.isShowingTestModeToast) {
+      if (this.adminService.isTestModeEnabled() && !this.hasUserAcknowledgedTestMode() && this.hasVisibleTestModeToast()) {
         this.updateTestModeToastLanguage();
       }
     });
+  }
+
+  private hasVisibleTestModeToast(): boolean {
+    return this.toastService.toasts().some(t => t.persistent && t.type === 'warning');
   }
 
   @HostListener('document:contextmenu', ['$event'])
@@ -85,22 +89,24 @@ export class App {
    */
   private acknowledgeTestMode(): void {
     localStorage.setItem('test_mode_acknowledged', 'true');
-    this.isShowingTestModeToast = false;
+  }
+
+  private getTestModeToastContent(): { message: string; buttonText: string } {
+    const currentLang = this.languageService.getCurrentLanguage();
+
+    return {
+      message: currentLang === 'en'
+        ? 'This website ist currently still under construction.'
+        : '⚠️ Dies ist eine TESTSEITE',
+      buttonText: currentLang === 'en' ? 'Understood' : 'Verstanden'
+    };
   }
 
   /**
    * Show the test mode toast with current language
    */
   private showTestModeToast(): void {
-    if (this.isShowingTestModeToast) {
-      return; // Already showing, don't create duplicate
-    }
-
-    const currentLang = this.languageService.getCurrentLanguage();
-    const message = currentLang === 'en'
-      ? '⚠️ This is a TEST page'
-      : '⚠️ Dies ist eine TESTSEITE';
-    const buttonText = currentLang === 'en' ? 'Understood' : 'Verstanden';
+    const { message, buttonText } = this.getTestModeToastContent();
 
     // if existing persistent warning toast, update via signal to trigger change detection
     const existing = this.toastService.toasts().find(t => t.persistent && t.type === 'warning');
@@ -118,19 +124,13 @@ export class App {
         this.acknowledgeTestMode();
       });
     }
-
-    this.isShowingTestModeToast = true;
   }
 
   /**
    * Update only the language of existing test mode toast
    */
   private updateTestModeToastLanguage(): void {
-    const currentLang = this.languageService.getCurrentLanguage();
-    const message = currentLang === 'en'
-      ? '⚠️ This is a TEST page'
-      : '⚠️ Dies ist eine TESTSEITE';
-    const buttonText = currentLang === 'en' ? 'Understood' : 'Verstanden';
+    const { message, buttonText } = this.getTestModeToastContent();
 
     // Update signal to trigger change detection
     this.toastService.toasts.update(toasts =>
