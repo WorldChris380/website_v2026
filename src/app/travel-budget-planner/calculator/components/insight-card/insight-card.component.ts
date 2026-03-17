@@ -9,7 +9,7 @@ import type { Language } from '../../../../language.service';
     imports: [CommonModule],
     styleUrl: './insight-card.component.scss',
     template: `
-<div class="insight-card" *ngIf="insight && country">
+<div *ngIf="insight && country">
     <div class="insight-header">
         <span class="insight-flag" aria-hidden="true">
             <img *ngIf="!isFlagBroken(country.code)" class="insight-flag-image" [src]="getFlagApiUrl(country.code)" [alt]="''"

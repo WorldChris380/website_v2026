@@ -4,6 +4,13 @@
             <a id="header-logo-link" href=""><img id="header-logo-img"
                     src="/assets/img/icons-and-logos/christian-boehme-logo.png" alt="Logo of Christian Boehme">
                 <span id="page-heading">Christian Böhme</span>
+                <span class="page-heading-current" [class.section-travel]="currentPageSection === 'travel'"
+                    [class.section-aviation]="currentPageSection === 'aviation'"
+                    [class.section-photography]="currentPageSection === 'photography'"
+                    [class.section-career]="currentPageSection === 'career'"
+                    [class.section-shop]="currentPageSection === 'shop'"
+                    [class.section-blog]="currentPageSection === 'blog'" *ngIf="currentPageTitleShort">{{
+                    currentPageTitleShort }}</span>
             </a>
         </div>
 
@@ -26,13 +33,13 @@
                             {{ getTranslation('travel') }}
                         </h3>
                         <div class="megamenu-links">
-                            <a [routerLink]="['/search-by-budget']" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('searchByBudget') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescSearchByBudget') }}</span>
-                            </a>
-                            <a [routerLink]="['/travel-budget-planner']" [queryParams]="{ mode: 'calculate' }" class="megamenu-link">
+                            <a [routerLink]="['/travel-budget-calculator']" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('budgetCalculator') }}</span>
                                 <span class="link-description">{{ getTranslation('menuDescBudgetCalculator') }}</span>
+                            </a>
+                            <a [routerLink]="['/travel-faqs']" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('travelFaqs') }}</span>
+                                <span class="link-description">{{ getTranslation('menuDescTravelFaqs') }}</span>
                             </a>
                         </div>
                     </div>
@@ -249,6 +256,14 @@
                         href="javascript:void(0);">{{ getTranslation('travel') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'travel'" id="mobile-travel-dropdown"
                         [class.open]="openMobileDropdownMenu === 'travel'">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/travel-budget-calculator']"
+                            class="mobile-dropdown-link dropdown-link-travel">
+                            {{ getTranslation('budgetCalculator') }}
+                        </a>
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/travel-faqs']"
+                            class="mobile-dropdown-link dropdown-link-travel">
+                            {{ getTranslation('travelFaqs') }}
+                        </a>
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography-travels']"
                             class="mobile-dropdown-link dropdown-link-travel">
                             {{ getTranslation('photographyTravels') }}

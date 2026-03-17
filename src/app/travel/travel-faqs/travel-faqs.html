@@ -1,0 +1,12 @@
+<section class="travel-faqs-hero">
+    <div class="travel-faqs-inner">
+        <h1>{{ tFn('travelFaqs') }}</h1>
+        <p>
+            {{ currentLanguage === 'de'
+            ? 'Alle wichtigen Antworten zur Reisebudgetplanung auf einen Blick.'
+            : 'All key answers for travel budget planning in one place.' }}
+        </p>
+    </div>
+</section>
+
+<app-calc-faq-section [t]="tFn"></app-calc-faq-section>

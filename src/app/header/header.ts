@@ -1,9 +1,10 @@
 import { Component, ElementRef, HostListener, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { DarkModeService } from '../dark-mode.service';
 import { LanguageService, Language } from '../language.service';
 import { ShopService } from '../shop/shop.service';
+import { filter } from 'rxjs/operators';
 type MenuHeading = 'aviation' | 'blog' | 'travel' | 'shop' | 'career' | 'photography';
 
 @Component({
@@ -25,6 +26,8 @@ export class Header implements OnInit {
   openMobileSubDropdownMenu: string | null = null;
   isLoading: boolean = false;
   megamenuOpen: boolean = false;
+  currentPageTitleShort: string = '';
+  currentPageSection: MenuHeading = 'career';
 
   get cartQuantity(): number {
     return this.shopService.totalQuantity();
@@ -34,7 +37,8 @@ export class Header implements OnInit {
     private darkModeService: DarkModeService,
     private languageService: LanguageService,
     private shopService: ShopService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -49,8 +53,17 @@ export class Header implements OnInit {
     this.currentLanguage = this.languageService.getCurrentLanguage();
     this.languageService.language$.subscribe((lang) => {
       this.currentLanguage = lang;
+      this.updateCurrentPageTitle();
       this.cdr.markForCheck();
     });
+
+    this.updateCurrentPageTitle();
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.updateCurrentPageTitle();
+        this.cdr.markForCheck();
+      });
 
     // Track page loading state
     this.isLoading = true;
@@ -146,5 +159,57 @@ export class Header implements OnInit {
 
   darkmodeSVG(name: string) {
     return this.darkModeService.darkmodeSVG(name);
+  }
+
+  private updateCurrentPageTitle(): void {
+    const path = this.router.url.split('?')[0].replace(/^\//, '');
+    const key = path || 'home';
+
+    const byPath: Record<string, string> = {
+      home: this.currentLanguage === 'de' ? 'Startseite' : 'Home',
+      'travel-budget-calculator': 'Travel Budget Calculator',
+      'travel-faqs': this.currentLanguage === 'de' ? 'Travel FAQs' : 'Travel FAQs',
+      'aviation-spotter-hotels': this.currentLanguage === 'de' ? 'Spotter Hotels' : 'Spotter Hotels',
+      'gallery': this.currentLanguage === 'de' ? 'Galerie' : 'Gallery',
+      'shop': 'Shop',
+      'shop/cart': this.currentLanguage === 'de' ? 'Warenkorb' : 'Cart',
+      'shop/account': this.currentLanguage === 'de' ? 'Konto' : 'Account',
+      'air-germany': 'Air Germany',
+      'airlinesim-ceo-tools': 'AirlineSim Tools',
+      'my-visited-countries': this.currentLanguage === 'de' ? 'Laenderkarte' : 'Countries Map',
+      'career': this.currentLanguage === 'de' ? 'Karriere' : 'Career',
+      'legal': this.currentLanguage === 'de' ? 'Rechtliches' : 'Legal',
+      'admin': 'Admin',
+    };
+
+    const fallback = key
+      .split('/')
+      .pop()
+      ?.split('-')
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ') ?? '';
+
+    const rawTitle = byPath[key] ?? fallback;
+    this.currentPageTitleShort = rawTitle.length > 24 ? `${rawTitle.slice(0, 24)}...` : rawTitle;
+
+    const sectionByPath: Record<string, MenuHeading> = {
+      home: 'career',
+      'travel-budget-calculator': 'travel',
+      'travel-faqs': 'travel',
+      'aviation-spotter-hotels': 'aviation',
+      'aviation-spotter-hotels/twa-hotel-jfk': 'aviation',
+      'air-germany': 'aviation',
+      'airlinesim-ceo-tools': 'aviation',
+      'gallery': 'photography',
+      'my-visited-countries': 'travel',
+      'shop': 'shop',
+      'shop/cart': 'shop',
+      'shop/account': 'shop',
+      'career': 'career',
+      'legal': 'career',
+      'admin': 'career',
+    };
+
+    this.currentPageSection = sectionByPath[key] ?? 'career';
   }
 }

@@ -93,11 +93,47 @@
     width: 30px;
 }
 
-#page-heading {
+#page-heading,
+.page-heading-current {
     color: $career-black;
     font-size: var(--font-size-lg);
-    margin-left: var(--space-2);
     line-height: 1.2;
+}
+
+#page-heading {
+    margin-left: var(--space-2);
+}
+
+.page-heading-current {
+    margin-left: 0.45rem;
+    max-width: 26ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &.section-travel {
+        color: $travel-green;
+    }
+
+    &.section-aviation {
+        color: $aviation-blue;
+    }
+
+    &.section-photography {
+        color: $photography-orange;
+    }
+
+    &.section-career {
+        color: $career-black;
+    }
+
+    &.section-shop {
+        color: $shop-blue;
+    }
+
+    &.section-blog {
+        color: $career-black;
+    }
 }
 
 // 2nd Header Column - Megamenu
@@ -1072,11 +1108,21 @@
 }
 
 @media(max-width: 480px) {
-    #page-heading {
+
+    #page-heading,
+    .page-heading-current {
         font-size: 18px;
+        line-height: 1.2;
+    }
+
+    #page-heading {
         margin-left: 6px;
         padding: 4px 0;
-        line-height: 1.2;
+    }
+
+    .page-heading-current {
+        margin-left: 4px;
+        max-width: 16ch;
     }
 
     #header-logo-img {
@@ -1090,9 +1136,18 @@
         height: 36px;
     }
 
-    #page-heading {
+    #page-heading,
+    .page-heading-current {
         font-size: 14px;
+    }
+
+    #page-heading {
         margin-left: 4px;
+    }
+
+    .page-heading-current {
+        margin-left: 3px;
+        max-width: 10ch;
     }
 
     #header-logo-img {

@@ -4,7 +4,7 @@
     display: block;
 }
 
-.insight-card {
+:host>div {
     background: white;
     border: 1px solid #e5e7eb;
     border-radius: 16px;
@@ -14,7 +14,7 @@
     animation: slideUp .3s ease;
 }
 
-:host-context(body.dark-mode) .insight-card {
+:host-context(body.dark-mode)>div {
     background: #111827;
     border-color: #334155;
 }

@@ -5,6 +5,7 @@ import { DOCUMENT } from '@angular/common';
 export interface MetaConfig {
     title: string;
     description: string;
+    keywords?: string;
     image?: string;
     type?: string;
     url?: string;
@@ -25,6 +26,11 @@ export class MetaService {
 
         // Description
         this.meta.updateTag({ name: 'description', content: config.description });
+
+        // Keywords
+        if (config.keywords) {
+            this.meta.updateTag({ name: 'keywords', content: config.keywords });
+        }
 
         // Open Graph
         this.meta.updateTag({ property: 'og:title', content: config.title });

@@ -1,14 +1,11 @@
-﻿import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
 import { LanguageService, Language } from '../../language.service';
 import { MetaService } from '../../services/meta.service';
-import { HeroPresetsComponent } from './components/hero-presets/hero-presets.component';
-import { InsightCardComponent } from './components/insight-card/insight-card.component';
 import { ResultCardComponent } from './components/result-card/result-card.component';
-import { TierCardComponent } from './components/tier-card/tier-card.component';
-import { FaqSectionComponent } from './components/faq-section/faq-section.component';
 
 export interface CountryCostData {
     code: string;
@@ -54,6 +51,21 @@ export interface ReverseBudgetMatch {
     total: number;
     perPerson: number;
     perDayPerPerson: number;
+}
+
+interface CountryPriceComparisonItem {
+    country: CountryCostData;
+    total: number;
+}
+
+export interface CountryPriceComparison {
+    rank: number;
+    totalCountries: number;
+    cheaperCount: number;
+    expensiveCount: number;
+    selectedTotal: number;
+    cheaperAlternatives: CountryPriceComparisonItem[];
+    pricierAlternatives: CountryPriceComparisonItem[];
 }
 
 export type SafetyLevel = 'low' | 'medium' | 'high';
@@ -103,33 +115,40 @@ interface WorldBankIndicatorEntry {
     value?: number | null;
 }
 
+type CollapsibleSectionKey = 'starting' | 'destination' | 'budgetSearch' | 'destFilters' | 'tripParams' | 'costProfile';
+
 @Component({
     selector: 'app-calculator',
     standalone: true,
     imports: [
         CommonModule,
         FormsModule,
-        HeroPresetsComponent,
-        InsightCardComponent,
+        RouterLink,
         ResultCardComponent,
-        TierCardComponent,
-        FaqSectionComponent,
     ],
     templateUrl: './calculator.html',
     styleUrl: './calculator.scss'
 })
-export class Calculator implements OnInit {
+export class TravelBudgetCalculatorComponent implements OnInit, OnDestroy {
     currentLanguage: Language = 'en';
     readonly tFn = (key: string) => this.t(key);
     readonly countryLabelFn = (country: CountryCostData) => this.getCountryLabel(country);
     readonly barWidthFn = (value: number, total: number) => this.getBarWidth(value, total);
-    readonly tierBarWidthFn = (value: number, max: number) => this.getTierBarWidth(value, max);
     readonly openLinkFn = (url: string) => this.openLink(url);
     readonly formatCurrencyFn = (amount: number) => this.formatCurrency(amount);
+    readonly compareRankPercentFn = (comparison: CountryPriceComparison | null) => this.getCompareRankPercent(comparison);
+    readonly continentLabelFn = (continent: string) => this.getContinentLabel(continent);
+    readonly countryCurrencyFn = (country: CountryCostData) => this.getCountryCurrency(country);
+    readonly countrySafetyFn = (country: CountryCostData) => this.getCountrySafety(country);
+    readonly countryTourismFn = (country: CountryCostData) => this.getCountryTourismDevelopment(country);
+    readonly safetyLabelFn = (level: SafetyLevel) => this.getSafetyLabel(level);
+    readonly tourismLabelFn = (level: TourismDevelopment) => this.getTourismLabel(level);
+    readonly priceLevelLabelFn = (country: CountryCostData) => this.getPriceLevelLabel(country);
+    readonly seasonLabelFn = (country: CountryCostData | null) => this.getDerivedSeasonLabelForCountry(country);
 
     // Form state
     selectedCountryCode: string = '';
-    selectedOriginCountryCode: string = 'DE';
+    selectedOriginCountryCode: string = '';
     selectedCurrency: DisplayCurrency = 'USD';
     duration: number = 7;
     persons: number = 2;
@@ -138,8 +157,12 @@ export class Calculator implements OnInit {
     travelStyle: 'budget' | 'midrange' | 'luxury' = 'midrange';
     includeFlight: boolean = true;
     includeActivities: boolean = true;
-    reverseBudget: number = 2500;
-    selectedTravelMonth: number = new Date().getMonth() + 1;
+    reverseBudgetMin: number = 1500;
+    reverseBudgetMax: number = 4000;
+    readonly reverseBudgetFloor = 300;
+    readonly reverseBudgetCeiling = 12000;
+    readonly reverseBudgetStep = 100;
+    selectedTravelMonth: number | null = null;
     selectedContinentFilter = 'all';
     selectedSafetyFilter: SafetyLevel | 'all' = 'all';
     selectedTourismFilter: TourismDevelopment | 'all' = 'all';
@@ -149,15 +172,25 @@ export class Calculator implements OnInit {
     reverseMatches: ReverseBudgetMatch[] = [];
     reverseSearchPerformed: boolean = false;
     private readonly brokenFlagCodes = new Set<string>();
-    wizardMode = true;
+    wizardMode = false;
     wizardStep = 1;
     readonly wizardTotalSteps = 5;
-    appMode: 'select' | 'find' | 'calculate' = 'select';
+    private displayCurrencyOverridden = false;
+    leftPaneWidth = 420;
+    private removeResizeListeners: (() => void) | null = null;
 
     activePreset: string | null = null;
     isCalculating: boolean = false;
-    tierData: { budget: number; midrange: number; luxury: number } | null = null;
     countries: CountryCostData[] = [];
+    selectedCountryComparison: CountryPriceComparison | null = null;
+    private readonly sectionExpanded: Record<CollapsibleSectionKey, boolean> = {
+        starting: false,
+        destination: false,
+        budgetSearch: false,
+        destFilters: false,
+        tripParams: false,
+        costProfile: false,
+    };
 
     private readonly countryProfiles: Record<string, CountryProfile> = {
         DE: { safety: 'low', tourismDevelopment: 'high' },
@@ -398,8 +431,8 @@ export class Calculator implements OnInit {
             this.selectedCountryCode = '';
             this.selectedCountry = null;
             this.result = null;
-            this.tierData = null;
         }
+        this.updateSelectedCountryComparison();
         this.cdr.markForCheck();
     }
 
@@ -437,7 +470,7 @@ export class Calculator implements OnInit {
 
     canProceedWizardStep(): boolean {
         if (this.wizardStep === 1) {
-            return !!this.selectedCountryCode;
+            return !!this.selectedOriginCountryCode;
         }
         if (this.wizardStep === 2) {
             return this.duration > 0 && this.persons > 0;
@@ -508,26 +541,64 @@ export class Calculator implements OnInit {
         return this.countries.find(c => c.code === this.selectedOriginCountryCode) ?? null;
     }
 
+    private readonly countryPhotoCache = new Map<string, string>();
+    private readonly countryPhotoLoading = new Set<string>();
+    private autoCalcTimer: ReturnType<typeof setTimeout> | null = null;
+
     constructor(
         private languageService: LanguageService,
         private metaService: MetaService,
         private cdr: ChangeDetectorRef,
-        private route: ActivatedRoute
+        private http: HttpClient
     ) { }
 
-    selectAppMode(mode: 'find' | 'calculate'): void {
-        this.appMode = mode;
-        this.wizardStep = 1;
-        this.cdr.markForCheck();
+    startColumnResize(event: MouseEvent): void {
+        if (window.matchMedia('(max-width: 960px)').matches) {
+            return;
+        }
+
+        event.preventDefault();
+
+        const minWidth = 320;
+        const currentTarget = event.currentTarget as HTMLElement | null;
+        const layout = currentTarget?.closest('.calc-layout') as HTMLElement | null;
+        const layoutWidth = layout?.getBoundingClientRect().width ?? window.innerWidth;
+        const maxWidth = Math.max(minWidth + 80, Math.floor(layoutWidth - 360));
+        const startX = event.clientX;
+        const startWidth = this.leftPaneWidth;
+
+        const previousCursor = document.body.style.cursor;
+        const previousUserSelect = document.body.style.userSelect;
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+
+        const onMouseMove = (moveEvent: MouseEvent) => {
+            const deltaX = moveEvent.clientX - startX;
+            const nextWidth = Math.max(minWidth, Math.min(maxWidth, startWidth + deltaX));
+            this.leftPaneWidth = nextWidth;
+            this.cdr.markForCheck();
+        };
+
+        const onMouseUp = () => {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            document.body.style.cursor = previousCursor;
+            document.body.style.userSelect = previousUserSelect;
+            this.removeResizeListeners = null;
+        };
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+        this.removeResizeListeners = onMouseUp;
     }
 
-    backToModeSelect(): void {
-        this.appMode = 'select';
-        this.result = null;
-        this.reverseMatches = [];
-        this.reverseSearchPerformed = false;
-        this.wizardStep = 1;
-        this.cdr.markForCheck();
+    ngOnDestroy(): void {
+        if (this.removeResizeListeners) {
+            this.removeResizeListeners();
+        }
+        if (this.autoCalcTimer !== null) {
+            clearTimeout(this.autoCalcTimer);
+        }
     }
 
     ngOnInit(): void {
@@ -538,13 +609,6 @@ export class Calculator implements OnInit {
         this.languageService.language$.subscribe(lang => {
             this.currentLanguage = lang;
             this.updateSeo();
-            this.cdr.markForCheck();
-        });
-        this.route.queryParamMap.subscribe(params => {
-            const mode = params.get('mode');
-            if (mode === 'find' || mode === 'calculate') {
-                this.appMode = mode;
-            }
             this.cdr.markForCheck();
         });
     }
@@ -720,7 +784,7 @@ export class Calculator implements OnInit {
 
     private syncStateAfterCountryReload(): void {
         if (!this.countries.some(c => c.code === this.selectedOriginCountryCode)) {
-            this.selectedOriginCountryCode = 'DE';
+            this.selectedOriginCountryCode = '';
         }
 
         if (this.selectedCountryCode && !this.countries.some(c => c.code === this.selectedCountryCode)) {
@@ -731,7 +795,6 @@ export class Calculator implements OnInit {
             this.selectedCountry = this.countries.find(c => c.code === this.selectedCountryCode) ?? null;
         }
 
-        this.updateTierData();
         if (this.reverseSearchPerformed) {
             this.findDestinationsByBudget();
         }
@@ -764,17 +827,21 @@ export class Calculator implements OnInit {
     private updateSeo(): void {
         const isGerman = this.currentLanguage === 'de';
         const title = isGerman
-            ? 'Reisebudget-Rechner für Flüge, Hotels und Tageskosten | Christian Böhme'
-            : 'Travel Budget Calculator for Flights, Hotels and Daily Costs | Christian Boehme';
+            ? 'Reisebudget-Rechner 2026: Flüge, Hotels & Tageskosten weltweit planen | Christian Böhme'
+            : 'Travel Budget Calculator 2026: Plan Flights, Hotels & Daily Costs Worldwide | Christian Boehme';
         const description = isGerman
-            ? 'Kosten für Flüge, Hotels, Essen, Transport und Aktivitäten mit Startland, Sicherheitspuffer und Währungsumschaltung für mehr als 30 Reiseziele weltweit berechnen.'
-            : 'Estimate flights, hotels, food, transport and activity costs with departure country, safety buffer and currency switching for 30+ travel destinations worldwide.';
+            ? 'Reisebudget für über 180 Länder weltweit berechnen – Flüge, Unterkunft, Essen, Transport und Aktivitäten nach Reisestil, Saison, Startland und Sicherheitspuffer. Kostenlos, ohne Anmeldung.'
+            : 'Plan your travel budget for 180+ countries worldwide. Calculate flights, accommodation, food, transport and activities by travel style, season, origin country and safety buffer. Free, no sign-up required.';
+        const keywords = isGerman
+            ? 'Reisebudget Rechner, Reisekosten berechnen, Urlaubsbudget planen, Flugkosten schätzen, Hotelkosten weltweit, Tageskosten Reise, Reiseplaner kostenlos'
+            : 'travel budget calculator, travel cost estimator, trip budget planner, flight cost calculator, hotel cost by country, daily travel costs, free travel planner';
 
         this.metaService.updateSEO(
             {
                 title,
                 description,
-                url: 'https://www.christian-boehme.com/travel-budget-planner',
+                keywords,
+                url: 'https://www.christian-boehme.com/travel-budget-calculator',
                 type: 'website'
             },
             [
@@ -785,7 +852,7 @@ export class Calculator implements OnInit {
                     applicationCategory: 'TravelApplication',
                     operatingSystem: 'Any',
                     isAccessibleForFree: true,
-                    url: 'https://www.christian-boehme.com/travel-budget-planner',
+                    url: 'https://www.christian-boehme.com/travel-budget-calculator',
                     description,
                     offers: {
                         '@type': 'Offer',
@@ -904,8 +971,10 @@ export class Calculator implements OnInit {
     onCountryChange(): void {
         this.selectedCountry = this.countries.find(c => c.code === this.selectedCountryCode) ?? null;
         this.result = null;
-        this.tierData = null;
-        this.updateTierData();
+        if (this.selectedCountry) {
+            this.bufferPercentage = this.getRecommendedBufferPercentage(this.selectedCountry);
+        }
+        this.updateSelectedCountryComparison();
         if (!this.wizardMode && this.selectedCountry) {
             this.calculate();
         }
@@ -913,19 +982,33 @@ export class Calculator implements OnInit {
     }
 
     onOriginCountryChange(): void {
+        if (!this.displayCurrencyOverridden) {
+            this.selectedCurrency = this.getPreferredDisplayCurrencyForCountry(this.selectedOriginCountryCode);
+        }
+        this.updateSelectedCountryComparison();
         this.refreshEstimate();
     }
 
     onDisplayCurrencyChange(): void {
+        this.displayCurrencyOverridden = true;
         this.cdr.markForCheck();
+    }
+
+    private getPreferredDisplayCurrencyForCountry(countryCode: string): DisplayCurrency {
+        const local = this.getCurrencyCodeForCountry(countryCode);
+        const supported: DisplayCurrency[] = ['USD', 'EUR', 'GBP', 'CHF', 'CAD', 'AUD', 'JPY'];
+        if (supported.includes(local as DisplayCurrency)) {
+            return local as DisplayCurrency;
+        }
+        return 'USD';
     }
 
     applyPreset(preset: TripPreset): void {
         this.activePreset = preset.key;
         this.accommodationType = preset.accommodationType;
         this.travelStyle = preset.travelStyle;
-        this.includeFlight = preset.includeFlight;
-        this.includeActivities = preset.includeActivities;
+        this.includeFlight = true;
+        this.includeActivities = true;
         this.duration = preset.suggestedDuration;
         if (this.selectedCountryCode) {
             this.calculate();
@@ -989,11 +1072,6 @@ export class Calculator implements OnInit {
         return String.fromCodePoint(127397 + upper.charCodeAt(0), 127397 + upper.charCodeAt(1));
     }
 
-    getTierBarWidth(value: number, max: number): string {
-        if (!max || !value) return '10%';
-        return Math.max(10, Math.round((value / max) * 100)) + '%';
-    }
-
     getConvertedAmount(amount: number): number {
         return amount * this.exchangeRates[this.selectedCurrency];
     }
@@ -1013,6 +1091,15 @@ export class Calculator implements OnInit {
             : `Displayed in ${this.selectedCurrency}. Base modelling remains in USD.`;
     }
 
+    formatDisplayCurrencyAmount(amount: number): string {
+        const locale = this.currentLanguage === 'de' ? 'de-DE' : 'en-US';
+        return new Intl.NumberFormat(locale, {
+            style: 'currency',
+            currency: this.selectedCurrency,
+            maximumFractionDigits: 0,
+        }).format(amount);
+    }
+
     getCountryCurrency(country: CountryCostData): string {
         if (country.currency) {
             return country.currency;
@@ -1021,16 +1108,91 @@ export class Calculator implements OnInit {
     }
 
     refreshEstimate(): void {
-        this.updateTierData();
-        if (this.result && this.selectedCountry) {
-            this.calculate();
+        this.updateSelectedCountryComparison();
+        if (this.selectedCountry && this.selectedOriginCountryCode) {
+            this.scheduleAutoCalc();
             return;
         }
         this.cdr.markForCheck();
     }
 
+    scheduleAutoCalc(delay = 350): void {
+        if (this.autoCalcTimer !== null) {
+            clearTimeout(this.autoCalcTimer);
+        }
+        this.autoCalcTimer = setTimeout(() => {
+            this.autoCalcTimer = null;
+            if (this.selectedCountry && this.selectedOriginCountryCode) {
+                this.calculate();
+            }
+        }, delay);
+    }
+
+    buildSummaryLink(entry: { country: CountryCostData; total: number }): Record<string, string | number> {
+        const est = this.getEstimateForCountry(entry.country);
+        return {
+            c: entry.country.code,
+            o: this.selectedOriginCountryCode,
+            n: this.currentLanguage === 'de' ? entry.country.nameDE : entry.country.name,
+            cont: this.getContinentLabel(entry.country.continent),
+            d: this.duration,
+            p: this.persons,
+            cur: this.selectedCurrency,
+            buf: this.bufferPercentage,
+            acc: est.accommodation,
+            food: est.food,
+            trans: est.transport,
+            acts: est.activities,
+            fl: est.flight,
+            sub: est.subtotal,
+            bufamt: est.buffer,
+            total: est.grandTotal,
+            pp: est.totalPerPerson,
+            ppd: est.dailyPerPerson,
+        };
+    }
+
     onTravelMonthChange(): void {
         this.refreshEstimate();
+    }
+
+    getSafetyBufferRecommendation(): string {
+        if (!this.selectedCountry) {
+            return this.currentLanguage === 'de'
+                ? 'Empfehlung erscheint nach Auswahl eines Ziellandes.'
+                : 'Recommendation appears after selecting a destination.';
+        }
+
+        const recommended = this.getRecommendedBufferPercentage(this.selectedCountry);
+        const risk = this.getCountrySafety(this.selectedCountry);
+
+        if (this.currentLanguage === 'de') {
+            const riskLabel = risk === 'low' ? 'niedrigem Risiko' : risk === 'medium' ? 'mittlerem Risiko' : 'höherem Risiko';
+            return `Empfohlen: ${recommended}% bei ${riskLabel}.`;
+        }
+
+        const riskLabel = risk === 'low' ? 'low risk' : risk === 'medium' ? 'medium risk' : 'higher risk';
+        return `Recommended: ${recommended}% for ${riskLabel}.`;
+    }
+
+    getAutoTravelMonthHint(): string {
+        if (!this.selectedCountry) {
+            return this.currentLanguage === 'de'
+                ? 'Wenn kein Monat gewählt ist, wird automatisch die günstigste Saison kalkuliert.'
+                : 'If no month is selected, the calculator automatically uses the cheapest season.';
+        }
+
+        if (this.selectedTravelMonth) {
+            return this.currentLanguage === 'de'
+                ? 'Monat manuell gewählt.'
+                : 'Month selected manually.';
+        }
+
+        const month = this.getCheapestTravelMonthForCountry(this.selectedCountry);
+        const monthLabel = this.getTravelMonthLabel(month);
+        return this.currentLanguage === 'de'
+            ? `Automatisch gewählt: ${monthLabel} (günstigster Monat).`
+            : `Automatically selected: ${monthLabel} (cheapest month).`;
     }
 
     getTravelMonthLabel(month: number): string {
@@ -1064,16 +1226,146 @@ export class Calculator implements OnInit {
         return this.reverseMatches.length;
     }
 
+    isSectionExpanded(key: CollapsibleSectionKey): boolean {
+        return this.sectionExpanded[key];
+    }
+
+    toggleSection(key: CollapsibleSectionKey): void {
+        this.sectionExpanded[key] = !this.sectionExpanded[key];
+        this.cdr.markForCheck();
+    }
+
+    areAllSectionsExpanded(): boolean {
+        return Object.values(this.sectionExpanded).every(value => value);
+    }
+
+    toggleAllSections(): void {
+        const next = !this.areAllSectionsExpanded();
+        (Object.keys(this.sectionExpanded) as CollapsibleSectionKey[]).forEach(key => {
+            this.sectionExpanded[key] = next;
+        });
+        this.cdr.markForCheck();
+    }
+
+    onReverseBudgetRangeChange(changed: 'min' | 'max'): void {
+        if (changed === 'min' && this.reverseBudgetMin > this.reverseBudgetMax) {
+            this.reverseBudgetMax = this.reverseBudgetMin;
+        }
+
+        if (changed === 'max' && this.reverseBudgetMax < this.reverseBudgetMin) {
+            this.reverseBudgetMin = this.reverseBudgetMax;
+        }
+
+        this.reverseBudgetMin = this.clampReverseBudget(this.reverseBudgetMin);
+        this.reverseBudgetMax = this.clampReverseBudget(this.reverseBudgetMax);
+        this.cdr.markForCheck();
+    }
+
+    getReverseBudgetPreviewBuckets(): Array<{ label: string; count: number; heightPercent: number; active: boolean }> {
+        const estimates = this.getFilteredCountryEstimateTotalsInDisplayCurrency();
+        const domain = this.getReverseBudgetPreviewDomain();
+        const bucketCount = 10;
+        const span = domain.max - domain.min;
+        const bucketSize = Math.max(this.reverseBudgetStep, Math.ceil(span / bucketCount));
+
+        const buckets = Array.from({ length: bucketCount }, (_, index) => {
+            const min = domain.min + (index * bucketSize);
+            const max = index === bucketCount - 1 ? domain.max : min + bucketSize;
+            const count = estimates.filter(total => total >= min && total <= max).length;
+            const active = max >= this.reverseBudgetMin && min <= this.reverseBudgetMax;
+            const label = `${min}-${max}`;
+            return { label, count, min, max, active };
+        });
+
+        const maxCount = Math.max(1, ...buckets.map(b => b.count));
+        return buckets.map(bucket => ({
+            label: bucket.label,
+            count: bucket.count,
+            active: bucket.active,
+            heightPercent: Math.max(12, Math.round((bucket.count / maxCount) * 100)),
+        }));
+    }
+
+    getReverseBudgetPreviewHitCount(): number {
+        return this.getFilteredCountryEstimateTotalsInDisplayCurrency()
+            .filter(total => total >= this.reverseBudgetMin && total <= this.reverseBudgetMax)
+            .length;
+    }
+
+    getTopCheapestCountries(limit = 3): Array<{ country: CountryCostData; total: number }> {
+        if (!this.selectedOriginCountryCode) {
+            return [];
+        }
+
+        return this.countries
+            .filter(country => this.matchesCountryFilters(country))
+            .map(country => ({ country, total: Math.round(this.getEstimateForCountry(country).grandTotal) }))
+            .sort((a, b) => a.total - b.total)
+            .slice(0, limit);
+    }
+
+    getCountryPhotoUrl(country: CountryCostData): string {
+        const key = country.code;
+        if (this.countryPhotoCache.has(key)) {
+            return this.countryPhotoCache.get(key)!;
+        }
+        if (!this.countryPhotoLoading.has(key)) {
+            this.countryPhotoLoading.add(key);
+            const query = `${country.name} travel landscape`;
+            const url = `/api/unsplash-proxy.php?query=${encodeURIComponent(query)}&per_page=1`;
+            this.http.get<{ results?: Array<{ urls?: { small?: string; regular?: string } }> }>(url).subscribe({
+                next: (res) => {
+                    const imgUrl = res?.results?.[0]?.urls?.regular ?? res?.results?.[0]?.urls?.small ?? '';
+                    if (imgUrl) {
+                        this.countryPhotoCache.set(key, imgUrl);
+                        this.cdr.markForCheck();
+                    }
+                    this.countryPhotoLoading.delete(key);
+                },
+                error: () => {
+                    this.countryPhotoLoading.delete(key);
+                    const fallback = `https://picsum.photos/seed/${key}/400/250`;
+                    this.countryPhotoCache.set(key, fallback);
+                    this.cdr.markForCheck();
+                }
+            });
+        }
+        return '';
+    }
+
+    getCompareRankPercent(comparison: CountryPriceComparison | null): number {
+        if (!comparison || comparison.totalCountries <= 0) {
+            return 0;
+        }
+        return Math.max(4, Math.round((comparison.rank / comparison.totalCountries) * 100));
+    }
+
+    getReverseBudgetPreviewDomain(): { min: number; max: number } {
+        const estimates = this.getFilteredCountryEstimateTotalsInDisplayCurrency();
+        if (estimates.length === 0) {
+            return { min: this.reverseBudgetFloor, max: this.reverseBudgetCeiling };
+        }
+
+        const dataMin = Math.min(...estimates);
+        const dataMax = Math.max(...estimates);
+
+        const min = Math.min(this.reverseBudgetFloor, this.reverseBudgetMin, Math.floor(dataMin / 100) * 100);
+        const max = Math.max(this.reverseBudgetCeiling, this.reverseBudgetMax, Math.ceil(dataMax / 100) * 100);
+
+        return { min, max };
+    }
+
     findDestinationsByBudget(): void {
         this.reverseSearchPerformed = true;
         this.reverseMatches = [];
 
-        if (!this.reverseBudget || this.reverseBudget <= 0 || this.duration <= 0 || this.persons <= 0) {
+        if (this.reverseBudgetMax <= 0 || this.duration <= 0 || this.persons <= 0) {
             this.cdr.markForCheck();
             return;
         }
 
-        const maxBudgetUsd = this.reverseBudget / this.exchangeRates[this.selectedCurrency];
+        const minBudgetUsd = this.reverseBudgetMin / this.exchangeRates[this.selectedCurrency];
+        const maxBudgetUsd = this.reverseBudgetMax / this.exchangeRates[this.selectedCurrency];
 
         this.reverseMatches = this.countries
             .filter(country => this.matchesCountryFilters(country))
@@ -1086,7 +1378,7 @@ export class Calculator implements OnInit {
                     perDayPerPerson: Math.round(estimate.grandTotal / this.duration / this.persons)
                 } as ReverseBudgetMatch;
             })
-            .filter(match => match.total <= maxBudgetUsd)
+            .filter(match => match.total >= minBudgetUsd && match.total <= maxBudgetUsd)
             .sort((a, b) => a.total - b.total)
             .slice(0, 24);
 
@@ -1212,6 +1504,29 @@ export class Calculator implements OnInit {
         return Math.max(0.78, Math.min(1.35, factor));
     }
 
+    private getOriginDependentLocalCostMultiplier(destination: CountryCostData): number {
+        const origin = this.selectedOriginCountry;
+        if (!origin || origin.code === destination.code) {
+            return 1;
+        }
+
+        // If geodata is available, model arrival complexity by distance and connectivity.
+        if (origin.geo && destination.geo) {
+            const distanceKm = this.getDistanceKm(origin.geo.lat, origin.geo.lon, destination.geo.lat, destination.geo.lon);
+            const distanceImpact = Math.min(0.16, (distanceKm / 10000) * 0.16);
+            const avgReachability = (origin.geo.reachability + destination.geo.reachability) / 2;
+            const connectivityImpact = Math.max(-0.04, Math.min(0.06, (1 - avgReachability) * 0.15));
+            const continentImpact = origin.continent === destination.continent ? -0.03 : 0.03;
+
+            return Math.max(0.92, Math.min(1.22, 1 + distanceImpact + connectivityImpact + continentImpact));
+        }
+
+        // Fallback without geodata: infer a moderate impact from route complexity.
+        const routeFactor = this.getRouteFactor(origin.continent, destination.continent);
+        const routeImpact = Math.max(-0.05, Math.min(0.18, (routeFactor - 0.75) * 0.18));
+        return Math.max(0.92, Math.min(1.22, 1 + routeImpact));
+    }
+
     private getSeasonCostMultiplier(country: CountryCostData): number {
         const map: Record<TravelSeason, number> = {
             low: 0.9,
@@ -1231,7 +1546,11 @@ export class Calculator implements OnInit {
     }
 
     private getDerivedSeasonForCountry(country: CountryCostData): TravelSeason {
-        const month = this.selectedTravelMonth;
+        const month = this.selectedTravelMonth ?? this.getCheapestTravelMonthForCountry(country);
+        return this.getDerivedSeasonForCountryByMonth(country, month);
+    }
+
+    private getDerivedSeasonForCountryByMonth(country: CountryCostData, month: number): TravelSeason {
         const lat = country.geo?.lat ?? this.getFallbackLatitudeForContinent(country.continent);
 
         if (Math.abs(lat) < 15) {
@@ -1240,6 +1559,50 @@ export class Calculator implements OnInit {
 
         const northernHemisphere = lat >= 0;
         return this.getTemperateSeason(month, northernHemisphere);
+    }
+
+    private getCheapestTravelMonthForCountry(country: CountryCostData): number {
+        let cheapestMonth = 1;
+        let cheapestScore = Number.POSITIVE_INFINITY;
+
+        for (let month = 1; month <= 12; month += 1) {
+            const season = this.getDerivedSeasonForCountryByMonth(country, month);
+            const cost = this.getSeasonCostMultiplierBySeason(season);
+            const flight = this.getSeasonFlightMultiplierBySeason(season);
+            const score = cost + flight;
+
+            if (score < cheapestScore) {
+                cheapestScore = score;
+                cheapestMonth = month;
+            }
+        }
+
+        return cheapestMonth;
+    }
+
+    private getSeasonCostMultiplierBySeason(season: TravelSeason): number {
+        const map: Record<TravelSeason, number> = {
+            low: 0.9,
+            shoulder: 1,
+            high: 1.22,
+        };
+        return map[season] ?? 1;
+    }
+
+    private getSeasonFlightMultiplierBySeason(season: TravelSeason): number {
+        const map: Record<TravelSeason, number> = {
+            low: 0.92,
+            shoulder: 1,
+            high: 1.28,
+        };
+        return map[season] ?? 1;
+    }
+
+    private getRecommendedBufferPercentage(country: CountryCostData): number {
+        const safety = this.getCountrySafety(country);
+        if (safety === 'low') return 10;
+        if (safety === 'medium') return 15;
+        return 22;
     }
 
     private getTemperateSeason(month: number, northernHemisphere: boolean): TravelSeason {
@@ -1271,13 +1634,40 @@ export class Calculator implements OnInit {
         return latByContinent[continent] ?? 20;
     }
 
-    private updateTierData(): void {
-        if (!this.selectedCountry) { this.tierData = null; return; }
-        const calc = (style: 'budget' | 'midrange' | 'luxury') => {
-            const estimate = this.getEstimateForCountry(this.selectedCountry!, style);
-            return Math.round(estimate.grandTotal);
+    private updateSelectedCountryComparison(): void {
+        if (!this.selectedCountry) {
+            this.selectedCountryComparison = null;
+            return;
+        }
+
+        const pool = this.countries
+            .filter(country => this.matchesCountryFilters(country))
+            .map(country => ({ country, total: this.getEstimateForCountry(country).grandTotal }))
+            .sort((a, b) => a.total - b.total);
+
+        const selectedIndex = pool.findIndex(item => item.country.code === this.selectedCountry!.code);
+        if (selectedIndex === -1) {
+            this.selectedCountryComparison = null;
+            return;
+        }
+
+        const selectedTotal = pool[selectedIndex].total;
+        const cheaperAlternatives = pool
+            .filter(item => item.total < selectedTotal)
+            .slice(-3);
+        const pricierAlternatives = pool
+            .filter(item => item.total > selectedTotal)
+            .slice(0, 3);
+
+        this.selectedCountryComparison = {
+            rank: selectedIndex + 1,
+            totalCountries: pool.length,
+            cheaperCount: selectedIndex,
+            expensiveCount: Math.max(0, pool.length - selectedIndex - 1),
+            selectedTotal,
+            cheaperAlternatives,
+            pricierAlternatives,
         };
-        this.tierData = { budget: calc('budget'), midrange: calc('midrange'), luxury: calc('luxury') };
     }
 
     private getEstimateForCountry(
@@ -1290,12 +1680,14 @@ export class Calculator implements OnInit {
         const accommodationType = forcedStyle ?? this.accommodationType;
         const seasonCostFactor = this.getSeasonCostMultiplier(country);
         const seasonFlightFactor = this.getSeasonFlightMultiplier(country);
+        const originLocalMultiplier = this.getOriginDependentLocalCostMultiplier(country);
+        const foodOriginAdjustment = 1 + ((originLocalMultiplier - 1) * 0.25);
 
         const accommodation = Math.round(country.costs.accommodation[accommodationType] * nights * p * seasonCostFactor);
-        const food = Math.round(country.costs.food[style] * nights * p * seasonCostFactor);
-        const transport = Math.round(country.costs.transport * nights * p * seasonCostFactor);
-        const activities = this.includeActivities ? Math.round(country.costs.activities * nights * p * seasonCostFactor) : 0;
-        const flight = this.includeFlight ? Math.round(this.getEstimatedFlightCost(country, p) * seasonFlightFactor) : 0;
+        const food = Math.round(country.costs.food[style] * nights * p * seasonCostFactor * foodOriginAdjustment);
+        const transport = Math.round(country.costs.transport * nights * p * seasonCostFactor * originLocalMultiplier);
+        const activities = Math.round(country.costs.activities * nights * p * seasonCostFactor * originLocalMultiplier);
+        const flight = Math.round(this.getEstimatedFlightCost(country, p) * seasonFlightFactor);
 
         const subtotal = accommodation + food + transport + activities + flight;
         const buffer = Math.round(subtotal * (this.bufferPercentage / 100));
@@ -1316,13 +1708,13 @@ export class Calculator implements OnInit {
     }
 
     calculate(): void {
-        if (!this.selectedCountry) return;
+        if (!this.selectedCountry || !this.selectedOriginCountryCode) return;
         this.isCalculating = true;
         this.result = null;
         this.cdr.markForCheck();
         setTimeout(() => {
             this.result = this.getEstimateForCountry(this.selectedCountry!);
-            this.updateTierData();
+            this.updateSelectedCountryComparison();
             this.isCalculating = false;
             this.cdr.markForCheck();
         }, 600);
@@ -1330,13 +1722,14 @@ export class Calculator implements OnInit {
 
     reset(): void {
         this.selectedCountryCode = '';
-        this.selectedOriginCountryCode = 'DE';
+        this.selectedOriginCountryCode = '';
         this.selectedCurrency = 'USD';
+        this.displayCurrencyOverridden = false;
         this.selectedCountry = null;
         this.result = null;
         this.activePreset = null;
         this.isCalculating = false;
-        this.tierData = null;
+        this.selectedCountryComparison = null;
         this.duration = 7;
         this.persons = 2;
         this.bufferPercentage = 15;
@@ -1344,8 +1737,9 @@ export class Calculator implements OnInit {
         this.travelStyle = 'midrange';
         this.includeFlight = true;
         this.includeActivities = true;
-        this.reverseBudget = 2500;
-        this.selectedTravelMonth = new Date().getMonth() + 1;
+        this.reverseBudgetMin = 1500;
+        this.reverseBudgetMax = 4000;
+        this.selectedTravelMonth = null;
         this.selectedContinentFilter = 'all';
         this.selectedSafetyFilter = 'all';
         this.selectedTourismFilter = 'all';
@@ -1375,6 +1769,19 @@ export class Calculator implements OnInit {
             return false;
         }
         return true;
+    }
+
+    private getFilteredCountryEstimateTotalsInDisplayCurrency(): number[] {
+        return this.countries
+            .filter(country => this.matchesCountryFilters(country))
+            .map(country => this.getEstimateForCountry(country).grandTotal * this.exchangeRates[this.selectedCurrency]);
+    }
+
+    private clampReverseBudget(value: number): number {
+        if (Number.isNaN(value)) {
+            return this.reverseBudgetFloor;
+        }
+        return Math.min(this.reverseBudgetCeiling, Math.max(this.reverseBudgetFloor, value));
     }
 
     private resolveCountryProfile(country: CountryCostData): CountryProfile {

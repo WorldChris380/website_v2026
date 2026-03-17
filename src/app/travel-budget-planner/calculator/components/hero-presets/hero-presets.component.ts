@@ -8,9 +8,8 @@ import { Component, Input } from '@angular/core';
     styleUrl: './hero-presets.component.scss',
     template: `
 <section class="hero-section">
-    <div class="hero-background"></div>
     <div class="hero-content">
-        <h1>&#9992;&#65039; {{ t('budgetCalculator') }}</h1>
+        <h1>{{ t('budgetCalculator') }}</h1>
         <p class="hero-subtitle">{{ t('calcSubtitle') }}</p>
     </div>
 </section>

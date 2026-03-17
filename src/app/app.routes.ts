@@ -12,8 +12,9 @@ import { ShopHome } from './shop/shop-home';
 import { Account } from './shop/account';
 import { ShopCartPage } from './shop/shop-cart-page';
 import { AdminHome } from './admin/home/admin-home';
-import { Calculator } from './travel-budget-planner/calculator/calculator';
-import { SearchByBudget } from './travel-budget-planner/search-by-budget/search-by-budget';
+import { TravelBudgetCalculatorComponent } from './travel-budget-planner/calculator/calculator';
+import { TravelFaqs } from './travel/travel-faqs/travel-faqs';
+import { TravelBudgetSummaryComponent } from './travel-budget-planner/summary/travel-budget-summary';
 
 export const routes: Routes = [
     { path: '', component: HomeAtf },
@@ -29,6 +30,9 @@ export const routes: Routes = [
     { path: 'career', component: Career },
     { path: 'legal', component: Legal },
     { path: 'admin', component: AdminHome },
-    { path: 'travel-budget-planner', component: Calculator },
-    { path: 'search-by-budget', component: SearchByBudget }
+    { path: 'travel-budget-calculator', component: TravelBudgetCalculatorComponent },
+    { path: 'travel-budget-summary', component: TravelBudgetSummaryComponent },
+    { path: 'travel-faqs', component: TravelFaqs },
+    { path: 'travel-budget-planner', redirectTo: 'travel-budget-calculator', pathMatch: 'full' },
+    { path: 'search-by-budget', redirectTo: 'travel-budget-calculator', pathMatch: 'full' }
 ];

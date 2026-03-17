@@ -220,6 +220,13 @@ $calc-surface-dark-soft: #13241b;
     }
 }
 
+/* Keep dropdown popup options readable in dark mode on Windows/native select UI. */
+:host-context(body.dark-mode) .select-wrapper select option,
+:host-context(body.dark-mode) .select-wrapper select optgroup {
+    background: #ffffff;
+    color: #111827;
+}
+
 .field-hint {
     font-size: .8rem;
     color: $calc-text-muted;

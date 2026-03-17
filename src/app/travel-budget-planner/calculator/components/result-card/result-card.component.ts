@@ -1,6 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import type { BudgetResult, CountryCostData, CountryInsight, DisplayCurrency } from '../../calculator';
+import type {
+    BudgetResult,
+    CountryCostData,
+    CountryInsight,
+    CountryPriceComparison,
+    DisplayCurrency,
+    SafetyLevel,
+    TourismDevelopment,
+} from '../../calculator';
 import type { Language } from '../../../../language.service';
 
 @Component({
@@ -9,121 +17,202 @@ import type { Language } from '../../../../language.service';
     imports: [CommonModule],
     styleUrl: './result-card.component.scss',
     template: `
-<div class="calc-result-card" *ngIf="result && selectedCountry && !isCalculating">
-    <h2 class="result-title">{{ t('calcResultTitle') }}</h2>
-    <p class="result-destination">
-        <ng-container *ngIf="selectedCountry" aria-hidden="true">
-            <img *ngIf="!isFlagBroken(selectedCountry.code)" class="result-flag-image"
-                [src]="getFlagApiUrl(selectedCountry.code)" [alt]="''" loading="lazy" decoding="async"
-                (error)="markFlagBroken(selectedCountry.code)">
-            <span *ngIf="isFlagBroken(selectedCountry.code)" class="result-flag-fallback">{{ getFallbackFlagEmoji(selectedCountry.code) }}</span>
-        </ng-container>
-        {{ getCountryLabel(selectedCountry) }} &middot;
-        {{ duration }}&nbsp;{{ currentLanguage === 'de' ? 'Tage' : 'days' }} &middot;
-        {{ persons }}&nbsp;{{ currentLanguage === 'de' ? 'Personen' : 'persons' }}
-    </p>
+<div class="calc-result-card" *ngIf="selectedCountry && !isCalculating">
+    <div class="country-info-box">
+        <div class="country-info-photo" [class.photo-loading]="!countryPhotoUrl">
+            <img *ngIf="countryPhotoUrl" [src]="countryPhotoUrl" [alt]="getCountryLabel(selectedCountry)" loading="eager" decoding="async">
+        </div>
+        <div class="country-info-header">
+            <span class="country-info-flag" aria-hidden="true">
+                <img *ngIf="!isFlagBroken(selectedCountry.code)" [src]="getFlagApiUrl(selectedCountry.code)" [alt]="''"
+                    loading="lazy" decoding="async" (error)="markFlagBroken(selectedCountry.code)">
+                <span *ngIf="isFlagBroken(selectedCountry.code)">{{ getFallbackFlagEmoji(selectedCountry.code) }}</span>
+            </span>
+            <h3 class="country-info-name">{{ getCountryLabel(selectedCountry) }}</h3>
+            <span class="country-info-continent">{{ getContinentLabel(selectedCountry.continent) }}</span>
+        </div>
 
-    <div class="result-meta">
-        <span class="result-chip">
-            {{ t('calcOriginCountry') }}:
-            <ng-container *ngIf="originCountry; else defaultOrigin" aria-hidden="true">
-                <img *ngIf="!isFlagBroken(originCountry.code)" class="chip-flag-image"
-                    [src]="getFlagApiUrl(originCountry.code)" [alt]="''" loading="lazy" decoding="async"
-                    (error)="markFlagBroken(originCountry.code)">
-                <span *ngIf="isFlagBroken(originCountry.code)" class="chip-flag-fallback">{{ getFallbackFlagEmoji(originCountry.code) }}</span>
-            </ng-container>
-            <ng-template #defaultOrigin>{{ currentLanguage === 'de' ? 'Europa' : 'Europe' }}</ng-template>
-            <ng-container *ngIf="originCountry"> {{ getCountryLabel(originCountry) }}</ng-container>
-        </span>
-        <span class="result-chip">{{ t('calcDisplayCurrency') }}: {{ displayCurrency }}</span>
-        <span class="result-chip">{{ t('calcBufferPercent') }}: {{ bufferPercentage }}%</span>
+        <ul class="country-info-list">
+            <li class="country-info-item">
+                <span class="country-info-icon">&#128737;</span>
+                <span class="country-info-label">{{ currentLanguage === 'de' ? 'Sicherheit' : 'Safety' }}</span>
+                <span class="country-info-value">{{ getSafetyLabel(getCountrySafety(selectedCountry)) }}</span>
+            </li>
+            <li class="country-info-item">
+                <span class="country-info-icon">&#127758;</span>
+                <span class="country-info-label">{{ currentLanguage === 'de' ? 'Tourismus' : 'Tourism' }}</span>
+                <span class="country-info-value">{{ getTourismLabel(getCountryTourismDevelopment(selectedCountry)) }}</span>
+            </li>
+            <li class="country-info-item">
+                <span class="country-info-icon">&#128181;</span>
+                <span class="country-info-label">{{ currentLanguage === 'de' ? 'Preisniveau' : 'Price level' }}</span>
+                <span class="country-info-value">{{ getPriceLevelLabel(selectedCountry) }}</span>
+            </li>
+            <li class="country-info-item">
+                <span class="country-info-icon">&#128197;</span>
+                <span class="country-info-label">{{ currentLanguage === 'de' ? 'Reisesaison' : 'Season' }}</span>
+                <span class="country-info-value">{{ getSeasonValue(selectedCountry) }}</span>
+            </li>
+            <li class="country-info-item" *ngIf="currentInsight">
+                <span class="country-info-icon">&#9728;</span>
+                <span class="country-info-label">{{ currentLanguage === 'de' ? 'Beste Reisezeit' : 'Best time' }}</span>
+                <span class="country-info-value">{{ currentLanguage === 'de' ? currentInsight.bestTimeDE : currentInsight.bestTime }}</span>
+            </li>
+        </ul>
     </div>
 
-    <div class="result-summary">
-        <div class="summary-box primary">
-            <span class="summary-label">{{ t('calcTotal') }}</span>
-            <span class="summary-value">{{ formatCurrency(result.grandTotal) }}</span>
+    <section class="country-compare-box" *ngIf="selectedCountryComparison">
+        <div class="compare-head">
+            <h3>{{ currentLanguage === 'de' ? 'Preisvergleich Wunschland' : 'Desired destination price comparison' }}</h3>
+            <p class="compare-subtitle">{{ getCountryLabel(selectedCountry) }}</p>
         </div>
-        <div class="summary-box">
-            <span class="summary-label">{{ t('calcPerPerson') }}</span>
-            <span class="summary-value">{{ formatCurrency(result.totalPerPerson) }}</span>
-        </div>
-        <div class="summary-box">
-            <span class="summary-label">{{ t('calcPerDay') }}</span>
-            <span class="summary-value">{{ formatCurrency(result.dailyPerPerson) }}</span>
-        </div>
-    </div>
 
-    <div class="breakdown">
-        <div class="breakdown-item">
-            <div class="breakdown-label">
-                <span>{{ t('calcAccom') }}</span>
-                <span>{{ formatCurrency(result.accommodation) }}</span>
+        <div class="compare-total-card" [class.expanded]="compareExpanded">
+            <div class="compare-total-header">
+                <div>
+                    <p class="compare-total-label">{{ currentLanguage === 'de' ? 'Gesamtkosten Wunschland' : 'Selected destination total' }}</p>
+                    <p class="compare-total-value">{{ formatCurrency(selectedCountryComparison.selectedTotal) }}</p>
+                </div>
+                <button *ngIf="result" class="compare-toggle-btn" (click)="compareExpanded = !compareExpanded"
+                    [attr.aria-expanded]="compareExpanded"
+                    [title]="compareExpanded ? (currentLanguage === 'de' ? 'Weniger anzeigen' : 'Show less') : (currentLanguage === 'de' ? 'Berechnung anzeigen' : 'Show calculation')">
+                    {{ compareExpanded ? '&#9650;' : '&#9660;' }}
+                </button>
             </div>
-            <div class="breakdown-bar">
-                <div class="bar-fill accom" [style.width]="getBarWidth(result.accommodation, result.subtotal)"></div>
-            </div>
-        </div>
-        <div class="breakdown-item">
-            <div class="breakdown-label">
-                <span>{{ t('calcFood') }}</span>
-                <span>{{ formatCurrency(result.food) }}</span>
-            </div>
-            <div class="breakdown-bar">
-                <div class="bar-fill food" [style.width]="getBarWidth(result.food, result.subtotal)"></div>
-            </div>
-        </div>
-        <div class="breakdown-item">
-            <div class="breakdown-label">
-                <span>{{ t('calcTransport') }}</span>
-                <span>{{ formatCurrency(result.transport) }}</span>
-            </div>
-            <div class="breakdown-bar">
-                <div class="bar-fill transport" [style.width]="getBarWidth(result.transport, result.subtotal)"></div>
-            </div>
-        </div>
-        <div class="breakdown-item" *ngIf="result.activities">
-            <div class="breakdown-label">
-                <span>{{ t('calcActivities') }}</span>
-                <span>{{ formatCurrency(result.activities) }}</span>
-            </div>
-            <div class="breakdown-bar">
-                <div class="bar-fill activities" [style.width]="getBarWidth(result.activities, result.subtotal)"></div>
-            </div>
-        </div>
-        <div class="breakdown-item" *ngIf="result.flight">
-            <div class="breakdown-label">
-                <span>{{ t('calcFlight') }}</span>
-                <span>{{ formatCurrency(result.flight) }}</span>
-            </div>
-            <div class="breakdown-bar">
-                <div class="bar-fill flight" [style.width]="getBarWidth(result.flight, result.subtotal)"></div>
-            </div>
-        </div>
-        <div class="breakdown-item buffer">
-            <div class="breakdown-label">
-                <span>{{ t('calcBuffer') }} ({{ bufferPercentage }}%)</span>
-                <span>+{{ formatCurrency(result.buffer) }}</span>
+            <div class="compare-breakdown" *ngIf="compareExpanded && result">
+                <p class="compare-breakdown-title">{{ currentLanguage === 'de' ? 'So setzt sich der Betrag zusammen:' : 'How this total is calculated:' }}</p>
+                <div class="compare-breakdown-row">
+                    <span>{{ currentLanguage === 'de' ? 'Unterkunft' : 'Accommodation' }} <small>({{ duration }}&nbsp;{{ currentLanguage === 'de' ? 'N&auml;chte' : 'nights' }},&nbsp;{{ persons }}&nbsp;{{ currentLanguage === 'de' ? 'Pers.' : 'pp' }})</small></span>
+                    <span>{{ formatCurrency(result.accommodation) }}</span>
+                </div>
+                <div class="compare-breakdown-row">
+                    <span>{{ currentLanguage === 'de' ? 'Essen &amp; Trinken' : 'Food &amp; Drinks' }}</span>
+                    <span>{{ formatCurrency(result.food) }}</span>
+                </div>
+                <div class="compare-breakdown-row">
+                    <span>{{ currentLanguage === 'de' ? 'Transport vor Ort' : 'Local transport' }}</span>
+                    <span>{{ formatCurrency(result.transport) }}</span>
+                </div>
+                <div class="compare-breakdown-row" *ngIf="result.activities">
+                    <span>{{ currentLanguage === 'de' ? 'Aktivit&auml;ten' : 'Activities' }}</span>
+                    <span>{{ formatCurrency(result.activities) }}</span>
+                </div>
+                <div class="compare-breakdown-row" *ngIf="result.flight">
+                    <span>{{ currentLanguage === 'de' ? 'Hin- &amp; R&uuml;ckflug' : 'Return flight' }}</span>
+                    <span>{{ formatCurrency(result.flight) }}</span>
+                </div>
+                <div class="compare-breakdown-row compare-breakdown-sub">
+                    <span>{{ currentLanguage === 'de' ? 'Zwischensumme' : 'Subtotal' }}</span>
+                    <span>{{ formatCurrency(result.subtotal) }}</span>
+                </div>
+                <div class="compare-breakdown-row">
+                    <span>{{ currentLanguage === 'de' ? 'Puffer (' + bufferPercentage + '%)' : 'Buffer (' + bufferPercentage + '%)' }}</span>
+                    <span>+{{ formatCurrency(result.buffer) }}</span>
+                </div>
+                <div class="compare-breakdown-row compare-breakdown-total">
+                    <span>{{ currentLanguage === 'de' ? 'Gesamtbetrag' : 'Grand total' }}</span>
+                    <span>{{ formatCurrency(result.grandTotal) }}</span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="smart-insights">
-        <div class="smart-card">
-            <span class="smart-label">{{ t('calcLargestCostDriver') }}</span>
-            <strong class="smart-value">{{ getLargestCostDriverLabel() }}</strong>
-        </div>
-        <div class="smart-card">
-            <span class="smart-label">{{ t('calcCostLevel') }}</span>
-            <strong class="smart-value">{{ getCostLevelLabel() }}</strong>
-        </div>
-        <div class="smart-card">
-            <span class="smart-label">{{ t('calcLocalCurrency') }}</span>
-            <strong class="smart-value">{{ currentInsight?.currency ?? 'USD' }}</strong>
-        </div>
-    </div>
+        <div class="compare-stats-grid">
+            <div class="compare-stat">
+                <span class="compare-stat-label">{{ currentLanguage === 'de' ? 'Kostenrang' : 'Cost rank' }}</span>
+                <strong class="compare-stat-value">#{{ selectedCountryComparison.rank }} {{ currentLanguage === 'de' ? 'von' : 'of' }} {{ selectedCountryComparison.totalCountries }}</strong>
+            </div>
 
-    <div class="affiliate-section">
+            <div class="compare-stat">
+                <span class="compare-stat-label">{{ currentLanguage === 'de' ? 'Guenstiger' : 'Cheaper' }}</span>
+                <strong class="compare-stat-value">{{ selectedCountryComparison.cheaperCount }}</strong>
+            </div>
+
+            <div class="compare-stat">
+                <span class="compare-stat-label">{{ currentLanguage === 'de' ? 'Teurer' : 'More expensive' }}</span>
+                <strong class="compare-stat-value">{{ selectedCountryComparison.expensiveCount }}</strong>
+            </div>
+        </div>
+
+        <div class="compare-rank-track" aria-hidden="true">
+            <div class="compare-rank-fill"
+                [class.mid]="isMidPrice(selectedCountryComparison)"
+                [class.expensive]="isExpensivePrice(selectedCountryComparison)"
+                [style.width.%]="getCompareRankPercent(selectedCountryComparison)"></div>
+        </div>
+    </section>
+
+    <ng-container *ngIf="result">
+        <h2 class="result-title">{{ t('calcResultTitle') }}</h2>
+        <div class="result-summary">
+            <div class="summary-box primary">
+                <span class="summary-label">{{ t('calcTotal') }}</span>
+                <span class="summary-value">{{ formatCurrency(result.grandTotal) }}</span>
+            </div>
+            <div class="summary-box">
+                <span class="summary-label">{{ t('calcPerPerson') }}</span>
+                <span class="summary-value">{{ formatCurrency(result.totalPerPerson) }}</span>
+            </div>
+            <div class="summary-box">
+                <span class="summary-label">{{ t('calcPerDay') }}</span>
+                <span class="summary-value">{{ formatCurrency(result.dailyPerPerson) }}</span>
+            </div>
+        </div>
+
+        <div class="breakdown">
+            <div class="breakdown-item">
+                <div class="breakdown-label">
+                    <span>{{ t('calcAccom') }}</span>
+                    <span>{{ formatCurrency(result.accommodation) }}</span>
+                </div>
+                <div class="breakdown-bar">
+                    <div class="bar-fill accom" [style.width]="getBarWidth(result.accommodation, result.subtotal)"></div>
+                </div>
+            </div>
+            <div class="breakdown-item">
+                <div class="breakdown-label">
+                    <span>{{ t('calcFood') }}</span>
+                    <span>{{ formatCurrency(result.food) }}</span>
+                </div>
+                <div class="breakdown-bar">
+                    <div class="bar-fill food" [style.width]="getBarWidth(result.food, result.subtotal)"></div>
+                </div>
+            </div>
+            <div class="breakdown-item">
+                <div class="breakdown-label">
+                    <span>{{ t('calcTransport') }}</span>
+                    <span>{{ formatCurrency(result.transport) }}</span>
+                </div>
+                <div class="breakdown-bar">
+                    <div class="bar-fill transport" [style.width]="getBarWidth(result.transport, result.subtotal)"></div>
+                </div>
+            </div>
+            <div class="breakdown-item" *ngIf="result.activities">
+                <div class="breakdown-label">
+                    <span>{{ t('calcActivities') }}</span>
+                    <span>{{ formatCurrency(result.activities) }}</span>
+                </div>
+                <div class="breakdown-bar">
+                    <div class="bar-fill activities" [style.width]="getBarWidth(result.activities, result.subtotal)"></div>
+                </div>
+            </div>
+            <div class="breakdown-item" *ngIf="result.flight">
+                <div class="breakdown-label">
+                    <span>{{ t('calcFlight') }}</span>
+                    <span>{{ formatCurrency(result.flight) }}</span>
+                </div>
+                <div class="breakdown-bar">
+                    <div class="bar-fill flight" [style.width]="getBarWidth(result.flight, result.subtotal)"></div>
+                </div>
+            </div>
+            <div class="breakdown-item buffer">
+                <div class="breakdown-label">
+                    <span>{{ t('calcBuffer') }} ({{ bufferPercentage }}%)</span>
+                    <span>+{{ formatCurrency(result.buffer) }}</span>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <div class="affiliate-inner" *ngIf="result">
         <h3 class="affiliate-title">{{ t('calcBookNow') }}</h3>
         <p class="affiliate-note">{{ t('calcAffiliateDisclosure') }}</p>
         <div class="affiliate-grid">
@@ -148,12 +237,6 @@ import type { Language } from '../../../../language.service';
                 <span class="aff-brand">Airbnb</span>
             </button>
         </div>
-
-        <div class="newsletter-cta">
-            <h4>{{ t('calcPriceAlertTitle') }}</h4>
-            <p>{{ t('calcPriceAlertText') }}</p>
-            <button class="btn-price-alert" (click)="openLink(selectedCountry.skyscannerUrl)">{{ t('calcPriceAlertButton') }}</button>
-        </div>
     </div>
 </div>
 `
@@ -169,34 +252,25 @@ export class ResultCardComponent {
     @Input({ required: true }) displayCurrency: DisplayCurrency = 'USD';
     @Input({ required: true }) bufferPercentage = 15;
     @Input({ required: true }) isCalculating = false;
+    @Input({ required: true }) selectedCountryComparison: CountryPriceComparison | null = null;
 
     @Input({ required: true }) t!: (key: string) => string;
     @Input({ required: true }) formatCurrency!: (amount: number) => string;
     @Input({ required: true }) getCountryLabel!: (country: CountryCostData) => string;
     @Input({ required: true }) getBarWidth!: (value: number, total: number) => string;
     @Input({ required: true }) openLink!: (url: string) => void;
+    @Input({ required: true }) getCompareRankPercent!: (comparison: CountryPriceComparison | null) => number;
+    @Input({ required: true }) getContinentLabel!: (continent: string) => string;
+    @Input({ required: true }) getCountryCurrency!: (country: CountryCostData) => string;
+    @Input({ required: true }) getCountrySafety!: (country: CountryCostData) => SafetyLevel;
+    @Input({ required: true }) getCountryTourismDevelopment!: (country: CountryCostData) => TourismDevelopment;
+    @Input({ required: true }) getSafetyLabel!: (level: SafetyLevel) => string;
+    @Input({ required: true }) getTourismLabel!: (level: TourismDevelopment) => string;
+    @Input({ required: true }) getPriceLevelLabel!: (country: CountryCostData) => string;
+    @Input({ required: true }) getDerivedSeasonLabelForCountry!: (country: CountryCostData | null) => string;
+    @Input() countryPhotoUrl: string = '';
+    compareExpanded = false;
     private readonly brokenFlagCodes = new Set<string>();
-
-    getLargestCostDriverLabel(): string {
-        if (!this.result) return '';
-
-        const categories = [
-            { label: this.t('calcAccom'), value: this.result.accommodation },
-            { label: this.t('calcFood'), value: this.result.food },
-            { label: this.t('calcTransport'), value: this.result.transport },
-            { label: this.t('calcActivities'), value: this.result.activities },
-            { label: this.t('calcFlight'), value: this.result.flight },
-        ];
-
-        return categories.sort((left, right) => right.value - left.value)[0]?.label ?? '';
-    }
-
-    getCostLevelLabel(): string {
-        if (!this.result) return '';
-        if (this.result.dailyPerPerson <= 60) return this.t('calcCostLevelValue');
-        if (this.result.dailyPerPerson <= 180) return this.t('calcCostLevelBalanced');
-        return this.t('calcCostLevelPremium');
-    }
 
     getFlagApiUrl(code: string): string {
         const normalized = code?.toLowerCase();
@@ -224,5 +298,35 @@ export class ResultCardComponent {
         if (!code || code.length !== 2) return '';
         const upper = code.toUpperCase();
         return String.fromCodePoint(127397 + upper.charCodeAt(0), 127397 + upper.charCodeAt(1));
+    }
+
+    isExpensivePrice(comparison: CountryPriceComparison | null): boolean {
+        if (!comparison || comparison.totalCountries <= 0) {
+            return false;
+        }
+        const ratio = comparison.rank / comparison.totalCountries;
+        return ratio > 0.66;
+    }
+
+    isMidPrice(comparison: CountryPriceComparison | null): boolean {
+        if (!comparison || comparison.totalCountries <= 0) {
+            return false;
+        }
+        const ratio = comparison.rank / comparison.totalCountries;
+        return ratio > 0.33 && ratio <= 0.66;
+    }
+
+    getSeasonValue(country: CountryCostData | null): string {
+        const label = this.getDerivedSeasonLabelForCountry(country);
+        const normalized = label.toLowerCase();
+        const isLowSeason = normalized.includes('low season') || normalized.includes('nebensaison');
+
+        if (!isLowSeason) {
+            return label;
+        }
+
+        return this.currentLanguage === 'de'
+            ? `${label} (immer guenstiger)`
+            : `${label} (always cheaper)`;
     }
 }
