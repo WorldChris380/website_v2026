@@ -68,10 +68,6 @@
                                     <span class="link-title">{{ getTranslation('airlineSimCeoTools') }}</span>
                                 </a>
                             </div>
-                            <a href="/" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('msfsComparison') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescMsfsComparison') }}</span>
-                            </a>
                         </div>
                     </div>
 
@@ -89,6 +85,10 @@
                             <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('travelGallery') }}</span>
                                 <span class="link-description">{{ getTranslation('menuDescTravelPhotography') }}</span>
+                            </a>
+                            <a [routerLink]="['/about-my-photography']" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('aboutMyPhotography') }}</span>
+                                <span class="link-description">{{ getTranslation('menuDescAboutPhotography') }}</span>
                             </a>
                             <a target="_blank"
                                 href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"

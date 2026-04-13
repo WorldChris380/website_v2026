@@ -73,6 +73,25 @@
     padding: 0 var(--space-4);
 }
 
+@media(min-width: 769px) {
+    #header-content-limitation {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    #header-logo-div {
+        justify-self: start;
+    }
+
+    #header-navigation-div {
+        justify-self: center;
+    }
+
+    #header-3rd-row-div {
+        justify-self: end;
+    }
+}
+
 #header-logo-div {
     display: flex;
     align-items: center;

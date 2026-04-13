@@ -8,7 +8,6 @@ import { LanguageService, Language } from '../language.service';
 import { MetaService } from '../services/meta.service';
 import { ShopService } from '../shop/shop.service';
 import { ShopCart } from '../shop/shop-cart';
-import { Counters } from '../homepage/counters/counters';
 
 interface GalleryImage {
     id: number;
@@ -48,7 +47,7 @@ interface ImageManifest {
 @Component({
     selector: 'app-gallery',
     standalone: true,
-    imports: [CommonModule, FormsModule, ShopCart, Counters],
+    imports: [CommonModule, FormsModule, ShopCart],
     templateUrl: './gallery.html',
     styleUrls: ['./gallery.scss'],
 })
@@ -531,4 +530,3 @@ export class Gallery implements OnInit {
         return image.title;
     }
 }
-

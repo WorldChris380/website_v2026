@@ -3,6 +3,7 @@ import { AviationSpotterHotels } from './travel/aviation-spotter-hotels/aviation
 import { Gallery } from './gallery/gallery';
 import { HomeAtf } from './homepage/home-atf/home-atf';
 import { MyVisitedCountries } from './photography/my-visited-countries/my-visited-countries';
+import { AboutMyPhotography } from './photography/about-my-photography/about-my-photography';
 import { Career } from './career/career/career';
 import { Legal } from './legal/legal';
 import { AirlineSim } from './aviation/airlineSim/airlineSim';
@@ -27,6 +28,7 @@ export const routes: Routes = [
     { path: 'airlinesim-ceo-tools', component: AirlineSim },
     { path: 'air-germany', component: AirGermany },
     { path: 'my-visited-countries', component: MyVisitedCountries },
+    { path: 'about-my-photography', component: AboutMyPhotography },
     { path: 'career', component: Career },
     { path: 'legal', component: Legal },
     { path: 'admin', component: AdminHome },

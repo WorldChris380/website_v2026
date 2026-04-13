@@ -1,0 +1,318 @@
+.about-photography {
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+
+    @media (min-width: 1920px) {
+        padding: 3rem 2rem;
+    }
+
+    @media (max-width: 768px) {
+        padding: 1.5rem 1rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 1rem 0.5rem;
+    }
+}
+
+.photography-header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    h1 {
+        font-size: var(--font-size-xxl);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--cb-dark-grey);
+
+        :global(body.dark-mode) & {
+            color: var(--cb-light-grey);
+        }
+
+        @media (max-width: 768px) {
+            font-size: var(--font-size-xl);
+        }
+
+        @media (max-width: 480px) {
+            font-size: var(--font-size-lg);
+        }
+    }
+
+    p {
+        font-size: var(--font-size-md);
+        color: var(--cb-dark-grey);
+        opacity: 0.8;
+        max-width: 600px;
+        margin: 0 auto;
+
+        :global(body.dark-mode) & {
+            color: var(--cb-light-grey);
+        }
+
+        @media (max-width: 480px) {
+            font-size: var(--font-size-sm);
+        }
+    }
+}
+
+.equipment-section {
+    margin-bottom: 4rem;
+
+    h2 {
+        font-size: var(--font-size-xl);
+        font-weight: 700;
+        margin-bottom: 2rem;
+        text-align: center;
+        color: var(--cb-dark-grey);
+
+        :global(body.dark-mode) & {
+            color: var(--cb-light-grey);
+        }
+
+        @media (max-width: 480px) {
+            font-size: var(--font-size-lg);
+            margin-bottom: 1.5rem;
+        }
+    }
+}
+
+.equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+        gap: 1rem;
+    }
+}
+
+.equipment-card {
+    background: var(--photography-orange-bright);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+    transition: transform var(--dur-medium) var(--ease-standard),
+        box-shadow var(--dur-medium) var(--ease-standard),
+        background-color var(--dur-medium) var(--ease-standard),
+        color var(--dur-medium) var(--ease-standard);
+
+    :global(body:not(.dark-mode)) & {
+        background: var(--photography-orange) !important;
+    }
+
+    :global(body.dark-mode) & {
+        background: #ffb300 !important;
+        color: #000;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-strong);
+
+        :global(body.dark-mode) & {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 1.2rem;
+    }
+}
+
+.equipment-header {
+    margin-bottom: 1rem;
+
+    h3 {
+        font-size: var(--font-size-lg);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--cb-dark-grey);
+
+        :global(body.dark-mode) & {
+            color: #000;
+        }
+
+        @media (max-width: 480px) {
+            font-size: var(--font-size-md);
+        }
+    }
+}
+
+.equipment-model {
+    display: block;
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--cb-black-ish);
+    margin-bottom: 0.5rem;
+
+    :global(body.dark-mode) & {
+        color: var(--cb-white-ish);
+    }
+
+    @media (max-width: 480px) {
+        font-size: var(--font-size-sm);
+    }
+}
+
+.equipment-type {
+    font-size: var(--font-size-sm);
+    color: var(--cb-dark-grey);
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+
+    :global(body.dark-mode) & {
+        color: #000;
+        opacity: 1;
+    }
+}
+
+.equipment-specs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+        font-size: var(--font-size-sm);
+        color: var(--cb-dark-grey);
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+
+        :global(body.dark-mode) & {
+            color: #000;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 480px) {
+            font-size: var(--font-size-xs);
+            margin-bottom: 0.6rem;
+        }
+    }
+}
+
+:global(body.dark-mode) .equipment-specs li[itemprop="features"] {
+    color: #000 !important;
+}
+
+.spec-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: var(--photography-orange);
+    border-radius: 50%;
+    color: #fff;
+    font-weight: bold;
+    margin-right: 0.8rem;
+    flex-shrink: 0;
+    font-size: var(--font-size-xs);
+    transition: background-color var(--dur-fast) var(--ease-standard),
+        color var(--dur-fast) var(--ease-standard);
+
+    :global(body.dark-mode) & {
+        background: #000;
+        color: var(--photography-orange);
+    }
+
+    @media (max-width: 480px) {
+        width: 18px;
+        height: 18px;
+        margin-right: 0.6rem;
+    }
+}
+
+.statistics-section {
+    background: var(--photography-orange-bright);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    transition: transform var(--dur-medium) var(--ease-standard),
+        box-shadow var(--dur-medium) var(--ease-standard),
+        background-color var(--dur-medium) var(--ease-standard),
+        color var(--dur-medium) var(--ease-standard);
+
+    :global(body:not(.dark-mode)) & {
+        background: var(--photography-orange-bright) !important;
+    }
+
+    :global(body.dark-mode) & {
+        background: #ffb300 !important;
+        color: #000;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-strong);
+
+        :global(body.dark-mode) & {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+        padding: 1rem;
+        border-radius: var(--radius-md);
+    }
+
+    h2 {
+        font-size: var(--font-size-xl);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--photography-orange);
+
+        :global(body.dark-mode) & {
+            color: var(--photography-orange-bright);
+        }
+
+        @media (max-width: 480px) {
+            font-size: var(--font-size-lg);
+        }
+    }
+
+    >p {
+        font-size: var(--font-size-md);
+        color: var(--photography-orange);
+        opacity: 0.7;
+        margin-bottom: 2rem;
+
+        :global(body.dark-mode) & {
+            color: #000;
+        }
+
+        @media (max-width: 480px) {
+            font-size: var(--font-size-sm);
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+:global(body.dark-mode) .about-photography .equipment-card,
+:global(body.dark-mode) .about-photography .statistics-section {
+    background: #ffb300 !important;
+}
+
+:host-context(.dark-mode) .equipment-card,
+:host-context(.dark-mode) .statistics-section {
+    background: #000 !important;
+}

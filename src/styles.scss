@@ -9,6 +9,7 @@ $aviation-blue: #2171a6ff;
 $travel-green: #659968ff;
 $photography-orange: #ffb300ff;
 $warning-red: #fa003eff;
+$cb-black: $career-black;
 
 // Helle Variationen
 $career-black-bright: #cbcbd2ff;
@@ -109,7 +110,7 @@ body.dark-mode {
     --shop-blue: #{$shop-blue-bright};
     --aviation-blue: #{$aviation-blue-bright};
     --travel-green: #{$travel-green-bright};
-    --photography-orange: #{$photography-orange-bright};
+    --photography-orange: #{$photography-orange};
 
     // Legacy-Kompatibilität
     --cb-dark-grey: #{$cb-white-ish};
@@ -389,7 +390,7 @@ body.dark-mode #mobileBottomMenu {
 
 // Dark mode for counters
 body.dark-mode .counter-card {
-    background: $shop-blue;
+    background: $cb-career-grey;
     color: #fff;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
