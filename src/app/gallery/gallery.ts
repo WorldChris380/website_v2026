@@ -2,7 +2,6 @@ import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementR
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { ManifestService } from './manifest.service';
 import { LanguageService, Language } from '../language.service';
 import { MetaService } from '../services/meta.service';
@@ -21,27 +20,6 @@ interface GalleryImage {
     fileName: string;
     fileNameDE?: string;
     path: string;
-}
-
-interface ImageManifest {
-    generated: string;
-    statistics: {
-        totalImages: number;
-        aviationPhotos: number;
-        travelPhotos: number;
-        continents: string[];
-        countries: string[];
-    };
-    images: Array<{
-        url: string;
-        title: string;
-        titleDE?: string;
-        category: string;
-        continent: string;
-        country: string;
-        fileName: string;
-        path: string;
-    }>;
 }
 
 @Component({
@@ -86,7 +64,6 @@ export class Gallery implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private http: HttpClient,
         private manifestService: ManifestService,
         private languageService: LanguageService,
         private cdr: ChangeDetectorRef,
@@ -397,8 +374,9 @@ export class Gallery implements OnInit {
     }
 
     // Touch Event Handlers for Swipe Gestures
-    onTouchStart(event: TouchEvent) {
-        this.touchStartX = event.changedTouches[0].screenX;
+    onTouchStart(event: Event) {
+        const touchEvent = event as TouchEvent;
+        this.touchStartX = touchEvent.changedTouches[0].screenX;
     }
 
     onTouchEnd(event: TouchEvent) {

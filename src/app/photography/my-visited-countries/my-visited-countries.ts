@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MetaService } from '../../services/meta.service';
+import { ManifestService } from '../../gallery/manifest.service';
 
 interface Continent {
     name: string;
@@ -12,7 +12,7 @@ interface Continent {
 @Component({
     selector: 'app-my-visited-countries',
     standalone: true,
-    imports: [CommonModule, RouterModule, HttpClientModule],
+    imports: [CommonModule, RouterModule],
     templateUrl: './my-visited-countries.html',
     styleUrl: './my-visited-countries.scss'
 })
@@ -115,7 +115,7 @@ export class MyVisitedCountries implements OnInit {
 
     constructor(
         private router: Router,
-        private http: HttpClient,
+        private manifestService: ManifestService,
         private cdr: ChangeDetectorRef,
         private metaService: MetaService
     ) { }
@@ -143,8 +143,8 @@ export class MyVisitedCountries implements OnInit {
             }
         );
 
-        this.http.get<{ images: Array<{ country: string }>, statistics?: { countries?: string[] } }>('assets/img/photography/images-manifest.json').subscribe({
-            next: (manifest) => {
+        this.manifestService.loadManifest()
+            .then((manifest) => {
                 (manifest.images || []).forEach(img => {
                     if (img.country) {
                         const normalized = img.country.trim().toLowerCase();
@@ -175,14 +175,13 @@ export class MyVisitedCountries implements OnInit {
                 this.fallbackAvailable.forEach(c => this.availableCountries.add(c));
                 this.availabilityReady = true;
                 this.cdr.detectChanges();
-            },
-            error: () => {
-                // If manifest is missing, fall back to known list from last generation
+            })
+            .catch(() => {
+                // If manifest loading fails, fall back to known list
                 this.fallbackAvailable.forEach(c => this.availableCountries.add(c));
                 this.availabilityReady = true;
                 this.cdr.detectChanges();
-            }
-        });
+            });
     }
 
     get totalCountries(): number {

@@ -104,7 +104,7 @@
     <div *ngIf="isLightboxOpen" class="lightbox-overlay" (click)="closeLightbox()">
         <div class="lightbox-container" (click)="$event.stopPropagation()">
             <!-- Main Image -->
-            <div class="lightbox-main" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+            <div class="lightbox-main" (touchstart.passive)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
                 <!-- Close Button -->
                 <div class="lightbox-image-wrapper">
                     <!-- Close Button -->

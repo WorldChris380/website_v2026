@@ -677,8 +677,9 @@ app-gallery {
 }
 
 .lightbox-image {
-    width: 100vw;
-    max-width: 100vw;
+    width: 1920px;
+    min-width: 1920px;
+    max-width: 1920px;
     max-height: calc(100vh - 300px);
     height: auto;
     object-fit: cover;
@@ -688,11 +689,17 @@ app-gallery {
     box-shadow: var(--shadow-soft);
 
     @media (max-width: 768px) {
+        width: 100vw;
+        min-width: 0;
+        max-width: 100vw;
         max-height: calc(100vh - 280px);
         border-radius: var(--radius-sm);
     }
 
     @media (max-width: 480px) {
+        width: 100vw;
+        min-width: 0;
+        max-width: 100vw;
         max-height: calc(100vh - 260px);
         border-radius: var(--radius-sm);
     }

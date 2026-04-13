@@ -8,6 +8,10 @@ import { MetaService } from '../../services/meta.service';
     selector: 'app-career',
     standalone: true,
     imports: [CommonModule],
+    host: {
+        '(touchstart.passive)': 'onTouchStart($event)',
+        '(touchend)': 'onTouchEnd($event)'
+    },
     templateUrl: './career.html',
     styleUrl: './career.scss'
 })
@@ -47,15 +51,15 @@ export class Career implements OnInit, OnDestroy {
         }
     }
 
-    @HostListener('touchstart', ['$event'])
-    onTouchStart(event: TouchEvent): void {
-        this.touchStartY = event.touches[0].clientY;
+    onTouchStart(event: Event): void {
+        const touchEvent = event as TouchEvent;
+        this.touchStartY = touchEvent.touches[0].clientY;
     }
 
-    @HostListener('touchend', ['$event'])
-    onTouchEnd(event: TouchEvent): void {
+    onTouchEnd(event: Event): void {
+        const touchEvent = event as TouchEvent;
         const el = this.elementRef.nativeElement;
-        const delta = this.touchStartY - event.changedTouches[0].clientY;
+        const delta = this.touchStartY - touchEvent.changedTouches[0].clientY;
         if (Math.abs(delta) > 60) {
             const direction = delta > 0 ? 1 : -1;
             const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;

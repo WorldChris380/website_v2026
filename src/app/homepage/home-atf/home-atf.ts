@@ -176,9 +176,10 @@ export class HomeAtf implements OnInit, AfterViewInit, OnDestroy {
     this.resetSlideShow();
   }
 
-  onTouchStart(event: TouchEvent): void {
-    if (event.touches.length !== 1) return;
-    const touch = event.touches[0];
+  onTouchStart(event: Event): void {
+    const touchEvent = event as TouchEvent;
+    if (touchEvent.touches.length !== 1) return;
+    const touch = touchEvent.touches[0];
     this.touchStartX = touch.clientX;
     this.touchStartY = touch.clientY;
     this.touchEndX = touch.clientX;
