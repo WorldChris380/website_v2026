@@ -1,18 +1,19 @@
 @use '../../styles.scss' as *;
+@use 'sass:color';
 
 .cart-page {
     min-height: 100vh;
-    padding: calc(var(--space-8) + var(--header-offset)) var(--space-4) var(--space-7);
+    padding: calc(var(--space-4) + var(--header-offset)) var(--space-4) var(--space-7);
     display: flex;
     justify-content: center;
     background: #f8fafc;
 
     @media (max-width: 768px) {
-        padding: calc(var(--space-7) + var(--header-offset)) var(--space-4) var(--space-6);
+        padding: calc(var(--space-3) + var(--header-offset)) var(--space-4) var(--space-6);
     }
 
     @media (max-width: 480px) {
-        padding: calc(var(--space-6) + var(--header-offset)) var(--space-3) var(--space-5);
+        padding: calc(var(--space-2) + var(--header-offset)) var(--space-3) var(--space-5);
     }
 }
 
@@ -59,6 +60,27 @@
         margin: 0;
         color: rgba(255, 255, 255, 0.9);
         font-size: var(--font-size-md);
+    }
+
+    .hero-benefits {
+        margin-top: var(--space-4);
+        display: flex;
+        gap: var(--space-2);
+        flex-wrap: wrap;
+    }
+
+    .benefit-pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
     }
 }
 
@@ -143,6 +165,33 @@
         margin: 0;
         color: #64748b;
         font-size: var(--font-size-sm);
+    }
+
+    .item-license-toggle {
+        margin-top: var(--space-1);
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+        width: fit-content;
+        min-height: 32px;
+        padding: 0 var(--space-2);
+        border-radius: var(--radius-sm);
+        border: 1px solid rgba($shop-blue, 0.2);
+        background: rgba($shop-blue, 0.05);
+
+        input {
+            width: 15px;
+            height: 15px;
+            accent-color: $shop-blue-dark;
+            cursor: pointer;
+        }
+
+        span {
+            color: #1e293b;
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            line-height: 1.3;
+        }
     }
 
     .item-controls {
@@ -272,11 +321,166 @@
         }
     }
 
+    .checkout-story {
+        display: grid;
+        gap: var(--space-2);
+        margin-bottom: var(--space-4);
+        padding: var(--space-3);
+        border: 1px solid rgba($shop-blue, 0.16);
+        border-radius: var(--radius-sm);
+        background: rgba($shop-blue, 0.04);
+    }
+
+    .checkout-story-title {
+        margin: 0 0 2px;
+        color: #0f172a;
+        font-size: var(--font-size-xs);
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .checkout-step {
+        display: grid;
+        grid-template-columns: 32px 1fr;
+        gap: var(--space-2);
+        align-items: start;
+
+        strong,
+        p {
+            margin: 0;
+        }
+
+        strong {
+            color: #0f172a;
+            font-size: var(--font-size-sm);
+        }
+
+        p {
+            color: #475569;
+            font-size: var(--font-size-xs);
+            line-height: 1.45;
+        }
+
+        &.is-locked {
+            opacity: 0.72;
+        }
+
+        &.is-complete .checkout-step-number {
+            background: linear-gradient(135deg, #0f766e, #14b8a6);
+            color: #ffffff;
+            border-color: transparent;
+        }
+    }
+
+    .checkout-step-number {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid rgba($shop-blue, 0.24);
+        background: #ffffff;
+        color: $shop-blue-dark;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .certificate-owner-account {
+        display: grid;
+        gap: 4px;
+        margin-top: 8px;
+        padding: var(--space-3);
+        border: 1px solid rgba($shop-blue, 0.22);
+        border-radius: var(--radius-sm);
+        background: rgba($shop-blue, 0.05);
+
+        span {
+            font-size: 12px;
+            color: #64748b;
+            letter-spacing: 0.02em;
+        }
+
+        strong {
+            color: #0f172a;
+            font-size: var(--font-size-sm);
+        }
+    }
+
+    .logout-link {
+        justify-self: start;
+        border: 1px solid rgba(15, 23, 42, 0.16);
+        background: transparent;
+        color: #334155;
+        border-radius: var(--radius-sm);
+        min-height: 34px;
+        padding: 0 var(--space-3);
+        font-size: var(--font-size-xs);
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color var(--dur-fast) var(--ease-standard),
+            border-color var(--dur-fast) var(--ease-standard);
+
+        &:hover {
+            background: rgba($shop-blue, 0.08);
+            border-color: rgba($shop-blue, 0.45);
+        }
+    }
+
+    .owner-lock-hint {
+        margin: var(--space-2) 0 0;
+        font-size: 12px;
+        color: #475569;
+    }
+
+    .checkout-login-required {
+        margin-top: var(--space-2);
+        padding: var(--space-3);
+        border: 1px solid rgba(15, 23, 42, 0.14);
+        border-radius: var(--radius-sm);
+        background: rgba(15, 23, 42, 0.03);
+        display: grid;
+        gap: var(--space-2);
+
+        p {
+            margin: 0;
+            color: #475569;
+            font-size: var(--font-size-xs);
+        }
+
+        strong {
+            color: #0f172a;
+            font-size: var(--font-size-sm);
+        }
+
+        .login-link {
+            justify-self: start;
+            min-height: 34px;
+            display: inline-flex;
+            align-items: center;
+            border-radius: var(--radius-sm);
+            padding: 0 var(--space-3);
+            text-decoration: none;
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, $shop-blue-dark, $shop-blue);
+        }
+    }
+
     .checkout-actions {
         display: flex;
         flex-direction: column;
         gap: 12px;
         margin-top: 20px;
+    }
+
+    .checkout-ready-message {
+        margin: 4px 0 0;
+        color: #0f766e;
+        font-size: var(--font-size-xs);
+        font-weight: 700;
     }
 
     .continue-shopping,
@@ -367,33 +571,97 @@
 
 :host-context(body.dark-mode) {
     .cart-page {
-        background: $shop-blue-dark;
+        background: #0b1220;
+    }
+
+    .cart-summary {
+        .checkout-story {
+            border-color: rgba($shop-blue-bright, 0.28);
+            background: rgba($shop-blue-bright, 0.08);
+        }
+
+        .checkout-story-title,
+        .checkout-step strong,
+        .checkout-login-required strong {
+            color: #f8fafc;
+        }
+
+        .checkout-step p,
+        .checkout-ready-message {
+            color: #cbd5e1;
+        }
+
+        .checkout-step-number {
+            border-color: rgba($shop-blue-bright, 0.3);
+            background: rgba(15, 23, 42, 0.88);
+            color: $shop-blue-bright;
+        }
+
+        .commercial-license-toggle {
+            border-color: rgba($shop-blue-bright, 0.4);
+            background: rgba($shop-blue-bright, 0.12);
+            color: #e2e8f0;
+        }
+
+        .certificate-owner-account {
+            border-color: rgba($shop-blue-bright, 0.4);
+            background: rgba($shop-blue-bright, 0.12);
+
+            strong {
+                color: $shop-blue-bright;
+            }
+        }
+
+        .logout-link {
+            color: $shop-blue-bright;
+            border-color: rgba($shop-blue-bright, 0.45);
+
+            &:hover {
+                background: rgba($shop-blue, 0.18);
+            }
+        }
+
+        .owner-lock-hint {
+            color: #94a3b8;
+        }
+
+        .checkout-login-required {
+            border-color: rgba(148, 163, 184, 0.3);
+            background: rgba(15, 23, 42, 0.4);
+
+            p {
+                color: #cbd5e1;
+            }
+        }
     }
 
     .cart-hero {
-        background: linear-gradient(135deg, $shop-blue-dark, darken($shop-blue, 10%));
+        background: linear-gradient(135deg, $shop-blue-dark, color.adjust($shop-blue, $lightness: -10%));
     }
 
     .cart-items,
     .cart-summary,
     .empty-cart {
-        background: $shop-blue-dark;
-        border-color: rgba(255, 255, 255, 0.08);
+        background: #0f172a;
+        border-color: rgba(148, 163, 184, 0.24);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     }
 
     .cart-items h2,
     .cart-summary h2,
-    .item-title,
-    .qty-display,
-    .subtotal-amount,
-    .summary-total {
-        color: $shop-blue-bright;
-    }
 
     .item-price,
     .summary-row {
-        color: $shop-blue-bright;
+        color: #cbd5e1;
+    }
+
+    .item-license-toggle {
+        border-color: rgba($shop-blue-bright, 0.38);
+        background: rgba($shop-blue-bright, 0.14);
+
+        span {
+            color: #e2e8f0;
+        }
     }
 
     .cart-item {
@@ -424,10 +692,37 @@
     .clear-cart {
         border-color: #64748b;
         color: #94a3b8;
+
+        &:hover {
+            border-color: #f87171;
+            color: #fecaca;
+            background: rgba(127, 29, 29, 0.2);
+        }
     }
 
     .summary-divider {
         border-top-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .certificate-owner {
+        span {
+            color: #94a3b8;
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.14);
+            color: $shop-blue-bright;
+
+            &::placeholder {
+                color: rgba(148, 163, 184, 0.7);
+            }
+
+            &:focus {
+                border-color: rgba($shop-blue-bright, 0.7);
+                box-shadow: 0 0 0 2px rgba($shop-blue, 0.2);
+            }
+        }
     }
 
     .empty-cart {

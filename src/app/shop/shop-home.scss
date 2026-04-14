@@ -1,4 +1,5 @@
 @use '../../styles.scss' as *;
+@use 'sass:color';
 
 .shop-page {
     min-height: 100vh;
@@ -110,7 +111,7 @@
 
     &.featured {
         border: 2px solid $shop-blue-dark;
-        background: linear-gradient(135deg, $shop-blue-bright, lighten($shop-blue-bright, 6%));
+        background: linear-gradient(135deg, $shop-blue-bright, color.adjust($shop-blue-bright, $lightness: 6%));
         box-shadow: var(--shadow-soft);
         order: -1;
 
@@ -225,21 +226,21 @@
 
 .product-actions .primary:hover {
     box-shadow: 0 6px 16px rgba($shop-blue, 0.35);
-    background: linear-gradient(135deg, darken($shop-blue, 10%), $shop-blue);
+    background: linear-gradient(135deg, color.adjust($shop-blue, $lightness: -10%), $shop-blue);
 }
 
 .product-actions .secondary:hover {
     background: rgba($shop-blue, 0.08);
-    color: darken($shop-blue, 10%);
+    color: color.adjust($shop-blue, $lightness: -10%);
 }
 
 :host-context(body.dark-mode) {
     .shop-page {
-        background: $shop-blue-dark;
+        background: #0b1220;
     }
 
     .shop-hero {
-        background: linear-gradient(135deg, $shop-blue-dark, darken($shop-blue, 10%));
+        background: linear-gradient(135deg, $shop-blue-dark, color.adjust($shop-blue, $lightness: -10%));
         color: #ffffff;
         box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
 
@@ -249,8 +250,8 @@
     }
 
     .shop-body {
-        background: $shop-blue-dark;
-        border-color: rgba(255, 255, 255, 0.08);
+        background: #0f172a;
+        border-color: rgba(148, 163, 184, 0.26);
         color: $shop-blue-bright;
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
     }
@@ -260,8 +261,8 @@
     }
 
     .product-card {
-        background: $shop-blue-dark;
-        border-color: rgba(255, 255, 255, 0.08);
+        background: rgba(15, 23, 42, 0.88);
+        border-color: rgba(148, 163, 184, 0.24);
 
         &:hover {
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
@@ -283,15 +284,15 @@
     }
 
     .product-copy {
-        color: $shop-blue-bright;
+        color: #dbe7ff;
     }
 
     .product-meta {
-        color: $shop-blue-bright;
+        color: #cbd5e1;
     }
 
     .product-price {
-        border-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(148, 163, 184, 0.22);
 
         .price {
             color: $shop-blue-bright;
@@ -318,7 +319,7 @@
 
         &:hover {
             background: rgba($shop-blue, 0.1);
-            color: lighten($shop-blue-bright, 10%);
+            color: color.adjust($shop-blue-bright, $lightness: 10%);
         }
     }
 }

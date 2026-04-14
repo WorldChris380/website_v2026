@@ -2,7 +2,7 @@
     <div class="cart-header">
         <div>
             <p class="eyebrow">Shop</p>
-            <h3>Your selection</h3>
+            <h3>{{ t('selection') }}</h3>
         </div>
         <button class="close" (click)="toggle()">✕</button>
     </div>
@@ -19,22 +19,29 @@
                     <button (click)="increment(item.id)">+</button>
                 </div>
             </div>
-            <button class="remove" (click)="remove(item.id)">Remove</button>
+            <button class="remove" (click)="remove(item.id)">{{ t('remove') }}</button>
         </div>
     </div>
 
     <ng-template #emptyState>
         <div class="empty">
-            <p>No items yet. Add photos from the gallery.</p>
+            <p>{{ t('empty') }}</p>
         </div>
     </ng-template>
 
     <div class="cart-footer">
         <div class="total">
-            <span>Total</span>
+            <span>{{ t('total') }}</span>
             <strong>{{ total | number:'1.2-2' }} EUR</strong>
         </div>
-        <app-paypal-button [amount]="total" currency="EUR"></app-paypal-button>
-        <button class="clear" (click)="clear()" *ngIf="totalQuantity > 0">Clear cart</button>
+        <label class="certificate-owner" *ngIf="totalQuantity > 0">
+            <span>{{ t('owner') }}</span>
+            <input type="text" [ngModel]="certificateOwner" (ngModelChange)="onCertificateOwnerChange($event)"
+                [placeholder]="t('ownerPlaceholder')" />
+        </label>
+        <app-paypal-button *ngIf="totalQuantity > 0" [items]="items" currency="EUR" [ownerName]="certificateOwner"
+            (paymentSuccess)="onPaymentSuccess()">
+        </app-paypal-button>
+        <button class="clear" (click)="clear()" *ngIf="totalQuantity > 0">{{ t('clear') }}</button>
     </div>
 </div>

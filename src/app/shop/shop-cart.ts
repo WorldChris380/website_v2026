@@ -1,13 +1,15 @@
 import { Component, Input, Output, EventEmitter, computed, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ShopService } from './shop.service';
 import { PayPalButton } from './paypal-button';
+import { LanguageService, Language } from '../language.service';
 
 @Component({
     selector: 'app-shop-cart',
     standalone: true,
-    imports: [CommonModule, PayPalButton],
+    imports: [CommonModule, FormsModule, PayPalButton],
     templateUrl: './shop-cart.html',
     styleUrl: './shop-cart.scss'
 })
@@ -16,12 +18,18 @@ export class ShopCart {
     @Output() closed = new EventEmitter<void>();
 
     readonly isOpen = signal(false);
+    currentLanguage: Language = 'en';
 
     get isShopPage(): boolean {
         return this.router.url.startsWith('/shop');
     }
 
-    constructor(private shop: ShopService, private router: Router) {
+    constructor(private shop: ShopService, private router: Router, private languageService: LanguageService) {
+        this.currentLanguage = this.languageService.getCurrentLanguage();
+        this.languageService.language$.subscribe((lang) => {
+            this.currentLanguage = lang;
+        });
+
         if (this.openByDefault) {
             this.isOpen.set(true);
         }
@@ -45,11 +53,39 @@ export class ShopCart {
         return this.shop.totalQuantity();
     }
 
+    get certificateOwner() {
+        return this.shop.getCertificateOwner();
+    }
+
+    t(key: string): string {
+        const de = this.currentLanguage === 'de';
+        const map: Record<string, string> = {
+            selection: de ? 'Deine Auswahl' : 'Your selection',
+            remove: de ? 'Entfernen' : 'Remove',
+            empty: de ? 'Noch keine Artikel. Fuege zuerst Fotos aus der Galerie hinzu.' : 'No items yet. Add photos from the gallery.',
+            total: de ? 'Gesamt' : 'Total',
+            owner: de ? 'Zertifikatsinhaber' : 'Certificate holder',
+            ownerPlaceholder: de ? 'Vor- und Nachname' : 'First and last name',
+            clear: de ? 'Warenkorb leeren' : 'Clear cart',
+        };
+
+        return map[key] || key;
+    }
+
     toggle() {
         this.isOpen.update((v) => !v);
         if (!this.isOpen()) {
             this.closed.emit();
         }
+    }
+
+    onPaymentSuccess(): void {
+        this.isOpen.set(false);
+        this.router.navigate(['/shop/success']);
+    }
+
+    onCertificateOwnerChange(name: string) {
+        this.shop.setCertificateOwner(name);
     }
 
     increment(id: string) {

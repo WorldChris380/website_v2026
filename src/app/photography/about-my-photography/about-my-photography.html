@@ -43,6 +43,24 @@
                 </ul>
             </article>
         </div>
+
+        <h3>{{ getTranslation('formerCameras') }}</h3>
+        <div class="equipment-grid" role="list">
+            <article class="equipment-card" role="listitem" *ngFor="let former of formerCameras" itemscope
+                itemtype="https://schema.org/Product">
+                <div class="equipment-header">
+                    <h3 itemprop="category">{{ getTranslation('formerCameraPeriod') }}</h3>
+                    <span class="equipment-model" itemprop="name">{{ former.name }}</span>
+                </div>
+                <p class="equipment-type" itemprop="model">{{ former.period }}</p>
+                <ul class="equipment-specs" aria-label="Former Camera Details">
+                    <li *ngFor="let note of former.notes" itemprop="features">
+                        <span class="spec-icon" aria-hidden="true">✓</span>
+                        {{ note }}
+                    </li>
+                </ul>
+            </article>
+        </div>
     </section>
 
     <!-- Statistics Section with Counters -->

@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -12,6 +12,11 @@ interface LoginResponse {
     error?: string;
 }
 
+export interface AdminLoginResult {
+    success: boolean;
+    error?: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -19,8 +24,10 @@ export class AdminService {
     private readonly API_URL = '/api/admin-login.php';
     private readonly TOKEN_KEY = 'admin_token';
     private readonly TEST_MODE_KEY = 'test_mode_enabled';
+    private readonly GOOGLE_LOGIN_KEY = 'google_login_enabled';
 
     isTestModeEnabled = signal(this.getPersistedTestMode());
+    isGoogleLoginEnabled = signal(this.getPersistedGoogleLogin());
     isAdminLoggedIn = signal(this.hasValidToken());
 
     constructor(private http: HttpClient) {
@@ -33,23 +40,32 @@ export class AdminService {
             this.isTestModeEnabled.set(enabled);
             localStorage.setItem(this.TEST_MODE_KEY, String(enabled));
         });
+
+        this.fetchGoogleLoginFromBackend().subscribe(enabled => {
+            this.isGoogleLoginEnabled.set(enabled);
+            localStorage.setItem(this.GOOGLE_LOGIN_KEY, String(enabled));
+        });
     }
 
     /**
      * Login mit Passwort (Backend-Validierung)
      */
-    login(password: string): Observable<boolean> {
+    login(password: string): Observable<AdminLoginResult> {
         return this.http.post<LoginResponse>(`${this.API_URL}?action=login`, { password })
             .pipe(
                 map(response => {
                     if (response.success && response.data?.token) {
                         localStorage.setItem(this.TOKEN_KEY, response.data.token);
                         this.isAdminLoggedIn.set(true);
-                        return true;
+                        return { success: true };
                     }
-                    return false;
+                    return { success: false, error: response.error || 'Login failed' };
                 }),
-                catchError(() => of(false))
+                catchError((error: HttpErrorResponse) => {
+                    const backendError = (error.error?.error || error.error?.details || '').toString().trim();
+                    const fallback = error.status ? `HTTP ${error.status}` : 'Network error';
+                    return of({ success: false, error: backendError || fallback });
+                })
             );
     }
 
@@ -78,6 +94,20 @@ export class AdminService {
         }
     }
 
+    toggleGoogleLogin(): void {
+        const newState = !this.isGoogleLoginEnabled();
+        this.isGoogleLoginEnabled.set(newState);
+        localStorage.setItem(this.GOOGLE_LOGIN_KEY, String(newState));
+
+        this.syncGoogleLoginToBackend(newState).subscribe((success) => {
+            if (!success) {
+                const fallbackState = !newState;
+                this.isGoogleLoginEnabled.set(fallbackState);
+                localStorage.setItem(this.GOOGLE_LOGIN_KEY, String(fallbackState));
+            }
+        });
+    }
+
     /**
      * Holt den globalen Test-Mode-Status vom Backend
      */
@@ -86,6 +116,14 @@ export class AdminService {
             .pipe(
                 map(response => response.success ? (response.data?.enabled ?? false) : false),
                 catchError(() => of(this.getPersistedTestMode()))
+            );
+    }
+
+    private fetchGoogleLoginFromBackend(): Observable<boolean> {
+        return this.http.get<{ success: boolean; data: { enabled: boolean } }>(`${this.API_URL}?action=get_google_login`)
+            .pipe(
+                map(response => response.success ? (response.data?.enabled ?? true) : true),
+                catchError(() => of(this.getPersistedGoogleLogin()))
             );
     }
 
@@ -102,6 +140,16 @@ export class AdminService {
             );
     }
 
+    private syncGoogleLoginToBackend(enabled: boolean): Observable<boolean> {
+        const token = localStorage.getItem(this.TOKEN_KEY);
+        if (!token) return of(false);
+        return this.http.post<{ success: boolean }>(`${this.API_URL}?action=set_google_login`, { token, enabled })
+            .pipe(
+                map(r => r.success),
+                catchError(() => of(false))
+            );
+    }
+
     /**
      * Prüft ob gültiger Token vorhanden
      */
@@ -111,6 +159,12 @@ export class AdminService {
 
     private getPersistedTestMode(): boolean {
         return localStorage.getItem(this.TEST_MODE_KEY) === 'true';
+    }
+
+    private getPersistedGoogleLogin(): boolean {
+        const raw = localStorage.getItem(this.GOOGLE_LOGIN_KEY);
+        if (raw === null) return true;
+        return raw === 'true';
     }
 
     /**

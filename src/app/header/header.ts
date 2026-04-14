@@ -4,6 +4,7 @@ import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { DarkModeService } from '../dark-mode.service';
 import { LanguageService, Language } from '../language.service';
 import { ShopService } from '../shop/shop.service';
+import { ShopAuthService } from '../shop/shop-auth.service';
 import { filter } from 'rxjs/operators';
 type MenuHeading = 'aviation' | 'blog' | 'travel' | 'shop' | 'career' | 'photography';
 
@@ -33,10 +34,15 @@ export class Header implements OnInit {
     return this.shopService.totalQuantity();
   }
 
+  get isShopAuthenticated(): boolean {
+    return this.shopAuthService.isAuthenticated();
+  }
+
   constructor(
     private darkModeService: DarkModeService,
     private languageService: LanguageService,
     private shopService: ShopService,
+    private shopAuthService: ShopAuthService,
     private cdr: ChangeDetectorRef,
     private router: Router,
   ) { }
@@ -161,12 +167,33 @@ export class Header implements OnInit {
     return this.darkModeService.darkmodeSVG(name);
   }
 
+  handleShopAccountAction(): void {
+    if (this.isShopAuthenticated) {
+      this.shopAuthService.logout();
+      this.megamenuOpen = false;
+      this.router.navigate(['/shop/account']);
+      return;
+    }
+
+    this.megamenuOpen = false;
+    this.router.navigate(['/shop/account']);
+  }
+
+  handleShopAccountActionMobile(): void {
+    if (this.isShopAuthenticated) {
+      this.shopAuthService.logout();
+    }
+
+    this.closeMenuAfterNavigation();
+    this.router.navigate(['/shop/account']);
+  }
+
   private updateCurrentPageTitle(): void {
     const path = this.router.url.split('?')[0].replace(/^\//, '');
     const key = path || 'home';
 
     const byPath: Record<string, string> = {
-      home: this.currentLanguage === 'de' ? 'Startseite' : 'Home',
+      home: '',
       'travel-budget-calculator': 'Travel Budget Calculator',
       'travel-faqs': this.currentLanguage === 'de' ? 'Travel FAQs' : 'Travel FAQs',
       'aviation-spotter-hotels': this.currentLanguage === 'de' ? 'Spotter Hotels' : 'Spotter Hotels',

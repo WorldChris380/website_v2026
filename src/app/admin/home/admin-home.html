@@ -62,6 +62,30 @@
                 </p>
             </div>
 
+            <div class="feature-section">
+                <h2>{{ languageService.getCurrentLanguage() === 'en' ? 'Google Login' : 'Google-Login' }}</h2>
+
+                <div class="toggle-container">
+                    <label class="toggle-label">
+                        <input type="checkbox" [checked]="adminService.isGoogleLoginEnabled()"
+                            (change)="toggleGoogleLogin()" class="toggle-input" />
+                        <span class="toggle-text">
+                            {{ languageService.getCurrentLanguage() === 'en'
+                            ? (adminService.isGoogleLoginEnabled() ? 'Google login: ON' : 'Google login: OFF')
+                            : (adminService.isGoogleLoginEnabled() ? 'Google-Login: AN' : 'Google-Login: AUS')
+                            }}
+                        </span>
+                    </label>
+                </div>
+
+                <p class="info-text">
+                    {{ languageService.getCurrentLanguage() === 'en'
+                    ? 'Temporarily disable Google Sign-In for account login/registration.'
+                    : 'Google Sign-In für Konto-Login/Registrierung vorübergehend deaktivieren.'
+                    }}
+                </p>
+            </div>
+
             <button (click)="logout()" class="btn btn-secondary">
                 {{ languageService.getCurrentLanguage() === 'en' ? 'Logout' : 'Abmelden' }}
             </button>

@@ -5,7 +5,7 @@
     <div class="gallery-header">
         <!-- Breadcrumb Navigation -->
         <div class="filter-breadcrumb"
-            *ngIf="selectedCategory !== 'All' || selectedContinent !== 'All' || selectedCountry !== 'All'">
+            *ngIf="selectedCategory !== 'All' || selectedContinent !== 'All' || selectedCountry !== 'All' || selectedSubfolders.length > 0">
             <button class="breadcrumb-btn" (click)="resetFilters()">{{ getTranslation('all') }}</button>
             <span class="breadcrumb-separator" *ngIf="selectedCategory !== 'All'">›</span>
             <button class="breadcrumb-btn" *ngIf="selectedCategory !== 'All'"
@@ -18,8 +18,21 @@
                 {{ translateContinent(selectedContinent) }}
             </button>
             <span class="breadcrumb-separator" *ngIf="selectedCountry !== 'All'">›</span>
-            <span class="breadcrumb-current" *ngIf="selectedCountry !== 'All'">{{ translateCountry(selectedCountry)
-                }}</span>
+            <button class="breadcrumb-btn" *ngIf="selectedCountry !== 'All'" (click)="onCountryChange(selectedCountry)">
+                {{ translateCountry(selectedCountry) }}
+            </button>
+            <ng-container *ngFor="let sub of selectedSubfolders; let i = index">
+                <span class="breadcrumb-separator">›</span>
+                <button class="breadcrumb-btn"
+                    *ngIf="i < selectedSubfolders.length - 1 || currentSubfolderOptions.length > 0"
+                    (click)="onSubfolderBreadcrumbClick(i)">
+                    {{ translateLocation(sub) }}
+                </button>
+                <span class="breadcrumb-current"
+                    *ngIf="i === selectedSubfolders.length - 1 && currentSubfolderOptions.length === 0">
+                    {{ translateLocation(sub) }}
+                </span>
+            </ng-container>
         </div>
 
         <!-- Category Filter Buttons -->
@@ -46,10 +59,35 @@
             </button>
         </div>
 
+        <!-- Location / Subfolder Filter Buttons (dynamic depth) -->
+        <div class="filter-buttons" *ngIf="selectedCountry !== 'All' && currentSubfolderOptions.length > 0">
+            <button *ngFor="let sub of currentSubfolderOptions"
+                (click)="onSubfolderChange(currentSubfolderFilterDepth, sub)" class="filter-btn">
+                {{ translateLocation(sub) }}
+            </button>
+        </div>
+
         <!-- Search Section -->
         <div class="search-container">
-            <input type="text" class="search-input" [placeholder]="getTranslation('searchPlaceholder')"
-                [(ngModel)]="searchQuery" (input)="onSearchChange(searchQuery)" />
+            <div class="search-row">
+                <div class="search-input-wrap">
+                    <input type="text" class="search-input" [placeholder]="getTranslation('searchPlaceholder')"
+                        [(ngModel)]="searchQuery" (input)="onSearchChange(searchQuery)" />
+                    <button class="search-clear-btn" type="button" *ngIf="searchQuery.trim().length > 0"
+                        (click)="clearSearch()"
+                        [attr.aria-label]="currentLanguage === 'de' ? 'Suche leeren' : 'Clear search'">
+                        ✕
+                    </button>
+                </div>
+                <button class="search-info-btn" type="button"
+                    [attr.aria-label]="currentLanguage === 'de' ? 'Suchhinweis' : 'Search hint'">
+                    i
+                    <span class="search-info-tooltip">
+                        {{ currentLanguage === 'de' ? 'Hinweis: Bitte auf Englisch suchen (z. B. country/city).' :
+                        'Hint: Please search in English (e.g. country/city).' }}
+                    </span>
+                </button>
+            </div>
         </div>
 
         <!-- Results Count -->
@@ -65,23 +103,33 @@
 
     <!-- Gallery Grid -->
     <div class="gallery-grid" *ngIf="!isLoading">
-        <div *ngFor="let image of paginatedImages; let i = index" class="gallery-item">
+        <article *ngFor="let image of paginatedImages; let i = index" class="gallery-item" itemscope itemtype="https://schema.org/ImageObject">
+            <meta itemprop="name" [attr.content]="getImageTitle(image)" />
+            <meta itemprop="description" [attr.content]="getImageSeoDescription(image)" />
+            <meta itemprop="contentUrl" [attr.content]="image.originalUrl || image.url" />
+            <meta itemprop="thumbnailUrl" [attr.content]="image.thumbnailUrl || image.gridUrl || image.url" />
+            <meta itemprop="license" content="https://www.christian-boehme.com/shop" />
+
             <div class="image-wrapper" (click)="openLightbox(image)">
-                <img [src]="image.url" [alt]="image.title" class="gallery-image"
-                    [attr.loading]="i < 6 ? 'eager' : 'lazy'" [attr.fetchpriority]="i < 6 ? 'high' : 'auto'"
-                    decoding="async" />
+                <img [src]="image.gridUrl || image.url" [alt]="getImageSeoAlt(image)" [attr.title]="getImageSeoTitle(image)" class="gallery-image"
+                    [attr.loading]="i < 2 ? 'eager' : 'lazy'" [attr.fetchpriority]="i < 2 ? 'high' : 'auto'"
+                    decoding="async" [attr.width]="460" [attr.height]="300" itemprop="image" />
                 <div class="image-overlay">
                     <div class="overlay-content">
                         <h3>{{ getImageTitle(image) }}</h3>
-                        <p>{{ translateCountry(image.country) }}</p>
+                        <button class="overlay-country-btn" (click)="goToCountryResults(image.country, $event)">
+                            {{ translateCountry(image.country) }}
+                        </button>
                         <div class="overlay-actions">
-                            <button class="gallery-shop-btn" (click)="addToCart(image); $event.stopPropagation()">Add to
+                            <span>{{ image.price | number:'1.2-2' }} EUR</span>
+                            <button class="gallery-shop-btn"
+                                (click)="addToCartWithAnimation(image, $event); $event.stopPropagation()">Add to
                                 cart</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </article>
     </div>
 
     <!-- Pagination -->
@@ -104,7 +152,8 @@
     <div *ngIf="isLightboxOpen" class="lightbox-overlay" (click)="closeLightbox()">
         <div class="lightbox-container" (click)="$event.stopPropagation()">
             <!-- Main Image -->
-            <div class="lightbox-main" (touchstart.passive)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+            <div class="lightbox-main" (touchstart.passive)="onTouchStart($event)" (touchmove)="onTouchMove($event)"
+                (touchend)="onTouchEnd($event)">
                 <!-- Close Button -->
                 <div class="lightbox-image-wrapper">
                     <!-- Close Button -->
@@ -112,8 +161,8 @@
                         ✕
                     </button>
 
-                    <img *ngIf="currentLightboxImage" [src]="currentLightboxImage.url"
-                        [alt]="currentLightboxImage.title" class="lightbox-image" #lightboxImg />
+                    <img *ngIf="currentLightboxImage" [src]="currentLightboxImage.gridUrl"
+                        [alt]="getImageSeoAlt(currentLightboxImage)" [attr.title]="getImageSeoTitle(currentLightboxImage)" class="lightbox-image" #lightboxImg (load)="onLightboxImageLoad()" />
 
                     <!-- Navigation Buttons -->
                     <button class="lightbox-nav lightbox-nav-prev" (click)="previousLightboxImage()"
@@ -127,12 +176,38 @@
                 </div>
 
                 <div class="lightbox-info" *ngIf="currentLightboxImage">
-                    <h2>{{ getImageTitle(currentLightboxImage) }}</h2>
-                    <p>{{ translateCountry(currentLightboxImage.country) }}</p>
-                    <button class="lightbox-purchase" (click)="addToCart(currentLightboxImage)">Add to cart</button>
-                    <span class="lightbox-counter">
-                        {{ currentLightboxImageIndex + 1 }} / {{ filteredImages.length }}
-                    </span>
+                    <div class="lightbox-info-top">
+                        <h2>{{ getImageTitle(currentLightboxImage) }}</h2>
+                        <span class="lightbox-counter">
+                            {{ currentLightboxImageIndex + 1 }} / {{ filteredImages.length }}
+                        </span>
+                    </div>
+                    <div class="lightbox-meta-row">
+                        <button type="button" class="meta-chip meta-chip-filter"
+                            (click)="applyLightboxFilter('category', currentLightboxImage.category, $event)">
+                            {{ translateCategory(currentLightboxImage.category) }}
+                        </button>
+                        <button type="button" class="meta-chip meta-chip-filter"
+                            (click)="applyLightboxFilter('continent', currentLightboxImage.continent, $event)">
+                            {{ translateContinent(currentLightboxImage.continent) }}
+                        </button>
+                        <button type="button" class="meta-chip meta-chip-filter"
+                            (click)="applyLightboxFilter('country', currentLightboxImage.country, $event)">
+                            {{ translateCountry(currentLightboxImage.country) }}
+                        </button>
+                        <span class="meta-chip meta-price">{{ currentLightboxImage.price | number:'1.2-2' }} EUR</span>
+                        <button class="meta-chip meta-id" (click)="copyImageId(currentLightboxImage.id, $event)">
+                            {{ copiedImageId === currentLightboxImage.id ? (currentLanguage === 'de' ? 'Kopiert' :
+                            'Copied') : 'ID #' + currentLightboxImage.id }}
+                        </button>
+                    </div>
+                    <p class="lightbox-folder-path">
+                        <strong>{{ currentLanguage === 'en' ? 'Folder path:' : 'Ordnerpfad:' }}</strong>
+                        <span>{{ getImageFolderPath(currentLightboxImage) }}</span>
+                    </p>
+                    <button class="lightbox-purchase" (click)="addToCartWithAnimation(currentLightboxImage, $event)">
+                        {{ currentLanguage === 'en' ? 'Add to cart' : 'In den Warenkorb' }}
+                    </button>
                 </div>
 
                 <!-- Keyboard Help -->

@@ -67,6 +67,28 @@
     }
 }
 
+@media (max-width: 600px) {
+    #footer-content-limitation {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+        text-align: center;
+    }
+
+    #first-footer-column {
+        justify-self: center;
+        align-items: center;
+    }
+
+    #second-footer-column {
+        justify-content: center;
+    }
+
+    #third-footer-column {
+        justify-content: center;
+        justify-self: center;
+    }
+}
+
 @media (max-width: 320px) {
     #footer-full-width {
         min-height: 60px;

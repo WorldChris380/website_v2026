@@ -2,6 +2,10 @@
   RewriteEngine On
   RewriteBase /
 
+  # Never rewrite static assets to index.html. Missing files should 404, not return HTML.
+  RewriteCond %{REQUEST_URI} \.(?:js|mjs|css|map|json|png|jpe?g|gif|webp|svg|ico|woff2?|ttf|eot|txt|xml)$ [NC]
+  RewriteRule ^ - [L]
+
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]

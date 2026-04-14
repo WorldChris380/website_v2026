@@ -7,7 +7,24 @@
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://www.paypalobjects.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://www.paypal.com; frame-src 'self' https://www.paypal.com; object-src 'none'; base-uri 'self'; form-action 'self' mailto:;
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://www.paypalobjects.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://www.paypal.com https://christian-boehme-gallery.s3.eu-central-3.ionoscloud.com https://www.christian-boehme.com; frame-src 'self' https://www.paypal.com; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests;
+
+# Static files must never be rewritten to index.html
+/assets/* /assets/:splat 200
+/api/* /api/:splat 200
+/*.js /:splat 200
+/*.mjs /:splat 200
+/*.css /:splat 200
+/*.map /:splat 200
+/*.json /:splat 200
+/*.png /:splat 200
+/*.jpg /:splat 200
+/*.jpeg /:splat 200
+/*.webp /:splat 200
+/*.svg /:splat 200
+/*.ico /:splat 200
+/*.txt /:splat 200
+/*.xml /:splat 200
 
 # SPA Routing
 /* /index.html 200

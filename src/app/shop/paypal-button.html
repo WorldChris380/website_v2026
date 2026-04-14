@@ -1,4 +1,8 @@
 <div class="paypal-box">
-    <div id="paypal-btn-container"></div>
-    <p class="hint" *ngIf="clientId === 'YOUR_PAYPAL_CLIENT_ID'">Add your PayPal Client ID to enable checkout.</p>
+    <div class="paypal-loading" *ngIf="isLoading">
+        <span class="spinner-sm"></span>
+    </div>
+    <div id="paypal-btn-container" *ngIf="!isLoading && !isPlaceholder"></div>
+    <p class="hint" *ngIf="isPlaceholder">PayPal Client ID not configured. Set <code>paypalClientId</code> in
+        <code>environment.ts</code>.</p>
 </div>

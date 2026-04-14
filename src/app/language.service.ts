@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 
 export type Language = 'en' | 'de';
@@ -9,6 +10,7 @@ export type Language = 'en' | 'de';
 export class LanguageService {
     private currentLanguage: Language = 'en';
     public language$ = new BehaviorSubject<Language>('en');
+    private document = inject(DOCUMENT);
 
     constructor() {
         const savedLanguage = localStorage.getItem('language') as Language | null;
@@ -16,6 +18,11 @@ export class LanguageService {
             this.currentLanguage = savedLanguage;
             this.language$.next(this.currentLanguage);
         }
+        this.updateHtmlLang(this.currentLanguage);
+    }
+
+    private updateHtmlLang(lang: Language): void {
+        this.document.documentElement.setAttribute('lang', lang);
     }
 
     getCurrentLanguage(): Language {
@@ -25,12 +32,14 @@ export class LanguageService {
     toggleLanguage(): void {
         this.currentLanguage = this.currentLanguage === 'en' ? 'de' : 'en';
         localStorage.setItem('language', this.currentLanguage);
+        this.updateHtmlLang(this.currentLanguage);
         this.language$.next(this.currentLanguage);
     }
 
     setLanguage(language: Language): void {
         this.currentLanguage = language;
         localStorage.setItem('language', this.currentLanguage);
+        this.updateHtmlLang(this.currentLanguage);
         this.language$.next(this.currentLanguage);
     }
 

@@ -4,8 +4,8 @@
 User-agent: *
 Allow: /
 
-# Disallow admin or private areas (if any)
-# Disallow: /admin/
+# Disallow admin or private areas
+Disallow: /admin/
 
 # Sitemap location
 Sitemap: https://www.christian-boehme.com/sitemap.xml
@@ -16,9 +16,11 @@ Sitemap: https://www.christian-boehme.com/sitemap.xml
 # Specific rules for major search engines
 User-agent: Googlebot
 Allow: /
+Disallow: /admin/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /admin/
 
 # Block access to specific file types if needed
 # Disallow: /*.json$

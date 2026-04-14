@@ -3,30 +3,40 @@
         <header class="cart-hero">
             <div>
                 <p class="eyebrow">Shop</p>
-                <h1>Shopping Cart</h1>
-                <p class="lede">Review your selection and proceed to checkout.</p>
+                <h1>{{ t('cartTitle') }}</h1>
+                <p class="lede">{{ t('cartLead') }}</p>
+            </div>
+            <div class="hero-benefits" *ngIf="totalQuantity > 0">
+                <span class="benefit-pill">{{ t('noShipping') }}</span>
+                <span class="benefit-pill">{{ t('instantAccess') }}</span>
+                <span class="benefit-pill">{{ t('invoiceIncluded') }}</span>
             </div>
         </header>
 
         <section class="cart-content" *ngIf="totalQuantity > 0; else emptyState">
             <div class="cart-items">
-                <h2>Your Items ({{ totalQuantity }})</h2>
+                <h2>{{ t('yourItems') }} ({{ totalQuantity }})</h2>
                 <div class="cart-item" *ngFor="let item of items">
                     <img [src]="item.imageUrl" [alt]="item.title" class="item-image">
                     <div class="item-details">
                         <h3 class="item-title">{{ item.title }}</h3>
                         <p class="item-price">{{ item.price | number:'1.2-2' }} {{ item.currency }}</p>
+                        <label class="item-license-toggle" *ngIf="isPhotoItem(item.id)">
+                            <input type="checkbox" [ngModel]="isCommercialLicenseSelected(item.id)"
+                                (ngModelChange)="onCommercialLicenseItemChange(item.id, $event)" />
+                            <span>{{ t('commercialPerItem') }}</span>
+                        </label>
                         <div class="item-controls">
                             <div class="qty-control">
                                 <button (click)="decrement(item.id)" class="qty-btn">−</button>
                                 <span class="qty-display">{{ item.quantity }}</span>
                                 <button (click)="increment(item.id)" class="qty-btn">+</button>
                             </div>
-                            <button class="remove-btn" (click)="remove(item.id)">Remove</button>
+                            <button class="remove-btn" (click)="remove(item.id)">{{ t('remove') }}</button>
                         </div>
                     </div>
                     <div class="item-subtotal">
-                        <span class="subtotal-label">Subtotal</span>
+                        <span class="subtotal-label">{{ t('subtotal') }}</span>
                         <strong class="subtotal-amount">{{ (item.price * item.quantity) | number:'1.2-2' }} {{
                             item.currency }}</strong>
                     </div>
@@ -34,25 +44,69 @@
             </div>
 
             <aside class="cart-summary">
-                <h2>Order Summary</h2>
-                <div class="summary-row">
-                    <span>Items ({{ totalQuantity }})</span>
-                    <span>{{ total | number:'1.2-2' }} EUR</span>
+                <h2>{{ t('summary') }}</h2>
+                <div class="checkout-story">
+                    <p class="checkout-story-title">{{ t('simpleCheckout') }}</p>
+                    <div class="checkout-step" [class.is-complete]="isAuthenticated">
+                        <span class="checkout-step-number">1</span>
+                        <div>
+                            <strong>{{ t('stepOne') }}</strong>
+                            <p>{{ t('stepOneCopy') }}</p>
+                        </div>
+                    </div>
+                    <div class="checkout-step" [class.is-complete]="totalQuantity > 0">
+                        <span class="checkout-step-number">2</span>
+                        <div>
+                            <strong>{{ t('stepTwo') }}</strong>
+                            <p>{{ t('stepTwoCopy') }}</p>
+                        </div>
+                    </div>
+                    <div class="checkout-step" [class.is-complete]="canCheckout" [class.is-locked]="!canCheckout">
+                        <span class="checkout-step-number">3</span>
+                        <div>
+                            <strong>{{ t('stepThree') }}</strong>
+                            <p>{{ t('stepThreeCopy') }}</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="summary-row">
-                    <span>Shipping</span>
-                    <span>Calculated at checkout</span>
+                    <span>{{ t('items') }} ({{ totalQuantity }})</span>
+                    <span>{{ total | number:'1.2-2' }} EUR</span>
+                </div>
+                <div class="summary-row" *ngIf="commercialLicenseUpgrade">
+                    <span>{{ t('licenseUpgrade') }}</span>
+                    <span>+ {{ commercialLicenseSurcharge | number:'1.2-2' }} EUR</span>
                 </div>
                 <div class="summary-divider"></div>
                 <div class="summary-total">
-                    <span>Total</span>
-                    <strong>{{ total | number:'1.2-2' }} EUR</strong>
+                    <span>{{ t('total') }}</span>
+                    <strong>{{ grandTotal | number:'1.2-2' }} EUR</strong>
                 </div>
 
+                <p class="owner-lock-hint owner-lock-hint-delivery">{{ t('digitalDelivery') }}</p>
+
+                <div class="certificate-owner-account" *ngIf="isAuthenticated; else loginRequiredForCheckout">
+                    <span>{{ t('owner') }}</span>
+                    <strong>{{ certificateOwner }}</strong>
+                    <p class="owner-lock-hint">{{ t('ownerHint') }}</p>
+                    <p class="checkout-ready-message">{{ t('checkoutReadyCopy') }}</p>
+                    <button type="button" class="logout-link" (click)="logout()">{{ t('logout') }}</button>
+                </div>
+
+                <ng-template #loginRequiredForCheckout>
+                    <div class="checkout-login-required">
+                        <strong>{{ t('signInRequiredTitle') }}</strong>
+                        <p>{{ t('signInRequiredCopy') }}</p>
+                        <a class="login-link" [routerLink]="['/shop/account']">{{ t('goToAccount') }}</a>
+                    </div>
+                </ng-template>
+
                 <div class="checkout-actions">
-                    <app-paypal-button [amount]="total" currency="EUR"></app-paypal-button>
-                    <button class="continue-shopping" [routerLink]="['/gallery']">Continue Shopping</button>
-                    <button class="clear-cart" (click)="clear()">Clear Cart</button>
+                    <app-paypal-button *ngIf="canCheckout" [items]="items" currency="EUR" [ownerName]="certificateOwner"
+                        (paymentSuccess)="onPaymentSuccess()">
+                    </app-paypal-button>
+                    <button class="continue-shopping" [routerLink]="['/gallery']">{{ t('continueShopping') }}</button>
+                    <button class="clear-cart" (click)="clear()">{{ t('clearCart') }}</button>
                 </div>
             </aside>
         </section>
@@ -60,9 +114,9 @@
         <ng-template #emptyState>
             <div class="empty-cart">
                 <div class="empty-icon">🛒</div>
-                <h2>Your cart is empty</h2>
-                <p>Add photos from the gallery to get started.</p>
-                <a [routerLink]="['/gallery']" class="browse-btn">Browse Gallery</a>
+                <h2>{{ t('emptyCart') }}</h2>
+                <p>{{ t('emptyLead') }}</p>
+                <a [routerLink]="['/gallery']" class="browse-btn">{{ t('browseGallery') }}</a>
             </div>
         </ng-template>
     </div>

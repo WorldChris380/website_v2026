@@ -176,6 +176,62 @@ button,
         opacity var(--dur-fast) var(--ease-standard);
 }
 
+@keyframes cb-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cb-fade-soft {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Subtle page/section entrances across key surfaces */
+:where(.gallery-container, .shop-page, .account-page, .cart-page, .success-page, .lightbox-container) {
+    animation: cb-fade-soft var(--dur-slow) var(--ease-standard);
+}
+
+/* Minimal stagger-like feel for cards and list items */
+:where(.gallery-item, .product-card, .order-card, .download-card, .billing-card, .cart-item, .cert-item, .account-highlight-card) {
+    animation: cb-fade-up var(--dur-slow) var(--ease-standard);
+}
+
+:where(.gallery-grid, .products-grid, .order-history, .download-list, .billing-list, .cart-items, .cert-list)> :nth-child(2) {
+    animation-delay: 40ms;
+}
+
+:where(.gallery-grid, .products-grid, .order-history, .download-list, .billing-list, .cart-items, .cert-list)> :nth-child(3) {
+    animation-delay: 80ms;
+}
+
+:where(.gallery-grid, .products-grid, .order-history, .download-list, .billing-list, .cart-items, .cert-list)> :nth-child(4) {
+    animation-delay: 120ms;
+}
+
+/* Unified minimalist hover motion */
+:where(.gallery-item, .product-card, .order-card, .download-card, .billing-card, .cart-summary, .cart-items, .account-summary-card, .success-card, .lightbox-info) {
+    transition: transform var(--dur-medium) var(--ease-standard),
+        box-shadow var(--dur-medium) var(--ease-standard),
+        border-color var(--dur-medium) var(--ease-standard),
+        background-color var(--dur-medium) var(--ease-standard);
+}
+
+:where(.gallery-item, .product-card, .order-card, .download-card, .billing-card, .success-card):hover {
+    transform: translateY(-2px);
+}
+
 // button:hover,
 // [role="button"]:hover,
 // .btn:hover {

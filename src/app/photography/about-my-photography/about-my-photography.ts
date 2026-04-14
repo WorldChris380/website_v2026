@@ -13,6 +13,12 @@ interface CameraEquipment {
     specs: string[];
 }
 
+interface FormerCamera {
+    name: string;
+    period: string;
+    notes: string[];
+}
+
 @Component({
     selector: 'app-about-my-photography',
     standalone: true,
@@ -48,6 +54,27 @@ export class AboutMyPhotography implements OnInit, OnDestroy {
             'Perfect for Aviation & Travel'
         ]
     };
+
+    formerCameras: FormerCamera[] = [
+        {
+            name: 'Nikon D7000',
+            period: 'bis 2017',
+            notes: [
+                '16.2 MP APS-C DSLR',
+                '39-point autofocus system',
+                'Weather-sealed magnesium-alloy body'
+            ]
+        },
+        {
+            name: 'Nikon D7100',
+            period: 'bis 2025',
+            notes: [
+                '24.1 MP APS-C DSLR without optical low-pass filter',
+                'Nikon AF-S Nikkor DX 18-105 mm/3,5-5,6 G ED VR',
+                'Advanced autofocus and travel-ready allround setup'
+            ]
+        }
+    ];
 
     constructor(
         private languageService: LanguageService,
@@ -156,6 +183,8 @@ export class AboutMyPhotography implements OnInit, OnDestroy {
             'camera': { en: 'Camera', de: 'Kamera' },
             'lens': { en: 'Lens', de: 'Objektiv' },
             'features': { en: 'Key Features', de: 'Hauptmerkmale' }
+            , 'formerCameras': { en: 'Former Cameras', de: 'Fruehere Kameras' }
+            , 'formerCameraPeriod': { en: 'Former Camera', de: 'Fruehere Kamera' }
         };
 
         return translations[key]?.[this.currentLanguage] || key;

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MetaService } from '../../services/meta.service';
 import { ManifestService } from '../../gallery/manifest.service';
+import { Language, LanguageService } from '../../language.service';
 
 interface Continent {
     name: string;
@@ -17,6 +18,7 @@ interface Continent {
     styleUrl: './my-visited-countries.scss'
 })
 export class MyVisitedCountries implements OnInit {
+    currentLanguage: Language = 'en';
     continents: Continent[] = [
         {
             name: 'Africa',
@@ -117,31 +119,19 @@ export class MyVisitedCountries implements OnInit {
         private router: Router,
         private manifestService: ManifestService,
         private cdr: ChangeDetectorRef,
-        private metaService: MetaService
+        private metaService: MetaService,
+        private languageService: LanguageService
     ) { }
 
     ngOnInit(): void {
-        // SEO Meta Tags
-        this.metaService.updateSEO(
-            {
-                title: 'My Visited Countries - Interactive Travel Map | Christian Böhme',
-                description: 'Interactive world map showing 40+ countries I have visited and photographed across 6 continents. Explore my travel journey with photography from each destination including Europe, Asia, America, Africa, and Oceania.',
-                image: 'https://www.christian-boehme.com/assets/img/other/Dresden%20Skyline.jpg',
-                url: 'https://www.christian-boehme.com/my-visited-countries',
-                type: 'website'
-            },
-            {
-                "@context": "https://schema.org",
-                "@type": "TravelAction",
-                "name": "World Travel Map",
-                "description": "Interactive map of countries visited and photographed by Christian Böhme across Europe, Asia, North America, Africa, and Australia/Oceania",
-                "agent": {
-                    "@type": "Person",
-                    "name": "Christian Böhme",
-                    "url": "https://www.christian-boehme.com"
-                }
-            }
-        );
+        this.currentLanguage = this.languageService.getCurrentLanguage();
+        this.languageService.language$.subscribe((lang) => {
+            this.currentLanguage = lang;
+            this.updateSeo();
+            this.cdr.markForCheck();
+        });
+
+        this.updateSeo();
 
         this.manifestService.loadManifest()
             .then((manifest) => {
@@ -184,6 +174,38 @@ export class MyVisitedCountries implements OnInit {
             });
     }
 
+    private updateSeo(): void {
+        const isDE = this.currentLanguage === 'de';
+
+        // SEO Meta Tags
+        this.metaService.updateSEO(
+            {
+                title: isDE
+                    ? 'Meine besuchten Länder - Interaktive Reisekarte | Christian Böhme'
+                    : 'My Visited Countries - Interactive Travel Map | Christian Böhme',
+                description: isDE
+                    ? 'Interaktive Weltkarte mit den von mir bereisten und fotografierten Ländern über mehrere Kontinente hinweg.'
+                    : 'Interactive world map showing countries I have visited and photographed across multiple continents.',
+                image: 'https://www.christian-boehme.com/assets/img/other/Dresden%20Skyline.jpg',
+                url: 'https://www.christian-boehme.com/my-visited-countries',
+                type: 'website'
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "TravelAction",
+                "name": isDE ? "Welt-Reisekarte" : "World Travel Map",
+                "description": isDE
+                    ? "Interaktive Karte der besuchten und fotografierten Länder von Christian Böhme"
+                    : "Interactive map of countries visited and photographed by Christian Böhme",
+                "agent": {
+                    "@type": "Person",
+                    "name": "Christian Böhme",
+                    "url": "https://www.christian-boehme.com"
+                }
+            }
+        );
+    }
+
     get totalCountries(): number {
         return this.continents.reduce((sum, continent) => sum + continent.countries.length, 0);
     }
@@ -213,5 +235,92 @@ export class MyVisitedCountries implements OnInit {
         const alias = this.countryAliases[normalized];
         const aliasNormalized = alias ? alias.trim().toLowerCase() : null;
         return this.availableCountries.has(normalized) || (aliasNormalized ? this.availableCountries.has(aliasNormalized) : false);
+    }
+
+    translateContinent(continent: string): string {
+        if (this.currentLanguage !== 'de') {
+            return continent;
+        }
+
+        const translations: Record<string, string> = {
+            'Africa': 'Afrika',
+            'Australia/Oceania': 'Australien/Ozeanien',
+            'Asia': 'Asien',
+            'Europe': 'Europa',
+            'North America': 'Nordamerika'
+        };
+
+        return translations[continent] || continent;
+    }
+
+    translateCountry(country: string): string {
+        if (this.currentLanguage !== 'de') {
+            return country;
+        }
+
+        const translations: Record<string, string> = {
+            'Egypt': 'Aegypten',
+            'Cape Verde': 'Kap Verde',
+            'Australia': 'Australien',
+            'Fiji': 'Fidschi',
+            'Indonesia': 'Indonesien',
+            'Israel': 'Israel',
+            'Qatar': 'Katar',
+            'Malaysia': 'Malaysia',
+            'Oman': 'Oman',
+            'Philippines': 'Philippinen',
+            'Singapore': 'Singapur',
+            'Thailand': 'Thailand',
+            'Turkey': 'Tuerkei',
+            'United Arab Emirates': 'Vereinigte Arabische Emirate',
+            'Belgium': 'Belgien',
+            'Bulgaria': 'Bulgarien',
+            'Denmark': 'Daenemark',
+            'Germany': 'Deutschland',
+            'France': 'Frankreich',
+            'Greece': 'Griechenland',
+            'Ireland': 'Irland',
+            'Italy': 'Italien',
+            'Latvia': 'Lettland',
+            'Netherlands': 'Niederlande',
+            'Norway': 'Norwegen',
+            'Austria': 'Oesterreich',
+            'Poland': 'Polen',
+            'Portugal': 'Portugal',
+            'Russia': 'Russland',
+            'Switzerland': 'Schweiz',
+            'Slovakia': 'Slowakei',
+            'Slovenia': 'Slowenien',
+            'Spain': 'Spanien',
+            'Czech Republic': 'Tschechien',
+            'Ukraine': 'Ukraine',
+            'Hungary': 'Ungarn',
+            'Vatican City': 'Vatikanstadt',
+            'United Kingdom': 'Vereinigtes Koenigreich',
+            'Belarus': 'Belarus',
+            'Costa Rica': 'Costa Rica',
+            'Dominican Republic': 'Dominikanische Republik',
+            'United States': 'Vereinigte Staaten'
+        };
+
+        return translations[country] || country;
+    }
+
+    getUiText(key: string): string {
+        const isDE = this.currentLanguage === 'de';
+        const map: Record<string, { en: string; de: string }> = {
+            title: { en: 'Countries visited', de: 'Besuchte Laender' },
+            countries: { en: 'Countries', de: 'Laender' },
+            continents: { en: 'Continents', de: 'Kontinente' },
+            photosAvailable: { en: 'Photos available', de: 'Fotos verfuegbar' },
+            noPhotos: { en: 'No photos yet', de: 'Noch keine Fotos' }
+        };
+
+        const entry = map[key];
+        if (!entry) {
+            return key;
+        }
+
+        return isDE ? entry.de : entry.en;
     }
 }

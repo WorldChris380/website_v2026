@@ -1,0 +1,51 @@
+<div class="success-page">
+    <div class="success-shell">
+        <div class="success-card">
+            <div class="success-icon">✓</div>
+            <h1>{{ t('title') }}</h1>
+            <p class="lede">{{ t('lead') }}</p>
+
+            <section class="certificate-block" *ngIf="lastPurchase as purchase; else noPurchaseData">
+                <h2>{{ t('certificates') }}</h2>
+                <p class="cert-hint">
+                    {{ t('owner') }}: <strong>{{ purchase.ownerName }}</strong><br />
+                    {{ t('order') }}: {{ purchase.orderNumber || purchase.orderId }}<br />
+                    <span *ngIf="purchase.invoiceNumber">{{ t('invoice') }}: {{ purchase.invoiceNumber }}</span>
+                </p>
+                <div class="invoice-actions" *ngIf="purchase.invoicePdfUrl">
+                    <button type="button" class="invoice-download" (click)="openInvoice()">
+                        {{ t('invoicePdf') }}
+                    </button>
+                </div>
+                <div class="cert-list">
+                    <article class="cert-item" *ngFor="let item of purchase.items">
+                        <img [src]="item.imageUrl" [alt]="item.title" loading="lazy" />
+                        <div class="cert-meta">
+                            <h3>{{ item.title }}</h3>
+                            <p>ID: {{ item.id }} · {{ item.unitPrice | number:'1.2-2' }} {{ item.currency }} · {{
+                                t('qty') }} {{
+                                item.quantity }}</p>
+                        </div>
+                        <div class="cert-actions">
+                            <button type="button" class="cert-download" (click)="downloadCertificate(item)">
+                                {{ t('certificatePdf') }}
+                            </button>
+                            <button type="button" class="photo-download" (click)="downloadOriginalPhoto(item)">
+                                {{ t('originalPhoto') }}
+                            </button>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <ng-template #noPurchaseData>
+                <p class="cert-empty">{{ t('empty') }}</p>
+            </ng-template>
+
+            <div class="success-actions">
+                <a [routerLink]="['/gallery']" class="btn-primary">{{ t('backGallery') }}</a>
+                <a [routerLink]="['/shop/cart']" class="btn-secondary">{{ t('backCart') }}</a>
+            </div>
+        </div>
+    </div>
+</div>

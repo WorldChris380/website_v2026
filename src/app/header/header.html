@@ -8,8 +8,8 @@
                     [class.section-aviation]="currentPageSection === 'aviation'"
                     [class.section-photography]="currentPageSection === 'photography'"
                     [class.section-career]="currentPageSection === 'career'"
-                    [class.section-shop]="currentPageSection === 'shop'"
-                    [class.section-blog]="currentPageSection === 'blog'" *ngIf="currentPageTitleShort">{{
+                    [class.section-blog]="currentPageSection === 'blog'"
+                    *ngIf="currentPageTitleShort && currentPageSection !== 'shop'">{{
                     currentPageTitleShort }}</span>
             </a>
         </div>
@@ -155,22 +155,50 @@
                             {{ getTranslation('shop') }}
                         </h3>
                         <div class="megamenu-links">
-                            <a [routerLink]="['/shop']" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('shop') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescBrowseProducts') }}</span>
+                            <a [routerLink]="['/gallery']"
+                                class="megamenu-link megamenu-link-featured megamenu-shop-primary">
+                                <span class="link-title">
+                                    {{ currentLanguage === 'de' ? 'Foto lizenzieren' : 'License Photo' }}
+                                    <span class="megamenu-shop-pill">Featured</span>
+                                </span>
+                                <span class="link-description">{{ currentLanguage === 'de' ? 'Direkt zur Galerie und
+                                    Motive fuer den Warenkorb auswaehlen.' : 'Go straight to the gallery and select
+                                    photos for your cart.' }}</span>
+                            </a>
+                            <a [routerLink]="['/shop/cart']" class="megamenu-link">
+                                <span class="link-title">
+                                    {{ currentLanguage === 'de' ? 'Warenkorb' : 'Cart' }}
+                                    <span class="megamenu-shop-pill" *ngIf="cartQuantity > 0">{{ cartQuantity }}</span>
+                                </span>
+                                <span class="link-description">{{ currentLanguage === 'de' ? 'Auswahl pruefen und
+                                    Checkout starten.' : 'Review your selection and start checkout.' }}</span>
+                            </a>
+                            <a [routerLink]="['/shop/account']" class="megamenu-link" *ngIf="isShopAuthenticated">
+                                <span class="link-title">{{ currentLanguage === 'de' ? 'Mein Konto & Bestellungen' : 'My
+                                    Account & Orders' }}</span>
+                                <span class="link-description">{{ currentLanguage === 'de' ? 'Bestellungen, Rechnungen
+                                    und Historie verwalten.' : 'Manage orders, invoices, and purchase history.'
+                                    }}</span>
                             </a>
                             <a [routerLink]="['/shop/account']" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('myAccount') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescAccountSettings') }}</span>
+                                <span class="link-title">{{ currentLanguage === 'de' ? 'Downloads & Zertifikate' :
+                                    'Downloads & Certificates' }}</span>
+                                <span class="link-description">{{ currentLanguage === 'de' ? 'Originale und
+                                    Echtheitszertifikate erneut laden.' : 'Re-download originals and authenticity
+                                    certificates.' }}</span>
                             </a>
-                            <a [routerLink]="['/shop/account']" class="megamenu-link">
-                                <span class="link-title">My Downloads</span>
-                                <span class="link-description">{{ getTranslation('menuDescDownloads') }}</span>
-                            </a>
-                            <a [routerLink]="['/shop/account']" class="megamenu-link">
-                                <span class="link-title">My Purchases</span>
-                                <span class="link-description">{{ getTranslation('menuDescOrderHistory') }}</span>
-                            </a>
+                            <button type="button" class="megamenu-link megamenu-link-button"
+                                (click)="handleShopAccountAction()">
+                                <span class="link-title">{{ isShopAuthenticated
+                                    ? (currentLanguage === 'de' ? 'Abmelden' : 'Logout')
+                                    : (currentLanguage === 'de' ? 'Anmelden / Registrieren' : 'Login / Register')
+                                    }}</span>
+                                <span class="link-description">{{ isShopAuthenticated
+                                    ? (currentLanguage === 'de' ? 'Sicher vom Shop-Konto abmelden.' : 'Sign out safely
+                                    from your shop account.')
+                                    : (currentLanguage === 'de' ? 'Im Konto anmelden oder neu registrieren.' : 'Sign in
+                                    or create your account.') }}</span>
+                            </button>
                         </div>
                     </div>
 
@@ -315,13 +343,19 @@
                         href="javascript:void(0);">{{ getTranslation('shop') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'shop'" id="mobile-shop-dropdown"
                         [class.open]="openMobileDropdownMenu === 'shop'">
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop']"
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/cart']"
                             class="mobile-dropdown-link dropdown-link-career">
-                            {{ getTranslation('shop') }}
+                            {{ currentLanguage === 'de' ? 'Warenkorb' : 'Cart' }}
                         </a>
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/account']"
-                            class="mobile-dropdown-link dropdown-link-career">
+                            class="mobile-dropdown-link dropdown-link-career" *ngIf="isShopAuthenticated">
                             {{ getTranslation('myAccount') }}
+                        </a>
+                        <a (click)="handleShopAccountActionMobile()" class="mobile-dropdown-link dropdown-link-career"
+                            href="javascript:void(0);">
+                            {{ isShopAuthenticated
+                            ? (currentLanguage === 'de' ? 'Abmelden' : 'Logout')
+                            : (currentLanguage === 'de' ? 'Anmelden / Registrieren' : 'Login / Register') }}
                         </a>
                     </div>
         </div>

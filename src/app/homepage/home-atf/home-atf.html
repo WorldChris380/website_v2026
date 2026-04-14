@@ -39,8 +39,9 @@
             <p class="hero-quote">{{ currentQuote }}</p>
         </div>
         <div class="hero-buttons">
-            <a class="btn btn-primary" routerLink="/photography-travels">{{ currentLanguage === 'en' ? 'Travels' :
-                'Reisen' }}</a>
+            <a class="btn btn-primary" routerLink="/travel-budget-calculator">{{ currentLanguage === 'en' ? 'Travel
+                Budget Calculator' :
+                'Reisebudget-Rechner' }}</a>
             <a class="btn btn-secondary" routerLink="/gallery" [queryParams]="{ filter: 'travel' }">{{ currentLanguage
                 === 'en' ? 'Travel Gallery' : 'Reisefotos' }}</a>
         </div>
@@ -57,9 +58,6 @@
                 === 'en' ? 'View aviation photos' : 'Luftfahrtfotografien ansehen' }}</a>
             <a class="btn btn-primary" routerLink="/aviation-spotter-hotels">{{ currentLanguage === 'en' ? 'Aviation
                 Tourism' : 'Luftfahrt-Tourismus' }}</a>
-            <a href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
-                target="_blank" rel="noopener noreferrer" class="btn btn-secondary">{{ currentLanguage === 'en' ? 'Buy
-                photos' : 'Fotos kaufen' }}</a>
         </div>
     </div>
 
@@ -74,10 +72,6 @@
                 === 'en' ? 'Aviation Gallery' : 'Luftfahrt Galerie' }}</a>
             <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'travel' }">{{ currentLanguage ===
                 'en' ? 'Travel Gallery' : 'Reise Galerie' }}</a>
-            <a class="btn btn-secondary"
-                href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
-                target="_blank" rel="noopener noreferrer">{{ currentLanguage === 'en' ? 'Buy Photos' : 'Fotos kaufen'
-                }}</a>
         </div>
     </div>
 

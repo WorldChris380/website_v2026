@@ -5,6 +5,10 @@
     "ng": "ng",
     "start": "ng serve",
     "generate-manifest": "node scripts/generate-manifest.js",
+    "copy-object-storage-images": "node scripts/copy-object-storage-images.js",
+    "import-gallery-db": "php scripts/import-gallery-to-db.php",
+    "import-gallery-db-delta": "php scripts/import-gallery-to-db.php --delta",
+    "sync-gallery-metadata": "php scripts/process-metadata-sync.php",
     "build": "ng build && call postbuild.bat",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -44,6 +48,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "sharp": "^0.33.5",
     "typescript": "~5.8.2"
   }
 }

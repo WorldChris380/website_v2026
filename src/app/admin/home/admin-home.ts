@@ -38,10 +38,10 @@ export class AdminHome {
         this.showPasswordError.set(false);
 
         this.adminService.login(password).subscribe(
-            success => {
+            result => {
                 this.isLoading.set(false);
 
-                if (success) {
+                if (result.success) {
                     this.passwordInput.set('');
                     this.showPasswordError.set(false);
 
@@ -54,9 +54,10 @@ export class AdminHome {
                     this.showPasswordError.set(true);
 
                     const currentLang = this.languageService.getCurrentLanguage();
-                    const message = currentLang === 'en'
-                        ? 'Wrong password'
-                        : 'Falsches Passwort';
+                    const serverError = (result.error || '').trim();
+                    const message = serverError
+                        ? serverError
+                        : (currentLang === 'en' ? 'Wrong password' : 'Falsches Passwort');
                     this.toastService.error(message);
                 }
             }
@@ -74,6 +75,18 @@ export class AdminHome {
         const message = currentLang === 'en'
             ? `Test mode ${newState ? 'enabled' : 'disabled'}`
             : `Test-Modus ${newState ? 'aktiviert' : 'deaktiviert'}`;
+
+        this.toastService.success(message);
+    }
+
+    toggleGoogleLogin(): void {
+        this.adminService.toggleGoogleLogin();
+
+        const currentLang = this.languageService.getCurrentLanguage();
+        const newState = this.adminService.isGoogleLoginEnabled();
+        const message = currentLang === 'en'
+            ? `Google login ${newState ? 'enabled' : 'disabled'}`
+            : `Google-Login ${newState ? 'aktiviert' : 'deaktiviert'}`;
 
         this.toastService.success(message);
     }

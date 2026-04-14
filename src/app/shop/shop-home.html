@@ -3,77 +3,32 @@
         <header class="shop-hero">
             <div>
                 <p class="eyebrow">Shop</p>
-                <h1>Photo Shop</h1>
-                <p class="lede">Buy selected aviation and travel shots. PayPal only for fast checkout.</p>
+                <h1>{{ t('pageTitle') }}</h1>
+                <p class="lede">{{ t('pageLead') }}</p>
             </div>
         </header>
         <section class="shop-body">
-            <p class="hint">Use the gallery and lightbox to add photos to your cart. Checkout with the cart button
-                bottom-right.</p>
+            <p class="hint">{{ t('hint') }}</p>
 
             <div class="products-grid">
                 <article class="product-card featured">
                     <div class="product-header">
-                        <p class="eyebrow badge-new">🎉 New 2027</p>
-                        <h3>Wall Calendar 2027</h3>
+                        <p class="eyebrow badge-new">{{ t('badge') }}</p>
+                        <h3>{{ t('productTitle') }}</h3>
                     </div>
-                    <p class="product-copy">Stunning wall calendar featuring 12 beautiful aviation and travel
-                        photographs from my collection. Each month showcases a different breathtaking destination
-                        captured through my lens.</p>
+                    <p class="product-copy">{{ t('productCopy') }}</p>
                     <ul class="product-meta">
-                        <li>Paper: Premium satin finish</li>
-                        <li>Size: A3 landscape (29.7 x 42 cm)</li>
-                        <li>Binding: Sturdy wire-o with hook</li>
-                        <li>Months: January - December 2027</li>
-                        <li>Printed on high-quality 250gsm paper</li>
+                        <li>{{ t('meta1') }}</li>
+                        <li>{{ t('meta2') }}</li>
+                        <li>{{ t('meta3') }}</li>
+                        <li>{{ t('meta4') }}</li>
                     </ul>
                     <div class="product-price">
-                        <span class="price">€34,99</span>
-                        <span class="stock-indicator">In Stock</span>
+                        <span class="price">€79,00</span>
+                        <span class="stock-indicator">{{ t('stock') }}</span>
                     </div>
                     <div class="product-actions">
-                        <button class="primary" type="button" (click)="addCalendarToCart()">Add to Cart</button>
-                        <a class="secondary"
-                            href="mailto:info@christian-boehme.com?subject=Calendar%202027%20Inquiry">Contact for bulk
-                            orders</a>
-                    </div>
-                </article>
-
-                <article class="product-card">
-                    <div class="product-header">
-                        <p class="eyebrow">Print</p>
-                        <h3>Poster / Fine Art</h3>
-                    </div>
-                    <p class="product-copy">Select one hero image for a poster or fine-art print. We’ll prep bleed,
-                        crop,
-                        and sharpening to match your chosen size.</p>
-                    <ul class="product-meta">
-                        <li>Sizes: A2 / A1 / 50x70 cm</li>
-                        <li>Stock: Matte or semi-gloss</li>
-                        <li>Framing: Optional recommendations</li>
-                    </ul>
-                    <div class="product-actions">
-                        <a class="secondary" [routerLink]="['/gallery']">Pick your photo</a>
-                        <button class="primary" type="button">Add poster placeholder</button>
-                    </div>
-                </article>
-
-                <article class="product-card">
-                    <div class="product-header">
-                        <p class="eyebrow">Merch</p>
-                        <h3>Custom Printables</h3>
-                    </div>
-                    <p class="product-copy">Need mugs, cards, or canvas? Start with your favorite shot, and we’ll set up
-                        a
-                        print-ready file for your supplier.</p>
-                    <ul class="product-meta">
-                        <li>Artwork prep included</li>
-                        <li>Proof via email</li>
-                        <li>Production handled by your printer</li>
-                    </ul>
-                    <div class="product-actions">
-                        <a class="secondary" [routerLink]="['/gallery']">Select photo</a>
-                        <button class="primary" type="button">Add merch placeholder</button>
+                        <a class="secondary" [routerLink]="['/gallery']">{{ t('cta') }}</a>
                     </div>
                 </article>
             </div>
