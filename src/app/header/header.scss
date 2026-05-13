@@ -123,6 +123,10 @@
     margin-left: var(--space-2);
 }
 
+#header-logo-link:hover {
+    opacity: 1;
+}
+
 .page-heading-current {
     margin-left: 0.45rem;
     max-width: 26ch;
@@ -162,6 +166,88 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    gap: var(--space-3);
+    width: min(100%, 900px);
+}
+
+.desktop-mega-nav {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    width: min(100%, 860px);
+    padding: 0 var(--space-2);
+
+    .desktop-mega-link {
+        --desktop-category-color: #334155;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 32px;
+        padding: 0 12px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        color: $career-black;
+        text-decoration: none;
+        font-size: calc(var(--font-size-lg) - 2pt);
+        line-height: 1.2;
+        transition: background-color var(--dur-fast) var(--ease-standard),
+            border-color var(--dur-fast) var(--ease-standard),
+            color var(--dur-fast) var(--ease-standard);
+        position: relative;
+
+        &[data-category="travel"] {
+            --desktop-category-color: #{$travel-green};
+        }
+
+        &[data-category="aviation"] {
+            --desktop-category-color: #{$aviation-blue};
+        }
+
+        &[data-category="photography"] {
+            --desktop-category-color: #{$photography-orange};
+        }
+
+        &[data-category="career"] {
+            --desktop-category-color: #{$career-black};
+        }
+
+        &[data-category="shop"] {
+            --desktop-category-color: #{$shop-blue};
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 10px;
+            right: 10px;
+            bottom: 4px;
+            height: 2px;
+            border-radius: 999px;
+            background: var(--desktop-category-color);
+            opacity: 0;
+            transform: scaleX(0.6);
+            transition: opacity var(--dur-fast) var(--ease-standard), transform var(--dur-fast) var(--ease-standard);
+        }
+
+        &:hover,
+        &:focus-visible {
+            background: rgba(15, 23, 42, 0.06);
+            border-color: rgba(15, 23, 42, 0.14);
+            outline: none;
+
+            &::after {
+                opacity: 0.95;
+                transform: scaleX(1);
+            }
+        }
+    }
+}
+
+@media (min-width: 1025px) {
+    .desktop-mega-nav {
+        display: inline-flex;
+    }
 }
 
 // Megamenu Trigger Button
@@ -233,6 +319,66 @@
 }
 
 :host-context(body.dark-mode) {
+    .desktop-mega-nav {
+        .desktop-mega-link {
+            color: #e2e8f0;
+
+            &:hover {
+                border-color: color-mix(in srgb, var(--desktop-category-color) 52%, #94a3b8);
+            }
+
+            &::after {
+                opacity: 0.92;
+            }
+        }
+
+        .desktop-mega-link[data-category="travel"] {
+            --desktop-category-color: #{$travel-green-bright};
+
+            &:hover,
+            &:focus-visible {
+                background: rgba($travel-green-bright, 0.24);
+            }
+        }
+
+        .desktop-mega-link[data-category="aviation"] {
+            --desktop-category-color: #{$aviation-blue-bright};
+
+            &:hover,
+            &:focus-visible {
+                background: rgba($aviation-blue-bright, 0.24);
+            }
+        }
+
+        .desktop-mega-link[data-category="photography"] {
+            --desktop-category-color: #{$photography-orange-bright};
+
+            &:hover,
+            &:focus-visible {
+                background: rgba($photography-orange-bright, 0.25);
+            }
+        }
+
+        .desktop-mega-link[data-category="career"] {
+            --desktop-category-color: #{$career-black-bright};
+
+            &:hover,
+            &:focus-visible {
+                background: rgba($career-black-bright, 0.3);
+            }
+        }
+
+        .desktop-mega-link[data-category="shop"] {
+            --desktop-category-color: #{$shop-blue-bright};
+
+            &:hover,
+            &:focus-visible {
+                background: rgba($shop-blue-bright, 0.32);
+                box-shadow: 0 0 0 1px rgba($shop-blue-bright, 0.55), 0 0 18px rgba($shop-blue-bright, 0.24);
+            }
+        }
+    }
+
     .megamenu-trigger {
         color: #f2f2f2;
         background: #21242a;
@@ -339,6 +485,10 @@
         opacity: 0.8;
     }
 
+    &.active::before {
+        opacity: 1;
+    }
+
     // Category-specific colors
     &[data-category="travel"]::before {
         background: $travel-green;
@@ -360,11 +510,29 @@
         background: $shop-blue;
     }
 
-    &[data-category="shop"] {
-        background: linear-gradient(180deg, rgba($shop-blue, 0.05), rgba($shop-blue, 0));
-        border: 1px solid rgba($shop-blue, 0.16);
-        border-radius: var(--radius-md);
-        padding: var(--space-3);
+    &.active[data-category="travel"] {
+        background: linear-gradient(180deg, rgba($travel-green, 0.12), rgba($travel-green, 0.03));
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    &.active[data-category="aviation"] {
+        background: linear-gradient(180deg, rgba($aviation-blue, 0.12), rgba($aviation-blue, 0.03));
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    &.active[data-category="photography"] {
+        background: linear-gradient(180deg, rgba($photography-orange, 0.14), rgba($photography-orange, 0.04));
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    &.active[data-category="career"] {
+        background: linear-gradient(180deg, rgba($career-black, 0.1), rgba($career-black, 0.03));
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    &.active[data-category="shop"] {
+        background: linear-gradient(180deg, rgba($shop-blue, 0.2), rgba($shop-blue, 0.05));
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 }
 
@@ -521,19 +689,44 @@
         }
     }
 
-    .megamenu-section[data-category="shop"] {
-        background: linear-gradient(180deg, rgba($shop-blue-bright, 0.15), rgba($shop-blue-bright, 0.04));
-        border-color: rgba($shop-blue-bright, 0.38);
+    .megamenu-section.active[data-category="travel"] {
+        background: linear-gradient(180deg, rgba($travel-green-bright, 0.2), rgba($travel-green-bright, 0.07));
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    .megamenu-section.active[data-category="aviation"] {
+        background: linear-gradient(180deg, rgba($aviation-blue-bright, 0.22), rgba($aviation-blue-bright, 0.07));
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    .megamenu-section.active[data-category="photography"] {
+        background: linear-gradient(180deg, rgba($photography-orange-bright, 0.24), rgba($photography-orange-bright, 0.08));
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    .megamenu-section.active[data-category="career"] {
+        background: linear-gradient(180deg, rgba($career-black-bright, 0.24), rgba($career-black-bright, 0.08));
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    .megamenu-section.active[data-category="shop"] {
+        background: linear-gradient(180deg, rgba($shop-blue-bright, 0.3), rgba($shop-blue-bright, 0.14));
+        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     .megamenu-shop-primary {
-        border-color: rgba($shop-blue-bright, 0.38);
-        background: rgba($shop-blue-bright, 0.15);
+        border-color: rgba($shop-blue-bright, 0.54);
+        background: rgba($shop-blue-bright, 0.22);
     }
 
     .megamenu-shop-pill {
         background: $shop-blue-bright;
         color: $shop-blue-dark;
+    }
+
+    .megamenu-section[data-category="shop"] .megamenu-link:hover {
+        background: rgba($shop-blue-bright, 0.2);
+        border-left-color: rgba($shop-blue-bright, 0.9);
     }
 }
 
@@ -655,12 +848,21 @@
 
 :host-context(body.dark-mode) {
     .header-cart {
-        color: $cb-white-ish;
-        border-color: transparent;
+        color: #f0f8ff;
+        border-color: rgba($shop-blue-bright, 0.45);
+        background: rgba($shop-blue-bright, 0.16);
+        box-shadow: 0 6px 14px rgba(8, 47, 73, 0.35);
 
         &:hover {
-            background-color: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.16);
+            background-color: rgba($shop-blue-bright, 0.28);
+            border-color: rgba($shop-blue-bright, 0.68);
+            box-shadow: 0 10px 20px rgba(8, 47, 73, 0.45);
+        }
+
+        .cart-badge {
+            background: $shop-blue-bright;
+            color: $shop-blue-dark;
+            box-shadow: 0 2px 8px rgba(56, 189, 248, 0.55);
         }
     }
 }
@@ -758,7 +960,7 @@
         outline-offset: 2px;
     }
 
-    @media (min-width: 769px) {
+    @media (min-width: 1201px) {
         display: none;
     }
 }
@@ -794,7 +996,7 @@
         outline-offset: 2px;
     }
 
-    @media (min-width: 769px) {
+    @media (min-width: 1201px) {
         display: none !important;
     }
 }
@@ -985,7 +1187,8 @@
 #mobile-shop-dropdown,
 #mobile-travel-dropdown,
 #mobile-blog-dropdown,
-#mobile-career-dropdown {
+#mobile-career-dropdown,
+#mobile-photography-dropdown {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
@@ -998,7 +1201,8 @@
 #mobile-shop-dropdown.open,
 #mobile-travel-dropdown.open,
 #mobile-blog-dropdown.open,
-#mobile-career-dropdown.open {
+#mobile-career-dropdown.open,
+#mobile-photography-dropdown.open {
     max-height: 600px;
     opacity: 1;
     display: flex;
@@ -1007,7 +1211,11 @@
 }
 
 .dropdown-link-photography:hover {
-    background-color: $cb-green-ish;
+    background-color: rgba($cb-orange-ish, 0.12);
+}
+
+.dropdown-link-shop:hover {
+    background-color: rgba($shop-blue, 0.1);
 }
 
 .goBackToMainMobileMenu {
@@ -1157,9 +1365,15 @@
 @media(max-width: 1279px) {}
 
 
-@media(min-width: 769px) {
+@media(min-width: 1201px) {
     #burger-menu-icon {
         display: none;
+    }
+}
+
+@media(max-width: 1200px) {
+    #burger-menu-icon {
+        display: flex;
     }
 }
 

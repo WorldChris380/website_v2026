@@ -525,22 +525,48 @@ SQL;
         $shopOrderId = (int) $insertOrderStmt->insert_id;
         $insertOrderStmt->close();
 
-        $invoiceData = buildInvoiceAccessData($shopOrderId, $invoiceToken);
+        $shopOrderColumns = fetchTableColumns($db, 'shop_orders');
+        $supportsInvoiceToken = isset($shopOrderColumns['invoice_token']);
+        $supportsInvoiceNumber = isset($shopOrderColumns['invoice_number']);
+        $supportsInvoicePdfUrl = isset($shopOrderColumns['invoice_pdf_url']);
+        $supportsInvoiceGeneratedAt = isset($shopOrderColumns['invoice_generated_at']);
 
-        $updateInvoiceStmt = $db->prepare(
-            'UPDATE shop_orders SET invoice_number = ?, invoice_pdf_url = ?, invoice_token = ?, invoice_generated_at = CURRENT_TIMESTAMP WHERE id = ? LIMIT 1'
-        );
+        if (!$supportsInvoiceNumber || !$supportsInvoicePdfUrl) {
+            throw new RuntimeException('Missing required invoice columns on shop_orders table.');
+        }
+
+        $invoiceData = buildInvoiceAccessData($shopOrderId, $invoiceToken, $supportsInvoiceToken);
+
+        $setParts = [
+            'invoice_number = ?',
+            'invoice_pdf_url = ?',
+        ];
+        $bindTypes = 'ss';
+        $bindValues = [
+            $invoiceData['invoiceNumber'],
+            $invoiceData['invoicePdfUrl'],
+        ];
+
+        if ($supportsInvoiceToken) {
+            $setParts[] = 'invoice_token = ?';
+            $bindTypes .= 's';
+            $bindValues[] = $invoiceData['invoiceToken'];
+        }
+
+        if ($supportsInvoiceGeneratedAt) {
+            $setParts[] = 'invoice_generated_at = CURRENT_TIMESTAMP';
+        }
+
+        $invoiceUpdateSql = 'UPDATE shop_orders SET ' . implode(', ', $setParts) . ' WHERE id = ? LIMIT 1';
+        $bindTypes .= 'i';
+        $bindValues[] = $shopOrderId;
+
+        $updateInvoiceStmt = $db->prepare($invoiceUpdateSql);
         if (!$updateInvoiceStmt) {
             throw new RuntimeException('Failed to prepare invoice update: ' . $db->error);
         }
 
-        $updateInvoiceStmt->bind_param(
-            'sssi',
-            $invoiceData['invoiceNumber'],
-            $invoiceData['invoicePdfUrl'],
-            $invoiceData['invoiceToken'],
-            $shopOrderId
-        );
+        bindDynamicParams($updateInvoiceStmt, $bindTypes, $bindValues);
         $updateInvoiceStmt->execute();
         $updateInvoiceStmt->close();
 
@@ -594,7 +620,7 @@ function buildInvoiceToken(): string
     return rtrim(strtr(base64_encode(random_bytes(24)), '+/', '-_'), '=');
 }
 
-function buildInvoiceAccessData(int $orderNumber, string $invoiceToken): array
+function buildInvoiceAccessData(int $orderNumber, string $invoiceToken, bool $includeToken = true): array
 {
     if ($orderNumber <= 0) {
         throw new RuntimeException('Invalid order number for invoice generation.');
@@ -602,7 +628,10 @@ function buildInvoiceAccessData(int $orderNumber, string $invoiceToken): array
 
     $invoiceNumber = str_pad((string) $orderNumber, 6, '0', STR_PAD_LEFT);
 
-    $relativePath = '/api/invoice.php?invoice=' . rawurlencode($invoiceNumber) . '&token=' . rawurlencode($invoiceToken);
+    $relativePath = '/api/invoice.php?invoice=' . rawurlencode($invoiceNumber);
+    if ($includeToken) {
+        $relativePath .= '&token=' . rawurlencode($invoiceToken);
+    }
     $invoicePdfUrl = $relativePath;
 
     return [
@@ -794,4 +823,28 @@ function bindDynamicParams(mysqli_stmt $stmt, string $types, array $values): voi
     }
 
     call_user_func_array([$stmt, 'bind_param'], $refs);
+}
+
+function fetchTableColumns(mysqli $db, string $table): array
+{
+    $tableName = trim($table);
+    if ($tableName === '') {
+        return [];
+    }
+
+    $escapedTable = $db->real_escape_string($tableName);
+    $result = $db->query('SHOW COLUMNS FROM `' . $escapedTable . '`');
+    if (!$result) {
+        return [];
+    }
+
+    $columns = [];
+    while ($row = $result->fetch_assoc()) {
+        $name = isset($row['Field']) ? trim((string) $row['Field']) : '';
+        if ($name !== '') {
+            $columns[$name] = true;
+        }
+    }
+
+    return $columns;
 }

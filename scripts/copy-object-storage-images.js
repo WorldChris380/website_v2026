@@ -1,4 +1,5 @@
 const fs = require('fs/promises');
+const fsSync = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 const crypto = require('crypto');
@@ -17,6 +18,8 @@ const SOURCE_ROOTS = [
 const DESTINATION_ROOT = 'D:\\Programmieren\\cb.com\\Object storage';
 const FILE_PATTERN = /(?:B|\u00DC)\.jpg$/i;
 const NAME_MAP_FILE = path.join(DESTINATION_ROOT, 'name-map.json');
+const STATS_MANIFEST_FILE = path.join(__dirname, '..', 'src', 'assets', 'img', 'photography', 'manifest.json');
+const DB_SECRETS_FILE = path.join(__dirname, '..', 'secrets', 'gallery-db.local.json');
 
 const VARIANTS = {
     original: {
@@ -32,7 +35,7 @@ const VARIANTS = {
             fit: 'inside',
             withoutEnlargement: true
         },
-        quality: 80
+        quality: 70
     },
     thumbnail: {
         folder: 'thumbnail',
@@ -63,6 +66,8 @@ async function main() {
     }
 
     await writeNameMap(nameMapEntries);
+    await writeStatsManifest(nameMapEntries);
+    await syncToDatabase(nameMapEntries);
 
     console.log(`Copied ${copiedOriginalCount} original file(s) to ${path.join(DESTINATION_ROOT, VARIANTS.original.folder)}`);
     console.log(`Generated ${generatedGridCount} grid file(s) in ${path.join(DESTINATION_ROOT, VARIANTS.grid.folder)}`);
@@ -145,15 +150,31 @@ async function copyIfMatch(root, sourceFilePath, reservedRelativePaths, nameMapE
     const gridPath = path.join(DESTINATION_ROOT, VARIANTS.grid.folder, normalizedRelativePath);
     const thumbnailPath = path.join(DESTINATION_ROOT, VARIANTS.thumbnail.folder, normalizedRelativePath);
 
-    const copiedOriginalCount = await writeOriginal(sourceFilePath, originalPath);
-    const generatedGridCount = await writeVariant(sourceFilePath, gridPath, VARIANTS.grid);
-    const generatedThumbnailCount = await writeVariant(sourceFilePath, thumbnailPath, VARIANTS.thumbnail);
+    const [origExists, gridExists, thumbExists] = await Promise.all([
+        exists(originalPath),
+        exists(gridPath),
+        exists(thumbnailPath)
+    ]);
+
+    if (origExists && gridExists && thumbExists) {
+        console.log(`Skipped (all variants present): ${sourceFilePath}`);
+        return {
+            copiedOriginalCount: 0,
+            generatedGridCount: 0,
+            generatedThumbnailCount: 0,
+            skippedCount: 1
+        };
+    }
+
+    const copiedOriginalCount = origExists ? 0 : await writeOriginal(sourceFilePath, originalPath);
+    const generatedGridCount = gridExists ? 0 : await writeVariant(sourceFilePath, gridPath, VARIANTS.grid);
+    const generatedThumbnailCount = thumbExists ? 0 : await writeVariant(sourceFilePath, thumbnailPath, VARIANTS.thumbnail);
 
     return {
         copiedOriginalCount,
         generatedGridCount,
         generatedThumbnailCount,
-        skippedCount: copiedOriginalCount === 0 && generatedGridCount === 0 && generatedThumbnailCount === 0 ? 1 : 0
+        skippedCount: 0
     };
 }
 
@@ -225,6 +246,34 @@ async function writeNameMap(nameMapEntries) {
     await fs.writeFile(NAME_MAP_FILE, JSON.stringify(payload, null, 2), 'utf-8');
 }
 
+async function writeStatsManifest(nameMapEntries) {
+    const countries = new Set();
+    let aviationPhotos = 0;
+    let travelPhotos = 0;
+
+    for (const posixKey of Object.keys(nameMapEntries)) {
+        const parts = posixKey.split('/');
+        const label = parts[0];
+        const country = parts[2];
+
+        if (label === 'Aviation') aviationPhotos++;
+        else if (label === 'Travel') travelPhotos++;
+
+        if (country) countries.add(country.replace(/_/g, ' '));
+    }
+
+    const manifest = {
+        aviationPhotos,
+        travelPhotos,
+        totalPhotos: aviationPhotos + travelPhotos,
+        countriesPresented: countries.size
+    };
+
+    await fs.mkdir(path.dirname(STATS_MANIFEST_FILE), { recursive: true });
+    await fs.writeFile(STATS_MANIFEST_FILE, JSON.stringify(manifest, null, 2), 'utf-8');
+    console.log(`Wrote stats manifest to ${STATS_MANIFEST_FILE} ->`, manifest);
+}
+
 function toPosixPath(value) {
     return value.split(path.sep).join('/');
 }
@@ -268,6 +317,181 @@ async function exists(targetPath) {
         return true;
     } catch {
         return false;
+    }
+}
+
+function readDbConfig() {
+    let file = {};
+    try {
+        file = JSON.parse(fsSync.readFileSync(DB_SECRETS_FILE, 'utf-8'));
+    } catch {
+        // Secrets file optional — fall back to env vars
+    }
+
+    return {
+        host:       file.host       || process.env.GALLERY_DB_HOST      || 'db5020224670.hosting-data.io',
+        port:       parseInt(file.port || process.env.GALLERY_DB_PORT   || '3306', 10),
+        database:   file.database   || process.env.GALLERY_DB_NAME      || 'dbs15552605',
+        user:       file.username   || process.env.GALLERY_DB_USER      || 'dbu595115',
+        password:   file.password   || process.env.GALLERY_DB_PASS      || process.env.GALLERY_DB_PASSWORD || process.env.DB_PASSWORD || '',
+        charset:    file.charset    || process.env.GALLERY_DB_CHARSET   || 'utf8mb4',
+        syncApiUrl: file.syncApiUrl || process.env.GALLERY_SYNC_API_URL || '',
+        syncApiKey: file.syncApiKey || process.env.GALLERY_SYNC_API_KEY || '',
+    };
+}
+
+function humanizeSegment(value) {
+    return value.replace(/_/g, ' ').trim();
+}
+
+function buildSyncRows(nameMapEntries) {
+    const rows = [];
+    for (const [posixKey, entry] of Object.entries(nameMapEntries)) {
+        const parts = posixKey.split('/');
+        if (parts.length < 2) continue;
+
+        rows.push({
+            category:       humanizeSegment(parts[0] || 'Unknown'),
+            continent:      humanizeSegment(parts[1] || 'Unknown'),
+            country:        humanizeSegment(parts[2] || 'Unknown'),
+            title:          (entry.originalTitle || entry.sanitizedFileName.replace(/\.[^.]+$/, '')).trim(),
+            title_de:       null,
+            description:    null,
+            description_de: null,
+            path_original:  `original/${posixKey}`,
+            path_grid:      `grid/${posixKey}`,
+            path_thumbnail: `thumbnail/${posixKey}`,
+        });
+    }
+    return rows;
+}
+
+async function syncToDatabase(nameMapEntries) {
+    const config = readDbConfig();
+    const hasMySQL = !!config.password;
+    const hasHttp  = !!(config.syncApiUrl && config.syncApiKey);
+
+    if (!hasMySQL && !hasHttp) {
+        console.warn('DB sync skipped: no credentials configured (set secrets/gallery-db.local.json).');
+        return;
+    }
+
+    if (hasMySQL) {
+        const error = await trySyncViaMySQL(config, nameMapEntries);
+        if (!error) return;
+
+        const isNetworkError = ['ENOTFOUND', 'ECONNREFUSED', 'ETIMEDOUT'].some(
+            code => error.code === code || error.message.includes(code)
+        );
+
+        if (isNetworkError && hasHttp) {
+            console.warn(`MySQL unreachable (${error.message}), falling back to HTTP sync...`);
+        } else {
+            console.error('DB sync failed (images were still copied):', error.message);
+            return;
+        }
+    }
+
+    if (hasHttp) {
+        await trySyncViaHttp(config, nameMapEntries);
+    }
+}
+
+async function trySyncViaMySQL(config, nameMapEntries) {
+    let connection;
+    try {
+        const mysql = require('mysql2/promise');
+        connection = await mysql.createConnection({
+            host: config.host, port: config.port,
+            database: config.database, user: config.user,
+            password: config.password, charset: config.charset,
+        });
+
+        const [existingRows] = await connection.execute('SELECT path_grid FROM images');
+        const existingGridPaths = new Set(existingRows.map(r => r.path_grid));
+
+        const newRows = buildSyncRows(nameMapEntries).filter(r => !existingGridPaths.has(r.path_grid));
+
+        if (newRows.length === 0) {
+            console.log('DB sync (MySQL): no new images to insert.');
+            return null;
+        }
+
+        const values = newRows.map(r => [
+            r.category, r.continent, r.country,
+            r.title, r.title_de, r.description, r.description_de,
+            r.path_original, r.path_grid, r.path_thumbnail, 1,
+        ]);
+
+        await connection.query(`
+            INSERT INTO images
+                (category, continent, country,
+                 title, title_de, description, description_de,
+                 path_original, path_grid, path_thumbnail, is_active)
+            VALUES ?
+            ON DUPLICATE KEY UPDATE
+                category       = VALUES(category),
+                continent      = VALUES(continent),
+                country        = VALUES(country),
+                title          = COALESCE(NULLIF(images.title, ''),          VALUES(title)),
+                title_de       = COALESCE(NULLIF(images.title_de, ''),       VALUES(title_de)),
+                description    = COALESCE(NULLIF(images.description, ''),    VALUES(description)),
+                description_de = COALESCE(NULLIF(images.description_de, ''), VALUES(description_de)),
+                path_original  = VALUES(path_original),
+                path_thumbnail = VALUES(path_thumbnail),
+                is_active      = 1,
+                updated_at     = CURRENT_TIMESTAMP
+        `, [values]);
+
+        console.log(`DB sync (MySQL): inserted ${newRows.length} new image(s).`);
+        return null;
+    } catch (error) {
+        return error;
+    } finally {
+        if (connection) await connection.end();
+    }
+}
+
+async function trySyncViaHttp(config, nameMapEntries) {
+    try {
+        const https = require('https');
+        const body = JSON.stringify(buildSyncRows(nameMapEntries));
+        const url = new URL(config.syncApiUrl);
+
+        await new Promise((resolve, reject) => {
+            const req = https.request({
+                hostname: url.hostname,
+                port: url.port || 443,
+                path: url.pathname,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(body),
+                    'X-Sync-Key': config.syncApiKey,
+                },
+            }, (res) => {
+                let data = '';
+                res.on('data', chunk => { data += chunk; });
+                res.on('end', () => {
+                    try {
+                        const json = JSON.parse(data);
+                        if (json.ok) {
+                            console.log(`DB sync (HTTP): upserted ${json.upserted} image(s).`);
+                            resolve();
+                        } else {
+                            reject(new Error(json.error || 'Unknown server error'));
+                        }
+                    } catch {
+                        reject(new Error(`Invalid response: ${data.slice(0, 200)}`));
+                    }
+                });
+            });
+            req.on('error', reject);
+            req.write(body);
+            req.end();
+        });
+    } catch (error) {
+        console.error('DB sync (HTTP) failed (images were still copied):', error.message);
     }
 }
 

@@ -15,20 +15,32 @@
         </div>
 
         <div id="header-navigation-div">
-            <!-- Megamenu Trigger -->
-            <button class="megamenu-trigger" [class.open]="megamenuOpen" [attr.aria-expanded]="megamenuOpen"
-                aria-haspopup="true" (mouseenter)="setMegamenuOpen(true)" (click)="toggleMegamenu()">
-                <span class="menu-text">Menu</span>
-                <span class="menu-icon">☰</span>
-            </button>
+            <nav class="desktop-mega-nav" aria-label="Primary navigation" (mouseleave)="setDesktopDropdown(null)">
+                <a [routerLink]="['/travel-budget-calculator']" class="desktop-mega-link" data-category="travel"
+                    (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('travel')">{{ getTranslation('travel')
+                    }}</a>
+                <a [routerLink]="['/gallery']" [queryParams]="{ filter: 'aviation' }" class="desktop-mega-link"
+                    data-category="aviation" (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('aviation')">{{
+                    getTranslation('aviation') }}</a>
+                <a [routerLink]="['/gallery']" class="desktop-mega-link" data-category="photography"
+                    (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('photography')">{{
+                    getTranslation('photography') }}</a>
+                <a [routerLink]="['/career']" class="desktop-mega-link" data-category="career"
+                    (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('career')">{{
+                    getTranslation('myCareer') }}</a>
+                <a [routerLink]="['/shop']" class="desktop-mega-link" data-category="shop"
+                    (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('shop')">{{ getTranslation('shop') }}</a>
+            </nav>
 
             <!-- Megamenu Panel -->
             <div class="megamenu-panel" [class.open]="megamenuOpen" (mouseenter)="setMegamenuOpen(true)"
-                (mouseleave)="setMegamenuOpen(false)">
+                (mouseleave)="setMegamenuOpen(false); setDesktopDropdown(null)" (click)="handleMegamenuClick($event)">
                 <div class="megamenu-content">
 
                     <!-- Travel Section -->
-                    <div class="megamenu-section" data-category="travel">
+                    <div class="megamenu-section" data-category="travel"
+                        [class.active]="openDesktopDropdownMenu === 'travel'"
+                        (mouseenter)="setDesktopDropdown('travel')">
                         <h3 class="megamenu-category">
                             {{ getTranslation('travel') }}
                         </h3>
@@ -45,16 +57,13 @@
                     </div>
 
                     <!-- Aviation Section -->
-                    <div class="megamenu-section" data-category="aviation">
+                    <div class="megamenu-section" data-category="aviation"
+                        [class.active]="openDesktopDropdownMenu === 'aviation'"
+                        (mouseenter)="setDesktopDropdown('aviation')">
                         <h3 class="megamenu-category">
                             {{ getTranslation('aviation') }}
                         </h3>
                         <div class="megamenu-links">
-                            <a [routerLink]="['/gallery']" [queryParams]="{filter: 'aviation'}" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('aviationGallery') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescAircraftPhotography')
-                                    }}</span>
-                            </a>
                             <a href="/aviation-spotter-hotels" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('aviationSpotterHotels') }}</span>
                                 <span class="link-description">{{ getTranslation('menuDescSpotterHotels') }}</span>
@@ -72,7 +81,9 @@
                     </div>
 
                     <!-- Photography Section -->
-                    <div class="megamenu-section" data-category="photography">
+                    <div class="megamenu-section" data-category="photography"
+                        [class.active]="openDesktopDropdownMenu === 'photography'"
+                        (mouseenter)="setDesktopDropdown('photography')">
                         <h3 class="megamenu-category">
                             {{ getTranslation('photography') }}
                         </h3>
@@ -102,7 +113,9 @@
                     </div>
 
                     <!-- Career Section -->
-                    <div class="megamenu-section" data-category="career">
+                    <div class="megamenu-section" data-category="career"
+                        [class.active]="openDesktopDropdownMenu === 'career'"
+                        (mouseenter)="setDesktopDropdown('career')">
                         <h3 class="megamenu-category">
                             {{ getTranslation('myCareer') }}
                         </h3>
@@ -150,7 +163,8 @@
                     </div>
 
                     <!-- Shop Section -->
-                    <div class="megamenu-section" data-category="shop">
+                    <div class="megamenu-section" data-category="shop"
+                        [class.active]="openDesktopDropdownMenu === 'shop'" (mouseenter)="setDesktopDropdown('shop')">
                         <h3 class="megamenu-category">
                             {{ getTranslation('shop') }}
                         </h3>
@@ -241,16 +255,27 @@
 
             <a (click)="goBackToMainMobileMenuFunc()" class="goBackToMainMobileMenu" href="javascript:void(0)">
                 < Go Back </a>
+
+                    <!-- Mobile Travel Menu -->
+                    <a (click)="toggleMobileDropdownMenu('travel')" class="burger-menu-dark-green-item"
+                        href="javascript:void(0);">{{ getTranslation('travel') }}</a>
+                    <div *ngIf="openMobileDropdownMenu === 'travel'" id="mobile-travel-dropdown"
+                        [class.open]="openMobileDropdownMenu === 'travel'">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/travel-budget-calculator']"
+                            class="mobile-dropdown-link dropdown-link-travel">
+                            {{ getTranslation('budgetCalculator') }}
+                        </a>
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/travel-faqs']"
+                            class="mobile-dropdown-link dropdown-link-travel">
+                            {{ getTranslation('travelFaqs') }}
+                        </a>
+                    </div>
+
                     <!-- Mobile Aviation Menu -->
                     <a (click)="toggleMobileDropdownMenu('aviation')" class="burger-menu-blue-item"
                         href="javascript:void(0);">{{ getTranslation('aviation') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'aviation'" id="mobile-aviation-dropdown"
                         [class.open]="openMobileDropdownMenu === 'aviation'">
-                        <a target="_blank" class="mobile-dropdown-link dropdown-link-aviation"
-                            href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail">
-                            <img id="adobe-stock-mobile-logo" [src]="darkmodePNG('adobe-stock-logo')"
-                                alt="adobe stock logo">{{ getTranslation('buyPhotos') }}
-                        </a>
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"
                             [queryParams]="{ filter: 'aviation' }" class="mobile-dropdown-link dropdown-link-aviation">
                             {{ getTranslation('aviationGallery') }}
@@ -273,47 +298,30 @@
                                 {{ getTranslation('airlineSimCeoTools') }}
                             </a>
                         </div>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/']"
-                            class="mobile-dropdown-link dropdown-link-aviation">
-                            {{ getTranslation('msfsComparison') }}
-                        </a>
                     </div>
 
-                    <!-- Mobile Travel Menu -->
-                    <a (click)="toggleMobileDropdownMenu('travel')" class="burger-menu-dark-green-item"
-                        href="javascript:void(0);">{{ getTranslation('travel') }}</a>
-                    <div *ngIf="openMobileDropdownMenu === 'travel'" id="mobile-travel-dropdown"
-                        [class.open]="openMobileDropdownMenu === 'travel'">
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/travel-budget-calculator']"
-                            class="mobile-dropdown-link dropdown-link-travel">
-                            {{ getTranslation('budgetCalculator') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/travel-faqs']"
-                            class="mobile-dropdown-link dropdown-link-travel">
-                            {{ getTranslation('travelFaqs') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography-travels']"
-                            class="mobile-dropdown-link dropdown-link-travel">
-                            {{ getTranslation('photographyTravels') }}
+                    <!-- Mobile Photography Menu -->
+                    <a (click)="toggleMobileDropdownMenu('photography')" class="burger-menu-orange-item"
+                        href="javascript:void(0);">{{ getTranslation('photography') }}</a>
+                    <div *ngIf="openMobileDropdownMenu === 'photography'" id="mobile-photography-dropdown"
+                        [class.open]="openMobileDropdownMenu === 'photography'">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"
+                            [queryParams]="{ filter: 'aviation' }" class="mobile-dropdown-link dropdown-link-photography">
+                            {{ getTranslation('aviationGallery') }}
                         </a>
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"
-                            [queryParams]="{ filter: 'travel' }" class="mobile-dropdown-link dropdown-link-travel">
+                            [queryParams]="{ filter: 'travel' }" class="mobile-dropdown-link dropdown-link-photography">
                             {{ getTranslation('travelGallery') }}
                         </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/my-visited-countries']"
-                            class="mobile-dropdown-link dropdown-link-travel">
-                            {{ getTranslation('myVisitedCountries') }}
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/about-my-photography']"
+                            class="mobile-dropdown-link dropdown-link-photography">
+                            {{ getTranslation('aboutMyPhotography') }}
                         </a>
-                    </div>
-
-                    <!-- Mobile Blog Menu - Disabled -->
-                    <a style="display: none;" (click)="toggleMobileDropdownMenu('blog')" class="burger-menu-orange-item"
-                        href="javascript:void(0);">Blog</a>
-                    <div style="display: none;" *ngIf="openMobileDropdownMenu === 'blog'" id="mobile-blog-dropdown"
-                        [class.open]="openMobileDropdownMenu === 'blog'">
-                        <a (click)="closeMenuAfterNavigation()" class="mobile-dropdown-link dropdown-link-blog"
-                            [routerLink]="['/']">
-                            MSFS Career addons comparison
+                        <a target="_blank"
+                            href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
+                            class="mobile-dropdown-link dropdown-link-photography">
+                            <img id="adobe-stock-mobile-logo" [src]="darkmodePNG('adobe-stock-logo')"
+                                alt="adobe stock logo">{{ getTranslation('buyPhotos') }}
                         </a>
                     </div>
 
@@ -322,19 +330,43 @@
                         href="javascript:void(0);">{{ getTranslation('myCareer') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'career'" id="mobile-career-dropdown"
                         [class.open]="openMobileDropdownMenu === 'career'">
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']"
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'profile'"
                             class="mobile-dropdown-link dropdown-link-career">
-                            {{ getTranslation('viewCV') }}
+                            {{ getTranslation('profile') }}
                         </a>
-                        <a target="_blank" href="https://github.com/WorldChris380"
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'experience'"
                             class="mobile-dropdown-link dropdown-link-career">
-                            <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">{{
-                            getTranslation('github') }}
+                            {{ getTranslation('experience') }}
+                        </a>
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'education'"
+                            class="mobile-dropdown-link dropdown-link-career">
+                            {{ getTranslation('education') }}
+                        </a>
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'skills'"
+                            class="mobile-dropdown-link dropdown-link-career">
+                            {{ getTranslation('skillsCertifications') }}
+                        </a>
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'projects'"
+                            class="mobile-dropdown-link dropdown-link-career">
+                            {{ getTranslation('projects') }}
+                        </a>
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'testimonials'"
+                            class="mobile-dropdown-link dropdown-link-career">
+                            {{ getTranslation('testimonials') }}
+                        </a>
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/my-visited-countries']"
+                            class="mobile-dropdown-link dropdown-link-career">
+                            {{ getTranslation('myVisitedCountries') }}
                         </a>
                         <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
                             class="mobile-dropdown-link dropdown-link-career">
                             <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">{{
                             getTranslation('linkedin') }}
+                        </a>
+                        <a target="_blank" href="https://github.com/WorldChris380"
+                            class="mobile-dropdown-link dropdown-link-career">
+                            <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">{{
+                            getTranslation('github') }}
                         </a>
                     </div>
 
@@ -343,15 +375,24 @@
                         href="javascript:void(0);">{{ getTranslation('shop') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'shop'" id="mobile-shop-dropdown"
                         [class.open]="openMobileDropdownMenu === 'shop'">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"
+                            class="mobile-dropdown-link dropdown-link-shop">
+                            {{ currentLanguage === 'de' ? 'Foto lizenzieren' : 'License Photo' }}
+                        </a>
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/cart']"
-                            class="mobile-dropdown-link dropdown-link-career">
+                            class="mobile-dropdown-link dropdown-link-shop">
                             {{ currentLanguage === 'de' ? 'Warenkorb' : 'Cart' }}
+                            <span class="megamenu-shop-pill" *ngIf="cartQuantity > 0">{{ cartQuantity }}</span>
                         </a>
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/account']"
-                            class="mobile-dropdown-link dropdown-link-career" *ngIf="isShopAuthenticated">
-                            {{ getTranslation('myAccount') }}
+                            class="mobile-dropdown-link dropdown-link-shop" *ngIf="isShopAuthenticated">
+                            {{ currentLanguage === 'de' ? 'Mein Konto & Bestellungen' : 'My Account & Orders' }}
                         </a>
-                        <a (click)="handleShopAccountActionMobile()" class="mobile-dropdown-link dropdown-link-career"
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/account']"
+                            class="mobile-dropdown-link dropdown-link-shop">
+                            {{ currentLanguage === 'de' ? 'Downloads & Zertifikate' : 'Downloads & Certificates' }}
+                        </a>
+                        <a (click)="handleShopAccountActionMobile()" class="mobile-dropdown-link dropdown-link-shop"
                             href="javascript:void(0);">
                             {{ isShopAuthenticated
                             ? (currentLanguage === 'de' ? 'Abmelden' : 'Logout')

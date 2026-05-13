@@ -55,6 +55,10 @@ export class CertificateService {
             .filter((value): value is string => !!value)
             .map((value) => this.toAbsoluteImageUrl(value));
         const proxiedCandidates = imageCandidates.map((value) => this.toProxyImageUrl(value));
+        const preferredImageCandidates = [
+            ...proxiedCandidates,
+            ...imageCandidates.filter((value) => this.isSameOriginUrl(value)),
+        ];
         const certificateId = `${order.captureId}-${item.id}`;
 
         const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
@@ -89,7 +93,7 @@ export class CertificateService {
         doc.setDrawColor(226, 232, 240);
         doc.roundedRect(16, 48, 118, 92, 2, 2, 'S');
 
-        const imageData = await this.toDataUrlWithFallback([...imageCandidates, ...proxiedCandidates]);
+        const imageData = await this.toDataUrlWithFallback(preferredImageCandidates);
         if (imageData) {
             doc.addImage(imageData, this.detectImageFormat(imageData), 18, 50, 114, 88);
         } else {
@@ -178,6 +182,18 @@ export class CertificateService {
     private toProxyImageUrl(absoluteUrl: string): string {
         if (!absoluteUrl) return '';
         return `${window.location.origin}/api/image-proxy.php?url=${encodeURIComponent(absoluteUrl)}`;
+    }
+
+    private isSameOriginUrl(value: string): boolean {
+        if (!value) {
+            return false;
+        }
+
+        try {
+            return new URL(value, window.location.origin).origin === window.location.origin;
+        } catch {
+            return false;
+        }
     }
 
     private slug(value: string): string {

@@ -1,5 +1,4 @@
 <?php
-header('Content-Type: application/pdf');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);
@@ -7,20 +6,92 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
+$debugRequested = trim((string) ($_GET['debug'] ?? '')) === '1';
+
 try {
     $invoiceNumber = trim((string) ($_GET['invoice'] ?? ''));
     $invoiceToken = trim((string) ($_GET['token'] ?? ''));
     $language = resolvePdfLanguage((string) ($_GET['lang'] ?? 'de'));
 
-    if ($invoiceNumber === '' || $invoiceToken === '') {
-        throw new RuntimeException('Missing invoice access parameters.');
+    $db = getShopMysqli();
+    $shopOrderColumns = fetchTableColumns($db, 'shop_orders');
+    $supportsInvoiceToken = isset($shopOrderColumns['invoice_token']);
+    $supportsInvoiceNumber = isset($shopOrderColumns['invoice_number']);
+
+    if ($invoiceNumber === '') {
+        http_response_code(400);
+        if ($debugRequested) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode([
+                'ok' => false,
+                'error' => 'Missing invoice number',
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        } else {
+            header('Content-Type: text/plain; charset=utf-8');
+            echo 'Missing invoice number';
+        }
+        exit;
     }
 
-    $db = getShopMysqli();
-    $order = fetchInvoiceOrder($db, $invoiceNumber, $invoiceToken);
+    if ($supportsInvoiceToken && $invoiceToken === '') {
+        http_response_code(400);
+        if ($debugRequested) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode([
+                'ok' => false,
+                'error' => 'Missing invoice token',
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        } else {
+            header('Content-Type: text/plain; charset=utf-8');
+            echo 'Missing invoice token';
+        }
+        exit;
+    }
+
+    $order = fetchInvoiceOrder($db, $invoiceNumber, $invoiceToken, $supportsInvoiceToken, $supportsInvoiceNumber, $shopOrderColumns);
+    if (!$order && $supportsInvoiceToken) {
+        $legacyOrder = fetchInvoiceOrder($db, $invoiceNumber, $invoiceToken, false, $supportsInvoiceNumber, $shopOrderColumns);
+        if ($legacyOrder) {
+            $storedToken = trim((string) ($legacyOrder['invoice_token'] ?? ''));
+            if ($storedToken === '') {
+                $order = $legacyOrder;
+            } else {
+                http_response_code(403);
+                if ($debugRequested) {
+                    header('Content-Type: application/json; charset=utf-8');
+                    echo json_encode([
+                        'ok' => false,
+                        'error' => 'Invalid invoice token',
+                        'invoice' => $invoiceNumber,
+                        'tokenProvided' => true,
+                        'supportsInvoiceToken' => true,
+                        'tokenMismatch' => true,
+                    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                } else {
+                    header('Content-Type: text/plain; charset=utf-8');
+                    echo 'Invalid invoice token';
+                }
+                exit;
+            }
+        }
+    }
+
     if (!$order) {
         http_response_code(404);
-        echo 'Invoice not found';
+        if ($debugRequested) {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode([
+                'ok' => false,
+                'error' => 'Invoice not found',
+                'invoice' => $invoiceNumber,
+                'tokenProvided' => $invoiceToken !== '',
+                'supportsInvoiceToken' => $supportsInvoiceToken,
+                'supportsInvoiceNumber' => $supportsInvoiceNumber,
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        } else {
+            header('Content-Type: text/plain; charset=utf-8');
+            echo 'Invoice not found';
+        }
         exit;
     }
 
@@ -32,27 +103,111 @@ try {
     header('Cache-Control: private, max-age=300');
     echo $pdf;
 } catch (Throwable $e) {
+    error_log('Invoice generation failed: ' . $e->getMessage());
     http_response_code(500);
-    echo 'Invoice generation failed';
+    if ($debugRequested) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'ok' => false,
+            'error' => 'Invoice generation failed',
+            'details' => $e->getMessage(),
+            'file' => basename((string) $e->getFile()),
+            'line' => (int) $e->getLine(),
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    } else {
+        echo 'Invoice generation failed';
+    }
 }
 
-function fetchInvoiceOrder(mysqli $db, string $invoiceNumber, string $invoiceToken): ?array
-{
-    $stmt = $db->prepare(
-        'SELECT id, owner_name, customer_email, customer_display_name, paypal_order_id, paypal_capture_id, total_amount, currency, purchased_at, invoice_number '
-        . 'FROM shop_orders WHERE invoice_number = ? AND invoice_token = ? LIMIT 1'
-    );
+function fetchInvoiceOrder(
+    mysqli $db,
+    string $invoiceNumber,
+    string $invoiceToken,
+    bool $useToken,
+    bool $supportsInvoiceNumber,
+    array $columns
+): ?array {
+    $idColumnExists = isset($columns['id']);
+    if (!$idColumnExists) {
+        throw new RuntimeException('shop_orders.id column is missing.');
+    }
+
+    $selectFields = [
+        'id',
+        selectColumnOrLiteral($columns, 'owner_name', "''", 'owner_name'),
+        selectColumnOrLiteral($columns, 'customer_email', "''", 'customer_email'),
+        selectColumnOrLiteral($columns, 'customer_display_name', "''", 'customer_display_name'),
+        selectColumnOrLiteral($columns, 'paypal_order_id', "''", 'paypal_order_id'),
+        selectColumnOrLiteral($columns, 'paypal_capture_id', "''", 'paypal_capture_id'),
+        selectColumnOrLiteral($columns, 'total_amount', '0', 'total_amount'),
+        selectColumnOrLiteral($columns, 'currency', "'EUR'", 'currency'),
+        selectColumnOrLiteral($columns, 'purchased_at', 'CURRENT_TIMESTAMP', 'purchased_at'),
+        selectColumnOrLiteral($columns, 'invoice_number', "''", 'invoice_number'),
+        selectColumnOrLiteral($columns, 'invoice_token', "''", 'invoice_token'),
+    ];
+
+    $baseSql = 'SELECT ' . implode(', ', $selectFields) . ' FROM shop_orders ';
+
+    if ($useToken) {
+        if ($supportsInvoiceNumber) {
+            $stmt = $db->prepare($baseSql . 'WHERE invoice_number = ? AND invoice_token = ? LIMIT 1');
+        } else {
+            $orderId = invoiceNumberToOrderId($invoiceNumber);
+            $stmt = $db->prepare($baseSql . 'WHERE id = ? LIMIT 1');
+        }
+    } else {
+        if ($supportsInvoiceNumber) {
+            $stmt = $db->prepare($baseSql . 'WHERE invoice_number = ? LIMIT 1');
+        } else {
+            $orderId = invoiceNumberToOrderId($invoiceNumber);
+            $stmt = $db->prepare($baseSql . 'WHERE id = ? LIMIT 1');
+        }
+    }
     if (!$stmt) {
         throw new RuntimeException('Failed to prepare invoice order query: ' . $db->error);
     }
 
-    $stmt->bind_param('ss', $invoiceNumber, $invoiceToken);
+    if ($supportsInvoiceNumber && $useToken) {
+        $stmt->bind_param('ss', $invoiceNumber, $invoiceToken);
+    } elseif ($supportsInvoiceNumber) {
+        $stmt->bind_param('s', $invoiceNumber);
+    } else {
+        $stmt->bind_param('i', $orderId);
+    }
     $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result ? $result->fetch_assoc() : null;
+    $rows = stmtFetchAllAssoc($stmt);
+    $row = $rows[0] ?? null;
     $stmt->close();
 
     return $row ?: null;
+}
+
+function invoiceNumberToOrderId(string $invoiceNumber): int
+{
+    $digits = preg_replace('/\D+/', '', $invoiceNumber) ?? '';
+    if ($digits === '') {
+        throw new RuntimeException('Invoice number is not numeric.');
+    }
+
+    $orderId = (int) ltrim($digits, '0');
+    if ($orderId <= 0) {
+        $orderId = (int) $digits;
+    }
+
+    if ($orderId <= 0) {
+        throw new RuntimeException('Invalid order id derived from invoice number.');
+    }
+
+    return $orderId;
+}
+
+function selectColumnOrLiteral(array $columns, string $column, string $fallbackLiteral, string $alias): string
+{
+    if (isset($columns[$column])) {
+        return $column;
+    }
+
+    return $fallbackLiteral . ' AS ' . $alias;
 }
 
 function fetchInvoiceItems(mysqli $db, int $orderId): array
@@ -66,11 +221,7 @@ function fetchInvoiceItems(mysqli $db, int $orderId): array
 
     $stmt->bind_param('i', $orderId);
     $stmt->execute();
-    $result = $stmt->get_result();
-    $items = [];
-    while ($row = $result ? $result->fetch_assoc() : null) {
-        $items[] = $row;
-    }
+    $items = stmtFetchAllAssoc($stmt);
     $stmt->close();
 
     return $items;
@@ -370,6 +521,30 @@ function getShopMysqli(): mysqli
     return $db;
 }
 
+function fetchTableColumns(mysqli $db, string $table): array
+{
+    $tableName = trim($table);
+    if ($tableName === '') {
+        return [];
+    }
+
+    $escapedTable = $db->real_escape_string($tableName);
+    $result = $db->query('SHOW COLUMNS FROM `' . $escapedTable . '`');
+    if (!$result) {
+        return [];
+    }
+
+    $columns = [];
+    while ($row = $result->fetch_assoc()) {
+        $name = isset($row['Field']) ? trim((string) $row['Field']) : '';
+        if ($name !== '') {
+            $columns[$name] = true;
+        }
+    }
+
+    return $columns;
+}
+
 function firstNonEmpty(?string ...$values): string
 {
     foreach ($values as $value) {
@@ -597,7 +772,7 @@ function resolveInvoiceAssetPath(string $path): ?string
 {
     $normalized = str_replace(['/', '\\\\'], DIRECTORY_SEPARATOR, $path);
 
-    $isAbsolute = preg_match('/^[A-Za-z]:\\\\/', $normalized) === 1 || str_starts_with($normalized, DIRECTORY_SEPARATOR);
+    $isAbsolute = preg_match('/^[A-Za-z]:\\\\/', $normalized) === 1 || invoiceStartsWith($normalized, DIRECTORY_SEPARATOR);
     if ($isAbsolute) {
         return $normalized;
     }
@@ -729,6 +904,7 @@ function paethPredictor(int $a, int $b, int $c): int
     if ($pa <= $pb && $pa <= $pc) {
         return $a;
     }
+
     if ($pb <= $pc) {
         return $b;
     }
@@ -910,4 +1086,124 @@ function normalizeTaxMode(string $taxMode): string
     }
 
     return 'vat';
+}
+
+function stmtFetchAllAssoc(mysqli_stmt $stmt): array
+{
+    if (method_exists($stmt, 'get_result')) {
+        $result = $stmt->get_result();
+        if ($result === false) {
+            return [];
+        }
+
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    $metadata = $stmt->result_metadata();
+    if (!$metadata) {
+        return [];
+    }
+
+    $fields = $metadata->fetch_fields();
+    $row = [];
+    $bindRefs = [];
+    foreach ($fields as $field) {
+        $row[$field->name] = null;
+        $bindRefs[] = &$row[$field->name];
+    }
+
+    call_user_func_array([$stmt, 'bind_result'], $bindRefs);
+
+    $rows = [];
+    while ($stmt->fetch()) {
+        $copy = [];
+        foreach ($row as $key => $value) {
+            $copy[$key] = $value;
+        }
+        $rows[] = $copy;
+    }
+
+    return $rows;
+}
+
+function resolvePdfLanguage(string $value): string
+{
+    $lang = strtolower(trim($value));
+    if ($lang === 'en') {
+        return 'en';
+    }
+
+    return 'de';
+}
+
+function t(string $lang, string $key): string
+{
+    $de = [
+        'seller' => 'Verkaeufer',
+        'bill_to' => 'Rechnung an',
+        'paypal_order' => 'PayPal-Bestellung',
+        'capture_id' => 'Capture-ID',
+        'invoice_no' => 'Rechnungsnr.',
+        'service_date' => 'Leistungsdatum',
+        'description' => 'Beschreibung',
+        'qty' => 'Menge',
+        'unit' => 'Einzelpreis',
+        'total' => 'Gesamt',
+        'net_total' => 'Netto',
+        'vat' => 'USt.',
+        'grand_total' => 'Brutto',
+        'tax_information' => 'Steuerhinweis',
+        'payment_details' => 'Zahlungsdetails',
+        'vat_id' => 'USt-IdNr',
+        'tax_no' => 'Steuernr',
+        'thanks' => 'Vielen Dank fuer Ihren Einkauf.',
+        'issue_date' => 'Ausgestellt am',
+        'continued' => 'Fortsetzung',
+        'page' => 'Seite',
+    ];
+
+    $en = [
+        'seller' => 'Seller',
+        'bill_to' => 'Bill to',
+        'paypal_order' => 'PayPal order',
+        'capture_id' => 'Capture ID',
+        'invoice_no' => 'Invoice no.',
+        'service_date' => 'Service date',
+        'description' => 'Description',
+        'qty' => 'Qty',
+        'unit' => 'Unit price',
+        'total' => 'Total',
+        'net_total' => 'Net total',
+        'vat' => 'VAT',
+        'grand_total' => 'Grand total',
+        'tax_information' => 'Tax information',
+        'payment_details' => 'Payment details',
+        'vat_id' => 'VAT ID',
+        'tax_no' => 'Tax no.',
+        'thanks' => 'Thank you for your purchase.',
+        'issue_date' => 'Issued on',
+        'continued' => 'Continued',
+        'page' => 'Page',
+    ];
+
+    $dict = $lang === 'en' ? $en : $de;
+    return $dict[$key] ?? $key;
+}
+
+function invoiceStartsWith(string $haystack, string $needle): bool
+{
+    if ($needle === '') {
+        return true;
+    }
+
+    if (function_exists('str_starts_with')) {
+        return str_starts_with($haystack, $needle);
+    }
+
+    return strpos($haystack, $needle) === 0;
 }

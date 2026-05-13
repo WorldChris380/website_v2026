@@ -39,9 +39,6 @@
             <p class="hero-quote">{{ currentQuote }}</p>
         </div>
         <div class="hero-buttons">
-            <a class="btn btn-primary" routerLink="/travel-budget-calculator">{{ currentLanguage === 'en' ? 'Travel
-                Budget Calculator' :
-                'Reisebudget-Rechner' }}</a>
             <a class="btn btn-secondary" routerLink="/gallery" [queryParams]="{ filter: 'travel' }">{{ currentLanguage
                 === 'en' ? 'Travel Gallery' : 'Reisefotos' }}</a>
         </div>
@@ -56,8 +53,6 @@
         <div class="hero-buttons">
             <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'aviation' }">{{ currentLanguage
                 === 'en' ? 'View aviation photos' : 'Luftfahrtfotografien ansehen' }}</a>
-            <a class="btn btn-primary" routerLink="/aviation-spotter-hotels">{{ currentLanguage === 'en' ? 'Aviation
-                Tourism' : 'Luftfahrt-Tourismus' }}</a>
         </div>
     </div>
 

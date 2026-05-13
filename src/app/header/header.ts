@@ -91,6 +91,18 @@ export class Header implements OnInit {
     this.megamenuOpen = open;
   }
 
+  handleMegamenuClick(event: Event): void {
+    const target = event.target as HTMLElement | null;
+    if (!target) {
+      return;
+    }
+
+    if (target.closest('a, button')) {
+      this.megamenuOpen = false;
+      this.openDesktopDropdownMenu = null;
+    }
+  }
+
   toggleMegamenu() {
     this.megamenuOpen = !this.megamenuOpen;
   }

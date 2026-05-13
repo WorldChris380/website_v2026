@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ManifestService } from './manifest.service';
 import { LanguageService, Language } from '../language.service';
 import { MetaService } from '../services/meta.service';
@@ -30,7 +30,7 @@ interface GalleryImage {
 @Component({
     selector: 'app-gallery',
     standalone: true,
-    imports: [CommonModule, FormsModule, ShopCart],
+    imports: [CommonModule, FormsModule, RouterModule, ShopCart],
     templateUrl: './gallery.html',
     styleUrls: ['./gallery.scss'],
 })
@@ -64,6 +64,8 @@ export class Gallery implements OnInit {
         'uae': 'united arab emirates (uae)',
         'czechia': 'czech republic'
     };
+    private readonly baseGalleryUrl = 'https://www.christian-boehme.com/gallery';
+    private readonly baseShopCartUrl = 'https://www.christian-boehme.com/shop/cart';
 
     // Touch Events for Swipe
     private touchStartX: number = 0;
@@ -84,34 +86,14 @@ export class Gallery implements OnInit {
     ) { }
 
     ngOnInit() {
-        // SEO Meta Tags
-        this.metaService.updateSEO(
-            {
-                title: 'Photography Gallery - Aviation & Travel | Christian Böhme',
-                description: 'Browse aviation and travel photography from around the world. High-quality photos from Asia, Europe, America, Africa and Oceania featuring aircraft, landscapes, and travel destinations.',
-                image: 'https://www.christian-boehme.com/assets/img/other/Dresden%20Skyline.jpg',
-                url: 'https://www.christian-boehme.com/gallery',
-                type: 'website'
-            },
-            {
-                "@context": "https://schema.org",
-                "@type": "ImageGallery",
-                "name": "Aviation & Travel Photography Gallery",
-                "description": "Collection of aviation and travel photographs from around the world",
-                "author": {
-                    "@type": "Person",
-                    "name": "Christian Böhme",
-                    "url": "https://www.christian-boehme.com"
-                },
-                "url": "https://www.christian-boehme.com/gallery"
-            }
-        );
-
         this.currentLanguage = this.languageService.getCurrentLanguage();
         this.languageService.language$.subscribe((lang) => {
             this.currentLanguage = lang;
+            this.updateGallerySeo();
             this.cdr.markForCheck();
         });
+
+        this.updateGallerySeo();
 
         // Load images first
         this.loadImages();
@@ -339,6 +321,150 @@ export class Gallery implements OnInit {
                 return normPath.includes(looseQ) || normCountry.includes(looseQ) || normTitle.includes(looseQ) || normTitleDe.includes(looseQ);
             });
         }
+
+        this.updateGallerySeo();
+    }
+
+    private updateGallerySeo(): void {
+        const isDE = this.currentLanguage === 'de';
+        const contextLabel = this.getSeoContextLabel();
+        const isGlobalContext = this.isGlobalSeoContext();
+        const count = this.filteredImages.length || this.images.length;
+        const minPrice = this.getLowestVisiblePrice();
+        const canonicalUrl = this.buildSeoCanonicalUrl();
+
+        const title = isDE
+            ? `Fotos kaufen: ${contextLabel} | ${count} lizenzierbare Bilder | Christian Boehme`
+            : `Buy ${contextLabel} Photos | ${count} licensable images | Christian Boehme`;
+
+        const description = isDE
+            ? `Lizenzierbare Luftfahrt- und Reisefotografie ${isGlobalContext ? 'aus aller Welt' : `fuer ${contextLabel}`}. Sofortiger Checkout per PayPal. Preise ab ${minPrice.toFixed(2)} EUR pro Bild.`
+            : `Licensable aviation and travel photography ${isGlobalContext ? 'from around the world' : `for ${contextLabel}`}. Instant PayPal checkout. Prices from EUR ${minPrice.toFixed(2)} per image.`;
+
+        const keywords = isDE
+            ? `fotografie kaufen, luftfahrt fotos kaufen, reisefotos lizenzieren, bildlizenz, christian boehme galerie, ${this.selectedCountry !== 'All' ? this.selectedCountry.toLowerCase() + ', ' : ''}${this.selectedCategory !== 'All' ? this.selectedCategory.toLowerCase() + ', ' : ''}paypal checkout`
+            : `buy photos online, aviation photo licensing, travel photo licensing, image license, christian boehme gallery, ${this.selectedCountry !== 'All' ? this.selectedCountry.toLowerCase() + ', ' : ''}${this.selectedCategory !== 'All' ? this.selectedCategory.toLowerCase() + ', ' : ''}paypal checkout`;
+
+        this.metaService.updateSEO(
+            {
+                title,
+                description,
+                keywords,
+                image: 'https://www.christian-boehme.com/assets/img/other/Dresden%20Skyline.jpg',
+                url: canonicalUrl,
+                type: 'website'
+            },
+            this.buildGalleryStructuredData(title, description, canonicalUrl, count)
+        );
+    }
+
+    private getSeoContextLabel(): string {
+        const search = this.searchQuery.trim();
+        if (search) {
+            return search;
+        }
+
+        if (this.selectedCountry !== 'All') {
+            return this.translateCountry(this.selectedCountry);
+        }
+
+        if (this.selectedContinent !== 'All') {
+            return this.translateContinent(this.selectedContinent);
+        }
+
+        if (this.selectedCategory !== 'All') {
+            return this.translateCategory(this.selectedCategory);
+        }
+
+        return this.currentLanguage === 'de' ? 'Weltweit' : 'Worldwide';
+    }
+
+    private isGlobalSeoContext(): boolean {
+        return this.searchQuery.trim() === ''
+            && this.selectedCategory === 'All'
+            && this.selectedContinent === 'All'
+            && this.selectedCountry === 'All';
+    }
+
+    private getLowestVisiblePrice(): number {
+        const source = this.filteredImages.length > 0 ? this.filteredImages : this.images;
+        if (source.length === 0) {
+            return 19;
+        }
+
+        return source.reduce((minPrice, image) => Math.min(minPrice, image.price || 19), source[0].price || 19);
+    }
+
+    private buildSeoCanonicalUrl(): string {
+        const params = new URLSearchParams();
+
+        if (this.selectedCategory !== 'All') {
+            params.set('filter', this.selectedCategory);
+        }
+
+        if (this.selectedContinent !== 'All') {
+            params.set('continent', this.selectedContinent);
+        }
+
+        if (this.selectedCountry !== 'All') {
+            params.set('country', this.selectedCountry);
+        }
+
+        const search = this.searchQuery.trim();
+        if (search) {
+            params.set('search', search);
+        }
+
+        const queryString = params.toString();
+        return queryString ? `${this.baseGalleryUrl}?${queryString}` : this.baseGalleryUrl;
+    }
+
+    private buildGalleryStructuredData(title: string, description: string, url: string, count: number): any {
+        const items = (this.filteredImages.length > 0 ? this.filteredImages : this.images).slice(0, 8);
+
+        return {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": title,
+            "description": description,
+            "url": url,
+            "isPartOf": {
+                "@type": "WebSite",
+                "name": "Christian Boehme",
+                "url": "https://www.christian-boehme.com"
+            },
+            "mainEntity": {
+                "@type": "ItemList",
+                "numberOfItems": count,
+                "itemListElement": items.map((image, index) => ({
+                    "@type": "ListItem",
+                    "position": index + 1,
+                    "item": {
+                        "@type": "Product",
+                        "name": this.getImageTitle(image),
+                        "sku": `photo-${image.id}`,
+                        "image": [image.originalUrl || image.gridUrl || image.url],
+                        "description": this.getImageSeoDescription(image),
+                        "category": `${image.category} / ${image.country}`,
+                        "brand": {
+                            "@type": "Brand",
+                            "name": "Christian Boehme Photography"
+                        },
+                        "offers": {
+                            "@type": "Offer",
+                            "price": image.price.toFixed(2),
+                            "priceCurrency": "EUR",
+                            "availability": "https://schema.org/InStock",
+                            "url": this.baseShopCartUrl,
+                            "seller": {
+                                "@type": "Person",
+                                "name": "Christian Boehme"
+                            }
+                        }
+                    }
+                }))
+            }
+        };
     }
 
     onCategoryChange(category: string) {

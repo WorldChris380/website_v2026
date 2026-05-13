@@ -80,12 +80,6 @@ export class Account implements OnInit, AfterViewInit {
             type: 'website'
         });
 
-        this.shopAuthService.validateSession().subscribe((valid) => {
-            if (valid) {
-                this.shopAuthService.fetchOrders().subscribe();
-            }
-        });
-
         this.route.queryParamMap.subscribe((params) => {
             const resetEmail = (params.get('resetEmail') || '').trim();
             const resetToken = (params.get('resetToken') || '').trim();
@@ -97,7 +91,14 @@ export class Account implements OnInit, AfterViewInit {
                 this.forgotPasswordSuccess = this.currentLanguage === 'de'
                     ? 'Reset-Link erkannt. Bitte neues Passwort setzen.'
                     : 'Reset link detected. Please set your new password.';
+                return;
             }
+
+            this.shopAuthService.validateSession().subscribe((valid) => {
+                if (valid) {
+                    this.shopAuthService.fetchOrders().subscribe();
+                }
+            });
         });
 
         this.loadGoogleAvailability().then(() => {

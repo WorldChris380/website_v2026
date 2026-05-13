@@ -29,6 +29,14 @@ interface PayPalCaptureOrderResponse {
     details?: string;
 }
 
+interface PayPalClientConfigResponse {
+    ok: boolean;
+    clientId?: string;
+    mode?: string;
+    error?: string;
+    details?: string;
+}
+
 @Component({
     selector: 'app-paypal-button',
     standalone: true,
@@ -43,9 +51,10 @@ export class PayPalButton implements OnChanges, OnDestroy {
     @Output() paymentSuccess = new EventEmitter<void>();
     @Output() paymentError = new EventEmitter<string>();
 
-    readonly clientId = environment.paypalClientId;
+    private readonly fallbackClientId = environment.paypalClientId;
+    private clientId: string = environment.paypalClientId;
     readonly checkoutApiUrl = `${environment.apiBaseUrl}/api/paypal-checkout.php`;
-    readonly isPlaceholder = this.clientId === 'PAYPAL_CLIENT_ID_PLACEHOLDER';
+    readonly configApiUrl = `${environment.apiBaseUrl}/api/paypal-config.php`;
     isLoading = false;
 
     private http = inject(HttpClient);
@@ -55,8 +64,13 @@ export class PayPalButton implements OnChanges, OnDestroy {
     private destroyed = false;
     private renderTimer?: ReturnType<typeof setTimeout>;
     private buttonsInstance: any = null;
+    private configLoaded = false;
 
     constructor(private el: ElementRef) { }
+
+    get isPlaceholder(): boolean {
+        return this.clientId === 'PAYPAL_CLIENT_ID_PLACEHOLDER';
+    }
 
     get amount(): number {
         const cartTotal = this.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -85,11 +99,39 @@ export class PayPalButton implements OnChanges, OnDestroy {
         if (this.destroyed) return;
         this.isLoading = true;
         try {
+            await this.ensureClientConfig();
+            if (this.isPlaceholder) {
+                this.isLoading = false;
+                return;
+            }
             await this.paypalService.loadSdk(this.clientId, this.currency);
             if (!this.destroyed) this.renderButtons();
         } catch {
             this.isLoading = false;
         }
+    }
+
+    private async ensureClientConfig(): Promise<void> {
+        if (this.configLoaded) {
+            return;
+        }
+
+        this.configLoaded = true;
+        try {
+            const response = await firstValueFrom(
+                this.http.get<PayPalClientConfigResponse>(this.configApiUrl)
+            );
+
+            const serverClientId = (response.clientId || '').trim();
+            if (response.ok && serverClientId !== '') {
+                this.clientId = serverClientId;
+                return;
+            }
+        } catch {
+            // Use the frontend fallback value if the config endpoint is not reachable.
+        }
+
+        this.clientId = this.fallbackClientId;
     }
 
     private async renderButtons(): Promise<void> {
