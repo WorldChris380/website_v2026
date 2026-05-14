@@ -53,6 +53,18 @@
         &.hero-background-dark {
             display: none;
         }
+
+        &.hero-background-travel-dark {
+            display: none;
+        }
+
+        &.hero-background-aviation-dark {
+            display: none;
+        }
+
+        &.hero-background-photography-dark {
+            display: none;
+        }
     }
 
     .hero-background.active {
@@ -534,6 +546,33 @@
     .hero-background-dark {
         display: block !important;
         filter: grayscale(100%);
+    }
+
+    /* Swap travel slide backgrounds */
+    .hero-background-travel-bright {
+        display: none !important;
+    }
+
+    .hero-background-travel-dark {
+        display: block !important;
+    }
+
+    /* Swap aviation slide backgrounds */
+    .hero-background-aviation-bright {
+        display: none !important;
+    }
+
+    .hero-background-aviation-dark {
+        display: block !important;
+    }
+
+    /* Swap photography slide backgrounds */
+    .hero-background-photography-bright {
+        display: none !important;
+    }
+
+    .hero-background-photography-dark {
+        display: block !important;
     }
 
     /* Darken the image overlay for better contrast */

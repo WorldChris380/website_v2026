@@ -1,4 +1,5 @@
 @use '../../../styles.scss' as *;
+@use 'sass:color';
 
 $calc-text-primary: #0f172a;
 $calc-text-secondary: #334155;
@@ -168,7 +169,7 @@ $calc-surface-dark-soft: #13241b;
     }
 
     :host-context(body.dark-mode) & {
-        color: lighten($calc-accent-strong, 15%);
+        color: color.adjust($calc-accent-strong, $lightness: 15%);
 
         &:hover {
             background: rgba($travel-green, .2);
@@ -275,7 +276,7 @@ $calc-surface-dark-soft: #13241b;
     font-weight: 600;
 
     :host-context(body.dark-mode) & {
-        color: lighten($calc-accent-strong, 15%);
+        color: color.adjust($calc-accent-strong, $lightness: 15%);
     }
 }
 
@@ -291,7 +292,7 @@ $calc-surface-dark-soft: #13241b;
     transition: background .2s, transform .15s;
 
     &:hover:not(:disabled) {
-        background: darken($calc-accent-strong, 10%);
+        background: color.adjust($calc-accent-strong, $lightness: -10%);
         transform: translateY(-1px);
     }
 
@@ -301,11 +302,11 @@ $calc-surface-dark-soft: #13241b;
     }
 
     :host-context(body.dark-mode) & {
-        background: lighten($calc-accent-strong, 12%);
+        background: color.adjust($calc-accent-strong, $lightness: 12%);
         color: $calc-surface-dark;
 
         &:hover:not(:disabled) {
-            background: lighten($calc-accent-strong, 18%);
+            background: color.adjust($calc-accent-strong, $lightness: 18%);
         }
     }
 }
@@ -360,8 +361,8 @@ $calc-surface-dark-soft: #13241b;
         color: rgba(#a3c8b0, .7);
 
         &:hover {
-            border-color: lighten($calc-accent-strong, 15%);
-            color: lighten($calc-accent-strong, 15%);
+            border-color: color.adjust($calc-accent-strong, $lightness: 15%);
+            color: color.adjust($calc-accent-strong, $lightness: 15%);
         }
     }
 }
@@ -464,7 +465,7 @@ $calc-surface-dark-soft: #13241b;
         color: $calc-accent-strong;
 
         :host-context(body.dark-mode) & {
-            color: lighten($calc-accent-strong, 15%);
+            color: color.adjust($calc-accent-strong, $lightness: 15%);
         }
     }
 

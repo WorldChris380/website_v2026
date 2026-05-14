@@ -1,4 +1,5 @@
 @use '../../../styles.scss' as *;
+@use 'sass:color';
 
 .page-wrapper {
     display: flex;
@@ -240,11 +241,11 @@
         }
 
         .placeholder-image-2 {
-            background: linear-gradient(135deg, lighten($aviation-blue, 10%) 0%, darken($aviation-blue, 10%) 100%);
+            background: linear-gradient(135deg, color.adjust($aviation-blue, $lightness: 10%) 0%, color.adjust($aviation-blue, $lightness: -10%) 100%);
         }
 
         .placeholder-image-3 {
-            background: linear-gradient(135deg, lighten($aviation-blue-bright, 6%) 0%, $aviation-blue 100%);
+            background: linear-gradient(135deg, color.adjust($aviation-blue-bright, $lightness: 6%) 0%, $aviation-blue 100%);
         }
 
         .hotel-badge {
@@ -308,7 +309,7 @@
                 transition: color var(--dur-fast) var(--ease-standard);
 
                 &:hover {
-                    color: darken($aviation-blue, 15%);
+                    color: color.adjust($aviation-blue, $lightness: -15%);
                 }
             }
         }
@@ -402,7 +403,7 @@
             font-size: var(--font-size-md);
 
             &:hover {
-                background: darken(white, 5%);
+                background: color.adjust(white, $lightness: -5%);
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             }
@@ -479,7 +480,7 @@ body.dark-mode .hotels-section {
             color: $aviation-blue-bright;
 
             &:hover {
-                color: lighten($aviation-blue-bright, 10%);
+                color: color.adjust($aviation-blue-bright, $lightness: 10%);
             }
         }
     }
@@ -517,7 +518,7 @@ body.dark-mode .cta-section {
         color: $aviation-blue-dark;
 
         &:hover {
-            background: lighten($aviation-blue-bright, 8%);
+            background: color.adjust($aviation-blue-bright, $lightness: 8%);
         }
     }
 }

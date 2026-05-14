@@ -188,7 +188,7 @@ export class Account implements OnInit, AfterViewInit {
 
         if (this.form.password !== this.form.confirmPassword) {
             this.registrationError = this.currentLanguage === 'de'
-                ? 'Passwort und Bestaetigung stimmen nicht ueberein.'
+                ? 'Passwort und Bestätigung stimmen nicht überein.'
                 : 'Password confirmation does not match.';
             return;
         }
@@ -305,7 +305,7 @@ export class Account implements OnInit, AfterViewInit {
             this.isForgotSubmitting = false;
             if (!result.success) {
                 this.forgotPasswordError = result.error || (this.currentLanguage === 'de'
-                    ? 'Zuruecksetzen konnte nicht angefordert werden.'
+                    ? 'Zurücksetzen konnte nicht angefordert werden.'
                     : 'Could not request password reset.');
                 return;
             }
@@ -348,7 +348,7 @@ export class Account implements OnInit, AfterViewInit {
 
         if (newPassword !== confirmPassword) {
             this.forgotPasswordError = this.currentLanguage === 'de'
-                ? 'Passwort und Bestaetigung stimmen nicht ueberein.'
+                ? 'Passwort und Bestätigung stimmen nicht überein.'
                 : 'Password and confirmation do not match.';
             return;
         }
@@ -409,7 +409,7 @@ export class Account implements OnInit, AfterViewInit {
             });
         } catch {
             this.loginError = this.currentLanguage === 'de'
-                ? 'Google Sign-In ist derzeit nicht verfuegbar.'
+                ? 'Google Sign-In ist derzeit nicht verfügbar.'
                 : 'Google Sign-In is currently unavailable.';
         }
     }

@@ -40,8 +40,8 @@ export class ShopSuccess implements OnInit {
             qty: de ? 'Menge' : 'Qty',
             certificatePdf: de ? 'Zertifikat (PDF)' : 'Certificate (PDF)',
             originalPhoto: de ? 'Originalfoto' : 'Original photo',
-            empty: de ? 'Keine Bestelldaten gefunden. Ein Zertifikat ist direkt nach erfolgreicher Zahlung verfuegbar.' : 'No purchase data found. A certificate is available immediately after a successful payment.',
-            backGallery: de ? 'Zurueck zur Galerie' : 'Back to gallery',
+            empty: de ? 'Keine Bestelldaten gefunden. Ein Zertifikat ist direkt nach erfolgreicher Zahlung verfügbar.' : 'No purchase data found. A certificate is available immediately after a successful payment.',
+            backGallery: de ? 'Zurück zur Galerie' : 'Back to gallery',
             backCart: de ? 'Zum Warenkorb' : 'Back to cart',
         };
 

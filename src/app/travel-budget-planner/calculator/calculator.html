@@ -91,8 +91,8 @@
         <section class="filter-section" [class.collapsed]="!isSectionExpanded('destination')">
             <div class="filter-section-head">
                 <h3>{{ currentLanguage === 'de' ? '2. Wunschziel' : '2. Preferred destination' }}</h3>
-                <p>{{ currentLanguage === 'de' ? 'Lege optional ein Wunschland fest, um es spaeter direkt vergleichen zu
-                    koennen.' :
+                <p>{{ currentLanguage === 'de' ? 'Lege optional ein Wunschland fest, um es später direkt vergleichen zu
+                    können.' :
                     'Optionally set a preferred destination to compare it directly later.' }}</p>
                 <button class="section-toggle" type="button" (click)="toggleSection('destination')">
                     {{ isSectionExpanded('destination')
@@ -220,7 +220,7 @@
 
             <div class="filter-head">
                 <button type="button" class="btn-filter-reset" (click)="resetCountryFilters()">
-                    {{ currentLanguage === 'de' ? 'Zuruecksetzen' : 'Reset' }}
+                    {{ currentLanguage === 'de' ? 'Zurücksetzen' : 'Reset' }}
                 </button>
             </div>
 
@@ -342,7 +342,7 @@
                     <div class="select-wrapper select-wrapper--plain">
                         <select id="travel-month" [(ngModel)]="selectedTravelMonth"
                             (ngModelChange)="onTravelMonthChange()">
-                            <option [ngValue]="null">{{ currentLanguage === 'de' ? 'Automatisch guenstigster Monat' :
+                            <option [ngValue]="null">{{ currentLanguage === 'de' ? 'Automatisch günstigster Monat' :
                                 'Auto (cheapest month)' }}</option>
                             <option *ngFor="let month of travelMonths" [ngValue]="month">{{ getTravelMonthLabel(month)
                                 }}
@@ -541,7 +541,7 @@
         @if (selectedOriginCountryCode && getTopCheapestCountries().length > 0) {
         <section class="top-cheapest-card">
             <div class="top-cheapest-header">
-                <h3>{{ currentLanguage === 'de' ? 'Top 3 guenstigste Laender' : 'Top 3 cheapest countries' }}</h3>
+                <h3>{{ currentLanguage === 'de' ? 'Top 3 günstigste Länder' : 'Top 3 cheapest countries' }}</h3>
                 <p>{{ currentLanguage === 'de' ? 'Automatisch nach deinem aktuellen Reiseprofil berechnet.' :
                     'Auto-calculated from your current trip profile.' }}</p>
             </div>

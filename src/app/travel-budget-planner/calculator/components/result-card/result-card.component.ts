@@ -326,7 +326,7 @@ export class ResultCardComponent {
         }
 
         return this.currentLanguage === 'de'
-            ? `${label} (immer guenstiger)`
+            ? `${label} (immer günstiger)`
             : `${label} (always cheaper)`;
     }
 }

@@ -1,4 +1,5 @@
 @use '../../../styles.scss' as *;
+@use 'sass:color';
 
 $calc-text-primary: #0f172a;
 $calc-text-secondary: #334155;
@@ -80,7 +81,7 @@ $calc-surface-dark-soft: #13241b;
 }
 
 :host-context(body.dark-mode) .presets-heading {
-    color: lighten($travel-green, 15%);
+    color: color.adjust($travel-green, $lightness: 15%);
 }
 
 .presets-row {
@@ -340,7 +341,7 @@ $calc-surface-dark-soft: #13241b;
     border-color: rgba($travel-green, .22);
 
     &:hover {
-        border-color: lighten($travel-green, 10%);
+        border-color: color.adjust($travel-green, $lightness: 10%);
     }
 
     .mode-option-title {
@@ -352,7 +353,7 @@ $calc-surface-dark-soft: #13241b;
     }
 
     .mode-option-cta {
-        color: lighten($calc-accent-strong, 18%);
+        color: color.adjust($calc-accent-strong, $lightness: 18%);
     }
 }
 
@@ -382,12 +383,12 @@ $calc-surface-dark-soft: #13241b;
     transition: color .2s;
 
     &:hover {
-        color: darken($calc-accent-strong, 10%);
+        color: color.adjust($calc-accent-strong, $lightness: -10%);
     }
 }
 
 :host-context(body.dark-mode) .btn-mode-back {
-    color: lighten($calc-accent-strong, 18%);
+    color: color.adjust($calc-accent-strong, $lightness: 18%);
 }
 
 %card {
@@ -887,7 +888,7 @@ $calc-surface-dark-soft: #13241b;
     }
 
     &:focus {
-        border-color: lighten($travel-green, 12%);
+        border-color: color.adjust($travel-green, $lightness: 12%);
         box-shadow: 0 0 0 3px rgba($travel-green, .25);
     }
 }
@@ -975,7 +976,7 @@ $calc-surface-dark-soft: #13241b;
     }
 
     &:focus-within {
-        border-color: lighten($travel-green, 12%);
+        border-color: color.adjust($travel-green, $lightness: 12%);
         box-shadow: 0 0 0 3px rgba($travel-green, .25);
     }
 }
@@ -1003,7 +1004,7 @@ $calc-surface-dark-soft: #13241b;
 }
 
 :host-context(body.dark-mode) .num-btn {
-    color: lighten($travel-green, 15%);
+    color: color.adjust($travel-green, $lightness: 15%);
 
     &:hover {
         background: rgba($travel-green, .25);
@@ -1775,7 +1776,7 @@ $calc-surface-dark-soft: #13241b;
 }
 
 :host-context(body.dark-mode) .country-info-continent {
-    color: lighten($travel-green, 18%);
+    color: color.adjust($travel-green, $lightness: 18%);
     background: rgba($travel-green, .18);
     border-color: rgba($travel-green, .38);
 }
@@ -2059,7 +2060,7 @@ $calc-surface-dark-soft: #13241b;
 }
 
 :host-context(body.dark-mode) .insight-card {
-    background: lighten($travel-green-dark, 4%);
+    background: color.adjust($travel-green-dark, $lightness: 4%);
     border-color-left: $travel-green;
 }
 
@@ -2134,7 +2135,7 @@ $calc-surface-dark-soft: #13241b;
 }
 
 :host-context(body.dark-mode) .insight-tip .insight-value {
-    color: lighten($travel-green, 15%);
+    color: color.adjust($travel-green, $lightness: 15%);
 }
 
 .calc-loading-card {
@@ -2345,7 +2346,7 @@ $calc-surface-dark-soft: #13241b;
 }
 
 .bar-fill.transport {
-    background: lighten($travel-green, 10%);
+    background: color.adjust($travel-green, $lightness: 10%);
 }
 
 .bar-fill.activities {
@@ -2353,7 +2354,7 @@ $calc-surface-dark-soft: #13241b;
 }
 
 .bar-fill.flight {
-    background: darken($travel-green, 12%);
+    background: color.adjust($travel-green, $lightness: -12%);
 }
 
 .affiliate-section {
@@ -2563,7 +2564,7 @@ $calc-surface-dark-soft: #13241b;
     }
 
     &.lux {
-        background: darken($travel-green, 12%)
+        background: color.adjust($travel-green, $lightness: -12%)
     }
 }
 

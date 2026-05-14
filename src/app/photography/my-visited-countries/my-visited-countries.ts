@@ -284,7 +284,7 @@ export class MyVisitedCountries implements OnInit {
             'Latvia': 'Lettland',
             'Netherlands': 'Niederlande',
             'Norway': 'Norwegen',
-            'Austria': 'Oesterreich',
+            'Austria': 'Österreich',
             'Poland': 'Polen',
             'Portugal': 'Portugal',
             'Russia': 'Russland',
@@ -296,7 +296,7 @@ export class MyVisitedCountries implements OnInit {
             'Ukraine': 'Ukraine',
             'Hungary': 'Ungarn',
             'Vatican City': 'Vatikanstadt',
-            'United Kingdom': 'Vereinigtes Koenigreich',
+            'United Kingdom': 'Vereinigtes Königreich',
             'Belarus': 'Belarus',
             'Costa Rica': 'Costa Rica',
             'Dominican Republic': 'Dominikanische Republik',
@@ -309,10 +309,10 @@ export class MyVisitedCountries implements OnInit {
     getUiText(key: string): string {
         const isDE = this.currentLanguage === 'de';
         const map: Record<string, { en: string; de: string }> = {
-            title: { en: 'Countries visited', de: 'Besuchte Laender' },
-            countries: { en: 'Countries', de: 'Laender' },
+            title: { en: 'Countries visited', de: 'Besuchte Länder' },
+            countries: { en: 'Countries', de: 'Länder' },
             continents: { en: 'Continents', de: 'Kontinente' },
-            photosAvailable: { en: 'Photos available', de: 'Fotos verfuegbar' },
+            photosAvailable: { en: 'Photos available', de: 'Fotos verfügbar' },
             noPhotos: { en: 'No photos yet', de: 'Noch keine Fotos' }
         };
 

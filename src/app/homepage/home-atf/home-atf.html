@@ -2,21 +2,40 @@
     aria-label="Homepage hero with photography, travel and career slides" (touchstart.passive)="onTouchStart($event)"
     (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()">
     <!-- Skip link for keyboard navigation -->
-    <!-- Slide 1: Travel -->
-    <div class="hero-background" [ngClass]="{ 'active': currentSlide === 0 }"
+    <!-- Slide 1: Travel - Bright Mode -->
+    <div class="hero-background hero-background-travel-bright" [ngClass]="{ 'active': currentSlide === 0 }"
         [style.opacity]="currentSlide === 0 ? 1 : 0"
         style="background-image: url('/assets/img/photography/Travel/North America/Costa Rica/2024.06.02 So Butterfly Garden, La Fortuna Hotel/Tropic vulcano Arenal view from La Fortuna .jpg');"
         role="img" aria-label="Tropical volcano Arenal in Costa Rica - Travel destination">
     </div>
-    <!-- Slide 2: Aviation -->
-    <div class="hero-background" [ngClass]="{ 'active': currentSlide === 1 }"
+    <!-- Slide 1: Travel - Dark Mode -->
+    <div class="hero-background hero-background-travel-dark" [ngClass]="{ 'active': currentSlide === 0 }"
+        [style.opacity]="currentSlide === 0 ? 1 : 0"
+        style="background-image: url('https://christian-boehme-gallery.s3.eu-central-3.ionoscloud.com/grid/Travel/North_America/United_States_of_America_(USA)/New_York/2014.07.24_Do/dsc-1158b.jpg');"
+        role="img" aria-label="New York City grid view - Travel destination">
+    </div>
+    <!-- Slide 2: Aviation - Bright Mode -->
+    <div class="hero-background hero-background-aviation-bright" [ngClass]="{ 'active': currentSlide === 1 }"
         [style.opacity]="currentSlide === 1 ? 1 : 0"
         style="background-image: url('/assets/img/photography/Aviation/Australia and Oceania/Australia/Fraser Island/Arriving small plane at an airstrip on Fraser Island in Australia .JPG');"
         role="img" aria-label="Small aircraft arriving at Fraser Island airstrip - Aviation photography">
     </div>
-    <!-- Slide 3: Photography -->
-    <div class="hero-background" [ngClass]="{ 'active': currentSlide === 2 }"
-        [style.opacity]="currentSlide === 2 ? 1 : 0" style="background-image: url('/assets/img/other/CRB_8567B.JPG');"
+    <!-- Slide 2: Aviation - Dark Mode -->
+    <div class="hero-background hero-background-aviation-dark" [ngClass]="{ 'active': currentSlide === 1 }"
+        [style.opacity]="currentSlide === 1 ? 1 : 0"
+        style="background-image: url('https://christian-boehme-gallery.s3.eu-central-3.ionoscloud.com/grid/Aviation/Europe/Germany/Dresden_Aiport_(DRS)/2013/2013.12.01_So/dsc-6784b.jpg');"
+        role="img" aria-label="Aircraft at Dresden Airport - Aviation photography">
+    </div>
+    <!-- Slide 3: Photography - Bright Mode -->
+    <div class="hero-background hero-background-photography-bright" [ngClass]="{ 'active': currentSlide === 2 }"
+        [style.opacity]="currentSlide === 2 ? 1 : 0"
+        style="background-image: url('https://christian-boehme-gallery.s3.eu-central-3.ionoscloud.com/grid/Travel/Australia_and_Oceania/Australia/Queensland/Roadtrip_Brisbane-Cairns/2017.07.07_Fr_Whitheaven_Beach/crb-0841b.jpg');"
+        role="img" aria-label="Whitehaven Beach Queensland Australia - Photography portfolio">
+    </div>
+    <!-- Slide 3: Photography - Dark Mode -->
+    <div class="hero-background hero-background-photography-dark" [ngClass]="{ 'active': currentSlide === 2 }"
+        [style.opacity]="currentSlide === 2 ? 1 : 0"
+        style="background-image: url('/assets/img/other/CRB_8567B.JPG');"
         role="img" aria-label="Professional photography portfolio - Showcasing creative visual storytelling">
     </div>
     <!-- Slide 4: Career - Bright Mode -->
@@ -33,7 +52,8 @@
     </div>
 
     <!-- Slide 1 Content: Travel -->
-    <div class="hero-content" *ngIf="currentSlide === 0">
+    @if (currentSlide === 0) {
+    <div class="hero-content">
         <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Travels.' : 'Reisen.' }}</h1>
         <div class="hero-quotes">
             <p class="hero-quote">{{ currentQuote }}</p>
@@ -43,9 +63,11 @@
                 === 'en' ? 'Travel Gallery' : 'Reisefotos' }}</a>
         </div>
     </div>
+    }
 
     <!-- Slide 2 Content: Aviation -->
-    <div class="hero-content" *ngIf="currentSlide === 1">
+    @if (currentSlide === 1) {
+    <div class="hero-content">
         <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Aviation.' : 'Luftfahrt.' }}</h1>
         <div class="hero-quotes">
             <p class="hero-quote">{{ currentQuote }}</p>
@@ -55,9 +77,11 @@
                 === 'en' ? 'View aviation photos' : 'Luftfahrtfotografien ansehen' }}</a>
         </div>
     </div>
+    }
 
     <!-- Slide 3 Content: Photography -->
-    <div class="hero-content" *ngIf="currentSlide === 2">
+    @if (currentSlide === 2) {
+    <div class="hero-content">
         <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Photography.' : 'Fotografie.' }}</h1>
         <div class="hero-quotes">
             <p class="hero-quote">{{ currentQuote }}</p>
@@ -69,9 +93,11 @@
                 'en' ? 'Travel Gallery' : 'Reise Galerie' }}</a>
         </div>
     </div>
+    }
 
     <!-- Slide 4 Content: Career -->
-    <div class="hero-content" *ngIf="currentSlide === 3">
+    @if (currentSlide === 3) {
+    <div class="hero-content">
         <h1 class="hero-title">{{ currentLanguage === 'en' ? 'My career.' : 'Meine Karriere.' }}</h1>
         <div class="hero-quotes">
             <p class="hero-quote">{{ currentQuote }}</p>
@@ -84,6 +110,7 @@
                 }}</a>
         </div>
     </div>
+    }
 
     <div class="hero-dots" role="tablist" aria-label="Hero sections">
         <button class="hero-dot-item dot-travel" [class.active]="currentSlide === 0" (click)="goToSlide(0)"

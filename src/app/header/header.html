@@ -72,9 +72,13 @@
                                 <span class="subgroup-title">{{ getTranslation('airlineSim') }}</span>
                                 <a [routerLink]="['/air-germany']" class="megamenu-link megamenu-sublink">
                                     <span class="link-title">{{ getTranslation('airGermany') }}</span>
+                                    <span class="link-description">{{ getTranslation('airGermanyDescription') }}</span>
                                 </a>
+
                                 <a [routerLink]="['/airlinesim-ceo-tools']" class="megamenu-link megamenu-sublink">
                                     <span class="link-title">{{ getTranslation('airlineSimCeoTools') }}</span>
+                                    <span class="link-description">{{ getTranslation('airlineSimCeoToolsDescription')
+                                        }}</span>
                                 </a>
                             </div>
                         </div>
@@ -150,15 +154,17 @@
                                 <span class="link-title">{{ getTranslation('myVisitedCountries') }}</span>
                                 <span class="link-description">{{ getTranslation('menuDescVisitedCountries') }}</span>
                             </a>
-                            <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
-                                class="megamenu-link">
-                                <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">
-                                <span class="link-title">{{ getTranslation('linkedin') }}</span>
-                            </a>
-                            <a target="_blank" href="https://github.com/WorldChris380" class="megamenu-link">
-                                <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">
-                                <span class="link-title">{{ getTranslation('github') }}</span>
-                            </a>
+                            <div class="megamenu-social-row">
+                                <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
+                                    class="megamenu-link">
+                                    <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">
+                                    <span class="link-title">{{ getTranslation('linkedin') }}</span>
+                                </a>
+                                <a target="_blank" href="https://github.com/WorldChris380" class="megamenu-link">
+                                    <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">
+                                    <span class="link-title">{{ getTranslation('github') }}</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -176,7 +182,7 @@
                                     <span class="megamenu-shop-pill">Featured</span>
                                 </span>
                                 <span class="link-description">{{ currentLanguage === 'de' ? 'Direkt zur Galerie und
-                                    Motive fuer den Warenkorb auswaehlen.' : 'Go straight to the gallery and select
+                                    Motive für den Warenkorb auswählen.' : 'Go straight to the gallery and select
                                     photos for your cart.' }}</span>
                             </a>
                             <a [routerLink]="['/shop/cart']" class="megamenu-link">
@@ -184,7 +190,7 @@
                                     {{ currentLanguage === 'de' ? 'Warenkorb' : 'Cart' }}
                                     <span class="megamenu-shop-pill" *ngIf="cartQuantity > 0">{{ cartQuantity }}</span>
                                 </span>
-                                <span class="link-description">{{ currentLanguage === 'de' ? 'Auswahl pruefen und
+                                <span class="link-description">{{ currentLanguage === 'de' ? 'Auswahl prüfen und
                                     Checkout starten.' : 'Review your selection and start checkout.' }}</span>
                             </a>
                             <a [routerLink]="['/shop/account']" class="megamenu-link" *ngIf="isShopAuthenticated">
@@ -240,14 +246,14 @@
                 [attr.aria-label]="'Enable light mode'" (keydown.enter)="toggleDarkMode()"
                 (keydown.space)="toggleDarkMode()"><img [src]="darkmodePNG('mode-icon')" alt="Brightmode Icon">
             </span>
-        </div>
-        <div id="burger-menu-icon">
-            <button (click)="toggleBurgerMenu()" id="burger-menu-open-icon" type="button"
-                aria-label="Open navigation menu" [style.display]="burgerMenuOpen ? 'none' : 'flex'">☰
-            </button>
-            <button (click)="toggleBurgerMenu()" id="burger-menu-close-icon" type="button"
-                [style.display]="burgerMenuOpen ? 'flex' : 'none'">X
-            </button>
+            <div id="burger-menu-icon">
+                <button (click)="toggleBurgerMenu()" id="burger-menu-open-icon" type="button"
+                    aria-label="Open navigation menu" [style.display]="burgerMenuOpen ? 'none' : 'flex'">☰
+                </button>
+                <button (click)="toggleBurgerMenu()" id="burger-menu-close-icon" type="button"
+                    [style.display]="burgerMenuOpen ? 'flex' : 'none'">X
+                </button>
+            </div>
         </div>
     </div>
     <div id="burger-menu-content" [class.open]="burgerMenuOpen" [class.closing]="burgerMenuClosing">
@@ -306,7 +312,8 @@
                     <div *ngIf="openMobileDropdownMenu === 'photography'" id="mobile-photography-dropdown"
                         [class.open]="openMobileDropdownMenu === 'photography'">
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"
-                            [queryParams]="{ filter: 'aviation' }" class="mobile-dropdown-link dropdown-link-photography">
+                            [queryParams]="{ filter: 'aviation' }"
+                            class="mobile-dropdown-link dropdown-link-photography">
                             {{ getTranslation('aviationGallery') }}
                         </a>
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"

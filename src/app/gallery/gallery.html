@@ -3,36 +3,41 @@
 
     <!-- Filter Section -->
     <div class="gallery-header">
-        <!-- Breadcrumb Navigation -->
-        <div class="filter-breadcrumb"
-            *ngIf="selectedCategory !== 'All' || selectedContinent !== 'All' || selectedCountry !== 'All' || selectedSubfolders.length > 0">
-            <button class="breadcrumb-btn" (click)="resetFilters()">{{ getTranslation('all') }}</button>
-            <span class="breadcrumb-separator" *ngIf="selectedCategory !== 'All'">›</span>
-            <button class="breadcrumb-btn" *ngIf="selectedCategory !== 'All'"
-                (click)="onCategoryChange(selectedCategory)">
-                {{ translateCategory(selectedCategory) }}
-            </button>
-            <span class="breadcrumb-separator" *ngIf="selectedContinent !== 'All'">›</span>
-            <button class="breadcrumb-btn" *ngIf="selectedContinent !== 'All'"
-                (click)="onContinentChange(selectedContinent)">
-                {{ translateContinent(selectedContinent) }}
-            </button>
-            <span class="breadcrumb-separator" *ngIf="selectedCountry !== 'All'">›</span>
-            <button class="breadcrumb-btn" *ngIf="selectedCountry !== 'All'" (click)="onCountryChange(selectedCountry)">
-                {{ translateCountry(selectedCountry) }}
-            </button>
-            <ng-container *ngFor="let sub of selectedSubfolders; let i = index">
-                <span class="breadcrumb-separator">›</span>
-                <button class="breadcrumb-btn"
-                    *ngIf="i < selectedSubfolders.length - 1 || currentSubfolderOptions.length > 0"
-                    (click)="onSubfolderBreadcrumbClick(i)">
-                    {{ translateLocation(sub) }}
+        <!-- Breadcrumb + Results Count -->
+        <div class="filter-breadcrumb-row">
+            <div class="filter-breadcrumb"
+                *ngIf="selectedCategory !== 'All' || selectedContinent !== 'All' || selectedCountry !== 'All' || selectedSubfolders.length > 0">
+                <button class="breadcrumb-btn" (click)="resetFilters()">{{ getTranslation('all') }}</button>
+                <span class="breadcrumb-separator" *ngIf="selectedCategory !== 'All'">›</span>
+                <button class="breadcrumb-btn" *ngIf="selectedCategory !== 'All'"
+                    (click)="onCategoryChange(selectedCategory)">
+                    {{ translateCategory(selectedCategory) }}
                 </button>
-                <span class="breadcrumb-current"
-                    *ngIf="i === selectedSubfolders.length - 1 && currentSubfolderOptions.length === 0">
-                    {{ translateLocation(sub) }}
-                </span>
-            </ng-container>
+                <span class="breadcrumb-separator" *ngIf="selectedContinent !== 'All'">›</span>
+                <button class="breadcrumb-btn" *ngIf="selectedContinent !== 'All'"
+                    (click)="onContinentChange(selectedContinent)">
+                    {{ translateContinent(selectedContinent) }}
+                </button>
+                <span class="breadcrumb-separator" *ngIf="selectedCountry !== 'All'">›</span>
+                <button class="breadcrumb-btn" *ngIf="selectedCountry !== 'All'" (click)="onCountryChange(selectedCountry)">
+                    {{ translateCountry(selectedCountry) }}
+                </button>
+                <ng-container *ngFor="let sub of selectedSubfolders; let i = index">
+                    <span class="breadcrumb-separator">›</span>
+                    <button class="breadcrumb-btn"
+                        *ngIf="i < selectedSubfolders.length - 1 || currentSubfolderOptions.length > 0"
+                        (click)="onSubfolderBreadcrumbClick(i)">
+                        {{ translateLocation(sub) }}
+                    </button>
+                    <span class="breadcrumb-current"
+                        *ngIf="i === selectedSubfolders.length - 1 && currentSubfolderOptions.length === 0">
+                        {{ translateLocation(sub) }}
+                    </span>
+                </ng-container>
+            </div>
+            <div class="results-count">
+                {{ filteredImages.length }} {{ currentLanguage === 'en' ? 'images found' : 'Bilder gefunden' }}
+            </div>
         </div>
 
         <!-- Category Filter Buttons -->
@@ -88,29 +93,21 @@
                     </span>
                 </button>
             </div>
-        </div>
-
-        <!-- Results Count -->
-        <div class="results-count">
-            {{ filteredImages.length }} {{ currentLanguage === 'en' ? 'images found' : 'Bilder gefunden' }}
-        </div>
-
-        <section class="gallery-seo-intro">
-            <h1>{{ currentLanguage === 'de' ? 'Luftfahrt- und Reisefotos kaufen' : 'Buy Aviation and Travel Photos' }}</h1>
-            <p>
-                {{ currentLanguage === 'de'
-                ? 'Jedes Bild in dieser Galerie ist direkt lizenzierbar. Waehle deine Motive aus, lege sie in den Warenkorb und schliesse den Kauf in wenigen Sekunden via PayPal ab.'
-                : 'Every image in this gallery is directly licensable. Pick your favorites, add them to cart, and complete checkout in seconds via PayPal.' }}
-            </p>
-            <div class="gallery-seo-cta-row">
-                <a routerLink="/shop/cart" class="gallery-seo-cta">
-                    {{ currentLanguage === 'de' ? 'Jetzt Lizenz kaufen' : 'Buy License Now' }}
-                </a>
-                <a routerLink="/shop/account" class="gallery-seo-cta gallery-seo-cta-secondary">
-                    {{ currentLanguage === 'de' ? 'Konto fuer schnelleren Checkout' : 'Account for Faster Checkout' }}
-                </a>
+            <div class="view-mode-toggle">
+                <span class="toggle-label" [class.active]="!isLazyLoad">
+                    {{ currentLanguage === 'de' ? 'Seiten' : 'Pages' }}
+                </span>
+                <label class="toggle-switch"
+                    [attr.aria-label]="currentLanguage === 'de' ? 'Lademodus umschalten' : 'Toggle loading mode'">
+                    <input type="checkbox" [(ngModel)]="isLazyLoad" (change)="onToggleLoadingMode()">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label" [class.active]="isLazyLoad">
+                    {{ currentLanguage === 'de' ? 'Scrollen' : 'Scroll' }}
+                </span>
             </div>
-        </section>
+        </div>
+
     </div>
 
     <div *ngIf="isLoading" class="gallery-loading">
@@ -120,7 +117,7 @@
 
     <!-- Gallery Grid -->
     <div class="gallery-grid" *ngIf="!isLoading">
-        <article *ngFor="let image of paginatedImages; let i = index" class="gallery-item" itemscope
+        <article *ngFor="let image of displayedImages; let i = index" class="gallery-item" itemscope
             itemtype="https://schema.org/ImageObject">
             <meta itemprop="name" [attr.content]="getImageTitle(image)" />
             <meta itemprop="description" [attr.content]="getImageSeoDescription(image)" />
@@ -151,8 +148,11 @@
         </article>
     </div>
 
+    <!-- Lazy Load Sentinel -->
+    <div id="lazy-load-sentinel" *ngIf="isLazyLoad && !isLoading" class="lazy-load-sentinel"></div>
+
     <!-- Pagination -->
-    <div class="pagination" *ngIf="!isLoading">
+    <div class="pagination" *ngIf="!isLoading && !isLazyLoad">
         <button class="pagination-btn prev-btn" (click)="previousPage()" [disabled]="currentPage === 1">
             ←
         </button>
@@ -171,8 +171,8 @@
     <div *ngIf="isLightboxOpen" class="lightbox-overlay" (click)="closeLightbox()">
         <div class="lightbox-container" (click)="$event.stopPropagation()">
             <!-- Main Image -->
-            <div class="lightbox-main" (touchstart.passive)="onTouchStart($event)" (touchmove)="onTouchMove($event)"
-                (touchend)="onTouchEnd($event)">
+            <div class="lightbox-main" (touchstart.passive)="onTouchStart($event)" (touchmove.passive)="onTouchMove($event)"
+                (touchend.passive)="onTouchEnd($event)">
                 <!-- Close Button -->
                 <div class="lightbox-image-wrapper">
                     <!-- Close Button -->

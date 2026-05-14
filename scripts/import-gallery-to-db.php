@@ -9,66 +9,23 @@ $deltaMode = in_array('--delta', $argv ?? [], true);
 
 ensureHttpsSupport();
 
-$nameMap = loadNameMapFromBucket($bucketBaseUrl . '/name-map.json');
+$secrets  = readSecrets();
+$nameMap  = loadNameMapFromBucket($bucketBaseUrl . '/name-map.json');
 $relativePaths = fetchVariantRelativePaths($bucketBaseUrl, $variantFolder, $imagePattern);
-$db = getMysqli();
 
-if ($deltaMode) {
-    $existingPathGridSet = fetchExistingPathGridSet($db);
-    $relativePaths = array_values(array_filter(
-        $relativePaths,
-        static fn(string $relativePath): bool => !isset($existingPathGridSet['grid/' . $relativePath])
-    ));
-}
-
-$upsertSql = <<<'SQL'
-INSERT INTO images (
-    category,
-    continent,
-    country,
-    title,
-    title_de,
-    description,
-    description_de,
-    path_original,
-    path_grid,
-    path_thumbnail,
-    is_active
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
-ON DUPLICATE KEY UPDATE
-    category = VALUES(category),
-    continent = VALUES(continent),
-    country = VALUES(country),
-    title = COALESCE(NULLIF(images.title, ''), VALUES(title)),
-    title_de = COALESCE(NULLIF(images.title_de, ''), VALUES(title_de)),
-    description = COALESCE(NULLIF(images.description, ''), VALUES(description)),
-    description_de = COALESCE(NULLIF(images.description_de, ''), VALUES(description_de)),
-    path_original = VALUES(path_original),
-    path_thumbnail = VALUES(path_thumbnail),
-    is_active = 1,
-    updated_at = CURRENT_TIMESTAMP
-SQL;
-
-$stmt = $db->prepare($upsertSql);
-if (!$stmt) {
-    throw new RuntimeException('Failed to prepare upsert statement: ' . $db->error);
-}
-
-$insertedOrUpdated = 0;
+// Build row objects from S3 listing
 $skipped = 0;
-
+$rows = [];
 foreach ($relativePaths as $relativePath) {
-
     $parts = explode('/', $relativePath);
     if (count($parts) < 4) {
-        // Expected: category/continent/country/file
         $skipped++;
         continue;
     }
 
-    $category = humanize($parts[0]);
+    $category  = humanize($parts[0]);
     $continent = humanize($parts[1]);
-    $country = humanize($parts[2]);
+    $country   = humanize($parts[2]);
 
     $fileBase = pathinfo($parts[count($parts) - 1], PATHINFO_FILENAME);
     $title = humanize($fileBase);
@@ -76,73 +33,186 @@ foreach ($relativePaths as $relativePath) {
         $title = (string) $nameMap[$relativePath]['originalTitle'];
     }
 
-    $pathOriginal = 'original/' . $relativePath;
-    $pathGrid = 'grid/' . $relativePath;
-    $pathThumbnail = 'thumbnail/' . $relativePath;
-
-    $titleDe = null;
-    $description = null;
-    $descriptionDe = null;
-
-    $stmt->bind_param(
-        'ssssssssss',
-        $category,
-        $continent,
-        $country,
-        $title,
-        $titleDe,
-        $description,
-        $descriptionDe,
-        $pathOriginal,
-        $pathGrid,
-        $pathThumbnail
-    );
-
-    if (!$stmt->execute()) {
-        throw new RuntimeException('Failed upsert for ' . $relativePath . ': ' . $stmt->error);
-    }
-
-    $insertedOrUpdated++;
+    $rows[] = [
+        'category'       => $category,
+        'continent'      => $continent,
+        'country'        => $country,
+        'title'          => $title,
+        'title_de'       => null,
+        'description'    => null,
+        'description_de' => null,
+        'path_original'  => 'original/' . $relativePath,
+        'path_grid'      => 'grid/'     . $relativePath,
+        'path_thumbnail' => 'thumbnail/'. $relativePath,
+    ];
 }
 
-$stmt->close();
+// Try direct MySQL first; fall back to HTTP if network-blocked
+$insertedOrUpdated = 0;
+$usedMethod = 'none';
 
-echo "Import mode: " . ($deltaMode ? 'delta (new files only)' : 'full') . "\n";
-echo "Import finished. Upserted: {$insertedOrUpdated}, skipped: {$skipped}\n";
-echo "Image base URL: {$bucketBaseUrl}\n";
-echo "Variant folder: {$variantFolder}\n";
+if ($secrets['password'] !== '') {
+    try {
+        [$insertedOrUpdated, $usedMethod] = syncViaMySQL($secrets, $rows, $deltaMode);
+    } catch (RuntimeException $e) {
+        $msg = $e->getMessage();
+        $isNetwork = str_contains($msg, 'getaddrinfo') || str_contains($msg, 'ENOTFOUND')
+                  || str_contains($msg, 'Connection refused') || str_contains($msg, 'timed out');
 
-function getMysqli(): mysqli
+        if ($isNetwork && $secrets['syncApiUrl'] !== '' && $secrets['syncApiKey'] !== '') {
+            echo "MySQL unreachable ({$msg}), falling back to HTTP sync...\n";
+        } else {
+            throw $e;
+        }
+    }
+}
+
+if ($usedMethod === 'none' && $secrets['syncApiUrl'] !== '' && $secrets['syncApiKey'] !== '') {
+    [$insertedOrUpdated, $usedMethod] = syncViaHttp($secrets, $rows);
+}
+
+if ($usedMethod === 'none') {
+    echo "WARNING: No sync method available. Check secrets/gallery-db.local.json.\n";
+}
+
+echo "Import mode:   " . ($deltaMode ? 'delta (new files only)' : 'full') . "\n";
+echo "Sync method:   {$usedMethod}\n";
+echo "Upserted:      {$insertedOrUpdated}, skipped (bad path): {$skipped}\n";
+echo "Image base URL:{$bucketBaseUrl}\n";
+
+function readSecrets(): array
+{
+    // Prefer JSON file (same as copy-object-storage-images.js)
+    $jsonPath = __DIR__ . '/../secrets/gallery-db.local.json';
+    $cfg = [];
+    if (file_exists($jsonPath)) {
+        $decoded = json_decode((string) file_get_contents($jsonPath), true);
+        if (is_array($decoded)) {
+            $cfg = $decoded;
+        }
+    }
+
+    // Also accept PHP-format file as fallback
+    $phpPath = __DIR__ . '/../secrets/gallery-db.local.php';
+    if ($cfg === [] && file_exists($phpPath)) {
+        $loaded = require $phpPath;
+        if (is_array($loaded)) {
+            $cfg = $loaded;
+        }
+    }
+
+    return [
+        'host'       => firstNonEmpty($cfg['host']       ?? null, getenv('GALLERY_DB_HOST')      ?: null, 'db5020224670.hosting-data.io'),
+        'port'       => (int) firstNonEmpty(isset($cfg['port']) ? (string) $cfg['port'] : null, getenv('GALLERY_DB_PORT') ?: null, '3306'),
+        'database'   => firstNonEmpty($cfg['database']   ?? null, getenv('GALLERY_DB_NAME')      ?: null, 'dbs15552605'),
+        'username'   => firstNonEmpty($cfg['username']   ?? null, getenv('GALLERY_DB_USER')      ?: null, 'dbu595115'),
+        'password'   => firstNonEmpty($cfg['password']   ?? null, getenv('GALLERY_DB_PASS')      ?: null, ''),
+        'charset'    => firstNonEmpty($cfg['charset']    ?? null, getenv('GALLERY_DB_CHARSET')   ?: null, 'utf8mb4'),
+        'syncApiUrl' => firstNonEmpty($cfg['syncApiUrl'] ?? null, getenv('GALLERY_SYNC_API_URL') ?: null, ''),
+        'syncApiKey' => firstNonEmpty($cfg['syncApiKey'] ?? null, getenv('GALLERY_SYNC_API_KEY') ?: null, ''),
+    ];
+}
+
+function syncViaMySQL(array $secrets, array $rows, bool $deltaMode): array
 {
     if (!extension_loaded('mysqli')) {
-        throw new RuntimeException(
-            'PHP extension "mysqli" is not loaded. Install/enable mysqli (or run importer on your hosting environment where mysqli is available).'
-        );
+        throw new RuntimeException('PHP extension "mysqli" is not loaded.');
     }
-
-    $secretPath = __DIR__ . '/../secrets/gallery-db.local.php';
-    $config = [];
-
-    if (file_exists($secretPath)) {
-        $config = require $secretPath;
-    }
-
-    $host = firstNonEmpty($config['host'] ?? null, getenv('GALLERY_DB_HOST') ?: null, 'db5020224670.hosting-data.io');
-    $port = (int) firstNonEmpty(isset($config['port']) ? (string) $config['port'] : null, getenv('GALLERY_DB_PORT') ?: null, '3306');
-    $database = firstNonEmpty($config['database'] ?? null, getenv('GALLERY_DB_NAME') ?: null, 'dbs15552605');
-    $username = firstNonEmpty($config['username'] ?? null, getenv('GALLERY_DB_USER') ?: null, 'dbu595115');
-    $password = firstNonEmpty($config['password'] ?? null, getenv('GALLERY_DB_PASS') ?: null, '');
-    $charset = firstNonEmpty($config['charset'] ?? null, getenv('GALLERY_DB_CHARSET') ?: null, 'utf8mb4');
 
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-    $db = new mysqli($host, $username, $password, $database, $port);
+    $db = new mysqli($secrets['host'], $secrets['username'], $secrets['password'], $secrets['database'], $secrets['port']);
+    $db->set_charset($secrets['charset']);
 
-    if ($db->connect_error) {
-        throw new RuntimeException('Verbindung zum MySQL Server fehlgeschlagen: ' . $db->connect_error);
+    if ($deltaMode) {
+        $existing = fetchExistingPathGridSet($db);
+        $rows = array_values(array_filter($rows, static fn($r) => !isset($existing[$r['path_grid']])));
     }
 
-    $db->set_charset($charset);
-    return $db;
+    if (count($rows) === 0) {
+        $db->close();
+        return [0, 'MySQL (no new rows)'];
+    }
+
+    $upsertSql = <<<'SQL'
+        INSERT INTO images (
+            category, continent, country,
+            title, title_de, description, description_de,
+            path_original, path_grid, path_thumbnail, is_active
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+        ON DUPLICATE KEY UPDATE
+            category       = VALUES(category),
+            continent      = VALUES(continent),
+            country        = VALUES(country),
+            title          = COALESCE(NULLIF(images.title, ''),          VALUES(title)),
+            title_de       = COALESCE(NULLIF(images.title_de, ''),       VALUES(title_de)),
+            description    = COALESCE(NULLIF(images.description, ''),    VALUES(description)),
+            description_de = COALESCE(NULLIF(images.description_de, ''), VALUES(description_de)),
+            path_original  = VALUES(path_original),
+            path_thumbnail = VALUES(path_thumbnail),
+            is_active      = 1,
+            updated_at     = CURRENT_TIMESTAMP
+    SQL;
+
+    $stmt = $db->prepare($upsertSql);
+    if (!$stmt) {
+        throw new RuntimeException('Failed to prepare upsert: ' . $db->error);
+    }
+
+    $count = 0;
+    foreach ($rows as $row) {
+        $stmt->bind_param(
+            'ssssssssss',
+            $row['category'], $row['continent'], $row['country'],
+            $row['title'], $row['title_de'], $row['description'], $row['description_de'],
+            $row['path_original'], $row['path_grid'], $row['path_thumbnail']
+        );
+        $stmt->execute();
+        $count++;
+    }
+
+    $stmt->close();
+    $db->close();
+
+    return [$count, 'MySQL'];
+}
+
+function syncViaHttp(array $secrets, array $rows): array
+{
+    $body = json_encode($rows, JSON_THROW_ON_ERROR);
+    $url  = $secrets['syncApiUrl'];
+    $key  = $secrets['syncApiKey'];
+
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_POST            => true,
+        CURLOPT_POSTFIELDS      => $body,
+        CURLOPT_RETURNTRANSFER  => true,
+        CURLOPT_HTTPHEADER      => [
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($body),
+            'X-Sync-Key: ' . $key,
+        ],
+        CURLOPT_TIMEOUT         => 60,
+        CURLOPT_SSL_VERIFYPEER  => false, // local script — no system CA bundle needed
+        CURLOPT_SSL_VERIFYHOST  => false,
+    ]);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
+
+    if ($response === false || $curlError !== '') {
+        throw new RuntimeException('HTTP sync curl error: ' . $curlError);
+    }
+
+    $json = json_decode((string) $response, true);
+    if (!is_array($json) || !($json['ok'] ?? false)) {
+        $preview = substr((string) $response, 0, 200);
+        throw new RuntimeException('HTTP sync failed: ' . ($json['error'] ?? $preview));
+    }
+
+    return [(int) ($json['upserted'] ?? count($rows)), 'HTTP'];
 }
 
 function loadNameMapFromBucket(string $url): array

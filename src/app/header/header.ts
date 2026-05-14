@@ -215,7 +215,7 @@ export class Header implements OnInit {
       'shop/account': this.currentLanguage === 'de' ? 'Konto' : 'Account',
       'air-germany': 'Air Germany',
       'airlinesim-ceo-tools': 'AirlineSim Tools',
-      'my-visited-countries': this.currentLanguage === 'de' ? 'Laenderkarte' : 'Countries Map',
+      'my-visited-countries': this.currentLanguage === 'de' ? 'Länderkarte' : 'Countries Map',
       'about-my-photography': this.currentLanguage === 'de' ? 'Meine Fotografie' : 'My Photography',
       'career': this.currentLanguage === 'de' ? 'Karriere' : 'Career',
       'legal': this.currentLanguage === 'de' ? 'Rechtliches' : 'Legal',

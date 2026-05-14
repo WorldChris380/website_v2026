@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -34,7 +34,7 @@ interface GalleryImage {
     templateUrl: './gallery.html',
     styleUrls: ['./gallery.scss'],
 })
-export class Gallery implements OnInit {
+export class Gallery implements OnInit, OnDestroy {
     images: GalleryImage[] = [];
     filteredImages: GalleryImage[] = [];
     currentLanguage: Language = 'en';
@@ -67,9 +67,17 @@ export class Gallery implements OnInit {
     private readonly baseGalleryUrl = 'https://www.christian-boehme.com/gallery';
     private readonly baseShopCartUrl = 'https://www.christian-boehme.com/shop/cart';
 
+    // Loading mode
+    isLazyLoad: boolean = false;
+    lazyLoadCount: number = 15;
+    private readonly lazyLoadIncrement: number = 15;
+    private intersectionObserver?: IntersectionObserver;
+
     // Touch Events for Swipe
     private touchStartX: number = 0;
     private touchEndX: number = 0;
+    private touchStartY: number = 0;
+    private touchEndY: number = 0;
     private searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
     copiedImageId: number | null = null;
     private copiedImageTimer: ReturnType<typeof setTimeout> | null = null;
@@ -269,6 +277,7 @@ export class Gallery implements OnInit {
 
     filterImages() {
         this.currentPage = 1;
+        this.lazyLoadCount = this.lazyLoadIncrement;
         const normalize = (s: string) => s
             .toLowerCase()
             .replace(/_/g, ' ')
@@ -323,6 +332,9 @@ export class Gallery implements OnInit {
         }
 
         this.updateGallerySeo();
+        if (this.isLazyLoad) {
+            this.setupLazyLoadObserver();
+        }
     }
 
     private updateGallerySeo(): void {
@@ -334,11 +346,11 @@ export class Gallery implements OnInit {
         const canonicalUrl = this.buildSeoCanonicalUrl();
 
         const title = isDE
-            ? `Fotos kaufen: ${contextLabel} | ${count} lizenzierbare Bilder | Christian Boehme`
-            : `Buy ${contextLabel} Photos | ${count} licensable images | Christian Boehme`;
+            ? `Fotos kaufen: ${contextLabel} | ${count} lizenzierbare Bilder | Christian Böhme`
+            : `Buy ${contextLabel} Photos | ${count} licensable images | Christian Böhme`;
 
         const description = isDE
-            ? `Lizenzierbare Luftfahrt- und Reisefotografie ${isGlobalContext ? 'aus aller Welt' : `fuer ${contextLabel}`}. Sofortiger Checkout per PayPal. Preise ab ${minPrice.toFixed(2)} EUR pro Bild.`
+            ? `Lizenzierbare Luftfahrt- und Reisefotografie ${isGlobalContext ? 'aus aller Welt' : `für ${contextLabel}`}. Sofortiger Checkout per PayPal. Preise ab ${minPrice.toFixed(2)} EUR pro Bild.`
             : `Licensable aviation and travel photography ${isGlobalContext ? 'from around the world' : `for ${contextLabel}`}. Instant PayPal checkout. Prices from EUR ${minPrice.toFixed(2)} per image.`;
 
         const keywords = isDE
@@ -572,6 +584,51 @@ export class Gallery implements OnInit {
         this.goToPage(this.currentPage + 1);
     }
 
+    get displayedImages(): GalleryImage[] {
+        if (this.isLazyLoad) {
+            return this.filteredImages.slice(0, this.lazyLoadCount);
+        }
+        return this.paginatedImages;
+    }
+
+    onToggleLoadingMode(): void {
+        this.lazyLoadCount = this.lazyLoadIncrement;
+        if (this.isLazyLoad) {
+            this.setupLazyLoadObserver();
+        } else {
+            this.teardownLazyLoadObserver();
+            this.currentPage = 1;
+        }
+        this.cdr.markForCheck();
+    }
+
+    private setupLazyLoadObserver(): void {
+        this.teardownLazyLoadObserver();
+        setTimeout(() => {
+            const sentinel = document.getElementById('lazy-load-sentinel');
+            if (!sentinel || !this.isLazyLoad) return;
+            this.intersectionObserver = new IntersectionObserver(
+                (entries) => {
+                    if (entries[0].isIntersecting && this.lazyLoadCount < this.filteredImages.length) {
+                        this.lazyLoadCount += this.lazyLoadIncrement;
+                        this.cdr.markForCheck();
+                    }
+                },
+                { rootMargin: '300px', threshold: 0 }
+            );
+            this.intersectionObserver.observe(sentinel);
+        }, 50);
+    }
+
+    private teardownLazyLoadObserver(): void {
+        this.intersectionObserver?.disconnect();
+        this.intersectionObserver = undefined;
+    }
+
+    ngOnDestroy(): void {
+        this.teardownLazyLoadObserver();
+    }
+
     addToCart(image: GalleryImage | null) {
         this.addToCartWithAnimation(image);
     }
@@ -734,28 +791,34 @@ export class Gallery implements OnInit {
     onTouchStart(event: Event) {
         const touchEvent = event as TouchEvent;
         this.touchStartX = touchEvent.changedTouches[0].screenX;
+        this.touchStartY = touchEvent.changedTouches[0].screenY;
         this.touchEndX = this.touchStartX;
+        this.touchEndY = this.touchStartY;
     }
 
-    onTouchMove(event: TouchEvent) {
-        this.touchEndX = event.changedTouches[0].screenX;
+    onTouchMove(event: Event) {
+        const touchEvent = event as TouchEvent;
+        this.touchEndX = touchEvent.changedTouches[0].screenX;
+        this.touchEndY = touchEvent.changedTouches[0].screenY;
     }
 
-    onTouchEnd(event: TouchEvent) {
-        this.touchEndX = event.changedTouches[0].screenX;
+    onTouchEnd(event: Event) {
+        const touchEvent = event as TouchEvent;
+        this.touchEndX = touchEvent.changedTouches[0].screenX;
+        this.touchEndY = touchEvent.changedTouches[0].screenY;
         this.handleSwipe();
     }
 
     private handleSwipe() {
-        const swipeThreshold = 50; // Minimum distance for a swipe
-        const difference = this.touchStartX - this.touchEndX;
+        const swipeThreshold = 80;
+        const diffX = this.touchStartX - this.touchEndX;
+        const diffY = this.touchStartY - this.touchEndY;
 
-        if (Math.abs(difference) > swipeThreshold) {
-            if (difference > 0) {
-                // Swipe left - next image
+        // Only trigger if horizontal movement exceeds threshold AND is clearly more horizontal than vertical
+        if (Math.abs(diffX) > swipeThreshold && Math.abs(diffX) > Math.abs(diffY) * 1.8) {
+            if (diffX > 0) {
                 this.nextLightboxImage();
             } else {
-                // Swipe right - previous image
                 this.previousLightboxImage();
             }
         }
@@ -919,10 +982,10 @@ export class Gallery implements OnInit {
         const category = this.translateCategory(image.category || '');
 
         if (this.currentLanguage === 'de') {
-            return `${title} aus ${country} (${continent}), Kategorie ${category}. Lizenzierbare Fotografie im Christian Boehme Shop.`;
+            return `${title} aus ${country} (${continent}), Kategorie ${category}. Lizenzierbare Fotografie im Christian Böhme Shop.`;
         }
 
-        return `${title} from ${country} (${continent}), category ${category}. Licensable photography in the Christian Boehme shop.`;
+        return `${title} from ${country} (${continent}), category ${category}. Licensable photography in the Christian Böhme shop.`;
     }
 
     applyLightboxFilter(type: 'category' | 'continent' | 'country', value: string, event?: Event): void {
@@ -976,13 +1039,13 @@ export class Gallery implements OnInit {
     getImageFolderPath(image: GalleryImage): string {
         const rawPath = (image.path || '').trim();
         if (!rawPath) {
-            return this.currentLanguage === 'de' ? 'Ordner nicht verfuegbar' : 'Folder unavailable';
+            return this.currentLanguage === 'de' ? 'Ordner nicht verfügbar' : 'Folder unavailable';
         }
 
         const normalized = rawPath.replace(/\\/g, '/').replace(/^\/+/, '');
         const parts = normalized.split('/').filter(Boolean);
         if (parts.length === 0) {
-            return this.currentLanguage === 'de' ? 'Ordner nicht verfuegbar' : 'Folder unavailable';
+            return this.currentLanguage === 'de' ? 'Ordner nicht verfügbar' : 'Folder unavailable';
         }
 
         if (parts.length > 1) {

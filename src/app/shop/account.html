@@ -25,7 +25,7 @@
                     <button class="nav-btn" type="button" *ngIf="isAuthenticated"
                         [class.active]="activeAccountTab === 'overview'" (click)="setActiveAccountTab('overview')">{{
                         currentLanguage ===
-                        'de' ? 'Uebersicht' : 'Overview' }}</button>
+                        'de' ? 'Übersicht' : 'Overview' }}</button>
                     <button class="nav-btn" type="button" *ngIf="isAuthenticated"
                         [class.active]="activeAccountTab === 'orders'" (click)="setActiveAccountTab('orders')">{{
                         currentLanguage ===
@@ -89,7 +89,7 @@
                             ? (currentLanguage === 'de' ? 'Konto wird erstellt…' : 'Creating account…')
                             : (currentLanguage === 'de' ? 'Konto erstellen' : 'Create account') }}
                         </button>
-                        <a [routerLink]="['/gallery']" class="secondary-link">{{ currentLanguage === 'de' ? 'Zurueck zur
+                        <a [routerLink]="['/gallery']" class="secondary-link">{{ currentLanguage === 'de' ? 'Zurück zur
                             Galerie' : 'Back to gallery' }}</a>
                     </div>
 
@@ -232,7 +232,7 @@
                         <span class="highlight-label">{{ currentLanguage === 'de' ? 'Rechnungen' : 'Invoices' }}</span>
                         <strong>{{ invoiceOrders.length }}</strong>
                         <p>{{ currentLanguage === 'de'
-                            ? 'Fuer abgeschlossene Kaeufe direkt als PDF verfuegbar.'
+                            ? 'Für abgeschlossene Käufe direkt als PDF verfügbar.'
                             : 'Available as PDF immediately for completed purchases.' }}</p>
                     </article>
                 </div>
@@ -353,7 +353,7 @@
                 <ng-template #noInvoicesYet>
                     <div class="empty-state">
                         <p>{{ currentLanguage === 'de'
-                            ? 'Noch keine Rechnungen verfuegbar. Nach deinem ersten Kauf findest du hier alle PDFs.'
+                            ? 'Noch keine Rechnungen verfügbar. Nach deinem ersten Kauf findest du hier alle PDFs.'
                             : 'No invoices available yet. After your first purchase, all PDFs will appear here.' }}</p>
                     </div>
                 </ng-template>

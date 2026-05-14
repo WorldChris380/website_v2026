@@ -324,37 +324,37 @@ export class TravelBudgetCalculatorComponent implements OnInit, OnDestroy {
     readonly countryInsights: Record<string, CountryInsight> = {
         'DE': { flagEmoji: '', currency: 'EUR', bestTime: 'May - Sep', bestTimeDE: 'Mai - Sep', savingTip: 'Use the Deutschlandticket for unlimited local travel.', savingTipDE: 'Mit dem Deutschlandticket unbegrenzt Nahverkehr nutzen.' },
         'FR': { flagEmoji: '', currency: 'EUR', bestTime: 'Apr - Jun, Sep - Oct', bestTimeDE: 'Apr - Jun, Sep - Okt', savingTip: 'Visit museums on the first Sunday of each month, many are free.', savingTipDE: 'Am ersten Sonntag im Monat sind viele Museen kostenlos.' },
-        'ES': { flagEmoji: '', currency: 'EUR', bestTime: 'Mar - May, Sep - Nov', bestTimeDE: 'Maerz - Mai, Sep - Nov', savingTip: 'Many tapas bars include small snacks with drinks.', savingTipDE: 'Viele Tapas-Bars bieten kleine Snacks zum Getraenk.' },
-        'IT': { flagEmoji: '', currency: 'EUR', bestTime: 'Apr - Jun, Sep - Oct', bestTimeDE: 'Apr - Jun, Sep - Okt', savingTip: 'Lunch menus are often cheaper than dinner menus.', savingTipDE: 'Mittagsmenues sind oft guenstiger als Abendkarten.' },
+        'ES': { flagEmoji: '', currency: 'EUR', bestTime: 'Mar - May, Sep - Nov', bestTimeDE: 'März - Mai, Sep - Nov', savingTip: 'Many tapas bars include small snacks with drinks.', savingTipDE: 'Viele Tapas-Bars bieten kleine Snacks zum Getränk.' },
+        'IT': { flagEmoji: '', currency: 'EUR', bestTime: 'Apr - Jun, Sep - Oct', bestTimeDE: 'Apr - Jun, Sep - Okt', savingTip: 'Lunch menus are often cheaper than dinner menus.', savingTipDE: 'Mittagsmenüs sind oft günstiger als Abendkarten.' },
         'PT': { flagEmoji: '', currency: 'EUR', bestTime: 'Apr - Oct', bestTimeDE: 'Apr - Okt', savingTip: 'Look for local daily specials at neighborhood restaurants.', savingTipDE: 'Lokale Tagesmenues in Nachbarschaftsrestaurants nutzen.' },
-        'GR': { flagEmoji: '', currency: 'EUR', bestTime: 'Apr - Jun, Sep - Oct', bestTimeDE: 'Apr - Jun, Sep - Okt', savingTip: 'Travel in shoulder season for lower hotel rates.', savingTipDE: 'In der Nebensaison reisen fuer niedrigere Hotelpreise.' },
+        'GR': { flagEmoji: '', currency: 'EUR', bestTime: 'Apr - Jun, Sep - Oct', bestTimeDE: 'Apr - Jun, Sep - Okt', savingTip: 'Travel in shoulder season for lower hotel rates.', savingTipDE: 'In der Nebensaison reisen für niedrigere Hotelpreise.' },
         'HR': { flagEmoji: '', currency: 'EUR', bestTime: 'May - Jun, Sep', bestTimeDE: 'Mai - Jun, Sep', savingTip: 'Base on the mainland and do island day trips.', savingTipDE: 'Auf dem Festland wohnen und Inseln per Tagestour besuchen.' },
-        'PL': { flagEmoji: '', currency: 'PLN', bestTime: 'May - Sep', bestTimeDE: 'Mai - Sep', savingTip: 'Poland offers very good value in major cities.', savingTipDE: 'Polen bietet in grossen Staedten ein sehr gutes Preisniveau.' },
+        'PL': { flagEmoji: '', currency: 'PLN', bestTime: 'May - Sep', bestTimeDE: 'Mai - Sep', savingTip: 'Poland offers very good value in major cities.', savingTipDE: 'Polen bietet in großen Städten ein sehr gutes Preisniveau.' },
         'CZ': { flagEmoji: '', currency: 'CZK', bestTime: 'Apr - Oct', bestTimeDE: 'Apr - Okt', savingTip: 'Eat one or two streets away from city-center hotspots.', savingTipDE: 'Zum Essen ein bis zwei Strassen vom Zentrum weggehen.' },
-        'AT': { flagEmoji: '', currency: 'EUR', bestTime: 'Jun - Sep, Dec', bestTimeDE: 'Jun - Sep, Dez', savingTip: 'City cards can reduce transport and attraction costs.', savingTipDE: 'City Cards koennen Transport- und Eintrittskosten senken.' },
-        'CH': { flagEmoji: '', currency: 'CHF', bestTime: 'Jun - Sep', bestTimeDE: 'Jun - Sep', savingTip: 'Self-catering helps a lot in high-cost destinations.', savingTipDE: 'Selbstverpflegung hilft stark in Hochpreislaendern.' },
-        'IS': { flagEmoji: '', currency: 'ISK', bestTime: 'Jun - Aug', bestTimeDE: 'Jun - Aug', savingTip: 'Grocery shopping can save a lot compared to restaurants.', savingTipDE: 'Einkaufen im Supermarkt spart viel gegenueber Restaurants.' },
+        'AT': { flagEmoji: '', currency: 'EUR', bestTime: 'Jun - Sep, Dec', bestTimeDE: 'Jun - Sep, Dez', savingTip: 'City cards can reduce transport and attraction costs.', savingTipDE: 'City Cards können Transport- und Eintrittskosten senken.' },
+        'CH': { flagEmoji: '', currency: 'CHF', bestTime: 'Jun - Sep', bestTimeDE: 'Jun - Sep', savingTip: 'Self-catering helps a lot in high-cost destinations.', savingTipDE: 'Selbstverpflegung hilft stark in Hochpreisländern.' },
+        'IS': { flagEmoji: '', currency: 'ISK', bestTime: 'Jun - Aug', bestTimeDE: 'Jun - Aug', savingTip: 'Grocery shopping can save a lot compared to restaurants.', savingTipDE: 'Einkaufen im Supermarkt spart viel gegenüber Restaurants.' },
         'TH': { flagEmoji: '', currency: 'THB', bestTime: 'Nov - Feb', bestTimeDE: 'Nov - Feb', savingTip: 'Street food is usually fresh and budget-friendly.', savingTipDE: 'Streetfood ist meist frisch und sehr budgetfreundlich.' },
-        'JP': { flagEmoji: '', currency: 'JPY', bestTime: 'Mar - May, Oct - Nov', bestTimeDE: 'Maerz - Mai, Okt - Nov', savingTip: 'Regional rail passes can be excellent value.', savingTipDE: 'Regionale Bahnpaesse koennen sehr guenstig sein.' },
-        'ID': { flagEmoji: '', currency: 'IDR', bestTime: 'Apr - Oct', bestTimeDE: 'Apr - Okt', savingTip: 'Scooter rental is often cheaper than frequent taxis.', savingTipDE: 'Rollermiete ist oft guenstiger als haeufige Taxifahrten.' },
-        'VN': { flagEmoji: '', currency: 'VND', bestTime: 'Nov - Apr', bestTimeDE: 'Nov - Apr', savingTip: 'Night buses and trains can lower accommodation spend.', savingTipDE: 'Nachtbusse und Zuege koennen Unterkunftskosten senken.' },
-        'IN': { flagEmoji: '', currency: 'INR', bestTime: 'Oct - Mar', bestTimeDE: 'Okt - Maerz', savingTip: 'Train travel is a very low-cost option for long routes.', savingTipDE: 'Zugreisen sind fuer lange Strecken meist sehr guenstig.' },
-        'SG': { flagEmoji: '', currency: 'SGD', bestTime: 'Feb - Apr', bestTimeDE: 'Feb - Apr', savingTip: 'Hawker centers provide affordable meals with strong quality.', savingTipDE: 'Hawker Centers bieten guenstige Mahlzeiten mit guter Qualitaet.' },
-        'AE': { flagEmoji: '', currency: 'AED', bestTime: 'Nov - Mar', bestTimeDE: 'Nov - Maerz', savingTip: 'Book tours online early to secure discounts.', savingTipDE: 'Touren frueh online buchen, um Rabatte zu sichern.' },
-        'TR': { flagEmoji: '', currency: 'TRY', bestTime: 'Apr - Jun, Sep - Oct', bestTimeDE: 'Apr - Jun, Sep - Okt', savingTip: 'Avoid restaurants right next to major attractions.', savingTipDE: 'Restaurants direkt an Sehenswuerdigkeiten eher meiden.' },
+        'JP': { flagEmoji: '', currency: 'JPY', bestTime: 'Mar - May, Oct - Nov', bestTimeDE: 'März - Mai, Okt - Nov', savingTip: 'Regional rail passes can be excellent value.', savingTipDE: 'Regionale Bahnpässe können sehr günstig sein.' },
+        'ID': { flagEmoji: '', currency: 'IDR', bestTime: 'Apr - Oct', bestTimeDE: 'Apr - Okt', savingTip: 'Scooter rental is often cheaper than frequent taxis.', savingTipDE: 'Rollermiete ist oft günstiger als häufige Taxifahrten.' },
+        'VN': { flagEmoji: '', currency: 'VND', bestTime: 'Nov - Apr', bestTimeDE: 'Nov - Apr', savingTip: 'Night buses and trains can lower accommodation spend.', savingTipDE: 'Nachtbusse und Züge können Unterkunftskosten senken.' },
+        'IN': { flagEmoji: '', currency: 'INR', bestTime: 'Oct - Mar', bestTimeDE: 'Okt - März', savingTip: 'Train travel is a very low-cost option for long routes.', savingTipDE: 'Zugreisen sind für lange Strecken meist sehr günstig.' },
+        'SG': { flagEmoji: '', currency: 'SGD', bestTime: 'Feb - Apr', bestTimeDE: 'Feb - Apr', savingTip: 'Hawker centers provide affordable meals with strong quality.', savingTipDE: 'Hawker Centers bieten günstige Mahlzeiten mit guter Qualität.' },
+        'AE': { flagEmoji: '', currency: 'AED', bestTime: 'Nov - Mar', bestTimeDE: 'Nov - März', savingTip: 'Book tours online early to secure discounts.', savingTipDE: 'Touren früh online buchen, um Rabatte zu sichern.' },
+        'TR': { flagEmoji: '', currency: 'TRY', bestTime: 'Apr - Jun, Sep - Oct', bestTimeDE: 'Apr - Jun, Sep - Okt', savingTip: 'Avoid restaurants right next to major attractions.', savingTipDE: 'Restaurants direkt an Sehenswürdigkeiten eher meiden.' },
         'US': { flagEmoji: '', currency: 'USD', bestTime: 'Sep - Nov', bestTimeDE: 'Sep - Nov', savingTip: 'National park passes can cut multi-stop roadtrip costs.', savingTipDE: 'Nationalpark-Paesse senken Kosten bei mehreren Stopps.' },
-        'MX': { flagEmoji: '', currency: 'MXN', bestTime: 'Nov - Apr', bestTimeDE: 'Nov - Apr', savingTip: 'Local lunch spots often beat tourist pricing.', savingTipDE: 'Lokale Mittagslokale sind oft guenstiger als Touristenorte.' },
-        'CR': { flagEmoji: '', currency: 'CRC', bestTime: 'Dec - Apr', bestTimeDE: 'Dez - Apr', savingTip: 'Shared shuttles are cheaper than private transfers.', savingTipDE: 'Geteilte Shuttles sind guenstiger als Privattransfers.' },
-        'BR': { flagEmoji: '', currency: 'BRL', bestTime: 'Mar - May, Sep - Nov', bestTimeDE: 'Maerz - Mai, Sep - Nov', savingTip: 'Long-distance buses can significantly lower transport costs.', savingTipDE: 'Fernbusse senken die Transportkosten deutlich.' },
-        'AR': { flagEmoji: '', currency: 'ARS', bestTime: 'Oct - Nov, Mar - Apr', bestTimeDE: 'Okt - Nov, Maerz - Apr', savingTip: 'Set lunch menus can provide better value than dinner.', savingTipDE: 'Mittagsmenues bieten oft ein besseres Preis-Leistungs-Verhaeltnis.' },
+        'MX': { flagEmoji: '', currency: 'MXN', bestTime: 'Nov - Apr', bestTimeDE: 'Nov - Apr', savingTip: 'Local lunch spots often beat tourist pricing.', savingTipDE: 'Lokale Mittagslokale sind oft günstiger als Touristenorte.' },
+        'CR': { flagEmoji: '', currency: 'CRC', bestTime: 'Dec - Apr', bestTimeDE: 'Dez - Apr', savingTip: 'Shared shuttles are cheaper than private transfers.', savingTipDE: 'Geteilte Shuttles sind günstiger als Privattransfers.' },
+        'BR': { flagEmoji: '', currency: 'BRL', bestTime: 'Mar - May, Sep - Nov', bestTimeDE: 'März - Mai, Sep - Nov', savingTip: 'Long-distance buses can significantly lower transport costs.', savingTipDE: 'Fernbusse senken die Transportkosten deutlich.' },
+        'AR': { flagEmoji: '', currency: 'ARS', bestTime: 'Oct - Nov, Mar - Apr', bestTimeDE: 'Okt - Nov, März - Apr', savingTip: 'Set lunch menus can provide better value than dinner.', savingTipDE: 'Mittagsmenüs bieten oft ein besseres Preis-Leistungs-Verhältnis.' },
         'CA': { flagEmoji: '', currency: 'CAD', bestTime: 'Jun - Sep', bestTimeDE: 'Jun - Sep', savingTip: 'Campervan trips combine transport and accommodation.', savingTipDE: 'Campervan-Reisen kombinieren Transport und Unterkunft.' },
-        'PE': { flagEmoji: '', currency: 'PEN', bestTime: 'May - Oct', bestTimeDE: 'Mai - Okt', savingTip: 'Popular attractions are much cheaper when booked early.', savingTipDE: 'Beliebte Attraktionen sind frueh gebucht meist deutlich guenstiger.' },
-        'MA': { flagEmoji: '', currency: 'MAD', bestTime: 'Mar - May, Sep - Nov', bestTimeDE: 'Maerz - Mai, Sep - Nov', savingTip: 'Negotiation is expected in many markets.', savingTipDE: 'In vielen Maerkten ist Verhandeln ueblich.' },
-        'ZA': { flagEmoji: '', currency: 'ZAR', bestTime: 'Apr - Sep', bestTimeDE: 'Apr - Sep', savingTip: 'Self-drive routes can be cheaper than guided tours.', savingTipDE: 'Selbstfahrer-Routen sind oft guenstiger als gefuehrte Touren.' },
-        'EG': { flagEmoji: '', currency: 'EGP', bestTime: 'Oct - Apr', bestTimeDE: 'Okt - Apr', savingTip: 'Bundled cruise or tour packages often reduce total cost.', savingTipDE: 'Gebuendelte Kreuzfahrt- oder Tourpakete sind oft guenstiger.' },
+        'PE': { flagEmoji: '', currency: 'PEN', bestTime: 'May - Oct', bestTimeDE: 'Mai - Okt', savingTip: 'Popular attractions are much cheaper when booked early.', savingTipDE: 'Beliebte Attraktionen sind früh gebucht meist deutlich günstiger.' },
+        'MA': { flagEmoji: '', currency: 'MAD', bestTime: 'Mar - May, Sep - Nov', bestTimeDE: 'März - Mai, Sep - Nov', savingTip: 'Negotiation is expected in many markets.', savingTipDE: 'In vielen Märkten ist Verhandeln üblich.' },
+        'ZA': { flagEmoji: '', currency: 'ZAR', bestTime: 'Apr - Sep', bestTimeDE: 'Apr - Sep', savingTip: 'Self-drive routes can be cheaper than guided tours.', savingTipDE: 'Selbstfahrer-Routen sind oft günstiger als geführte Touren.' },
+        'EG': { flagEmoji: '', currency: 'EGP', bestTime: 'Oct - Apr', bestTimeDE: 'Okt - Apr', savingTip: 'Bundled cruise or tour packages often reduce total cost.', savingTipDE: 'Gebündelte Kreuzfahrt- oder Tourpakete sind oft günstiger.' },
         'KE': { flagEmoji: '', currency: 'KES', bestTime: 'Jun - Oct', bestTimeDE: 'Jun - Okt', savingTip: 'Group safaris can drastically reduce per-person pricing.', savingTipDE: 'Gruppen-Safaris senken die Kosten pro Person deutlich.' },
-        'TZ': { flagEmoji: '', currency: 'TZS', bestTime: 'Jul - Oct', bestTimeDE: 'Jul - Okt', savingTip: 'Combining nearby countries can improve airfare value.', savingTipDE: 'Die Kombination benachbarter Laender verbessert oft den Flugpreis.' },
-        'AU': { flagEmoji: '', currency: 'AUD', bestTime: 'Mar - May, Sep - Nov', bestTimeDE: 'Maerz - Mai, Sep - Nov', savingTip: 'Long stays can lower daily costs through weekly rates.', savingTipDE: 'Laengere Aufenthalte senken oft die Tageskosten durch Wochenpreise.' },
+        'TZ': { flagEmoji: '', currency: 'TZS', bestTime: 'Jul - Oct', bestTimeDE: 'Jul - Okt', savingTip: 'Combining nearby countries can improve airfare value.', savingTipDE: 'Die Kombination benachbarter Länder verbessert oft den Flugpreis.' },
+        'AU': { flagEmoji: '', currency: 'AUD', bestTime: 'Mar - May, Sep - Nov', bestTimeDE: 'März - Mai, Sep - Nov', savingTip: 'Long stays can lower daily costs through weekly rates.', savingTipDE: 'Längere Aufenthalte senken oft die Tageskosten durch Wochenpreise.' },
         'NZ': { flagEmoji: '', currency: 'NZD', bestTime: 'Dec - Feb', bestTimeDE: 'Dez - Feb', savingTip: 'Campgrounds and holiday parks can reduce lodging spend.', savingTipDE: 'Campgrounds und Holiday Parks senken oft die Unterkunftskosten.' },
     };
 
@@ -503,7 +503,7 @@ export class TravelBudgetCalculatorComponent implements OnInit, OnDestroy {
                 bestTime: this.getDefaultBestTimeByContinent(country.continent),
                 bestTimeDE: this.getDefaultBestTimeByContinentDE(country.continent),
                 savingTip: 'Travel in shoulder season and compare accommodation locations before booking.',
-                savingTipDE: 'Reise in der Nebensaison und vergleiche Unterkuenfte nach Lage vor der Buchung.'
+                savingTipDE: 'Reise in der Nebensaison und vergleiche Unterkünfte nach Lage vor der Buchung.'
             };
         }
         const selectedCountry = this.countries.find(c => c.code === this.selectedCountryCode) ?? null;
@@ -528,12 +528,12 @@ export class TravelBudgetCalculatorComponent implements OnInit, OnDestroy {
     private getDefaultBestTimeByContinentDE(continent: string): string {
         const map: Record<string, string> = {
             Europe: 'Mai - Sep',
-            Asia: 'Nov - Maerz',
+            Asia: 'Nov - März',
             Africa: 'Okt - Apr',
             Americas: 'Apr - Okt',
-            Oceania: 'Dez - Maerz'
+            Oceania: 'Dez - März'
         };
-        return map[continent] ?? 'Ganzjaehrig';
+        return map[continent] ?? 'Ganzjährig';
     }
 
     get selectedOriginCountry(): CountryCostData | null {
@@ -914,16 +914,16 @@ export class TravelBudgetCalculatorComponent implements OnInit, OnDestroy {
                 {
                     '@context': 'https://schema.org',
                     '@type': 'HowTo',
-                    name: isGerman ? 'Reisekosten Schritt fuer Schritt ermitteln' : 'Calculate travel costs step by step',
+                    name: isGerman ? 'Reisekosten Schritt für Schritt ermitteln' : 'Calculate travel costs step by step',
                     description: isGerman
-                        ? 'Gefuehrter Reisebudget-Prozess mit Zielwahl, Reisedaten, Stil und klarer Enduebersicht.'
+                        ? 'Geführter Reisebudget-Prozess mit Zielwahl, Reisedaten, Stil und klarer Endübersicht.'
                         : 'Guided travel budget process with destination, trip details, style and a clear final summary.',
                     step: [
                         {
                             '@type': 'HowToStep',
-                            name: isGerman ? 'Ziel und Startland waehlen' : 'Choose destination and origin',
+                            name: isGerman ? 'Ziel und Startland wählen' : 'Choose destination and origin',
                             text: isGerman
-                                ? 'Filtere Laender nach Kontinent, Sicherheit und Erschlossenheit und waehle dein Ziel.'
+                                ? 'Filtere Länder nach Kontinent, Sicherheit und Erschlossenheit und wähle dein Ziel.'
                                 : 'Filter countries by continent, safety and tourism development and select your destination.'
                         },
                         {
@@ -935,23 +935,23 @@ export class TravelBudgetCalculatorComponent implements OnInit, OnDestroy {
                         },
                         {
                             '@type': 'HowToStep',
-                            name: isGerman ? 'Budgetoptionen pruefen' : 'Review budget options',
+                            name: isGerman ? 'Budgetoptionen prüfen' : 'Review budget options',
                             text: isGerman
-                                ? 'Nutze die Budgetsuche fuer passende Ziele im verfuegbaren Rahmen.'
+                                ? 'Nutze die Budgetsuche für passende Ziele im verfügbaren Rahmen.'
                                 : 'Use budget search to find matching destinations within your budget.'
                         },
                         {
                             '@type': 'HowToStep',
                             name: isGerman ? 'Reisestil bestimmen' : 'Select travel style',
                             text: isGerman
-                                ? 'Lege Unterkunft, Stil, Aktivitaeten und Fluganteil fest.'
+                                ? 'Lege Unterkunft, Stil, Aktivitäten und Fluganteil fest.'
                                 : 'Set accommodation level, style, activities and flight inclusion.'
                         },
                         {
                             '@type': 'HowToStep',
                             name: isGerman ? 'Klare Gesamtauswertung erhalten' : 'Get a clear final summary',
                             text: isGerman
-                                ? 'Erhalte Gesamtkosten, Tageskosten und Kostentreiber als finale Uebersicht.'
+                                ? 'Erhalte Gesamtkosten, Tageskosten und Kostentreiber als finale Übersicht.'
                                 : 'Review total, daily cost and key cost drivers in a final summary.'
                         }
                     ]

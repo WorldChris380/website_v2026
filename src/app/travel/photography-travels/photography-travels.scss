@@ -1,4 +1,5 @@
 @use '../../../styles.scss' as *;
+@use 'sass:color';
 
 .page-wrapper {
     display: flex;
@@ -413,7 +414,7 @@
         }
 
         .trip-description {
-            background: lighten($cb-grey-ish, 8%);
+            background: color.adjust($cb-grey-ish, $lightness: 8%);
 
             .description-text {
                 color: $cb-white-ish;
@@ -444,7 +445,7 @@
         }
 
         .registration-form-section {
-            background: lighten($cb-grey-ish, 8%);
+            background: color.adjust($cb-grey-ish, $lightness: 8%);
 
             h3 {
                 color: $travel-green-bright;
@@ -463,7 +464,7 @@
                     input,
                     select,
                     textarea {
-                        background: lighten($cb-grey-ish, 2%);
+                        background: color.adjust($cb-grey-ish, $lightness: 2%);
                         color: $cb-white-ish;
                         border-color: #444;
 
@@ -483,7 +484,7 @@
                     color: $travel-green-dark;
 
                     &:hover {
-                        background: lighten($travel-green-bright, 10%);
+                        background: color.adjust($travel-green-bright, $lightness: 10%);
                     }
                 }
             }
@@ -502,7 +503,7 @@
                     color: $travel-green-dark;
 
                     &:hover {
-                        background: lighten($travel-green-bright, 10%);
+                        background: color.adjust($travel-green-bright, $lightness: 10%);
                     }
                 }
             }
@@ -701,7 +702,7 @@
             font-size: var(--font-size-md);
 
             &:hover {
-                background: darken($travel-green-bright, 10%);
+                background: color.adjust($travel-green-bright, $lightness: -10%);
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             }
@@ -730,7 +731,7 @@ body.dark-mode .section-header {
 }
 
 body.dark-mode .gallery-card {
-    background: lighten($cb-grey-ish, 5%);
+    background: color.adjust($cb-grey-ish, $lightness: 5%);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 
     .card-content {

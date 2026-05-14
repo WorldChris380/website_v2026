@@ -21,16 +21,16 @@ export class ShopHome implements OnInit {
         const de = this.currentLanguage === 'de';
         const map: Record<string, string> = {
             pageTitle: de ? 'Foto-Lizenzierung' : 'Photo Licensing',
-            pageLead: de ? 'Lizenziere ausgewaehlte Aviation- und Reisefotos mit moeglichst wenig Reibung.' : 'License selected aviation and travel photos with as little friction as possible.',
-            hint: de ? 'Waehle dein Motiv in der Galerie, lege es in den Warenkorb und schliesse den Kauf in wenigen Schritten ab.' : 'Choose your image in the gallery, add it to cart, and complete the purchase in a few simple steps.',
+            pageLead: de ? 'Lizenziere ausgewählte Aviation- und Reisefotos mit möglichst wenig Reibung.' : 'License selected aviation and travel photos with as little friction as possible.',
+            hint: de ? 'Wähle dein Motiv in der Galerie, lege es in den Warenkorb und schließe den Kauf in wenigen Schritten ab.' : 'Choose your image in the gallery, add it to cart, and complete the purchase in a few simple steps.',
             badge: de ? 'Lizenz' : 'License',
             productTitle: de ? 'Foto lizenzieren' : 'License Photo',
-            productCopy: de ? 'Kaufe eine kommerzielle Bildlizenz fuer die rechtssichere Nutzung eines Fotos aus meiner Galerie in Web, Social, Print oder Praesentationen.' : 'Buy a commercial image license for legally compliant use of a gallery photo on the web, in social media, print, or presentations.',
+            productCopy: de ? 'Kaufe eine kommerzielle Bildlizenz für die rechtssichere Nutzung eines Fotos aus meiner Galerie in Web, Social, Print oder Präsentationen.' : 'Buy a commercial image license for legally compliant use of a gallery photo on the web, in social media, print, or presentations.',
             meta1: de ? 'Lizenztyp: Standard Commercial License' : 'License type: Standard Commercial License',
-            meta2: de ? 'Nutzung: Web, Social Media, Editorial, Praesentation' : 'Usage: Web, social media, editorial, presentation',
+            meta2: de ? 'Nutzung: Web, Social Media, Editorial, Präsentation' : 'Usage: Web, social media, editorial, presentation',
             meta3: de ? 'Lieferung: Rechnung + Zertifikat direkt im Konto' : 'Delivery: Invoice + certificate directly in your account',
             meta4: de ? 'Checkout: Digitale Lieferung ohne Versandkosten' : 'Checkout: Digital delivery without shipping costs',
-            stock: de ? 'Sofort verfuegbar' : 'Available instantly',
+            stock: de ? 'Sofort verfügbar' : 'Available instantly',
             cta: de ? 'Zur Galerie' : 'Go to gallery',
         };
 

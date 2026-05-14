@@ -183,8 +183,8 @@ export class AboutMyPhotography implements OnInit, OnDestroy {
             'camera': { en: 'Camera', de: 'Kamera' },
             'lens': { en: 'Lens', de: 'Objektiv' },
             'features': { en: 'Key Features', de: 'Hauptmerkmale' }
-            , 'formerCameras': { en: 'Former Cameras', de: 'Fruehere Kameras' }
-            , 'formerCameraPeriod': { en: 'Former Camera', de: 'Fruehere Kamera' }
+            , 'formerCameras': { en: 'Former Cameras', de: 'Frühere Kameras' }
+            , 'formerCameraPeriod': { en: 'Former Camera', de: 'Frühere Kamera' }
         };
 
         return translations[key]?.[this.currentLanguage] || key;

@@ -27,7 +27,7 @@ export class CertificateService {
         const t = {
             heading: lang === 'de' ? 'ZERTIFIKAT LIZENZIERTER NUTZUNG' : 'CERTIFICATE OF LICENSED USE',
             subheading: lang === 'de' ? 'Fine Art Aviation- und Reisefotografie' : 'Fine Art Aviation and Travel Photography',
-            imagePreviewMissing: lang === 'de' ? 'Bildvorschau nicht verfuegbar' : 'Image preview not available',
+            imagePreviewMissing: lang === 'de' ? 'Bildvorschau nicht verfügbar' : 'Image preview not available',
             certificateId: lang === 'de' ? 'Zertifikats-ID' : 'Certificate ID',
             licenseHolder: lang === 'de' ? 'Lizenznehmer' : 'License holder',
             imageTitle: lang === 'de' ? 'Bildtitel' : 'Image title',
@@ -39,10 +39,10 @@ export class CertificateService {
             orderId: lang === 'de' ? 'Bestell-ID' : 'Order ID',
             captureId: 'Capture ID',
             footerLine1: lang === 'de'
-                ? 'Diese Urkunde bestaetigt ausschliesslich den Erwerb einer Nutzungslizenz.'
+                ? 'Diese Urkunde bestätigt ausschließlich den Erwerb einer Nutzungslizenz.'
                 : 'This document certifies the purchase of a usage license only.',
             footerLine2: lang === 'de'
-                ? 'Ein Eigentumsuebergang am Bildwerk ist hiermit nicht verbunden.'
+                ? 'Ein Eigentumsübergang am Bildwerk ist hiermit nicht verbunden.'
                 : 'No transfer of ownership of the image itself is implied.',
             fallbackHolder: lang === 'de' ? 'Lizenznehmer' : 'License holder',
         };
