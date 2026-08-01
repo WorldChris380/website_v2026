@@ -48,6 +48,9 @@ export class PayPalButton implements OnChanges, OnDestroy {
     @Input() items: CartItem[] = [];
     @Input() currency: 'EUR' = 'EUR';
     @Input() ownerName = '';
+    @Input() companyName = '';
+    @Input() recordPurchaseOnSuccess = true;
+    @Input() clearCartOnSuccess = true;
     @Output() paymentSuccess = new EventEmitter<void>();
     @Output() paymentError = new EventEmitter<string>();
 
@@ -56,6 +59,7 @@ export class PayPalButton implements OnChanges, OnDestroy {
     readonly checkoutApiUrl = `${environment.apiBaseUrl}/api/paypal-checkout.php`;
     readonly configApiUrl = `${environment.apiBaseUrl}/api/paypal-config.php`;
     isLoading = false;
+    loadError = '';
 
     private http = inject(HttpClient);
     private paypalService = inject(PayPalService);
@@ -82,6 +86,7 @@ export class PayPalButton implements OnChanges, OnDestroy {
 
     ngOnChanges(_changes: SimpleChanges): void {
         clearTimeout(this.renderTimer);
+        this.loadError = '';
         if (this.amount <= 0 || this.isPlaceholder || this.destroyed) {
             this.safeCleanupButtons();
             return;
@@ -98,6 +103,7 @@ export class PayPalButton implements OnChanges, OnDestroy {
     private async initButtons(): Promise<void> {
         if (this.destroyed) return;
         this.isLoading = true;
+        this.loadError = '';
         try {
             await this.ensureClientConfig();
             if (this.isPlaceholder) {
@@ -106,8 +112,10 @@ export class PayPalButton implements OnChanges, OnDestroy {
             }
             await this.paypalService.loadSdk(this.clientId, this.currency);
             if (!this.destroyed) this.renderButtons();
-        } catch {
+        } catch (error) {
             this.isLoading = false;
+            this.loadError = this.toSdkLoadErrorMessage(error);
+            this.paymentError.emit(this.loadError);
         }
     }
 
@@ -157,17 +165,22 @@ export class PayPalButton implements OnChanges, OnDestroy {
 
                 const capture = await this.captureServerOrder(orderId);
 
-                this.shopService.recordSuccessfulPurchase({
-                    orderId,
-                    orderNumber: capture.orderNumber,
-                    captureId: capture.captureId,
-                    ownerName: this.shopService.getCertificateOwner() || this.ownerName,
-                    currency: this.currency,
-                    invoiceNumber: capture.invoiceNumber,
-                    invoicePdfUrl: capture.invoicePdfUrl,
-                });
+                if (this.recordPurchaseOnSuccess) {
+                    this.shopService.recordSuccessfulPurchase({
+                        orderId,
+                        orderNumber: capture.orderNumber,
+                        captureId: capture.captureId,
+                        ownerName: this.shopService.getCertificateOwner() || this.ownerName,
+                        companyName: this.shopService.getCompanyName() || this.companyName,
+                        currency: this.currency,
+                        invoiceNumber: capture.invoiceNumber,
+                        invoicePdfUrl: capture.invoicePdfUrl,
+                    });
+                }
 
-                this.shopService.clear();
+                if (this.clearCartOnSuccess) {
+                    this.shopService.clear();
+                }
                 if (document.body.contains(target)) {
                     target.innerHTML = '<div class="paypal-success">✓ Zahlung verifiziert und abgeschlossen.</div>';
                 }
@@ -230,6 +243,7 @@ export class PayPalButton implements OnChanges, OnDestroy {
                     orderId,
                     currency: this.currency,
                     ownerName: this.ownerName,
+                    companyName: this.companyName,
                     items: this.items,
                     token: this.shopAuthService.getToken(),
                 })
@@ -265,5 +279,16 @@ export class PayPalButton implements OnChanges, OnDestroy {
         }
 
         return 'Zahlung konnte nicht abgeschlossen werden.';
+    }
+
+    private toSdkLoadErrorMessage(error: unknown): string {
+        if (error && typeof error === 'object' && 'message' in error) {
+            const message = String((error as { message: string }).message || '').trim();
+            if (message) {
+                return `PayPal konnte nicht geladen werden: ${message}`;
+            }
+        }
+
+        return 'PayPal konnte nicht geladen werden. Bitte Browser-Erweiterungen oder Netzwerkfilter fuer paypal.com pruefen.';
     }
 }

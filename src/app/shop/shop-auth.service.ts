@@ -71,6 +71,7 @@ export interface ShopOrderHistoryItem {
 export interface ShopOrderHistoryEntry {
     id: number;
     ownerName: string;
+    companyName?: string;
     paypalOrderId: string;
     paypalCaptureId: string;
     status: string;

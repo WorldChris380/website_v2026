@@ -27,6 +27,10 @@ export class Header implements OnInit {
   openMobileSubDropdownMenu: string | null = null;
   isLoading: boolean = false;
   megamenuOpen: boolean = false;
+  megamenuPanelWidth: number | null = null;
+  private megamenuCloseTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  @ViewChild('desktopMegaNav') desktopMegaNavRef?: ElementRef<HTMLElement>;
   currentPageTitleShort: string = '';
   currentPageSection: MenuHeading = 'career';
 
@@ -88,7 +92,36 @@ export class Header implements OnInit {
   }
 
   setMegamenuOpen(open: boolean) {
-    this.megamenuOpen = open;
+    this.cancelMegamenuClose();
+
+    if (open) {
+      this.megamenuOpen = true;
+      this.updateMegamenuPanelWidth();
+      return;
+    }
+
+    // Delay closing so the cursor can cross the gap between the nav link
+    // and the panel below it without the menu vanishing first.
+    this.megamenuCloseTimeout = setTimeout(() => {
+      this.megamenuOpen = false;
+      this.openDesktopDropdownMenu = null;
+      this.megamenuCloseTimeout = null;
+      this.cdr.markForCheck();
+    }, 250);
+  }
+
+  private cancelMegamenuClose(): void {
+    if (this.megamenuCloseTimeout) {
+      clearTimeout(this.megamenuCloseTimeout);
+      this.megamenuCloseTimeout = null;
+    }
+  }
+
+  private updateMegamenuPanelWidth(): void {
+    const nav = this.desktopMegaNavRef?.nativeElement;
+    if (nav) {
+      this.megamenuPanelWidth = nav.offsetWidth;
+    }
   }
 
   handleMegamenuClick(event: Event): void {
@@ -124,6 +157,9 @@ export class Header implements OnInit {
   onResize(event: Event) {
     const width = (event.target as Window).innerWidth;
     this.burgerMenuOpen = false;
+    if (this.megamenuOpen) {
+      this.updateMegamenuPanelWidth();
+    }
   }
 
   //Toggle mobile Dropdown menus
@@ -201,7 +237,7 @@ export class Header implements OnInit {
   }
 
   private updateCurrentPageTitle(): void {
-    const path = this.router.url.split('?')[0].replace(/^\//, '');
+    const path = this.router.url.split('?')[0].split('#')[0].replace(/^\//, '');
     const key = path || 'home';
 
     const byPath: Record<string, string> = {
@@ -209,7 +245,8 @@ export class Header implements OnInit {
       'travel-budget-calculator': 'Travel Budget Calculator',
       'travel-faqs': this.currentLanguage === 'de' ? 'Travel FAQs' : 'Travel FAQs',
       'aviation-spotter-hotels': this.currentLanguage === 'de' ? 'Spotter Hotels' : 'Spotter Hotels',
-      'gallery': this.currentLanguage === 'de' ? 'Galerie' : 'Gallery',
+      'photography': this.currentLanguage === 'de' ? 'Fotografie' : 'Photography',
+      'gallery': this.currentLanguage === 'de' ? 'Fotografie' : 'Photography',
       'shop': 'Shop',
       'shop/cart': this.currentLanguage === 'de' ? 'Warenkorb' : 'Cart',
       'shop/account': this.currentLanguage === 'de' ? 'Konto' : 'Account',
@@ -240,6 +277,7 @@ export class Header implements OnInit {
       'aviation-spotter-hotels/twa-hotel-jfk': 'aviation',
       'air-germany': 'aviation',
       'airlinesim-ceo-tools': 'aviation',
+      'photography': 'photography',
       'gallery': 'photography',
       'about-my-photography': 'photography',
       'my-visited-countries': 'travel',

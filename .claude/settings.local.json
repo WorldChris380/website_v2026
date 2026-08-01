@@ -4,7 +4,10 @@
       "WebFetch(domain:christian-boehme-gallery.s3.eu-central-3.ionoscloud.com)",
       "WebFetch(domain:www.christian-boehme.com)",
       "Bash(npx ng *)",
-      "Bash(npm i *)"
+      "Bash(npm i *)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npm --version)",
+      "PowerShell(uipro --help 2>&1)"
     ]
   }
 }

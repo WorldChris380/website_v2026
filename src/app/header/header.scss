@@ -81,14 +81,17 @@
 
     #header-logo-div {
         justify-self: start;
+        grid-column: 1;
     }
 
     #header-navigation-div {
         justify-self: center;
+        grid-column: 2;
     }
 
     #header-3rd-row-div {
         justify-self: end;
+        grid-column: 3;
     }
 }
 
@@ -175,7 +178,7 @@
     display: none;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-2);
+    gap: 24px;
     width: min(100%, 860px);
     padding: 0 var(--space-2);
 
@@ -238,11 +241,11 @@
 
 @media (min-width: 1025px) and (max-width: 1280px) {
     .desktop-mega-nav {
-        gap: var(--space-1);
+        gap: 24px;
         width: min(100%, 780px);
 
         .desktop-mega-link {
-            font-size: calc(var(--font-size-lg) - 3pt);
+            font-size: var(--font-size-lg);
             padding: 0 8px;
             white-space: nowrap;
         }
@@ -320,7 +323,7 @@
 :host-context(body.dark-mode) {
     .desktop-mega-nav {
         .desktop-mega-link {
-            color: #e2e8f0;
+            color: $cb-white-ish;
 
             &:hover {
                 border-color: color-mix(in srgb, var(--desktop-category-color) 52%, #94a3b8);
@@ -362,71 +365,61 @@
                 border-radius: var(--radius-md);
             }
         }
-
-        .desktop-mega-link[data-category="career"] {
-            --desktop-category-color: #{$career-black-bright};
-
-            &:hover,
-            &:focus-visible {
-                background: rgba($career-black-bright, 0.3);
-                border-radius: var(--radius-md);
-            }
-        }
-
-        .desktop-mega-link[data-category="shop"] {
-            --desktop-category-color: #{$shop-blue-bright};
-
-            &:hover,
-            &:focus-visible {
-                background: rgba($shop-blue-bright, 0.32);
-                box-shadow: 0 0 0 1px rgba($shop-blue-bright, 0.55), 0 0 18px rgba($shop-blue-bright, 0.24);
-                border-radius: var(--radius-md);
-            }
-        }
     }
 
-    .megamenu-trigger {
-        color: #f2f2f2;
-        background: #21242a;
-        border-color: #21242a;
-        box-shadow: 6px 6px 12px #17191e, -6px -6px 12px #2b2f36;
+    .desktop-mega-link[data-category="shop"] {
+        --desktop-category-color: #{$shop-blue-bright};
 
-        .menu-icon {
-            color: inherit;
-        }
-
-        &:hover {
-            color: #ffffff;
-            box-shadow: 8px 8px 16px #17191e, -8px -8px 16px #2b2f36;
-
-            .menu-icon {
-                transform: translateX(1px);
-            }
-        }
-
-        &.open {
-            color: #bfc5cc;
-            box-shadow: inset 4px 4px 12px #17191e, inset -4px -4px 12px #2b2f36;
-        }
-
+        &:hover,
         &:focus-visible {
-            box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.24), 6px 6px 12px #17191e, -6px -6px 12px #2b2f36;
-        }
-
-        &:active {
-            color: #a5acb5;
-            box-shadow: inset 4px 4px 12px #17191e, inset -4px -4px 12px #2b2f36;
+            background: rgba($shop-blue-bright, 0.32);
+            box-shadow: 0 0 0 1px rgba($shop-blue-bright, 0.55), 0 0 18px rgba($shop-blue-bright, 0.24);
+            border-radius: var(--radius-md);
         }
     }
 }
+
+.megamenu-trigger {
+    color: #f2f2f2;
+    background: #21242a;
+    border-color: #21242a;
+    box-shadow: 6px 6px 12px #17191e, -6px -6px 12px #2b2f36;
+
+    .menu-icon {
+        color: inherit;
+    }
+
+    &:hover {
+        color: #ffffff;
+        box-shadow: 8px 8px 16px #17191e, -8px -8px 16px #2b2f36;
+
+        .menu-icon {
+            transform: translateX(1px);
+        }
+    }
+
+    &.open {
+        color: #bfc5cc;
+        box-shadow: inset 4px 4px 12px #17191e, inset -4px -4px 12px #2b2f36;
+    }
+
+    &:focus-visible {
+        box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.24), 6px 6px 12px #17191e, -6px -6px 12px #2b2f36;
+    }
+
+    &:active {
+        color: #a5acb5;
+        box-shadow: inset 4px 4px 12px #17191e, inset -4px -4px 12px #2b2f36;
+    }
+}
+
 
 // Megamenu Panel
 .megamenu-panel {
     position: fixed;
     top: var(--header-offset);
-    left: 0;
-    right: 0;
-    width: 100%;
+    left: 50%;
+    width: min(100%, 860px);
     max-width: 100vw;
     background: $cb-white-ish;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
@@ -434,12 +427,12 @@
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transform: translateY(-10px);
+    transform: translateX(-50%) translateY(-10px);
     transition: opacity var(--dur-medium) var(--ease-standard),
         visibility var(--dur-medium) var(--ease-standard),
         transform var(--dur-medium) var(--ease-standard);
     z-index: 999;
-    padding: var(--space-6) 0;
+    padding: 0;
     display: flex;
     justify-content: center;
 
@@ -447,7 +440,13 @@
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+    .megamenu-panel {
+        width: min(100%, 780px);
     }
 }
 
@@ -459,21 +458,18 @@
 }
 
 .megamenu-content {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: var(--space-6);
-    max-width: 1920px;
+    display: flex;
+    justify-content: center;
     width: 100%;
-    margin: 0 auto;
-    padding: 0 var(--space-6);
 }
 
 // Megamenu Section
 .megamenu-section {
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: var(--space-3);
-    padding: var(--space-2);
+    padding: var(--space-6);
+    width: 100%;
     position: relative;
 
     &::before {
@@ -488,8 +484,8 @@
         transition: opacity var(--dur-fast) var(--ease-standard);
     }
 
-    &:hover::before {
-        opacity: 0.8;
+    &.active {
+        display: flex;
     }
 
     &.active::before {
@@ -519,27 +515,22 @@
 
     &.active[data-category="travel"] {
         background: linear-gradient(180deg, rgba($travel-green, 0.12), rgba($travel-green, 0.03));
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     &.active[data-category="aviation"] {
         background: linear-gradient(180deg, rgba($aviation-blue, 0.12), rgba($aviation-blue, 0.03));
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     &.active[data-category="photography"] {
         background: linear-gradient(180deg, rgba($photography-orange, 0.14), rgba($photography-orange, 0.04));
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     &.active[data-category="career"] {
         background: linear-gradient(180deg, rgba($career-black, 0.1), rgba($career-black, 0.03));
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     &.active[data-category="shop"] {
         background: linear-gradient(180deg, rgba($shop-blue, 0.2), rgba($shop-blue, 0.05));
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 }
 
@@ -698,22 +689,18 @@
 
     .megamenu-section.active[data-category="travel"] {
         background: linear-gradient(180deg, rgba($travel-green-bright, 0.2), rgba($travel-green-bright, 0.07));
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     .megamenu-section.active[data-category="aviation"] {
         background: linear-gradient(180deg, rgba($aviation-blue-bright, 0.22), rgba($aviation-blue-bright, 0.07));
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     .megamenu-section.active[data-category="photography"] {
         background: linear-gradient(180deg, rgba($photography-orange-bright, 0.24), rgba($photography-orange-bright, 0.08));
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     .megamenu-section.active[data-category="career"] {
         background: linear-gradient(180deg, rgba($career-black-bright, 0.24), rgba($career-black-bright, 0.08));
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     .megamenu-section[data-category="career"]::before {
@@ -726,7 +713,6 @@
 
     .megamenu-section.active[data-category="shop"] {
         background: linear-gradient(180deg, rgba($shop-blue-bright, 0.3), rgba($shop-blue-bright, 0.14));
-        border-radius: 0 var(--radius-md) var(--radius-md) 0;
     }
 
     .megamenu-shop-primary {
@@ -834,7 +820,6 @@
     justify-content: center;
     width: 40px;
     height: 36px;
-    font-size: 18px;
     color: $cb-grey-ish;
     border-radius: var(--radius-sm);
     border: 1px solid transparent;
@@ -845,6 +830,11 @@
         box-shadow var(--dur-fast) var(--ease-standard),
         transform var(--dur-fast) var(--ease-standard);
     position: relative;
+
+    .icon-cart {
+        width: 20px;
+        height: 20px;
+    }
 
     &:hover {
         background-color: rgba(0, 0, 0, 0.06);
@@ -954,6 +944,11 @@
         border-color var(--dur-fast) var(--ease-standard),
         transform var(--dur-fast) var(--ease-standard);
 
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
     &:hover {
         background-color: rgba(0, 0, 0, 0.06);
         border-color: rgba(0, 0, 0, 0.22);
@@ -966,14 +961,10 @@
 }
 
 #burger-menu-open-icon {
-    font-size: 20px;
     color: $career-black;
-    letter-spacing: -1px;
 }
 
 #burger-menu-close-icon {
-    font-size: 18px;
-    font-weight: 700;
     color: $career-black;
 
     &:hover {
@@ -1253,6 +1244,7 @@
 
 // ─── Burger menu dark mode ────────────────────────────────────────────────────
 :host-context(body.dark-mode) {
+
     #burger-menu-open-icon,
     #burger-menu-close-icon {
         color: #f2f2f2;
@@ -1388,7 +1380,7 @@
     align-items: center;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 1025px) {
     #mobile-bottom-Menu-first-coloum {
         display: none;
     }
@@ -1433,19 +1425,6 @@
 
 // Responsive Designs
 
-// Megamenu Responsive Breakpoints
-@media(max-width: 1200px) {
-    .megamenu-content {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media(max-width: 900px) {
-    .megamenu-content {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
 @media(max-width: 768px) {
     .megamenu-trigger {
         display: none;
@@ -1473,13 +1452,14 @@
     }
 }
 
-@media(max-width: 768px) {
+@media(max-width: 1024px) {
     #header-navigation-div {
         display: none;
     }
 
     /* Keep header-3rd-row-div visible so burger icon (inside it) stays accessible */
     #header-3rd-row-div {
+
         .header-cart,
         #language-toggle,
         #moon-icon,
@@ -1541,8 +1521,12 @@
     #burger-menu-close-icon {
         width: 28px;
         height: 28px;
-        font-size: 20px;
         margin-right: 2px;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
     }
 
     #burger-menu-content.open {

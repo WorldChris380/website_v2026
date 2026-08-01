@@ -18,6 +18,7 @@ import { MetaService } from '../../services/meta.service';
 export class Career implements OnInit, OnDestroy {
     activeSection: string = 'profile';
     currentLanguage: Language = 'en';
+    private autoDownloadHandled = false;
 
     readonly sections = ['profile', 'experience', 'education', 'skills', 'projects', 'testimonials'] as const;
     private scrollCooldown = false;
@@ -130,6 +131,15 @@ export class Career implements OnInit, OnDestroy {
                         element.scrollIntoView({ behavior: 'smooth' });
                     }
                 }, 100);
+            }
+        });
+
+        this.route.queryParamMap.subscribe((params) => {
+            if (params.get('download') === 'pdf' && !this.autoDownloadHandled) {
+                this.autoDownloadHandled = true;
+                setTimeout(() => {
+                    this.downloadPDF();
+                }, 350);
             }
         });
     }
@@ -442,35 +452,81 @@ export class Career implements OnInit, OnDestroy {
         tempContainer.innerHTML = cvHTML;
         document.body.appendChild(tempContainer);
 
-        const html2canvas = (await import('html2canvas')).default;
-        const jsPDF = (await import('jspdf')).default;
+        try {
+            // Let layout and fonts settle before rasterizing the temporary CV node.
+            await new Promise<void>((resolve) => {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => resolve());
+                });
+            });
+            if ('fonts' in document) {
+                await (document as Document & { fonts: FontFaceSet }).fonts.ready;
+            }
 
-        html2canvas(tempContainer, {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: '#ffffff'
-        }).then((canvas) => {
+            const html2canvas = (await import('html2canvas')).default;
+            const jsPDF = (await import('jspdf')).default;
+
+            const canvas = await html2canvas(tempContainer, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: '#ffffff'
+            });
+
+            if (!canvas.width || !canvas.height) {
+                throw new Error('Canvas rendering failed: empty output from html2canvas');
+            }
+
             const imgWidth = 210; // A4 width in mm
             const pageHeight = 297; // A4 height in mm
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let heightLeft = imgHeight;
-
-            const contentDataURL = canvas.toDataURL('image/png');
             const pdf = new jsPDF('p', 'mm', 'a4');
 
-            let pdfPosition = 0;
+            const pxPerMm = canvas.width / imgWidth;
+            const pageHeightPx = Math.floor(pageHeight * pxPerMm);
 
-            // First page
-            pdf.addImage(contentDataURL, 'PNG', 0, pdfPosition, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
+            if (!Number.isFinite(pxPerMm) || pxPerMm <= 0 || pageHeightPx <= 0) {
+                throw new Error('Invalid PDF scaling values');
+            }
 
-            // Additional pages
-            while (heightLeft >= 0) {
-                const nextPosition = heightLeft - imgHeight;
-                pdf.addPage();
-                pdf.addImage(contentDataURL, 'PNG', 0, nextPosition, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
+            let offsetY = 0;
+            let isFirstPage = true;
+
+            while (offsetY < canvas.height) {
+                const sliceHeightPx = Math.min(pageHeightPx, canvas.height - offsetY);
+                const pageCanvas = document.createElement('canvas');
+                pageCanvas.width = canvas.width;
+                pageCanvas.height = sliceHeightPx;
+
+                const pageCtx = pageCanvas.getContext('2d');
+                if (!pageCtx) {
+                    throw new Error('Failed to get 2D canvas context for PDF page slicing');
+                }
+
+                pageCtx.fillStyle = '#ffffff';
+                pageCtx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+                pageCtx.drawImage(
+                    canvas,
+                    0,
+                    offsetY,
+                    canvas.width,
+                    sliceHeightPx,
+                    0,
+                    0,
+                    canvas.width,
+                    sliceHeightPx
+                );
+
+                const renderHeightMm = (sliceHeightPx * imgWidth) / canvas.width;
+                const pageImageData = pageCanvas.toDataURL('image/jpeg', 0.95);
+
+                if (!isFirstPage) {
+                    pdf.addPage();
+                }
+
+                pdf.addImage(pageImageData, 'JPEG', 0, 0, imgWidth, renderHeightMm, undefined, 'FAST');
+
+                offsetY += sliceHeightPx;
+                isFirstPage = false;
             }
 
             // Add footer with generation date and page numbers
@@ -490,9 +546,12 @@ export class Career implements OnInit, OnDestroy {
             }
 
             pdf.save('Christian_Boehme_CV.pdf');
-
-            // Clean up
-            document.body.removeChild(tempContainer);
-        });
+        } catch (error) {
+            console.error('PDF generation failed:', error);
+        } finally {
+            if (document.body.contains(tempContainer)) {
+                document.body.removeChild(tempContainer);
+            }
+        }
     }
 }

@@ -77,6 +77,10 @@ export class ShopCartPage implements OnInit {
         return this.shop.getCertificateOwner();
     }
 
+    get companyName() {
+        return this.shop.getCompanyName();
+    }
+
     get canCheckout(): boolean {
         return this.isAuthenticated && this.certificateOwner.trim().length > 0;
     }
@@ -115,11 +119,13 @@ export class ShopCartPage implements OnInit {
             items: de ? 'Artikel' : 'Items',
             licenseUpgrade: de ? 'Kommerzielle Lizenz-Erweiterung' : 'Commercial license upgrade',
             total: de ? 'Gesamt' : 'Total',
-            commercialToggle: de ? 'Kommerzielle Lizenz (+5,00 EUR pro Bild)' : 'Commercial license (+5.00 EUR per image)',
+            commercialToggle: de ? 'Kommerzielle Lizenz (+10,00 EUR pro Bild)' : 'Commercial license (+10.00 EUR per image)',
             commercialPerItem: de ? 'Kommerzielle Nutzung für dieses Bild' : 'Commercial usage for this image',
             digitalDelivery: de ? 'Digitale Lizenz. Download und Rechnung sind direkt nach der Zahlung verfügbar.' : 'Digital license. Download and invoice are available immediately after payment.',
             owner: de ? 'Zertifikatsinhaber' : 'Certificate holder',
             ownerHint: de ? 'Der Zertifikatsname wird automatisch aus deinem Konto übernommen.' : 'The certificate holder is taken directly from your account.',
+            company: de ? 'Firmenname (optional)' : 'Company name (optional)',
+            companyHint: de ? 'Falls zutreffend, wird der Firmenname auf Zertifikat und Rechnung ergänzt.' : 'If applicable, the company name is added to certificate and invoice.',
             logout: de ? 'Abmelden' : 'Logout',
             loginRequired: de ? 'Bitte melde dich an, damit der Zertifikatsname automatisch übernommen wird.' : 'Please sign in so the certificate holder can be filled in automatically.',
             goToAccount: de ? 'Zum Konto' : 'Go to account',
@@ -179,14 +185,20 @@ export class ShopCartPage implements OnInit {
         this.router.navigate(['/shop/success']);
     }
 
+    onCompanyNameChange(name: string): void {
+        this.shop.setCompanyName(name);
+    }
+
     logout(): void {
         this.shopAuthService.logout();
         this.shop.setCertificateOwner('');
+        this.shop.setCompanyName('');
     }
 
     private syncCertificateOwnerWithAccount(): void {
         if (!this.isAuthenticated) {
             this.shop.setCertificateOwner('');
+            this.shop.setCompanyName('');
             return;
         }
 

@@ -148,13 +148,13 @@ export class AboutMyPhotography implements OnInit, OnDestroy {
             },
             "mentions": [
                 {
-                    "@type": "Product",
+                    "@type": "Thing",
                     "name": "Nikon Z50 II",
                     "brand": "Nikon",
                     "category": "Mirrorless Camera"
                 },
                 {
-                    "@type": "Product",
+                    "@type": "Thing",
                     "name": "Tamron 18-300mm f/3.5-6.3",
                     "brand": "Tamron",
                     "category": "Lens"

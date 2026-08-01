@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService, Language } from '../language.service';
 import { MetaService } from '../services/meta.service';
 
@@ -15,6 +16,8 @@ export class Legal implements OnInit {
     currentLanguage: Language = 'en';
 
     constructor(
+        private route: ActivatedRoute,
+        private router: Router,
         private languageService: LanguageService,
         private cdr: ChangeDetectorRef,
         private metaService: MetaService
@@ -37,6 +40,11 @@ export class Legal implements OnInit {
             this.currentLanguage = lang;
             this.cdr.markForCheck();
         });
+
+        this.route.queryParamMap.subscribe((params) => {
+            this.activeTab = this.normalizeTab(params.get('tab'));
+            this.cdr.markForCheck();
+        });
     }
 
     getTranslation(key: string): string {
@@ -45,5 +53,19 @@ export class Legal implements OnInit {
 
     switchTab(tab: 'impressum' | 'privacy' | 'terms'): void {
         this.activeTab = tab;
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { tab },
+            queryParamsHandling: 'merge',
+            replaceUrl: true,
+        });
+    }
+
+    private normalizeTab(value: string | null): 'impressum' | 'privacy' | 'terms' {
+        if (value === 'privacy' || value === 'terms' || value === 'impressum') {
+            return value;
+        }
+
+        return 'impressum';
     }
 }

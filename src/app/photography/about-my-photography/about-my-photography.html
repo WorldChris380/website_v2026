@@ -14,7 +14,7 @@
 
         <div class="equipment-grid" role="list">
             <!-- Camera Card -->
-            <article class="equipment-card" role="listitem" itemscope itemtype="https://schema.org/Product">
+            <article class="equipment-card" role="listitem" itemscope itemtype="https://schema.org/Thing">
                 <div class="equipment-header">
                     <h3 itemprop="category">{{ getTranslation('camera') }}</h3>
                     <span class="equipment-model" itemprop="name">{{ camera.name }}</span>
@@ -29,7 +29,7 @@
             </article>
 
             <!-- Lens Card -->
-            <article class="equipment-card" role="listitem" itemscope itemtype="https://schema.org/Product">
+            <article class="equipment-card" role="listitem" itemscope itemtype="https://schema.org/Thing">
                 <div class="equipment-header">
                     <h3 itemprop="category">{{ getTranslation('lens') }}</h3>
                     <span class="equipment-model" itemprop="name">{{ lens.name }}</span>
@@ -47,7 +47,7 @@
         <h3>{{ getTranslation('formerCameras') }}</h3>
         <div class="equipment-grid" role="list">
             <article class="equipment-card" role="listitem" *ngFor="let former of formerCameras" itemscope
-                itemtype="https://schema.org/Product">
+                itemtype="https://schema.org/Thing">
                 <div class="equipment-header">
                     <h3 itemprop="category">{{ getTranslation('formerCameraPeriod') }}</h3>
                     <span class="equipment-model" itemprop="name">{{ former.name }}</span>

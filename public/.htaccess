@@ -12,3 +12,9 @@
 
   RewriteRule ^ /index.html [L]
 </IfModule>
+
+<IfModule mod_headers.c>
+  # Ensure only a browser-compatible Permissions-Policy is sent.
+  Header always unset Permissions-Policy
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>

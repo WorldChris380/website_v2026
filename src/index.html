@@ -25,6 +25,14 @@
   <meta name="twitter:site" content="@christianboehme" />
   <link rel="preconnect" href="https://www.christian-boehme.com" />
   <link rel="preconnect" href="https://christian-boehme-gallery.s3.eu-central-3.ionoscloud.com" crossorigin />
+  <!-- Homepage hero photo: set via an Angular-bound CSS background-image,
+       so the browser's preload scanner can't discover it until the app
+       bootstraps and renders. Hinting it here lets it start downloading
+       immediately instead, improving LCP for the homepage (the site's
+       main entry point) — a small, harmless head start on other routes
+       that don't use it. -->
+  <link rel="preload" as="image" fetchpriority="high"
+    href="/assets/img/photography/Travel/Australia%20and%20Oceania/whitehaven%20beach.JPG" />
   <link rel="icon" type="image/x-icon" href="/assets/img/logos/favicon.ico">
 </head>
 

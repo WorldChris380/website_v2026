@@ -34,6 +34,7 @@ export class ShopSuccess implements OnInit {
             lead: de ? 'Deine Zahlung wurde erfolgreich verarbeitet. Downloads, Rechnung und Zertifikat stehen direkt bereit.' : 'Your payment was processed successfully. Downloads, invoice, and certificate are available right away.',
             certificates: de ? 'Downloads und Zertifikate' : 'Downloads and Certificates',
             owner: de ? 'Inhaber' : 'Holder',
+            company: de ? 'Firma' : 'Company',
             order: de ? 'Bestellung' : 'Order',
             invoice: de ? 'Rechnung' : 'Invoice',
             invoicePdf: de ? 'Rechnung (PDF)' : 'Invoice (PDF)',
@@ -68,6 +69,7 @@ export class ShopSuccess implements OnInit {
         await this.certificateService.downloadCertificate(
             {
                 ownerName: purchase.ownerName,
+                companyName: purchase.companyName,
                 orderId: purchase.orderId,
                 captureId: purchase.captureId,
                 purchasedAt: purchase.purchasedAt,

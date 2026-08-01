@@ -39,8 +39,13 @@
             <input type="text" [ngModel]="certificateOwner" (ngModelChange)="onCertificateOwnerChange($event)"
                 [placeholder]="t('ownerPlaceholder')" />
         </label>
+        <label class="certificate-owner" *ngIf="totalQuantity > 0">
+            <span>{{ t('company') }}</span>
+            <input type="text" [ngModel]="companyName" (ngModelChange)="onCompanyNameChange($event)"
+                [placeholder]="t('companyPlaceholder')" />
+        </label>
         <app-paypal-button *ngIf="totalQuantity > 0" [items]="items" currency="EUR" [ownerName]="certificateOwner"
-            (paymentSuccess)="onPaymentSuccess()">
+            [companyName]="companyName" (paymentSuccess)="onPaymentSuccess()">
         </app-paypal-button>
         <button class="clear" (click)="clear()" *ngIf="totalQuantity > 0">{{ t('clear') }}</button>
     </div>

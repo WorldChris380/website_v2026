@@ -406,6 +406,37 @@
             color: #0f172a;
             font-size: var(--font-size-sm);
         }
+
+        .company-name-field {
+            margin-top: var(--space-2);
+            display: grid;
+            gap: 6px;
+
+            span {
+                font-size: 12px;
+                color: #475569;
+            }
+
+            input {
+                width: 100%;
+                min-height: 40px;
+                border-radius: var(--radius-sm);
+                border: 1px solid rgba(15, 23, 42, 0.16);
+                background: #ffffff;
+                color: #0f172a;
+                padding: 0 12px;
+                outline: none;
+
+                &:focus {
+                    border-color: rgba($shop-blue, 0.6);
+                    box-shadow: 0 0 0 3px rgba($shop-blue, 0.15);
+                }
+            }
+        }
+    }
+
+    .owner-lock-hint-company {
+        margin-top: 2px;
     }
 
     .logout-link {
@@ -610,6 +641,27 @@
             strong {
                 color: $shop-blue-bright;
             }
+
+            .company-name-field {
+                span {
+                    color: #cbd5e1;
+                }
+
+                input {
+                    background: rgba(15, 23, 42, 0.7);
+                    border-color: rgba(148, 163, 184, 0.45);
+                    color: #f8fafc;
+
+                    &::placeholder {
+                        color: rgba(148, 163, 184, 0.75);
+                    }
+
+                    &:focus {
+                        border-color: rgba($shop-blue-bright, 0.7);
+                        box-shadow: 0 0 0 3px rgba($shop-blue, 0.2);
+                    }
+                }
+            }
         }
 
         .logout-link {
@@ -649,6 +701,12 @@
 
     .cart-items h2,
     .cart-summary h2,
+
+    .item-title,
+    .qty-display,
+    .subtotal-amount,
+    .summary-total,
+    .summary-total strong,
 
     .item-price,
     .summary-row {

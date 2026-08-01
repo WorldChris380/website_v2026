@@ -631,7 +631,7 @@ export class TravelBudgetCalculatorComponent implements OnInit, OnDestroy {
 
         try {
             const [restRes, worldBankRes] = await Promise.all([
-                fetch('https://restcountries.com/v3.1/all?fields=cca2,name,translations,region,latlng,currencies'),
+                fetch(this.getRestCountriesApiUrl()),
                 fetch('https://api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.PP.CD?format=json&per_page=20000')
             ]);
 
@@ -653,6 +653,13 @@ export class TravelBudgetCalculatorComponent implements OnInit, OnDestroy {
         } catch {
             // Keep fallback data if free APIs are unavailable.
         }
+    }
+
+    private getRestCountriesApiUrl(): string {
+        const endpoint = 'v3.1/all?fields=cca2,name,translations,region,latlng,currencies';
+        const host = typeof window !== 'undefined' ? window.location.hostname : '';
+        const isLocalDev = host === 'localhost' || host === '127.0.0.1';
+        return isLocalDev ? `/api/restcountries/${endpoint}` : `https://restcountries.com/${endpoint}`;
     }
 
     private extractGdpByIso3(payload: unknown): Record<string, number> {
@@ -857,7 +864,19 @@ export class TravelBudgetCalculatorComponent implements OnInit, OnDestroy {
                     offers: {
                         '@type': 'Offer',
                         price: '0',
-                        priceCurrency: 'USD'
+                        priceCurrency: 'USD',
+                        shippingDetails: {
+                            '@type': 'OfferShippingDetails',
+                            shippingRate: {
+                                '@type': 'MonetaryAmount',
+                                value: '0',
+                                currency: 'USD'
+                            }
+                        },
+                        hasMerchantReturnPolicy: {
+                            '@type': 'MerchantReturnPolicy',
+                            returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted'
+                        }
                     },
                     featureList: isGerman
                         ? [

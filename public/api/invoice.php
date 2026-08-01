@@ -135,6 +135,7 @@ function fetchInvoiceOrder(
     $selectFields = [
         'id',
         selectColumnOrLiteral($columns, 'owner_name', "''", 'owner_name'),
+        selectColumnOrLiteral($columns, 'company_name', "''", 'company_name'),
         selectColumnOrLiteral($columns, 'customer_email', "''", 'customer_email'),
         selectColumnOrLiteral($columns, 'customer_display_name', "''", 'customer_display_name'),
         selectColumnOrLiteral($columns, 'paypal_order_id', "''", 'paypal_order_id'),
@@ -248,6 +249,7 @@ function buildInvoicePdf(array $order, array $items, string $language = 'de'): s
             )
             : (string) ($order['customer_email'] ?? 'Customer')));
     $buyerEmail = trim((string) ($order['customer_email'] ?? ''));
+    $buyerCompany = trim((string) ($order['company_name'] ?? ''));
 
     $normalizedItems = normalizeInvoiceItems($items, $currency);
     $preparedRows = [];
@@ -290,6 +292,7 @@ function buildInvoicePdf(array $order, array $items, string $language = 'de'): s
                 trim((string) ($cfg['seller_email'] ?? '')),
             ];
             $buyerLines = [
+                $buyerCompany !== '' ? (t($language, 'company') . ': ' . $buyerCompany) : '',
                 $buyerName,
                 $buyerEmail,
                 t($language, 'paypal_order') . ': ' . (string) ($order['paypal_order_id'] ?? ''),
@@ -1146,6 +1149,7 @@ function t(string $lang, string $key): string
     $de = [
         'seller' => 'Verkaeufer',
         'bill_to' => 'Rechnung an',
+        'company' => 'Firma',
         'paypal_order' => 'PayPal-Bestellung',
         'capture_id' => 'Capture-ID',
         'invoice_no' => 'Rechnungsnr.',
@@ -1170,6 +1174,7 @@ function t(string $lang, string $key): string
     $en = [
         'seller' => 'Seller',
         'bill_to' => 'Bill to',
+        'company' => 'Company',
         'paypal_order' => 'PayPal order',
         'capture_id' => 'Capture ID',
         'invoice_no' => 'Invoice no.',

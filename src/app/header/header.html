@@ -1,4 +1,4 @@
-<header id="header-full-width" [class.loading]="isLoading">
+﻿<header id="header-full-width" [class.loading]="isLoading">
     <div id="header-content-limitation">
         <div id="header-logo-div">
             <a id="header-logo-link" href=""><img id="header-logo-img"
@@ -15,14 +15,15 @@
         </div>
 
         <div id="header-navigation-div">
-            <nav class="desktop-mega-nav" aria-label="Primary navigation" (mouseleave)="setDesktopDropdown(null)">
+            <nav #desktopMegaNav class="desktop-mega-nav" aria-label="Primary navigation"
+                (mouseleave)="setMegamenuOpen(false)">
                 <a [routerLink]="['/travel-budget-calculator']" class="desktop-mega-link" data-category="travel"
                     (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('travel')">{{ getTranslation('travel')
                     }}</a>
-                <a [routerLink]="['/gallery']" [queryParams]="{ filter: 'aviation' }" class="desktop-mega-link"
+                <a [routerLink]="['/photography']" [queryParams]="{ filter: 'aviation' }" class="desktop-mega-link"
                     data-category="aviation" (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('aviation')">{{
                     getTranslation('aviation') }}</a>
-                <a [routerLink]="['/gallery']" class="desktop-mega-link" data-category="photography"
+                <a [routerLink]="['/photography']" class="desktop-mega-link" data-category="photography"
                     (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('photography')">{{
                     getTranslation('photography') }}</a>
                 <a [routerLink]="['/career']" class="desktop-mega-link" data-category="career"
@@ -33,8 +34,9 @@
             </nav>
 
             <!-- Megamenu Panel -->
-            <div class="megamenu-panel" [class.open]="megamenuOpen" (mouseenter)="setMegamenuOpen(true)"
-                (mouseleave)="setMegamenuOpen(false); setDesktopDropdown(null)" (click)="handleMegamenuClick($event)">
+            <div class="megamenu-panel" [class.open]="megamenuOpen"
+                [style.width.px]="megamenuPanelWidth" (mouseenter)="setMegamenuOpen(true)"
+                (mouseleave)="setMegamenuOpen(false)" (click)="handleMegamenuClick($event)">
                 <div class="megamenu-content">
 
                     <!-- Travel Section -->
@@ -45,6 +47,11 @@
                             {{ getTranslation('travel') }}
                         </h3>
                         <div class="megamenu-links">
+                            <a [routerLink]="['/photography']" [queryParams]="{filter: 'travel'}"
+                                class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('travelGallery') }}</span>
+                                <span class="link-description">{{ getTranslation('menuDescTravelPhotography') }}</span>
+                            </a>
                             <a [routerLink]="['/travel-budget-calculator']" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('budgetCalculator') }}</span>
                                 <span class="link-description">{{ getTranslation('menuDescBudgetCalculator') }}</span>
@@ -64,21 +71,27 @@
                             {{ getTranslation('aviation') }}
                         </h3>
                         <div class="megamenu-links">
+                            <a [routerLink]="['/photography']" [queryParams]="{filter: 'aviation'}"
+                                class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('aviationGallery') }}</span>
+                                <span class="link-description">{{ getTranslation('menuDescAviationPhotography')
+                                    }}</span>
+                            </a>
                             <a href="/aviation-spotter-hotels" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('aviationSpotterHotels') }}</span>
                                 <span class="link-description">{{ getTranslation('menuDescSpotterHotels') }}</span>
                             </a>
                             <div class="megamenu-subgroup">
                                 <span class="subgroup-title">{{ getTranslation('airlineSim') }}</span>
-                                <a [routerLink]="['/air-germany']" class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('airGermany') }}</span>
-                                    <span class="link-description">{{ getTranslation('airGermanyDescription') }}</span>
-                                </a>
-
                                 <a [routerLink]="['/airlinesim-ceo-tools']" class="megamenu-link megamenu-sublink">
                                     <span class="link-title">{{ getTranslation('airlineSimCeoTools') }}</span>
                                     <span class="link-description">{{ getTranslation('airlineSimCeoToolsDescription')
                                         }}</span>
+                                </a>
+
+                                <a [routerLink]="['/air-germany']" class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('airGermany') }}</span>
+                                    <span class="link-description">{{ getTranslation('airGermanyDescription') }}</span>
                                 </a>
                             </div>
                         </div>
@@ -92,14 +105,9 @@
                             {{ getTranslation('photography') }}
                         </h3>
                         <div class="megamenu-links">
-                            <a [routerLink]="['/gallery']" [queryParams]="{filter: 'aviation'}" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('aviationGallery') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescAviationPhotography')
-                                    }}</span>
-                            </a>
-                            <a [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('travelGallery') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescTravelPhotography') }}</span>
+                            <a [routerLink]="['/photography']" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('photoGallery') }}</span>
+                                <span class="link-description">{{ getTranslation('menuDescPhotoGallery') }}</span>
                             </a>
                             <a [routerLink]="['/about-my-photography']" class="megamenu-link">
                                 <span class="link-title">{{ getTranslation('aboutMyPhotography') }}</span>
@@ -175,7 +183,7 @@
                             {{ getTranslation('shop') }}
                         </h3>
                         <div class="megamenu-links">
-                            <a [routerLink]="['/gallery']"
+                            <a [routerLink]="['/photography']"
                                 class="megamenu-link megamenu-link-featured megamenu-shop-primary">
                                 <span class="link-title">
                                     {{ currentLanguage === 'de' ? 'Foto lizenzieren' : 'License Photo' }}
@@ -184,6 +192,14 @@
                                 <span class="link-description">{{ currentLanguage === 'de' ? 'Direkt zur Galerie und
                                     Motive für den Warenkorb auswählen.' : 'Go straight to the gallery and select
                                     photos for your cart.' }}</span>
+                            </a>
+                            <a [routerLink]="['/shop/pricing']" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('pricingOverview') }}</span>
+                                <span class="link-description">{{ getTranslation('menuDescPricing') }}</span>
+                            </a>
+                            <a [routerLink]="['/shop/account']" fragment="subscription" class="megamenu-link">
+                                <span class="link-title">{{ getTranslation('manageSubscription') }}</span>
+                                <span class="link-description">{{ getTranslation('menuDescSubscription') }}</span>
                             </a>
                             <a [routerLink]="['/shop/cart']" class="megamenu-link">
                                 <span class="link-title">
@@ -228,7 +244,11 @@
         <div id="header-3rd-row-div">
             <a class="header-cart" [routerLink]="['/shop/cart']" [title]="getTranslation('shop')"
                 [attr.aria-label]="getTranslation('shopCart') + (cartQuantity > 0 ? ' (' + cartQuantity + ' items)' : ' (empty)')">
-                🛒
+                <svg class="icon-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path
+                        d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.865-4.593 2.235-6.615a.75.75 0 0 0-.746-.885H5.106M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                </svg>
                 <span class="cart-badge" *ngIf="cartQuantity > 0">{{ cartQuantity }}</span>
             </a>
             <span (click)="toggleLanguage()" id="language-toggle" [title]="getTranslation('toggleLanguage')"
@@ -248,10 +268,18 @@
             </span>
             <div id="burger-menu-icon">
                 <button (click)="toggleBurgerMenu()" id="burger-menu-open-icon" type="button"
-                    aria-label="Open navigation menu" [style.display]="burgerMenuOpen ? 'none' : 'flex'">☰
+                    aria-label="Open navigation menu" [style.display]="burgerMenuOpen ? 'none' : 'flex'">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+                    </svg>
                 </button>
                 <button (click)="toggleBurgerMenu()" id="burger-menu-close-icon" type="button"
-                    [style.display]="burgerMenuOpen ? 'flex' : 'none'">X
+                    aria-label="Close navigation menu" [style.display]="burgerMenuOpen ? 'flex' : 'none'">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path d="M6 18 18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
         </div>
@@ -267,6 +295,10 @@
                         href="javascript:void(0);">{{ getTranslation('travel') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'travel'" id="mobile-travel-dropdown"
                         [class.open]="openMobileDropdownMenu === 'travel'">
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
+                            [queryParams]="{ filter: 'travel' }" class="mobile-dropdown-link dropdown-link-travel">
+                            {{ getTranslation('travelGallery') }}
+                        </a>
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/travel-budget-calculator']"
                             class="mobile-dropdown-link dropdown-link-travel">
                             {{ getTranslation('budgetCalculator') }}
@@ -282,7 +314,7 @@
                         href="javascript:void(0);">{{ getTranslation('aviation') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'aviation'" id="mobile-aviation-dropdown"
                         [class.open]="openMobileDropdownMenu === 'aviation'">
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
                             [queryParams]="{ filter: 'aviation' }" class="mobile-dropdown-link dropdown-link-aviation">
                             {{ getTranslation('aviationGallery') }}
                         </a>
@@ -295,13 +327,13 @@
                             {{ getTranslation('airlineSim') }}
                         </a>
                         <div *ngIf="openMobileSubDropdownMenu === 'airline-sim'" class="mobile-dropdown-sublist">
-                            <a (click)="closeMenuAfterNavigation()" [routerLink]="['/air-germany']"
-                                class="mobile-dropdown-sublink">
-                                {{ getTranslation('airGermany') }}
-                            </a>
                             <a (click)="closeMenuAfterNavigation()" [routerLink]="['/airlinesim-ceo-tools']"
                                 class="mobile-dropdown-sublink">
                                 {{ getTranslation('airlineSimCeoTools') }}
+                            </a>
+                            <a (click)="closeMenuAfterNavigation()" [routerLink]="['/air-germany']"
+                                class="mobile-dropdown-sublink">
+                                {{ getTranslation('airGermany') }}
                             </a>
                         </div>
                     </div>
@@ -311,14 +343,9 @@
                         href="javascript:void(0);">{{ getTranslation('photography') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'photography'" id="mobile-photography-dropdown"
                         [class.open]="openMobileDropdownMenu === 'photography'">
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"
-                            [queryParams]="{ filter: 'aviation' }"
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
                             class="mobile-dropdown-link dropdown-link-photography">
-                            {{ getTranslation('aviationGallery') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"
-                            [queryParams]="{ filter: 'travel' }" class="mobile-dropdown-link dropdown-link-photography">
-                            {{ getTranslation('travelGallery') }}
+                            {{ getTranslation('photoGallery') }}
                         </a>
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/about-my-photography']"
                             class="mobile-dropdown-link dropdown-link-photography">
@@ -382,9 +409,17 @@
                         href="javascript:void(0);">{{ getTranslation('shop') }}</a>
                     <div *ngIf="openMobileDropdownMenu === 'shop'" id="mobile-shop-dropdown"
                         [class.open]="openMobileDropdownMenu === 'shop'">
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/gallery']"
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
                             class="mobile-dropdown-link dropdown-link-shop">
                             {{ currentLanguage === 'de' ? 'Foto lizenzieren' : 'License Photo' }}
+                        </a>
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/pricing']"
+                            class="mobile-dropdown-link dropdown-link-shop">
+                            {{ getTranslation('pricingOverview') }}
+                        </a>
+                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/account']"
+                            fragment="subscription" class="mobile-dropdown-link dropdown-link-shop">
+                            {{ getTranslation('manageSubscription') }}
                         </a>
                         <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/cart']"
                             class="mobile-dropdown-link dropdown-link-shop">
@@ -409,6 +444,16 @@
         </div>
         <div id="mobileBottomMenu">
             <div id="mobile-bottom-Menu-first-coloum">
+                <a class="header-cart header-cart-mobile" [routerLink]="['/shop/cart']"
+                    [title]="getTranslation('shop')"
+                    [attr.aria-label]="getTranslation('shopCart') + (cartQuantity > 0 ? ' (' + cartQuantity + ' items)' : ' (empty)')">
+                    <svg class="icon-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <path
+                            d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.865-4.593 2.235-6.615a.75.75 0 0 0-.746-.885H5.106M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                    </svg>
+                    <span class="cart-badge" *ngIf="cartQuantity > 0">{{ cartQuantity }}</span>
+                </a>
                 <span (click)="toggleLanguage()" id="language-toggle-mobile" [title]="getTranslation('toggleLanguage')">
                     <img class="flag-icon"
                         [src]="currentLanguage === 'en' ? darkmodeSVG('flag-de') : darkmodeSVG('flag-gb')"

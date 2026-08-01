@@ -20,7 +20,7 @@ export class PayPalService {
             script.onload = () => resolve();
             script.onerror = () => {
                 this.loading = undefined;
-                reject(new Error('PayPal SDK failed to load.'));
+                reject(new Error('PayPal SDK failed to load. A browser extension or network filter may be blocking PayPal.'));
             };
             document.body.appendChild(script);
         });

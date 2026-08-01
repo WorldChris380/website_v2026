@@ -3,76 +3,7 @@
 
     <!-- Filter Section -->
     <div class="gallery-header">
-        <!-- Breadcrumb + Results Count -->
-        <div class="filter-breadcrumb-row">
-            <div class="filter-breadcrumb"
-                *ngIf="selectedCategory !== 'All' || selectedContinent !== 'All' || selectedCountry !== 'All' || selectedSubfolders.length > 0">
-                <button class="breadcrumb-btn" (click)="resetFilters()">{{ getTranslation('all') }}</button>
-                <span class="breadcrumb-separator" *ngIf="selectedCategory !== 'All'">›</span>
-                <button class="breadcrumb-btn" *ngIf="selectedCategory !== 'All'"
-                    (click)="onCategoryChange(selectedCategory)">
-                    {{ translateCategory(selectedCategory) }}
-                </button>
-                <span class="breadcrumb-separator" *ngIf="selectedContinent !== 'All'">›</span>
-                <button class="breadcrumb-btn" *ngIf="selectedContinent !== 'All'"
-                    (click)="onContinentChange(selectedContinent)">
-                    {{ translateContinent(selectedContinent) }}
-                </button>
-                <span class="breadcrumb-separator" *ngIf="selectedCountry !== 'All'">›</span>
-                <button class="breadcrumb-btn" *ngIf="selectedCountry !== 'All'" (click)="onCountryChange(selectedCountry)">
-                    {{ translateCountry(selectedCountry) }}
-                </button>
-                <ng-container *ngFor="let sub of selectedSubfolders; let i = index">
-                    <span class="breadcrumb-separator">›</span>
-                    <button class="breadcrumb-btn"
-                        *ngIf="i < selectedSubfolders.length - 1 || currentSubfolderOptions.length > 0"
-                        (click)="onSubfolderBreadcrumbClick(i)">
-                        {{ translateLocation(sub) }}
-                    </button>
-                    <span class="breadcrumb-current"
-                        *ngIf="i === selectedSubfolders.length - 1 && currentSubfolderOptions.length === 0">
-                        {{ translateLocation(sub) }}
-                    </span>
-                </ng-container>
-            </div>
-            <div class="results-count">
-                {{ filteredImages.length }} {{ currentLanguage === 'en' ? 'images found' : 'Bilder gefunden' }}
-            </div>
-        </div>
-
-        <!-- Category Filter Buttons -->
-        <div class="filter-buttons" *ngIf="selectedCategory === 'All'">
-            <button *ngFor="let category of categories" [ngClass]="{ active: selectedCategory === category }"
-                (click)="onCategoryChange(category)" class="filter-btn">
-                {{ translateCategory(category) }}
-            </button>
-        </div>
-
-        <!-- Continent Filter Buttons -->
-        <div class="filter-buttons"
-            *ngIf="selectedCategory !== 'All' && selectedContinent === 'All' && continents.length > 0">
-            <button *ngFor="let continent of continents" (click)="onContinentChange(continent)" class="filter-btn">
-                {{ translateContinent(continent) }}
-            </button>
-        </div>
-
-        <!-- Country Filter Buttons -->
-        <div class="filter-buttons"
-            *ngIf="selectedContinent !== 'All' && selectedCountry === 'All' && countries.length > 0">
-            <button *ngFor="let country of countries" (click)="onCountryChange(country)" class="filter-btn">
-                {{ translateCountry(country) }}
-            </button>
-        </div>
-
-        <!-- Location / Subfolder Filter Buttons (dynamic depth) -->
-        <div class="filter-buttons" *ngIf="selectedCountry !== 'All' && currentSubfolderOptions.length > 0">
-            <button *ngFor="let sub of currentSubfolderOptions"
-                (click)="onSubfolderChange(currentSubfolderFilterDepth, sub)" class="filter-btn">
-                {{ translateLocation(sub) }}
-            </button>
-        </div>
-
-        <!-- Search Section -->
+        <!-- Controls: Count + Search + Toggle -->
         <div class="search-container">
             <div class="search-row">
                 <div class="search-input-wrap">
@@ -84,14 +15,6 @@
                         ✕
                     </button>
                 </div>
-                <button class="search-info-btn" type="button"
-                    [attr.aria-label]="currentLanguage === 'de' ? 'Suchhinweis' : 'Search hint'">
-                    i
-                    <span class="search-info-tooltip">
-                        {{ currentLanguage === 'de' ? 'Hinweis: Bitte auf Englisch suchen (z. B. country/city).' :
-                        'Hint: Please search in English (e.g. country/city).' }}
-                    </span>
-                </button>
             </div>
             <div class="view-mode-toggle">
                 <span class="toggle-label" [class.active]="!isLazyLoad">
@@ -106,6 +29,17 @@
                     {{ currentLanguage === 'de' ? 'Scrollen' : 'Scroll' }}
                 </span>
             </div>
+
+            <button type="button" class="favorites-filter-btn" [class.active]="showFavoritesOnly"
+                (click)="toggleFavoritesOnly()" [attr.aria-pressed]="showFavoritesOnly">
+                <svg viewBox="0 0 24 24" [attr.fill]="showFavoritesOnly ? 'currentColor' : 'none'"
+                    stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                </svg>
+                {{ currentLanguage === 'de' ? 'Merkliste' : 'Favorites' }}
+                <span class="favorites-count" *ngIf="favoritesService.count > 0">{{ favoritesService.count }}</span>
+            </button>
         </div>
 
     </div>
@@ -124,8 +58,24 @@
             <meta itemprop="contentUrl" [attr.content]="image.originalUrl || image.url" />
             <meta itemprop="thumbnailUrl" [attr.content]="image.thumbnailUrl || image.gridUrl || image.url" />
             <meta itemprop="license" content="https://www.christian-boehme.com/shop" />
+            <meta itemprop="acquireLicensePage" content="https://www.christian-boehme.com/shop/cart" />
+            <meta itemprop="creditText" content="Christian Böhme / christian-boehme.com" />
+            <meta itemprop="copyrightNotice" content="© Christian Böhme" />
+            <span itemprop="creator" itemscope itemtype="https://schema.org/Person" hidden>
+                <meta itemprop="name" content="Christian Böhme" />
+            </span>
 
             <div class="image-wrapper" (click)="openLightbox(image)">
+                <button type="button" class="favorite-btn" [class.active]="isFavorite(image)"
+                    (click)="toggleFavorite(image, $event)"
+                    [attr.aria-label]="isFavorite(image) ? (currentLanguage === 'de' ? 'Von Merkliste entfernen' : 'Remove from favorites') : (currentLanguage === 'de' ? 'Zur Merkliste hinzufügen' : 'Add to favorites')"
+                    [attr.aria-pressed]="isFavorite(image)">
+                    <svg viewBox="0 0 24 24" [attr.fill]="isFavorite(image) ? 'currentColor' : 'none'"
+                        stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg>
+                </button>
                 <img [src]="image.gridUrl || image.url" [alt]="getImageSeoAlt(image)"
                     [attr.title]="getImageSeoTitle(image)" class="gallery-image"
                     [attr.loading]="i < 2 ? 'eager' : 'lazy'" [attr.fetchpriority]="i < 2 ? 'high' : 'auto'"
@@ -137,7 +87,10 @@
                             {{ translateCountry(image.country) }}
                         </button>
                         <div class="overlay-actions">
-                            <span>{{ image.price | number:'1.2-2' }} EUR</span>
+                            <button class="gallery-subscription-btn" *ngIf="hasActiveSubscription"
+                                (click)="downloadWithSubscription(image, $event)">
+                                {{ currentLanguage === 'de' ? 'Abo' : 'Subscription' }}
+                            </button>
                             <button class="gallery-shop-btn"
                                 (click)="addToCartWithAnimation(image, $event); $event.stopPropagation()">Add to
                                 cart</button>
@@ -171,8 +124,8 @@
     <div *ngIf="isLightboxOpen" class="lightbox-overlay" (click)="closeLightbox()">
         <div class="lightbox-container" (click)="$event.stopPropagation()">
             <!-- Main Image -->
-            <div class="lightbox-main" (touchstart.passive)="onTouchStart($event)" (touchmove.passive)="onTouchMove($event)"
-                (touchend.passive)="onTouchEnd($event)">
+            <div class="lightbox-main" (touchstart.passive)="onTouchStart($event)"
+                (touchmove.passive)="onTouchMove($event)" (touchend.passive)="onTouchEnd($event)">
                 <!-- Close Button -->
                 <div class="lightbox-image-wrapper">
                     <!-- Close Button -->
@@ -204,31 +157,148 @@
                         </span>
                     </div>
                     <div class="lightbox-meta-row">
-                        <button type="button" class="meta-chip meta-chip-filter"
-                            (click)="applyLightboxFilter('category', currentLightboxImage.category, $event)">
-                            {{ translateCategory(currentLightboxImage.category) }}
-                        </button>
-                        <button type="button" class="meta-chip meta-chip-filter"
-                            (click)="applyLightboxFilter('continent', currentLightboxImage.continent, $event)">
-                            {{ translateContinent(currentLightboxImage.continent) }}
-                        </button>
-                        <button type="button" class="meta-chip meta-chip-filter"
-                            (click)="applyLightboxFilter('country', currentLightboxImage.country, $event)">
-                            {{ translateCountry(currentLightboxImage.country) }}
-                        </button>
-                        <span class="meta-chip meta-price">{{ currentLightboxImage.price | number:'1.2-2' }} EUR</span>
-                        <button class="meta-chip meta-id" (click)="copyImageId(currentLightboxImage.id, $event)">
-                            {{ copiedImageId === currentLightboxImage.id ? (currentLanguage === 'de' ? 'Kopiert' :
-                            'Copied') : 'ID #' + currentLightboxImage.id }}
-                        </button>
+                        <div class="lightbox-tag-group">
+                            <button type="button" class="meta-chip meta-chip-filter"
+                                (click)="applyLightboxFilter('category', currentLightboxImage.category, $event)">
+                                {{ translateCategory(currentLightboxImage.category) }}
+                            </button>
+                            <button type="button" class="meta-chip meta-chip-filter"
+                                (click)="applyLightboxFilter('continent', currentLightboxImage.continent, $event)">
+                                {{ translateContinent(currentLightboxImage.continent) }}
+                            </button>
+                            <button type="button" class="meta-chip meta-chip-filter"
+                                (click)="applyLightboxFilter('country', currentLightboxImage.country, $event)">
+                                {{ translateCountry(currentLightboxImage.country) }}
+                            </button>
+                        </div>
+                        <div class="lightbox-utility-group">
+                            <button type="button" class="meta-icon-btn meta-chip-favorite"
+                                [class.active]="isFavorite(currentLightboxImage)"
+                                (click)="toggleFavorite(currentLightboxImage, $event)"
+                                [attr.aria-pressed]="isFavorite(currentLightboxImage)"
+                                [attr.aria-label]="isFavorite(currentLightboxImage) ? (currentLanguage === 'de' ? 'Von Merkliste entfernen' : 'Remove from favorites') : (currentLanguage === 'de' ? 'Zur Merkliste hinzufügen' : 'Add to favorites')"
+                                [attr.title]="isFavorite(currentLightboxImage) ? (currentLanguage === 'de' ? 'Von Merkliste entfernen' : 'Remove from favorites') : (currentLanguage === 'de' ? 'Zur Merkliste hinzufügen' : 'Add to favorites')">
+                                <svg viewBox="0 0 24 24"
+                                    [attr.fill]="isFavorite(currentLightboxImage) ? 'currentColor' : 'none'"
+                                    stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                                </svg>
+                            </button>
+                            <button type="button" class="meta-icon-btn meta-id"
+                                (click)="copyImageId(currentLightboxImage.id, $event)"
+                                [attr.title]="currentLanguage === 'de' ? 'Bild-ID kopieren' : 'Copy image ID'">
+                                {{ copiedImageId === currentLightboxImage.id ? (currentLanguage === 'de' ? 'Kopiert' :
+                                'Copied') : '#' + currentLightboxImage.id }}
+                            </button>
+                        </div>
                     </div>
                     <p class="lightbox-folder-path">
                         <strong>{{ currentLanguage === 'en' ? 'Folder path:' : 'Ordnerpfad:' }}</strong>
-                        <span>{{ getImageFolderPath(currentLightboxImage) }}</span>
+                        <span class="lightbox-folder-path-value">
+                            {{ getImageFolderPath(currentLightboxImage) }}
+                            <button type="button" class="path-copy-icon-btn"
+                                *ngIf="getImageDrivePath(currentLightboxImage)"
+                                [class.copied]="copiedDrivePathId === currentLightboxImage.id"
+                                (click)="copyDrivePath(currentLightboxImage, $event)"
+                                [attr.title]="copiedDrivePathId === currentLightboxImage.id ? (currentLanguage === 'de' ? 'Kopiert' : 'Copied') : getImageDrivePath(currentLightboxImage)"
+                                [attr.aria-label]="currentLanguage === 'de' ? 'D:-Pfad kopieren' : 'Copy D: path'">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                                    aria-hidden="true" focusable="false">
+                                    <rect x="7" y="6.5" width="10" height="13" rx="1.5" />
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9.5 6.5V5.25A1.25 1.25 0 0 1 10.75 4h2.5a1.25 1.25 0 0 1 1.25 1.25V6.5" />
+                                </svg>
+                            </button>
+                        </span>
                     </p>
-                    <button class="lightbox-purchase" (click)="addToCartWithAnimation(currentLightboxImage, $event)">
-                        {{ currentLanguage === 'en' ? 'Add to cart' : 'In den Warenkorb' }}
-                    </button>
+                    <div class="lightbox-actions">
+                        <button class="lightbox-purchase"
+                            (click)="addToCartWithAnimation(currentLightboxImage, $event)">
+                            {{ currentLanguage === 'en' ? 'Add to cart' : 'In den Warenkorb' }}
+                        </button>
+                        <button class="lightbox-subscription-download" *ngIf="shopAuthService.isAuthenticated()"
+                            [disabled]="!canUseSubscriptionDownload || isSubscriptionLoading"
+                            (click)="downloadWithSubscription(undefined, $event)">
+                            {{ isSubscriptionDownloadPending
+                            ? (currentLanguage === 'de' ? 'Wird vorbereitet…' : 'Preparing…')
+                            : (currentLanguage === 'de' ? 'Mit Abo herunterladen' : 'Download with subscription') }}
+                        </button>
+                        <a class="lightbox-subscription-cta" *ngIf="!shopAuthService.isAuthenticated()"
+                            [routerLink]="['/shop/account']" fragment="subscription">
+                            {{ currentLanguage === 'de' ? 'Per Abo beziehen' : 'Get via subscription' }}
+                        </a>
+                    </div>
+                    <p class="subscription-download-hint" *ngIf="shopAuthService.isAuthenticated()">
+                        {{ subscriptionDownloadHint }}
+                    </p>
+                    <p class="subscription-download-message" *ngIf="subscriptionMessage">{{ subscriptionMessage }}</p>
+
+                    <section class="verified-reviews" aria-label="Verified reviews">
+                        <div class="verified-reviews-head">
+                            <h3>{{ currentLanguage === 'de' ? 'Verifizierte Bewertungen' : 'Verified reviews' }}</h3>
+                            <span class="verified-badge">{{ currentLanguage === 'de' ? 'Nur verifizierte Käufer' :
+                                'Verified buyers only' }}</span>
+                        </div>
+
+                        <p class="review-hint" *ngIf="shopAuthService.isAuthenticated() && !canLeaveVerifiedReview">
+                            {{ currentLanguage === 'de'
+                            ? 'Bewertungen sind nur möglich, wenn dieses Bild bereits gekauft wurde.'
+                            : 'You can review this image only after a verified purchase.' }}
+                        </p>
+
+                        <p class="review-hint" *ngIf="!shopAuthService.isAuthenticated()">
+                            {{ currentLanguage === 'de'
+                            ? 'Bitte einloggen, um verifizierte Bewertungen zu sehen und zu schreiben.'
+                            : 'Please sign in to view and submit verified reviews.' }}
+                        </p>
+
+                        <div class="reviews-loading" *ngIf="isReviewsLoading">
+                            {{ currentLanguage === 'de' ? 'Bewertungen werden geladen…' : 'Loading reviews…' }}
+                        </div>
+
+                        <div class="reviews-list" *ngIf="!isReviewsLoading && reviews.length > 0">
+                            <article class="review-item" *ngFor="let review of reviews">
+                                <div class="review-item-head">
+                                    <strong>{{ review.displayName }}</strong>
+                                    <span class="review-stars">{{ getReviewStars(review.rating) }}</span>
+                                </div>
+                                <p>{{ review.reviewText }}</p>
+                                <span class="review-date">{{ formatReviewDate(review.createdAt) }}</span>
+                            </article>
+                        </div>
+
+                        <p class="review-hint" *ngIf="!isReviewsLoading && reviews.length === 0">
+                            {{ currentLanguage === 'de' ? 'Noch keine verifizierten Bewertungen vorhanden.' : 'No
+                            verified reviews yet.' }}
+                        </p>
+
+                        <form class="review-form" *ngIf="canLeaveVerifiedReview" (ngSubmit)="submitVerifiedReview()">
+                            <label for="reviewRating">{{ currentLanguage === 'de' ? 'Bewertung' : 'Rating' }}</label>
+                            <select id="reviewRating" name="reviewRating" [(ngModel)]="reviewRating">
+                                <option [ngValue]="5">5 ★</option>
+                                <option [ngValue]="4">4 ★</option>
+                                <option [ngValue]="3">3 ★</option>
+                                <option [ngValue]="2">2 ★</option>
+                                <option [ngValue]="1">1 ★</option>
+                            </select>
+
+                            <label for="reviewText">{{ currentLanguage === 'de' ? 'Dein Feedback' : 'Your feedback'
+                                }}</label>
+                            <textarea id="reviewText" name="reviewText" rows="4" [(ngModel)]="reviewText"
+                                [placeholder]="currentLanguage === 'de' ? 'Deine Erfahrung mit diesem Motiv…' : 'Share your experience with this photo…'"></textarea>
+
+                            <button type="submit" class="review-submit" [disabled]="isReviewSubmitting">
+                                {{ isReviewSubmitting
+                                ? (currentLanguage === 'de' ? 'Wird gesendet…' : 'Submitting…')
+                                : (currentLanguage === 'de' ? 'Verifizierte Bewertung absenden' : 'Submit verified
+                                review') }}
+                            </button>
+                        </form>
+
+                        <p class="review-message review-error" *ngIf="reviewError">{{ reviewError }}</p>
+                        <p class="review-message review-success" *ngIf="reviewSuccess">{{ reviewSuccess }}</p>
+                    </section>
                 </div>
 
                 <!-- Keyboard Help -->

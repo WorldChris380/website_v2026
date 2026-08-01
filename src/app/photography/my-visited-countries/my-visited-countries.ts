@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+﻿import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MetaService } from '../../services/meta.service';
@@ -220,7 +220,7 @@ export class MyVisitedCountries implements OnInit {
         }
         const normalized = country.trim().toLowerCase();
         const target = this.countryAliases[normalized] || country;
-        this.router.navigate(['/gallery'], {
+        this.router.navigate(['/photography'], {
             queryParams: {
                 search: target
             }

@@ -1,15 +1,35 @@
 @use '../../../styles.scss' as *;
 
-/* Header- und Footer-Höhe als CSS-Variablen, damit sie zentral anpassbar sind */
-/* Maximalbreite und Zentrierung für den Hauptbereich */
-#home-atf {
-    min-height: calc(100vh - var(--header-height, 40px) - var(--footer-height, 40px));
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    max-width: 100%;
-    position: relative;
+}
+
+#home-atf {
+    min-height: calc(100dvh - var(--header-offset, 40px) + 500px);
+    width: calc(95vw - 16px);
+    flex-shrink: 0;
+    position: sticky;
+    top: var(--header-offset, 40px);
+    z-index: 0;
     overflow: hidden;
     box-sizing: border-box;
     touch-action: pan-y;
+    border-radius: 16px;
+    background-color: #111;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: 100;
+        box-sizing: border-box;
+        border: none;
+        border-radius: inherit;
+        pointer-events: none;
+    }
 
 
 
@@ -31,36 +51,19 @@
 
     .hero-background {
         position: absolute;
-        top: 0;
+        top: -30%;
         left: 0;
         right: 0;
-        bottom: 0;
         width: 100%;
-        height: 100%;
+        height: 160%;
         background-size: cover;
         background-position: center;
+        background-repeat: no-repeat;
         z-index: -1;
         opacity: 0;
         transform: none;
         transition: none;
-        will-change: auto;
-        contain: layout style paint;
-
-        &.hero-background-bright {
-            filter: grayscale(100%);
-        }
-
-        &.hero-background-dark {
-            display: none;
-        }
-
-        &.hero-background-travel-dark {
-            display: none;
-        }
-
-        &.hero-background-aviation-dark {
-            display: none;
-        }
+        will-change: transform;
 
         &.hero-background-photography-dark {
             display: none;
@@ -122,7 +125,7 @@
 
 
     .hero-title {
-        font-size: clamp(4rem, 10vw, 7rem);
+        font-size: clamp(2.5rem, 5vw, 4rem);
         font-weight: 700;
         font-family: 'Georgia', 'Garamond', serif;
         margin-bottom: clamp(1rem, 2.5vw, 2rem);
@@ -195,6 +198,11 @@
     opacity: 1;
     transform: none;
     position: relative;
+    transition: opacity 0.2s ease;
+
+    &.quote-hidden {
+        opacity: 0;
+    }
 
     &::before {
         content: '"';
@@ -451,119 +459,12 @@
     }
 }
 
-.hero-dots {
-    position: absolute;
-    bottom: clamp(1.5rem, 4vw, 5rem);
-    left: 50%;
-    transform: translateX(-50%);
-    display: grid;
-    grid-template-columns: repeat(4, minmax(120px, 1fr));
-    align-items: center;
-    gap: clamp(0.6rem, 2vw, 1.2rem);
-    z-index: 100;
-    pointer-events: auto;
-    width: min(90vw, 1100px);
-    padding: clamp(0.6rem, 1.2vw, 1rem) clamp(0.8rem, 2vw, 1.5rem);
-
-    border-radius: var(--radius-md);
-
-}
-
-.hero-dot-item {
-    background: transparent;
-    border: none;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
-    display: grid;
-    gap: 0.5rem;
-    justify-items: center;
-    cursor: pointer;
-    padding: 0.4rem 0.6rem;
-    text-transform: none;
-    transition: color var(--dur-fast) var(--ease-standard),
-        transform var(--dur-fast) var(--ease-standard);
-}
-
-.hero-dot-line {
-    width: 100%;
-    height: 6px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.25);
-    transition: background-color var(--dur-fast) var(--ease-standard),
-        transform var(--dur-fast) var(--ease-standard);
-}
-
-.hero-dot-item:hover {
-    transform: translateY(-1px);
-}
-
-.hero-dot-item.active .hero-dot-line {
-    transform: scaleX(1.02);
-}
-
-.hero-dot-item.dot-travel:hover .hero-dot-line,
-.hero-dot-item.dot-travel.active .hero-dot-line {
-    background-color: $travel-green;
-}
-
-.hero-dot-item.dot-photography:hover .hero-dot-line,
-.hero-dot-item.dot-photography.active .hero-dot-line {
-    background-color: $photography-orange;
-}
-
-.hero-dot-item.dot-aviation:hover .hero-dot-line,
-.hero-dot-item.dot-aviation.active .hero-dot-line {
-    background-color: $aviation-blue;
-}
-
-.hero-dot-item.dot-career:hover .hero-dot-line,
-.hero-dot-item.dot-career.active .hero-dot-line {
-    background-color: $career-black-bright;
-}
-
-@media (max-width: 768px) {
-    .hero-dots {
-        grid-template-columns: repeat(2, minmax(120px, 1fr));
-        row-gap: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero-dots {
-        grid-template-columns: repeat(2, minmax(110px, 1fr));
-        padding: 0.5rem 0.8rem;
-    }
-}
-
 /* Dark mode optimizations for hero section (Angular scoped) */
 :host-context(.dark-mode) {
 
-    /* Swap career slide backgrounds */
-    .hero-background-bright {
-        display: none !important;
-    }
-
-    .hero-background-dark {
-        display: block !important;
-        filter: grayscale(100%);
-    }
-
-    /* Swap travel slide backgrounds */
-    .hero-background-travel-bright {
-        display: none !important;
-    }
-
-    .hero-background-travel-dark {
-        display: block !important;
-    }
-
-    /* Swap aviation slide backgrounds */
-    .hero-background-aviation-bright {
-        display: none !important;
-    }
-
-    .hero-background-aviation-dark {
-        display: block !important;
+    /* White border overlay visible only in dark mode */
+    #home-atf::before {
+        border: 3px solid rgba(255, 255, 255, 0.9);
     }
 
     /* Swap photography slide backgrounds */
@@ -641,71 +542,11 @@
         }
     }
 
-    /* Dots visibility on dark */
-    .dot {
-        background-color: rgba(255, 255, 255, 0.6);
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
-
-        &.active-dot {
-            background-color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
-        }
-
-        &:hover {
-            background-color: #ffffff;
-            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.25);
-        }
-    }
 }
 
 /* Accessibility: Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
     #home-atf {
-        @keyframes slideBackgroundIn {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
-        @keyframes slideBackgroundOut {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
-        @keyframes slideContentIn {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
-        @keyframes titleFadeInScale {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
-        @keyframes quoteFadeInUp {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: none;
-            }
-        }
-
         .hero-background,
         .hero-content,
         .hero-quote {
@@ -719,9 +560,1187 @@
             opacity: 1 !important;
             transform: none !important;
         }
+    }
+}
 
-        .dot {
-            animation: none !important;
+// ─── Homepage Sections ────────────────────────────────────────────────────────
+// Shop through Career form one continuous visual block: seam gradients blend
+// each section's color into the next as you scroll past the boundary, and
+// each section's content/photo reveals itself once scrolled into view.
+
+.home-story {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.section-seam {
+    width: 100%;
+    height: clamp(140px, 18vw, 260px);
+    pointer-events: none;
+    position: relative;
+    z-index: 5;
+}
+
+// Soft blend between the sticky hero photo and the shop section: a plain
+// white (dark: shop-blue) gradient overlay fades in over the tail of the
+// photo and reaches full opacity before its own bottom edge, so the photo
+// melts into the section color instead of cutting off hard.
+.hero-shop-transition {
+    width: 100%;
+    height: clamp(120px, 16vw, 220px);
+    pointer-events: none;
+    position: relative;
+    z-index: 5;
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.7) 55%,
+            rgba(255, 255, 255, 1) 100%);
+
+    :host-context(.dark-mode) & {
+        background: linear-gradient(to bottom,
+                rgba($shop-blue, 0) 0%,
+                rgba($shop-blue, 0.7) 55%,
+                rgba($shop-blue, 1) 100%);
+    }
+}
+
+.seam-shop-travel {
+    background: linear-gradient(to bottom, white, $travel-green-bright);
+
+    :host-context(.dark-mode) & {
+        background: linear-gradient(to bottom, $shop-blue, $travel-green-dark);
+    }
+}
+
+.seam-travel-aviation {
+    background: linear-gradient(to bottom, $travel-green-bright, $aviation-blue-bright);
+
+    :host-context(.dark-mode) & {
+        background: linear-gradient(to bottom, $travel-green-dark, $aviation-blue-dark);
+    }
+}
+
+.seam-aviation-photography {
+    background: linear-gradient(to bottom, $aviation-blue-bright, $photography-orange-bright);
+
+    :host-context(.dark-mode) & {
+        background: linear-gradient(to bottom, $aviation-blue-dark, $photography-orange-dark);
+    }
+}
+
+.home-section {
+    width: 100%;
+    padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 5vw, 4rem);
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+}
+
+.home-section-inner {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+// Text columns: each direct child (eyebrow, heading, body, facts, cta
+// row…) reveals on its own with a slight stagger, instead of the whole
+// block fading in as one flat unit — reads as more "editorial", less
+// templated. The columns themselves keep their own sticky-centering
+// transform untouched (see the min-width: 901px block far below) — only
+// their children animate, so there's nothing to conflict with.
+.shop-content,
+.travel-content,
+.aviation-content,
+.photography-content,
+.career-content {
+    >* {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.6s var(--ease-standard), transform 0.6s var(--ease-standard);
+    }
+}
+
+@for $i from 1 through 7 {
+    .home-section.is-visible {
+
+        .shop-content>:nth-child(#{$i}),
+        .travel-content>:nth-child(#{$i}),
+        .aviation-content>:nth-child(#{$i}),
+        .photography-content>:nth-child(#{$i}),
+        .career-content>:nth-child(#{$i}) {
+            transition-delay: #{($i - 1) * 70}ms;
+        }
+    }
+}
+
+.home-section.is-visible {
+
+    .shop-content,
+    .travel-content,
+    .aviation-content,
+    .photography-content,
+    .career-content {
+        >* {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+// Photo / pricing columns: a plain fade-in as one unit, opacity only. Some
+// of these are read by the scroll-snap centering logic in home-atf.ts —
+// deliberately not stacking an entrance *transform* on top of that.
+.shop-pricing-card,
+.travel-photo-frame,
+.aviation-photo-frame,
+.photography-photo-frame,
+.career-window-frame {
+    opacity: 0;
+    transition: opacity 0.8s var(--ease-standard) 0.1s;
+}
+
+.home-section.is-visible {
+
+    .shop-pricing-card,
+    .travel-photo-frame,
+    .aviation-photo-frame,
+    .photography-photo-frame,
+    .career-window-frame {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .shop-content>*,
+    .travel-content>*,
+    .aviation-content>*,
+    .photography-content>*,
+    .career-content>*,
+    .shop-pricing-card,
+    .travel-photo-frame,
+    .aviation-photo-frame,
+    .photography-photo-frame,
+    .career-window-frame {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+.section-eyebrow {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin: 0 0 var(--space-5) 0;
+    position: relative;
+    display: inline-block;
+}
+
+// Draws itself in left-to-right once the section becomes visible — a
+// quiet flourish that doesn't compete with the reveal above.
+.section-eyebrow::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -0.4em;
+    height: 2px;
+    width: 0;
+    background: currentColor;
+    opacity: 0.55;
+    transition: width 1.3s var(--ease-standard) 0.5s;
+}
+
+.home-section.is-visible .section-eyebrow::after {
+    width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .section-eyebrow::after {
+        transition: none;
+        width: 100%;
+    }
+}
+
+.section-heading {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    font-family: 'Georgia', 'Garamond', serif;
+    line-height: 1.15;
+    margin: 0 0 clamp(1rem, 2.5vw, 1.8rem) 0;
+}
+
+.section-body {
+    font-size: var(--font-size-md);
+    line-height: 1.75;
+    max-width: 620px;
+    margin: 0 0 clamp(1.8rem, 4vw, 3rem) 0;
+    opacity: 0.8;
+}
+
+.section-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin: 0 0 clamp(1.6rem, 3vw, 2.4rem) 0;
+    max-width: 620px;
+}
+
+.section-fact {
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.08);
+    font-size: var(--font-size-sm);
+    line-height: 1.25;
+}
+
+.section-cta-btn {
+    display: inline-block;
+    padding: 0.9rem 2.4rem;
+    border-radius: 50px;
+    border: 2px solid transparent;
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    font-family: 'Quicksand', sans-serif;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+    }
+
+    &:active {
+        transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25), 0 0 0 6px rgba(255, 255, 255, 0.5);
+    }
+}
+
+// Shop Section
+.shop-section {
+    background: white;
+    color: $career-black;
+    z-index: 4;
+
+    .section-eyebrow {
+        color: $shop-blue;
+    }
+
+    .section-body {
+        color: rgba(0, 0, 0, 0.7);
+    }
+
+    :host-context(.dark-mode) & {
+        background: $shop-blue;
+        color: white;
+
+        .section-eyebrow {
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .section-body {
+            color: white;
+            opacity: 0.72;
+        }
+    }
+}
+
+.shop-inner {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 560px);
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: center;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+}
+
+.shop-content {
+    .section-heading {
+        margin-bottom: clamp(0.8rem, 2vw, 1.4rem);
+    }
+}
+
+.section-cta-row {
+    display: flex;
+    gap: clamp(1rem, 3vw, 2rem);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: clamp(1.8rem, 3.5vw, 2.8rem);
+}
+
+.shop-cta-btn {
+    background: $shop-blue;
+    color: white;
+
+    &:visited,
+    &:active {
+        color: white;
+    }
+
+    :host-context(.dark-mode) & {
+        background: white;
+        color: $shop-blue;
+
+        &:visited,
+        &:active {
+            color: $shop-blue;
+        }
+    }
+}
+
+.shop-pricing-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.shop-card-main {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 14px;
+    padding: clamp(1.4rem, 3vw, 2.2rem);
+    background: rgba(0, 0, 0, 0.03);
+    backdrop-filter: blur(4px);
+
+    :host-context(.dark-mode) & {
+        border-color: rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.05);
+    }
+}
+
+.shop-card-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    padding-bottom: clamp(1rem, 2vw, 1.6rem);
+    margin-bottom: clamp(1rem, 2vw, 1.6rem);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    :host-context(.dark-mode) & {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+}
+
+.shop-price {
+    font-size: clamp(2.8rem, 6vw, 4.2rem);
+    font-weight: 700;
+    font-family: 'Georgia', serif;
+    line-height: 1;
+}
+
+.shop-price-label {
+    font-size: var(--font-size-sm);
+    opacity: 0.55;
+    line-height: 1;
+}
+
+.shop-card-features {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: clamp(1rem, 2vw, 1.6rem);
+}
+
+.shop-feature-item {
+    font-size: var(--font-size-sm);
+    opacity: 0.7;
+    margin: 0;
+    padding-left: 1.1rem;
+    position: relative;
+
+    &::before {
+        content: '—';
+        position: absolute;
+        left: 0;
+        opacity: 0.35;
+    }
+}
+
+.shop-card-upgrade {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.8rem 1rem;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+
+    :host-context(.dark-mode) & {
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+}
+
+.shop-upgrade-price {
+    font-size: var(--font-size-md);
+    font-weight: 700;
+    font-family: 'Georgia', serif;
+    white-space: nowrap;
+}
+
+.shop-upgrade-desc {
+    font-size: var(--font-size-sm);
+    opacity: 0.65;
+    line-height: 1.3;
+}
+
+.shop-card-free {
+    display: none;
+}
+
+.shop-free-badge {
+    display: none;
+}
+
+.shop-free-sub {
+    display: none;
+}
+
+.section-cta-link {
+    font-size: var(--font-size-sm);
+    color: rgba(0, 0, 0, 0.55);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: $career-black;
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgba(0, 0, 0, 0.7);
+        outline-offset: 3px;
+        border-radius: 4px;
+        color: $career-black;
+    }
+
+    :host-context(.dark-mode) & {
+        color: rgba(255, 255, 255, 0.6);
+
+        &:hover {
+            color: white;
+        }
+
+        &:focus-visible {
+            outline-color: rgba(255, 255, 255, 0.9);
+            color: white;
+        }
+    }
+}
+
+// Travel Section
+.travel-section {
+    background: $travel-green-bright;
+    color: $career-black;
+    z-index: 3;
+
+    .section-eyebrow-travel {
+        color: $travel-green-dark;
+    }
+
+    .section-body {
+        color: rgba(0, 0, 0, 0.7);
+    }
+
+    :host-context(.dark-mode) & {
+        background: $travel-green-dark;
+        color: white;
+
+        .section-eyebrow-travel {
+            color: $travel-green-bright;
+        }
+
+        .section-body {
+            color: rgba(255, 255, 255, 0.78);
+        }
+    }
+}
+
+.travel-inner {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 560px);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+}
+
+.travel-content {
+    .travel-cta-row {
+        margin-top: 0;
+        flex-wrap: wrap;
+        gap: clamp(0.55rem, 1.5vw, 0.9rem);
+        max-width: 100%;
+        overflow: visible;
+
+        .section-cta-btn {
+            padding: 0.64rem 1.05rem;
+            font-size: clamp(0.78rem, 0.72rem + 0.22vw, 0.9rem);
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+    }
+
+    @media (max-width: 900px) {
+        text-align: center;
+
+        .section-body {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .travel-cta-row {
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
+
+.travel-photo-frame {
+    width: 100%;
+    margin: 0;
+    padding: clamp(10px, 1vw, 14px);
+    border-radius: 18px;
+    background: #f6f8f9;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.16);
+}
+
+.travel-photo-image {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: center 56%;
+    border-radius: 12px;
+    display: block;
+}
+
+.travel-cta-btn {
+    background: $travel-green;
+    color: white;
+
+    &:visited,
+    &:hover,
+    &:active {
+        color: white;
+    }
+}
+
+.travel-cta-btn-secondary {
+    background: transparent;
+    color: $travel-green;
+    border-color: $travel-green;
+
+    &:hover {
+        border-color: $travel-green;
+        background: rgba($travel-green, 0.08);
+    }
+
+    &:visited,
+    &:active {
+        color: $travel-green;
+    }
+
+    &:focus-visible {
+        box-shadow: 0 0 0 3px rgba($travel-green, 0.2), 0 0 0 6px rgba($travel-green, 0.38);
+    }
+}
+
+// Counts up from 0 once its section becomes visible (see animateCountUp()
+// in home-atf.ts). Tabular figures keep the button width stable while the
+// digits change instead of jittering side to side.
+.count-up {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+}
+
+// Aviation Section
+.aviation-section {
+    background: $aviation-blue-bright;
+    color: $career-black;
+    z-index: 2;
+
+    .section-eyebrow-aviation {
+        color: $aviation-blue-dark;
+    }
+
+    .section-body {
+        color: rgba(0, 0, 0, 0.72);
+    }
+
+    :host-context(.dark-mode) & {
+        background: $aviation-blue-dark;
+        color: white;
+
+        .section-eyebrow-aviation {
+            color: $aviation-blue-bright;
+        }
+
+        .section-body {
+            color: white;
+            opacity: 0.78;
+        }
+    }
+}
+
+.aviation-inner {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 560px);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+}
+
+.aviation-content {
+    .aviation-facts {
+        .aviation-fact {
+            color: rgba(255, 255, 255, 0.92);
+        }
+    }
+
+    .aviation-cta-row {
+        margin-top: 0;
+
+        .section-cta-btn {
+            padding: 0.64rem 1.05rem;
+            font-size: clamp(0.78rem, 0.72rem + 0.22vw, 0.9rem);
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+    }
+
+    @media (max-width: 900px) {
+        text-align: center;
+
+        .section-body {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .aviation-facts,
+        .aviation-cta-row {
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
+
+.aviation-photo-frame {
+    width: 100%;
+    margin: 0;
+    padding: clamp(10px, 1vw, 14px);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.16);
+
+    :host-context(.dark-mode) & {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
+    }
+}
+
+.aviation-photo-image {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: center 52%;
+    border-radius: 12px;
+    display: block;
+}
+
+.aviation-cta-btn {
+    background: $aviation-blue;
+    color: white;
+
+    &:visited,
+    &:active {
+        color: white;
+    }
+
+    &:hover {
+        background: #1c638f;
+    }
+}
+
+// Photography Section
+.photography-section {
+    background: $photography-orange-bright;
+    color: $career-black;
+    z-index: 1;
+
+    .section-eyebrow-photography {
+        color: $photography-orange-dark;
+    }
+
+    .section-body {
+        color: rgba(0, 0, 0, 0.72);
+    }
+
+    :host-context(.dark-mode) & {
+        background: $photography-orange-dark;
+        color: white;
+
+        .section-eyebrow-photography {
+            color: $photography-orange-bright;
+        }
+
+        .section-body {
+            color: rgba(255, 255, 255, 0.78);
+        }
+    }
+}
+
+.photography-inner {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 560px);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+}
+
+.photography-content {
+    .photography-facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin: 0 0 clamp(1.6rem, 3vw, 2.4rem) 0;
+        max-width: 620px;
+    }
+
+    .photography-fact {
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 0, 0, 0.16);
+        background: rgba(0, 0, 0, 0.05);
+        font-size: var(--font-size-sm);
+        line-height: 1.25;
+
+        :host-context(.dark-mode) & {
+            border-color: rgba(255, 255, 255, 0.24);
+            background: rgba(255, 255, 255, 0.08);
+        }
+    }
+
+    .photography-cta-row {
+        margin-top: 0;
+
+        .section-cta-btn {
+            padding: 0.64rem 1.05rem;
+            font-size: clamp(0.78rem, 0.72rem + 0.22vw, 0.9rem);
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+    }
+
+    @media (max-width: 900px) {
+        text-align: center;
+
+        .section-body {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .photography-facts,
+        .photography-cta-row {
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
+
+.photography-photo-frame {
+    width: 100%;
+    margin: 0;
+    padding: clamp(10px, 1vw, 14px);
+    border-radius: 18px;
+    background: #f6f8f9;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.16);
+}
+
+.photography-photo-image {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: center 56%;
+    border-radius: 12px;
+    display: block;
+}
+
+.photography-cta-btn {
+    background: $photography-orange;
+    color: $career-black;
+
+    &:visited,
+    &:active {
+        color: $career-black;
+    }
+
+    &:hover {
+        background: darken($photography-orange, 8%);
+    }
+
+    &:focus-visible {
+        box-shadow: 0 0 0 3px rgba($photography-orange, 0.3), 0 0 0 6px rgba($photography-orange, 0.5);
+    }
+}
+
+// Career Section
+.career-section {
+    background: $career-black;
+    color: white;
+
+    .section-eyebrow-career {
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .section-body {
+        opacity: 0.72;
+    }
+}
+
+.career-inner {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+}
+
+.career-content {
+    .career-heading {
+        max-width: 20ch;
+        text-wrap: balance;
+    }
+
+    .section-body {
+        max-width: 58ch;
+    }
+
+    .career-locations {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin: 0 0 clamp(1rem, 2vw, 1.4rem) 0;
+        max-width: 58ch;
+    }
+
+    .career-location-pin {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: rgba(255, 255, 255, 0.82);
+    }
+
+    .career-location-text {
+        margin: 0;
+        font-size: var(--font-size-sm);
+        line-height: 1.35;
+        color: rgba(255, 255, 255, 0.82);
+    }
+
+    .career-facts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin: 0 0 clamp(1.6rem, 3vw, 2.4rem) 0;
+        max-width: 58ch;
+    }
+
+    .career-fact {
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        background: rgba(255, 255, 255, 0.08);
+        font-size: var(--font-size-sm);
+        line-height: 1.25;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .career-cta-row {
+        margin-top: 0;
+        align-items: center;
+
+        .section-cta-btn {
+            padding: 0.64rem 1.05rem;
+            font-size: clamp(0.78rem, 0.72rem + 0.22vw, 0.9rem);
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+    }
+
+    @media (max-width: 900px) {
+        text-align: center;
+
+        .section-body {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .career-facts {
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .career-locations {
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .career-cta-row {
+            justify-content: center;
+        }
+    }
+}
+
+.career-window-frame {
+    --frame-width: clamp(230px, 28vw, 320px);
+    --frame-height: calc(var(--frame-width) * 1.34);
+    width: var(--frame-width);
+    height: var(--frame-height);
+    margin: 0;
+    padding: clamp(10px, 1vw, 14px);
+    border-radius: 22px;
+    background: white;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+}
+
+.career-window-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 54% 20%;
+    border-radius: 14px;
+    display: block;
+    transform: scale(1.02);
+    filter: saturate(1.04) contrast(1.03);
+}
+
+.career-cta-btn {
+    background: white;
+    color: $career-black;
+
+    &:visited,
+    &:active {
+        color: $career-black;
+    }
+
+    &:hover {
+        color: $career-black;
+        background: #f7f7f9;
+    }
+}
+
+.career-cta-btn-secondary {
+    background: transparent;
+    color: white;
+    border-color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+
+    &:hover {
+        border-color: white;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    &:focus-visible {
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.45), 0 0 0 6px rgba(255, 255, 255, 0.65);
+    }
+}
+
+// ─── Scroll-pin behavior ──────────────────────────────────────────────────────
+// Once a section's text column reaches vertical center, it holds there
+// (position: sticky) while the photo/pricing-card column keeps scrolling
+// normally underneath it — the seam gradients between sections keep moving
+// too, since they're untouched, normal-flow elements. Sections are taller
+// than their content so there's scroll room for this to read; the photo
+// starts partway down that area (not right at the top) so there's a beat of
+// "just text" before it arrives, but not so far down that the previous
+// photo has already fully scrolled off before this one shows up. The career
+// photo (last in line, nothing to hand off to) sticks in place once
+// centered instead of scrolling away. Mobile keeps the simple stacked
+// layout from the 900px breakpoint above — sticky-pinning doesn't translate
+// well to a single column.
+@media (min-width: 901px) {
+
+    .shop-inner,
+    .travel-inner,
+    .aviation-inner,
+    .photography-inner,
+    .career-inner {
+        grid-template-rows: 1fr;
+        // Tall enough that the photo (freely scrolling, see
+        // .shop-pricing-card etc. below) travels a good long distance
+        // before the next section takes over — its scroll path is meant to
+        // read as noticeably longer than the text column's, which mostly
+        // just holds still once stuck at center.
+        min-height: 150vh;
+        align-items: stretch;
+    }
+
+    .shop-content,
+    .travel-content,
+    .aviation-content,
+    .photography-content {
+        align-self: start;
+        // Push the natural (pre-stuck) position down by the same amount as
+        // the sticky "top" trigger below — otherwise sticky can kick in
+        // while the viewport is still scrolled over the previous section
+        // (its opaque background hasn't caught up yet), and this section's
+        // text ends up floating, half-transparent-looking, over whatever
+        // is still on screen behind it.
+        margin-top: calc(50vh + var(--header-offset, 40px) / 2);
+        position: sticky;
+        top: calc(50vh + var(--header-offset, 40px) / 2);
+        transform: translateY(-50%);
+    }
+
+    // Career's text/photo use a *lower* hold point than the other
+    // sections' true vertical center (see .career-window-frame below for
+    // why), so it's defined once here and shared by both.
+    .career-content,
+    .career-window-frame {
+        align-self: start;
+        margin-top: var(--career-hold-top);
+        position: sticky;
+        top: var(--career-hold-top);
+        transform: translateY(-50%);
+    }
+
+    .shop-pricing-card,
+    .travel-photo-frame,
+    .aviation-photo-frame,
+    .photography-photo-frame {
+        align-self: start;
+        // Close to the text column's own margin-top (above): the photo
+        // isn't sticky, so it keeps traveling the full row regardless, but
+        // starting it near the same height means it's still crossing
+        // center around when the text engages sticky, instead of already
+        // having passed center before the text even locks in.
+        margin-top: 66vh;
+    }
+
+    // Slack after the sticky point: without it, the page's true end
+    // (footer) arrives almost right as the career photo/text center, and
+    // sticky has nowhere left to hold — so it gets nudged out of center in
+    // the last stretch of scroll instead of staying put.
+    .career-inner {
+        min-height: 160vh;
+
+        // `position: sticky` computes its "don't overflow the container"
+        // limit from the element's *untransformed* box (top → top+height),
+        // ignoring the -50% translate used to visually center it — so a
+        // true vertical-center target (50vh) leaves this last section's
+        // photo/text short of room to stay stuck through to the real end
+        // of the page (there's no next section to hand off to, just the
+        // short footer). Cap the hold point so the taller of the two
+        // (career-content, ~540px) still fits above the footer with a
+        // safety margin; on very tall viewports the ordinary centered
+        // value already fits, so min() picks that instead.
+        --career-hold-top: min(calc(50vh + var(--header-offset, 40px) / 2),
+                calc(100vh - var(--footer-height, 80px) - 32px - 550px));
+    }
+
+    // Reduced from .home-section's generic clamp(4rem, 8vw, 8rem): this is
+    // the last section, so there's no next section's content to leave
+    // breathing room before — just the short footer — and every bit of it
+    // eats into --career-hold-top's budget above.
+    .career-section {
+        padding-bottom: var(--space-6, 32px);
+    }
+}
+
+@media (max-width: 640px) {
+    .shop-pricing {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .shop-free-block {
+        border-left: none;
+        border-top: 2px solid rgba(255, 255, 255, 0.18);
+        padding-left: 0;
+        padding-top: 1.5rem;
+    }
+
+    .section-cta-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .career-content {
+        .career-heading {
+            max-width: 16ch;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+
+    .career-cta-row {
+        width: 100%;
+        align-items: center;
+
+        .section-cta-btn {
+            width: 100%;
+            max-width: 340px;
+            text-align: center;
+        }
+    }
+
+    .travel-cta-row,
+    .aviation-cta-row,
+    .photography-cta-row {
+        width: 100%;
+        align-items: center;
+
+        .section-cta-btn {
+            width: 100%;
+            max-width: 340px;
+            text-align: center;
+        }
+    }
+
+    .travel-cta-row {
+        flex-direction: row;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+
+        .section-cta-btn {
+            width: auto;
+            max-width: none;
         }
     }
 }

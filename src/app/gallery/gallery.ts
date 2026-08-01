@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -7,6 +7,11 @@ import { LanguageService, Language } from '../language.service';
 import { MetaService } from '../services/meta.service';
 import { ShopService } from '../shop/shop.service';
 import { ShopCart } from '../shop/shop-cart';
+import { ShopAuthService } from '../shop/shop-auth.service';
+import { ShopReviewsService, VerifiedReview } from '../shop/shop-reviews.service';
+import { ShopSubscriptionService, ShopSubscriptionStatus } from '../shop/shop-subscription.service';
+import { FavoritesService } from './favorites.service';
+import { environment } from '../../environments/environment';
 
 interface GalleryImage {
     id: number;
@@ -44,6 +49,7 @@ export class Gallery implements OnInit, OnDestroy {
     selectedCountry: string = 'All';
     selectedSubfolders: string[] = [];
     searchQuery: string = '';
+    showFavoritesOnly: boolean = false;
     currentPage: number = 1;
     imagesPerPage: number = 15;
 
@@ -81,6 +87,20 @@ export class Gallery implements OnInit, OnDestroy {
     private searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
     copiedImageId: number | null = null;
     private copiedImageTimer: ReturnType<typeof setTimeout> | null = null;
+    copiedDrivePathId: number | null = null;
+    private copiedDrivePathTimer: ReturnType<typeof setTimeout> | null = null;
+    reviews: VerifiedReview[] = [];
+    isReviewsLoading = false;
+    reviewError = '';
+    reviewSuccess = '';
+    reviewRating = 5;
+    reviewText = '';
+    isReviewSubmitting = false;
+    canLeaveVerifiedReview = false;
+    subscriptionStatus: ShopSubscriptionStatus | null = null;
+    isSubscriptionLoading = false;
+    isSubscriptionDownloadPending = false;
+    subscriptionMessage = '';
     @ViewChild('lightboxImg') lightboxImg?: ElementRef<HTMLImageElement>;
 
     constructor(
@@ -90,7 +110,11 @@ export class Gallery implements OnInit, OnDestroy {
         private languageService: LanguageService,
         private cdr: ChangeDetectorRef,
         private metaService: MetaService,
-        private shopService: ShopService
+        private shopService: ShopService,
+        public shopAuthService: ShopAuthService,
+        private shopReviewsService: ShopReviewsService,
+        private shopSubscriptionService: ShopSubscriptionService,
+        public favoritesService: FavoritesService
     ) { }
 
     ngOnInit() {
@@ -102,6 +126,7 @@ export class Gallery implements OnInit, OnDestroy {
         });
 
         this.updateGallerySeo();
+        this.refreshSubscriptionStatus();
 
         // Load images first
         this.loadImages();
@@ -297,6 +322,7 @@ export class Gallery implements OnInit, OnDestroy {
             const matchesSubfolders = this.selectedSubfolders.every(
                 (sel, depth) => img.subfolders[depth] === sel
             );
+            const matchesFavorites = !this.showFavoritesOnly || this.favoritesService.isFavorite(img.id);
             const searchFields = [
                 img.title,
                 img.titleDE || '',
@@ -316,13 +342,14 @@ export class Gallery implements OnInit, OnDestroy {
                 rawHaystack.includes(rawNeedle) ||
                 rawHaystack.includes(qUnderscore);
 
-            return matchesCategory && matchesContinent && matchesCountry && matchesSubfolders && matchesSearch;
+            return matchesCategory && matchesContinent && matchesCountry && matchesSubfolders && matchesFavorites && matchesSearch;
         });
 
         // Fallback: if search is non-empty and nothing matched, try looser normalization across all images
         if (q !== '' && this.filteredImages.length === 0) {
             const looseQ = normalize(aliasQ).replace(/\s+/g, '');
             this.filteredImages = this.images.filter(img => {
+                if (this.showFavoritesOnly && !this.favoritesService.isFavorite(img.id)) return false;
                 const normPath = normalize(img.path).replace(/\s+/g, '');
                 const normCountry = normalize(img.country).replace(/\s+/g, '');
                 const normTitle = normalize(img.title).replace(/\s+/g, '');
@@ -452,27 +479,20 @@ export class Gallery implements OnInit, OnDestroy {
                     "@type": "ListItem",
                     "position": index + 1,
                     "item": {
-                        "@type": "Product",
+                        "@type": "ImageObject",
                         "name": this.getImageTitle(image),
-                        "sku": `photo-${image.id}`,
-                        "image": [image.originalUrl || image.gridUrl || image.url],
+                        "contentUrl": image.originalUrl || image.gridUrl || image.url,
+                        "thumbnailUrl": image.thumbnailUrl || image.gridUrl || image.url,
                         "description": this.getImageSeoDescription(image),
-                        "category": `${image.category} / ${image.country}`,
-                        "brand": {
-                            "@type": "Brand",
-                            "name": "Christian Boehme Photography"
+                        "license": "https://www.christian-boehme.com/shop",
+                        "acquireLicensePage": this.baseShopCartUrl,
+                        "creator": {
+                            "@type": "Person",
+                            "name": "Christian Boehme"
                         },
-                        "offers": {
-                            "@type": "Offer",
-                            "price": image.price.toFixed(2),
-                            "priceCurrency": "EUR",
-                            "availability": "https://schema.org/InStock",
-                            "url": this.baseShopCartUrl,
-                            "seller": {
-                                "@type": "Person",
-                                "name": "Christian Boehme"
-                            }
-                        }
+                        "creditText": "Christian Boehme / christian-boehme.com",
+                        "copyrightNotice": "© Christian Boehme",
+                        "keywords": [image.category, image.country]
                     }
                 }))
             }
@@ -524,6 +544,25 @@ export class Gallery implements OnInit, OnDestroy {
         this.filterImages();
     }
 
+    isFavorite(image: GalleryImage | null): boolean {
+        return !!image && this.favoritesService.isFavorite(image.id);
+    }
+
+    toggleFavorite(image: GalleryImage | null, event?: Event): void {
+        event?.stopPropagation();
+        if (!image) return;
+        this.favoritesService.toggle(image.id);
+        if (this.showFavoritesOnly) {
+            this.filterImages();
+        }
+        this.cdr.markForCheck();
+    }
+
+    toggleFavoritesOnly(): void {
+        this.showFavoritesOnly = !this.showFavoritesOnly;
+        this.filterImages();
+    }
+
     onSearchChange(query: string) {
         this.searchQuery = query;
         if (this.searchDebounceTimer) clearTimeout(this.searchDebounceTimer);
@@ -535,7 +574,13 @@ export class Gallery implements OnInit, OnDestroy {
     }
 
     clearSearch(): void {
-        this.onSearchChange('');
+        this.searchQuery = '';
+        if (this.searchDebounceTimer) {
+            clearTimeout(this.searchDebounceTimer);
+            this.searchDebounceTimer = null;
+        }
+        this.filterImages();
+        this.cdr.markForCheck();
     }
 
     goToCountryResults(country: string, event?: Event): void {
@@ -545,7 +590,7 @@ export class Gallery implements OnInit, OnDestroy {
             return;
         }
 
-        this.router.navigate(['/gallery'], {
+        this.router.navigate(['/photography'], {
             queryParams: {
                 search: target
             }
@@ -748,13 +793,20 @@ export class Gallery implements OnInit, OnDestroy {
         this.isLightboxOpen = true;
         this.currentLightboxImage = image;
         this.currentLightboxImageIndex = this.filteredImages.findIndex(img => img.id === image.id);
+        this.subscriptionMessage = '';
         document.body.style.overflow = 'hidden';
         this.applyLightboxAccentFromCurrentImage();
+        this.refreshLightboxReviews();
+        this.refreshSubscriptionStatus();
     }
 
     closeLightbox() {
         this.isLightboxOpen = false;
         this.currentLightboxImage = null;
+        this.reviews = [];
+        this.reviewError = '';
+        this.reviewSuccess = '';
+        this.subscriptionMessage = '';
         document.body.style.overflow = 'auto';
         this.resetLightboxAccent();
     }
@@ -769,6 +821,7 @@ export class Gallery implements OnInit, OnDestroy {
         }
 
         this.applyLightboxAccentFromCurrentImage();
+        this.refreshLightboxReviews();
     }
 
     previousLightboxImage() {
@@ -781,6 +834,216 @@ export class Gallery implements OnInit, OnDestroy {
         }
 
         this.applyLightboxAccentFromCurrentImage();
+        this.refreshLightboxReviews();
+    }
+
+    private refreshLightboxReviews(): void {
+        const image = this.currentLightboxImage;
+        if (!image) {
+            this.reviews = [];
+            this.canLeaveVerifiedReview = false;
+            return;
+        }
+
+        const productId = String(image.id);
+        this.reviewError = '';
+        this.reviewSuccess = '';
+        this.isReviewsLoading = true;
+
+        this.shopReviewsService.listReviews(productId).subscribe((result) => {
+            this.isReviewsLoading = false;
+            if (!result.success) {
+                this.reviewError = result.error || (this.currentLanguage === 'de' ? 'Bewertungen konnten nicht geladen werden.' : 'Could not load reviews.');
+                this.reviews = [];
+                this.cdr.markForCheck();
+                return;
+            }
+
+            this.reviews = result.reviews;
+            this.cdr.markForCheck();
+        });
+
+        this.updateVerifiedReviewEligibility(productId);
+    }
+
+    private updateVerifiedReviewEligibility(productId: string): void {
+        this.canLeaveVerifiedReview = false;
+
+        if (!this.shopAuthService.isAuthenticated()) {
+            return;
+        }
+
+        const currentOrders = this.shopAuthService.orderHistory();
+        if (currentOrders.length > 0) {
+            this.canLeaveVerifiedReview = this.hasPurchasedProduct(productId, currentOrders);
+            return;
+        }
+
+        this.shopAuthService.fetchOrders().subscribe(() => {
+            this.canLeaveVerifiedReview = this.hasPurchasedProduct(productId, this.shopAuthService.orderHistory());
+            this.cdr.markForCheck();
+        });
+    }
+
+    private hasPurchasedProduct(productId: string, orders: { items: { productId: string }[] }[]): boolean {
+        return orders.some((order) => Array.isArray(order.items) && order.items.some((item) => item.productId === productId));
+    }
+
+    get canUseSubscriptionDownload(): boolean {
+        return !!this.currentLightboxImage
+            && this.shopAuthService.isAuthenticated()
+            && !!this.subscriptionStatus?.active
+            && this.subscriptionStatus.monthlyDownloadsRemaining > 0
+            && !this.isSubscriptionDownloadPending;
+    }
+
+    get hasActiveSubscription(): boolean {
+        return !!this.subscriptionStatus?.active;
+    }
+
+    get subscriptionDownloadHint(): string {
+        if (this.subscriptionStatus?.active) {
+            return (this.currentLanguage === 'de' ? 'Verbleibende Abo-Downloads in diesem Monat: ' : 'Remaining subscription downloads this month: ')
+                + this.subscriptionStatus.monthlyDownloadsRemaining
+                + ' / '
+                + this.subscriptionStatus.monthlyDownloadLimit;
+        }
+
+        return this.currentLanguage === 'de'
+            ? 'Kein aktives Abo. Im Konto kannst du ein Monats- oder Jahresabo buchen.'
+            : 'No active subscription. You can activate a monthly or annual plan in your account.';
+    }
+
+    downloadWithSubscription(image?: GalleryImage | null, event?: Event): void {
+        event?.stopPropagation();
+
+        const targetImage = image ?? this.currentLightboxImage;
+        const token = this.shopAuthService.getToken();
+        if (!targetImage || !token) {
+            this.subscriptionMessage = this.currentLanguage === 'de'
+                ? 'Bitte zuerst einloggen.'
+                : 'Please sign in first.';
+            return;
+        }
+
+        this.isSubscriptionDownloadPending = true;
+        this.subscriptionMessage = '';
+        this.shopSubscriptionService.consumeDownload({
+            token,
+            imageId: targetImage.id,
+        }).subscribe((result) => {
+            this.isSubscriptionDownloadPending = false;
+            if (!result.success || !result.downloadUrl) {
+                this.subscriptionMessage = result.error || (this.currentLanguage === 'de'
+                    ? 'Abo-Download konnte nicht gestartet werden.'
+                    : 'Could not start subscription download.');
+                return;
+            }
+
+            this.subscriptionStatus = result.status ?? this.subscriptionStatus;
+            this.subscriptionMessage = this.currentLanguage === 'de'
+                ? `Download gestartet. Verbleibend: ${result.remainingDownloads ?? this.subscriptionStatus?.monthlyDownloadsRemaining ?? 0}`
+                : `Download started. Remaining: ${result.remainingDownloads ?? this.subscriptionStatus?.monthlyDownloadsRemaining ?? 0}`;
+            window.open(result.downloadUrl, '_blank', 'noopener,noreferrer');
+        });
+    }
+
+    private refreshSubscriptionStatus(): void {
+        const token = this.shopAuthService.getToken();
+        if (!token || !this.shopAuthService.isAuthenticated()) {
+            this.subscriptionStatus = null;
+            this.isSubscriptionLoading = false;
+            return;
+        }
+
+        this.isSubscriptionLoading = true;
+        this.shopSubscriptionService.getStatus(token).subscribe((result) => {
+            this.isSubscriptionLoading = false;
+            if (!result.success) {
+                this.subscriptionStatus = null;
+                return;
+            }
+
+            this.subscriptionStatus = result.status;
+        });
+    }
+
+    submitVerifiedReview(): void {
+        this.reviewError = '';
+        this.reviewSuccess = '';
+
+        const image = this.currentLightboxImage;
+        if (!image) {
+            return;
+        }
+
+        if (!this.canLeaveVerifiedReview) {
+            this.reviewError = this.currentLanguage === 'de'
+                ? 'Nur verifizierte Käufer können dieses Bild bewerten.'
+                : 'Only verified buyers can review this image.';
+            return;
+        }
+
+        const text = this.reviewText.trim();
+        if (text.length < 10) {
+            this.reviewError = this.currentLanguage === 'de'
+                ? 'Bitte mindestens 10 Zeichen schreiben.'
+                : 'Please write at least 10 characters.';
+            return;
+        }
+
+        const token = this.shopAuthService.getToken();
+        if (!token) {
+            this.reviewError = this.currentLanguage === 'de'
+                ? 'Bitte erneut einloggen.'
+                : 'Please log in again.';
+            return;
+        }
+
+        this.isReviewSubmitting = true;
+        this.shopReviewsService.saveReview({
+            token,
+            productId: String(image.id),
+            rating: this.reviewRating,
+            reviewText: text,
+        }).subscribe((result) => {
+            this.isReviewSubmitting = false;
+            if (!result.success) {
+                this.reviewError = result.error || (this.currentLanguage === 'de'
+                    ? 'Bewertung konnte nicht gespeichert werden.'
+                    : 'Could not save review.');
+                this.cdr.markForCheck();
+                return;
+            }
+
+            this.reviewText = '';
+            this.reviewSuccess = this.currentLanguage === 'de'
+                ? 'Vielen Dank! Deine verifizierte Bewertung wurde gespeichert.'
+                : 'Thanks! Your verified review has been saved.';
+            this.refreshLightboxReviews();
+        });
+    }
+
+    getReviewStars(rating: number): string {
+        const clamped = Math.max(1, Math.min(5, Math.round(rating || 0)));
+        return '★'.repeat(clamped) + '☆'.repeat(5 - clamped);
+    }
+
+    formatReviewDate(value: string): string {
+        if (!value) {
+            return '';
+        }
+
+        try {
+            const locale = this.currentLanguage === 'de' ? 'de-DE' : 'en-US';
+            return new Date(value).toLocaleDateString(locale, {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+            });
+        } catch {
+            return value;
+        }
     }
 
     onLightboxImageLoad(): void {
@@ -1059,6 +1322,47 @@ export class Gallery implements OnInit, OnDestroy {
         return parts.join(' / ');
     }
 
+    // Best-effort local source-folder path (D:\Bilder\...) for finding the
+    // original/RAW file on disk. Built from category/continent/country/
+    // subfolders — already de-slugified for display — rather than the raw
+    // `path` field, whose filename segment is slug-cased and doesn't match
+    // the real file name on disk. Folder-only: close enough to jump to the
+    // right place, exact file still needs a quick look once there.
+    getImageDrivePath(image: GalleryImage): string {
+        const segments = [image.category, image.continent, image.country, ...(image.subfolders || [])]
+            .map(s => (s || '').trim())
+            .filter(Boolean);
+        if (segments.length === 0) return '';
+        return ['D:', 'Bilder', ...segments].join('\\');
+    }
+
+    copyDrivePath(image: GalleryImage, event?: Event): void {
+        event?.stopPropagation();
+        const drivePath = this.getImageDrivePath(image);
+        if (!drivePath) return;
+
+        const setCopiedState = () => {
+            this.copiedDrivePathId = image.id;
+            if (this.copiedDrivePathTimer) {
+                clearTimeout(this.copiedDrivePathTimer);
+            }
+            this.copiedDrivePathTimer = setTimeout(() => {
+                this.copiedDrivePathId = null;
+                this.cdr.markForCheck();
+            }, 1200);
+            this.cdr.markForCheck();
+        };
+
+        if (navigator.clipboard?.writeText) {
+            navigator.clipboard.writeText(drivePath)
+                .then(() => setCopiedState())
+                .catch(() => this.copyImageIdFallback(drivePath, setCopiedState));
+            return;
+        }
+
+        this.copyImageIdFallback(drivePath, setCopiedState);
+    }
+
     private applyLightboxAccentFromCurrentImage(): void {
         const root = document.documentElement;
         const imageUrl = this.currentLightboxImage?.gridUrl || this.currentLightboxImage?.url;
@@ -1070,7 +1374,7 @@ export class Gallery implements OnInit, OnDestroy {
         const sampleImage = new Image();
         sampleImage.crossOrigin = 'anonymous';
         sampleImage.referrerPolicy = 'no-referrer';
-        sampleImage.src = imageUrl;
+        sampleImage.src = this.toLightboxAccentSampleUrl(imageUrl);
 
         sampleImage.onload = () => {
             try {
@@ -1125,6 +1429,44 @@ export class Gallery implements OnInit, OnDestroy {
         sampleImage.onerror = () => {
             this.resetLightboxAccent();
         };
+    }
+
+    private toLightboxAccentSampleUrl(imageUrl: string): string {
+        const absoluteUrl = this.toAbsoluteUrl(imageUrl);
+        if (!absoluteUrl) {
+            return imageUrl;
+        }
+
+        if (this.isSameOriginUrl(absoluteUrl)) {
+            return absoluteUrl;
+        }
+
+        const proxyBaseUrl = environment.apiBaseUrl || window.location.origin;
+        return `${proxyBaseUrl}/api/image-proxy.php?url=${encodeURIComponent(absoluteUrl)}`;
+    }
+
+    private toAbsoluteUrl(value: string): string {
+        if (!value) {
+            return '';
+        }
+
+        try {
+            return new URL(value, window.location.origin).toString();
+        } catch {
+            return value;
+        }
+    }
+
+    private isSameOriginUrl(value: string): boolean {
+        if (!value) {
+            return false;
+        }
+
+        try {
+            return new URL(value, window.location.origin).origin === window.location.origin;
+        } catch {
+            return false;
+        }
     }
 
     private boostColor(r: number, g: number, b: number, factor: number): { r: number; g: number; b: number } {

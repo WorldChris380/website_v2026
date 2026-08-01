@@ -162,7 +162,19 @@ export class SchemaService {
                 price: price.toFixed(2),
                 priceCurrency: 'EUR',
                 availability: 'https://schema.org/InStock',
-                url: 'https://christian-boehme.com/shop'
+                url: 'https://christian-boehme.com/shop',
+                shippingDetails: {
+                    '@type': 'OfferShippingDetails',
+                    shippingRate: {
+                        '@type': 'MonetaryAmount',
+                        value: '0',
+                        currency: 'EUR'
+                    }
+                },
+                hasMerchantReturnPolicy: {
+                    '@type': 'MerchantReturnPolicy',
+                    returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted'
+                }
             }
         };
 

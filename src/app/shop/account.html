@@ -1,4 +1,4 @@
-<div class="account-page">
+﻿<div class="account-page">
     <div class="account-shell">
         <header class="account-hero">
             <p class="eyebrow">Shop</p>
@@ -89,19 +89,14 @@
                             ? (currentLanguage === 'de' ? 'Konto wird erstellt…' : 'Creating account…')
                             : (currentLanguage === 'de' ? 'Konto erstellen' : 'Create account') }}
                         </button>
-                        <a [routerLink]="['/gallery']" class="secondary-link">{{ currentLanguage === 'de' ? 'Zurück zur
+                        <a [routerLink]="['/photography']" class="secondary-link">{{ currentLanguage === 'de' ? 'Zurück
+                            zur
                             Galerie' : 'Back to gallery' }}</a>
                     </div>
 
                     <div class="oauth-divider" *ngIf="canRenderGoogleAuth">
                         <span>{{ currentLanguage === 'de' ? 'oder' : 'or' }}</span>
                     </div>
-                    <p class="form-hint google-origin-warning" *ngIf="googleEnabled && !googleOriginAllowed">{{
-                        currentLanguage === 'de'
-                        ? 'Google-Login ist fuer diese Origin nicht aktiviert. Fuer lokale Tests muss
-                        http://localhost:4200 als Authorized JavaScript Origin in Google Cloud hinterlegt werden.'
-                        : 'Google Sign-In is not enabled for this origin. For local testing, add http://localhost:4200
-                        as an Authorized JavaScript Origin in Google Cloud.' }}</p>
                     <div class="google-signin-wrapper" *ngIf="canRenderGoogleAuth">
                         <p class="oauth-hint">{{ currentLanguage === 'de' ? 'Konto mit Google erstellen' : 'Create
                             account with Google' }}</p>
@@ -193,12 +188,6 @@
                     <div class="oauth-divider" *ngIf="canRenderGoogleAuth">
                         <span>{{ currentLanguage === 'de' ? 'oder' : 'or' }}</span>
                     </div>
-                    <p class="form-hint google-origin-warning" *ngIf="googleEnabled && !googleOriginAllowed">{{
-                        currentLanguage === 'de'
-                        ? 'Google-Login ist fuer diese Origin nicht aktiviert. Fuer lokale Tests muss
-                        http://localhost:4200 als Authorized JavaScript Origin in Google Cloud hinterlegt werden.'
-                        : 'Google Sign-In is not enabled for this origin. For local testing, add http://localhost:4200
-                        as an Authorized JavaScript Origin in Google Cloud.' }}</p>
                     <div class="google-signin-wrapper" *ngIf="canRenderGoogleAuth">
                         <p class="oauth-hint">{{ currentLanguage === 'de' ? 'Mit Google anmelden' : 'Sign in with
                             Google' }}</p>
@@ -235,6 +224,12 @@
                             ? 'Für abgeschlossene Käufe direkt als PDF verfügbar.'
                             : 'Available as PDF immediately for completed purchases.' }}</p>
                     </article>
+                    <article class="account-highlight-card">
+                        <span class="highlight-label">{{ currentLanguage === 'de' ? 'Abo-Downloads' : 'Subscription
+                            downloads' }}</span>
+                        <strong>{{ subscriptionRemainingCount }}</strong>
+                        <p>{{ subscriptionRemainingLabel }}</p>
+                    </article>
                 </div>
                 <div class="account-summary-card account-summary-card-wide">
                     <p><strong>{{ currentLanguage === 'de' ? 'Name' : 'Name' }}:</strong> {{ accountDisplayName }}</p>
@@ -247,6 +242,118 @@
                         <button class="secondary-link" type="button" (click)="setActiveAccountTab('billing')">{{
                             currentLanguage === 'de' ? 'Rechnungen ansehen' : 'View invoices' }}</button>
                     </div>
+                </div>
+                <div class="subscription-panel" id="subscription">
+                    <div class="subscription-panel-head">
+                        <div>
+                            <p class="subscription-eyebrow">{{ currentLanguage === 'de' ? 'Abo' : 'Subscription' }}</p>
+                            <h3>{{ currentLanguage === 'de' ? 'Bis zu 2 Bilder pro Monat herunterladen' : 'Download up
+                                to 2 images per month' }}</h3>
+                            <p class="subscription-copy">{{ currentLanguage === 'de'
+                                ? 'Nur im eingeloggten Konto buchbar. Persönlich: 9,99 EUR/Monat oder 99,99 EUR/Jahr.
+                                Kommerziell: 19,99 EUR/Monat oder 199,99 EUR/Jahr. Jederzeit kündbar — die bezahlte
+                                Laufzeit wird beachtet.'
+                                : 'Available only for signed-in accounts. Personal: EUR 9.99/month or EUR 99.99/year.
+                                Commercial: EUR 19.99/month or EUR 199.99/year. Cancel anytime — the paid term is
+                                still honored.' }}</p>
+                        </div>
+                        <div class="subscription-status" [class.is-active]="hasActiveSubscription">
+                            <strong>{{ activeSubscriptionLabel }}</strong>
+                            <span *ngIf="subscriptionExpiresAt && subscriptionStatus?.cancelAtPeriodEnd">{{
+                                currentLanguage === 'de' ? 'Kündigt zum' : 'Cancels on' }} {{ subscriptionExpiresAt |
+                                date:'mediumDate' }}</span>
+                            <span *ngIf="subscriptionExpiresAt && !subscriptionStatus?.cancelAtPeriodEnd">{{
+                                currentLanguage === 'de' ? 'Aktiv bis' : 'Active until' }} {{ subscriptionExpiresAt |
+                                date:'mediumDate' }}</span>
+                            <span *ngIf="hasActiveSubscription && !subscriptionExpiresAt">{{ currentLanguage === 'de' ?
+                                'Aktiv' : 'Active' }}</span>
+                            <span class="subscription-status-note">{{ subscriptionStatusNote }}</span>
+                        </div>
+                    </div>
+
+                    <div class="subscription-management-actions" *ngIf="hasActiveSubscription">
+                        <button type="button" class="secondary-link subscription-manage-btn"
+                            *ngIf="canCancelSubscription" [disabled]="isSubscriptionMutating || isSubscriptionLoading"
+                            (click)="cancelSubscription()">
+                            {{ currentLanguage === 'de' ? 'Abo kündigen' : 'Cancel subscription' }}
+                        </button>
+                    </div>
+
+                    <div class="subscription-history" *ngIf="hasSubscriptionHistory">
+                        <h4>{{ currentLanguage === 'de' ? 'Abo-Historie' : 'Subscription history' }}</h4>
+                        <article class="subscription-history-item" *ngFor="let entry of subscriptionHistory">
+                            <div class="subscription-history-main">
+                                <p class="subscription-history-title">{{ entry.planName || entry.planCode }}</p>
+                                <p class="subscription-history-dates">
+                                    {{ currentLanguage === 'de' ? 'Start' : 'Start' }} {{ entry.startedAt |
+                                    date:'mediumDate' }}
+                                    · {{ currentLanguage === 'de' ? 'Bis' : 'Until' }} {{ entry.expiresAt |
+                                    date:'mediumDate' }}
+                                </p>
+                            </div>
+                            <span class="subscription-history-status"
+                                [ngClass]="getSubscriptionHistoryStatusClass(entry)">
+                                {{ getSubscriptionHistoryStatusLabel(entry) }}
+                            </span>
+                        </article>
+                    </div>
+
+                    <div class="subscription-plans">
+                        <div class="subscription-plan-copy">
+                            <strong>{{ subscriptionPlanHeading }}</strong>
+                            <p>{{ subscriptionPlanHint }}</p>
+                        </div>
+                        <p class="subscription-plan-group-label">{{ currentLanguage === 'de' ? 'Persönliche Nutzung' :
+                            'Personal use' }}</p>
+                        <button type="button" class="subscription-plan"
+                            [class.active]="selectedSubscriptionPlan === 'subscription-monthly'"
+                            (click)="selectSubscriptionPlan('subscription-monthly')">
+                            <span class="plan-name">{{ currentLanguage === 'de' ? 'Monatsabo' : 'Monthly plan' }}</span>
+                            <strong>9,99 EUR</strong>
+                            <small>{{ currentLanguage === 'de' ? '2 Downloads pro Kalendermonat' : '2 downloads per
+                                calendar month' }}</small>
+                        </button>
+                        <button type="button" class="subscription-plan"
+                            [class.active]="selectedSubscriptionPlan === 'subscription-yearly'"
+                            (click)="selectSubscriptionPlan('subscription-yearly')">
+                            <span class="plan-name">{{ currentLanguage === 'de' ? 'Jahresabo' : 'Annual plan' }}</span>
+                            <strong>99,99 EUR</strong>
+                            <small>{{ currentLanguage === 'de' ? 'Jährliche Abrechnung, monatlich 2 Downloads' : 'Annual
+                                billing, 2 downloads every month' }}</small>
+                        </button>
+                        <p class="subscription-plan-group-label">{{ currentLanguage === 'de' ? 'Kommerzielle Nutzung' :
+                            'Commercial use' }}</p>
+                        <button type="button" class="subscription-plan"
+                            [class.active]="selectedSubscriptionPlan === 'subscription-commercial-monthly'"
+                            (click)="selectSubscriptionPlan('subscription-commercial-monthly')">
+                            <span class="plan-name">{{ currentLanguage === 'de' ? 'Kommerzielles Monatsabo' :
+                                'Commercial monthly plan' }}</span>
+                            <strong>19,99 EUR</strong>
+                            <small>{{ currentLanguage === 'de' ? '2 Downloads pro Kalendermonat, kommerzielle Lizenz' :
+                                '2 downloads per calendar month, commercial license' }}</small>
+                        </button>
+                        <button type="button" class="subscription-plan"
+                            [class.active]="selectedSubscriptionPlan === 'subscription-commercial-yearly'"
+                            (click)="selectSubscriptionPlan('subscription-commercial-yearly')">
+                            <span class="plan-name">{{ currentLanguage === 'de' ? 'Kommerzielles Jahresabo' :
+                                'Commercial annual plan' }}</span>
+                            <strong>199,99 EUR</strong>
+                            <small>{{ currentLanguage === 'de' ? 'Jährliche Abrechnung, monatlich 2 Downloads,
+                                kommerzielle Lizenz' : 'Annual billing, 2 downloads every month, commercial license'
+                                }}</small>
+                        </button>
+                    </div>
+
+                    <p class="subscription-hint" *ngIf="isSubscriptionLoading">{{ currentLanguage === 'de' ? 'Abo-Status
+                        wird geladen…' : 'Loading subscription status…' }}</p>
+                    <p class="form-message error" *ngIf="subscriptionError">{{ subscriptionError }}</p>
+                    <p class="form-message success" *ngIf="subscriptionSuccess">{{ subscriptionSuccess }}</p>
+
+                    <app-paypal-button [items]="subscriptionCheckoutItems" currency="EUR"
+                        [ownerName]="accountDisplayName" [recordPurchaseOnSuccess]="false" [clearCartOnSuccess]="false"
+                        (paymentSuccess)="onSubscriptionPaymentSuccess()"
+                        (paymentError)="onSubscriptionPaymentError($event)">
+                    </app-paypal-button>
                 </div>
             </div>
 
@@ -280,11 +387,55 @@
                                     </p>
                                     <div class="order-item-actions">
                                         <button class="secondary-link certificate-btn" type="button"
+                                            *ngIf="isPhotoOrderItem(item)"
                                             (click)="downloadOrderCertificate(order, item)">
                                             {{ currentLanguage === 'de' ? 'Zertifikat erneut herunterladen' : 'Download
                                             certificate again' }}
                                         </button>
+                                        <button class="secondary-link review-btn" type="button"
+                                            *ngIf="isPhotoOrderItem(item)" (click)="toggleReviewEditor(item)">
+                                            {{ isReviewEditorOpen(item)
+                                            ? (currentLanguage === 'de' ? 'Bewertung schließen' : 'Close review')
+                                            : (currentLanguage === 'de' ? 'Bild bewerten' : 'Review image') }}
+                                        </button>
                                     </div>
+
+                                    <form class="review-inline-form" *ngIf="isReviewEditorOpen(item)"
+                                        (ngSubmit)="submitVerifiedReview(item)">
+                                        <label>
+                                            <span>{{ currentLanguage === 'de' ? 'Sterne' : 'Rating' }}</span>
+                                            <select name="reviewRating{{ item.productId }}"
+                                                [(ngModel)]="getReviewDraft(item).rating">
+                                                <option [ngValue]="5">5 ★</option>
+                                                <option [ngValue]="4">4 ★</option>
+                                                <option [ngValue]="3">3 ★</option>
+                                                <option [ngValue]="2">2 ★</option>
+                                                <option [ngValue]="1">1 ★</option>
+                                            </select>
+                                        </label>
+                                        <label>
+                                            <span>{{ currentLanguage === 'de' ? 'Deine Bewertung' : 'Your review'
+                                                }}</span>
+                                            <textarea name="reviewText{{ item.productId }}" rows="3"
+                                                [(ngModel)]="getReviewDraft(item).reviewText"
+                                                [placeholder]="currentLanguage === 'de' ? 'Deine Erfahrung mit diesem Bild…' : 'Share your experience with this image…'"></textarea>
+                                        </label>
+
+                                        <button class="submit-btn review-submit" type="submit"
+                                            [disabled]="reviewSubmitting[getReviewKey(item)]">
+                                            {{ reviewSubmitting[getReviewKey(item)]
+                                            ? (currentLanguage === 'de' ? 'Wird gesendet…' : 'Submitting…')
+                                            : (currentLanguage === 'de' ? 'Verifizierte Bewertung absenden' : 'Submit
+                                            verified review') }}
+                                        </button>
+
+                                        <p class="form-message error" *ngIf="reviewError[getReviewKey(item)]">
+                                            {{ reviewError[getReviewKey(item)] }}
+                                        </p>
+                                        <p class="form-message success" *ngIf="reviewSuccess[getReviewKey(item)]">
+                                            {{ reviewSuccess[getReviewKey(item)] }}
+                                        </p>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -304,7 +455,8 @@
             <div class="account-section" *ngIf="isAuthenticated && activeAccountTab === 'downloads'">
                 <h2>{{ currentLanguage === 'de' ? 'Downloads' : 'Downloads' }}</h2>
                 <div class="download-list" *ngIf="downloadableItems.length > 0; else noDownloadsYet">
-                    <article class="download-card" *ngFor="let entry of downloadableItems">
+                    <article class="download-card" *ngFor="let entry of downloadableItems"
+                        [hidden]="!isPhotoOrderItem(entry.item)">
                         <img *ngIf="entry.item.imageUrl" [src]="entry.item.imageUrl" [alt]="entry.item.title" />
                         <div class="download-card-content">
                             <p class="download-card-title">{{ entry.item.title }}</p>

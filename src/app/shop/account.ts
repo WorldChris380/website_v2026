@@ -5,15 +5,25 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MetaService } from '../services/meta.service';
 import { ShopAuthService, ShopOrderHistoryEntry, ShopOrderHistoryItem } from './shop-auth.service';
 import { CertificateService } from './certificate.service';
+import { ShopReviewsService } from './shop-reviews.service';
+import { PayPalButton } from './paypal-button';
+import { CartItem } from './shop.service';
+import { ShopSubscriptionHistoryEntry, ShopSubscriptionService, ShopSubscriptionStatus } from './shop-subscription.service';
 import { LanguageService, Language } from '../language.service';
 import { environment } from '../../environments/environment';
 
 declare const google: any;
 
+type SubscriptionPlanId =
+    | 'subscription-monthly'
+    | 'subscription-yearly'
+    | 'subscription-commercial-monthly'
+    | 'subscription-commercial-yearly';
+
 @Component({
     selector: 'app-account',
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterModule],
+    imports: [CommonModule, FormsModule, RouterModule, PayPalButton],
     templateUrl: './account.html',
     styleUrl: './account.scss'
 })
@@ -52,6 +62,18 @@ export class Account implements OnInit, AfterViewInit {
     forgotPasswordSuccess = '';
     private googleScriptPromise: Promise<void> | null = null;
     private googleInitialized = false;
+    reviewEditorOpen: Record<string, boolean> = {};
+    reviewDrafts: Record<string, { rating: number; reviewText: string }> = {};
+    reviewSubmitting: Record<string, boolean> = {};
+    reviewError: Record<string, string> = {};
+    reviewSuccess: Record<string, string> = {};
+    selectedSubscriptionPlan: SubscriptionPlanId = 'subscription-monthly';
+    subscriptionStatus: ShopSubscriptionStatus | null = null;
+    subscriptionHistory: ShopSubscriptionHistoryEntry[] = [];
+    isSubscriptionLoading = false;
+    isSubscriptionMutating = false;
+    subscriptionError = '';
+    subscriptionSuccess = '';
     readonly googleClientId = environment.googleClientId;
     readonly googleAllowedOrigins = environment.googleAllowedOrigins;
     googleEnabled = environment.googleClientId !== 'GOOGLE_CLIENT_ID_PLACEHOLDER';
@@ -63,6 +85,8 @@ export class Account implements OnInit, AfterViewInit {
         private metaService: MetaService,
         private shopAuthService: ShopAuthService,
         private certificateService: CertificateService,
+        private shopReviewsService: ShopReviewsService,
+        private shopSubscriptionService: ShopSubscriptionService,
         private languageService: LanguageService,
         private route: ActivatedRoute
     ) { }
@@ -97,6 +121,8 @@ export class Account implements OnInit, AfterViewInit {
             this.shopAuthService.validateSession().subscribe((valid) => {
                 if (valid) {
                     this.shopAuthService.fetchOrders().subscribe();
+                    this.loadSubscriptionStatus();
+                    this.scrollToFragmentIfPresent();
                 }
             });
         });
@@ -108,6 +134,18 @@ export class Account implements OnInit, AfterViewInit {
 
     ngAfterViewInit(): void {
         this.renderGoogleButtonForActiveTab();
+    }
+
+    // Scrolls to a route fragment (e.g. #subscription from the header's
+    // "Manage Subscription" link) once the overview tab's content — gated
+    // behind auth/session validation — has actually rendered.
+    private scrollToFragmentIfPresent(): void {
+        this.route.fragment.subscribe((fragment) => {
+            if (!fragment) return;
+            setTimeout(() => {
+                document.getElementById(fragment)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 150);
+        });
     }
 
     get currentUser() {
@@ -133,7 +171,7 @@ export class Account implements OnInit, AfterViewInit {
     }
 
     get licensedImageCount(): number {
-        return this.orders.reduce((total, order) => total + order.items.reduce((sum, item) => sum + item.quantity, 0), 0);
+        return this.orders.reduce((total, order) => total + order.items.reduce((sum, item) => sum + (this.isPhotoOrderItem(item) ? item.quantity : 0), 0), 0);
     }
 
     get invoiceOrders(): ShopOrderHistoryEntry[] {
@@ -141,11 +179,168 @@ export class Account implements OnInit, AfterViewInit {
     }
 
     get downloadableItems(): Array<{ order: ShopOrderHistoryEntry; item: ShopOrderHistoryItem }> {
-        return this.orders.flatMap((order) => order.items.map((item) => ({ order, item })));
+        return this.orders.flatMap((order) => order.items
+            .filter((item) => this.isPhotoOrderItem(item))
+            .map((item) => ({ order, item })));
     }
 
     get latestOrder(): ShopOrderHistoryEntry | null {
         return this.orders[0] ?? null;
+    }
+
+    get activeSubscriptionLabel(): string {
+        if (!this.subscriptionStatus?.active) {
+            return this.currentLanguage === 'de' ? 'Kein aktives Abo' : 'No active subscription';
+        }
+
+        const de = this.currentLanguage === 'de';
+        switch (this.subscriptionStatus.planCode as SubscriptionPlanId) {
+            case 'subscription-yearly':
+                return de ? 'Jahresabo' : 'Annual subscription';
+            case 'subscription-commercial-monthly':
+                return de ? 'Kommerzielles Monatsabo' : 'Commercial monthly subscription';
+            case 'subscription-commercial-yearly':
+                return de ? 'Kommerzielles Jahresabo' : 'Commercial annual subscription';
+            default:
+                return de ? 'Monatsabo' : 'Monthly subscription';
+        }
+    }
+
+    get isCommercialSubscription(): boolean {
+        return this.subscriptionStatus?.planCode === 'subscription-commercial-monthly'
+            || this.subscriptionStatus?.planCode === 'subscription-commercial-yearly';
+    }
+
+    get subscriptionStatusNote(): string {
+        if (!this.subscriptionStatus?.active) {
+            return this.currentLanguage === 'de'
+                ? 'Kein laufendes Abo hinterlegt.'
+                : 'No active subscription stored.';
+        }
+
+        if (this.subscriptionStatus.cancelAtPeriodEnd) {
+            return this.currentLanguage === 'de'
+                ? 'Gekündigt — Downloads bleiben bis zum Laufzeitende nutzbar, danach keine Verlängerung.'
+                : 'Cancelled — downloads stay available until the term ends, then it will not renew.';
+        }
+
+        return this.currentLanguage === 'de'
+            ? 'Aktiv und für direkte Abo-Downloads freigeschaltet.'
+            : 'Active and enabled for direct subscription downloads.';
+    }
+
+    get subscriptionRemainingLabel(): string {
+        if (!this.subscriptionStatus?.active) {
+            return this.currentLanguage === 'de'
+                ? 'Mit Abo bis zu 2 Bilder pro Monat herunterladen.'
+                : 'Download up to 2 images per month with a subscription.';
+        }
+
+        return (this.currentLanguage === 'de' ? 'Verbleibend in diesem Monat: ' : 'Remaining this month: ')
+            + this.subscriptionStatus.monthlyDownloadsRemaining
+            + ' / '
+            + this.subscriptionStatus.monthlyDownloadLimit;
+    }
+
+    get subscriptionRemainingCount(): number {
+        return this.subscriptionStatus?.active ? this.subscriptionStatus.monthlyDownloadsRemaining : 0;
+    }
+
+    get hasActiveSubscription(): boolean {
+        return !!this.subscriptionStatus?.active;
+    }
+
+    get hasSubscriptionHistory(): boolean {
+        return this.subscriptionHistory.length > 0;
+    }
+
+    get canCancelSubscription(): boolean {
+        return !!this.subscriptionStatus?.active && !this.subscriptionStatus?.cancelAtPeriodEnd;
+    }
+
+    get subscriptionExpiresAt(): string {
+        return this.subscriptionStatus?.active ? this.subscriptionStatus.expiresAt : '';
+    }
+
+    get subscriptionPlanHeading(): string {
+        return this.hasActiveSubscription
+            ? (this.currentLanguage === 'de' ? 'Zahlungsmodell ändern' : 'Change billing plan')
+            : (this.currentLanguage === 'de' ? 'Abo auswählen' : 'Choose a subscription');
+    }
+
+    get subscriptionPlanHint(): string {
+        return this.hasActiveSubscription
+            ? (this.currentLanguage === 'de'
+                ? 'Ein neuer Kauf ersetzt das laufende Abo sofort durch den gewählten Tarif. Jederzeit kündbar — die bereits bezahlte Laufzeit wird dabei beachtet.'
+                : 'A new purchase replaces the current subscription immediately with the selected plan. Cancel anytime — the already-paid term is still honored.')
+            : (this.currentLanguage === 'de'
+                ? 'Wähle zwischen persönlicher und kommerzieller Nutzung sowie monatlicher oder jährlicher Abrechnung. Jederzeit kündbar, die Laufzeit wird beachtet.'
+                : 'Choose between personal and commercial use, billed monthly or annually. Cancel anytime — the term is still honored.');
+    }
+
+    getSubscriptionHistoryStatusLabel(entry: ShopSubscriptionHistoryEntry): string {
+        const status = entry.status.toLowerCase();
+        if (status === 'active') {
+            return this.currentLanguage === 'de' ? 'Aktiv' : 'Active';
+        }
+
+        if (status === 'cancelling') {
+            return this.currentLanguage === 'de' ? 'Endet zum Laufzeitende' : 'Ending at term end';
+        }
+
+        if (status === 'cancelled') {
+            return this.currentLanguage === 'de' ? 'Gekündigt' : 'Cancelled';
+        }
+
+        if (status === 'replaced') {
+            return this.currentLanguage === 'de' ? 'Ersetzt' : 'Replaced';
+        }
+
+        if (status === 'expired') {
+            return this.currentLanguage === 'de' ? 'Abgelaufen' : 'Expired';
+        }
+
+        return entry.status || (this.currentLanguage === 'de' ? 'Unbekannt' : 'Unknown');
+    }
+
+    getSubscriptionHistoryStatusClass(entry: ShopSubscriptionHistoryEntry): string {
+        const status = entry.status.toLowerCase();
+        if (status === 'active') {
+            return 'is-active';
+        }
+        if (status === 'cancelling') {
+            return 'is-cancelling';
+        }
+        if (status === 'cancelled') {
+            return 'is-expired';
+        }
+        if (status === 'replaced') {
+            return 'is-replaced';
+        }
+        if (status === 'expired') {
+            return 'is-expired';
+        }
+        return 'is-unknown';
+    }
+
+    private static readonly SUBSCRIPTION_PLANS: Record<SubscriptionPlanId, { title: string; price: number }> = {
+        'subscription-monthly': { title: 'Photo Subscription Monthly', price: 9.99 },
+        'subscription-yearly': { title: 'Photo Subscription Annual', price: 99.99 },
+        'subscription-commercial-monthly': { title: 'Commercial Photo Subscription Monthly', price: 19.99 },
+        'subscription-commercial-yearly': { title: 'Commercial Photo Subscription Annual', price: 199.99 },
+    };
+
+    get subscriptionCheckoutItems(): CartItem[] {
+        const plan = Account.SUBSCRIPTION_PLANS[this.selectedSubscriptionPlan];
+        return [{
+            id: this.selectedSubscriptionPlan,
+            title: plan.title,
+            imageUrl: '',
+            originalImageUrl: '',
+            price: plan.price,
+            quantity: 1,
+            currency: 'EUR',
+        }];
     }
 
     setActiveTab(tab: 'register' | 'login'): void {
@@ -165,6 +360,12 @@ export class Account implements OnInit, AfterViewInit {
 
     setActiveAccountTab(tab: 'overview' | 'orders' | 'downloads' | 'billing'): void {
         this.activeAccountTab = tab;
+    }
+
+    selectSubscriptionPlan(plan: SubscriptionPlanId): void {
+        this.selectedSubscriptionPlan = plan;
+        this.subscriptionError = '';
+        this.subscriptionSuccess = '';
     }
 
     register(): void {
@@ -269,6 +470,7 @@ export class Account implements OnInit, AfterViewInit {
                 this.loginForm.password = '';
                 this.activeAccountTab = 'overview';
                 this.shopAuthService.fetchOrders().subscribe();
+                this.loadSubscriptionStatus();
             },
             error: () => {
                 this.isLoginSubmitting = false;
@@ -459,6 +661,7 @@ export class Account implements OnInit, AfterViewInit {
                         ? 'Login erfolgreich.'
                         : 'Login successful.';
                     this.shopAuthService.fetchOrders().subscribe();
+                    this.loadSubscriptionStatus();
                 });
             }
         });
@@ -527,12 +730,183 @@ export class Account implements OnInit, AfterViewInit {
         this.loginSuccess = '';
         this.activeTab = 'login';
         this.activeAccountTab = 'overview';
+        this.reviewEditorOpen = {};
+        this.reviewDrafts = {};
+        this.reviewSubmitting = {};
+        this.reviewError = {};
+        this.reviewSuccess = {};
+        this.subscriptionStatus = null;
+        this.subscriptionHistory = [];
+        this.subscriptionError = '';
+        this.subscriptionSuccess = '';
+    }
+
+    isPhotoOrderItem(item: ShopOrderHistoryItem): boolean {
+        return item.productType === 'photo' && /^\d+$/.test(item.productId);
+    }
+
+    onSubscriptionPaymentSuccess(): void {
+        this.subscriptionError = '';
+        this.subscriptionSuccess = this.currentLanguage === 'de'
+            ? 'Abo erfolgreich aktiviert. Dein Kontingent wurde aktualisiert.'
+            : 'Subscription activated successfully. Your allowance has been updated.';
+        this.shopAuthService.fetchOrders().subscribe();
+        this.loadSubscriptionStatus();
+    }
+
+    onSubscriptionPaymentError(message: string): void {
+        this.subscriptionSuccess = '';
+        this.subscriptionError = message;
+    }
+
+    cancelSubscription(): void {
+        const token = this.shopAuthService.getToken();
+        if (!token || !this.canCancelSubscription) {
+            return;
+        }
+
+        this.isSubscriptionMutating = true;
+        this.subscriptionError = '';
+        this.subscriptionSuccess = '';
+        this.shopSubscriptionService.cancel(token).subscribe((result) => {
+            this.isSubscriptionMutating = false;
+            if (!result.success) {
+                this.subscriptionError = result.error || (this.currentLanguage === 'de'
+                    ? 'Abo konnte nicht beendet werden.'
+                    : 'Could not end subscription.');
+                return;
+            }
+
+            this.subscriptionStatus = null;
+            this.loadSubscriptionHistory(token);
+            this.subscriptionSuccess = this.currentLanguage === 'de'
+                ? 'Abo wurde sofort beendet.'
+                : 'Subscription was ended immediately.';
+        });
+    }
+
+    private loadSubscriptionStatus(): void {
+        const token = this.shopAuthService.getToken();
+        if (!token || !this.isAuthenticated) {
+            this.subscriptionStatus = null;
+            this.subscriptionHistory = [];
+            this.isSubscriptionLoading = false;
+            this.isSubscriptionMutating = false;
+            return;
+        }
+
+        this.isSubscriptionLoading = true;
+        this.shopSubscriptionService.getStatus(token).subscribe((result) => {
+            this.isSubscriptionLoading = false;
+            if (!result.success) {
+                this.subscriptionStatus = null;
+                this.subscriptionHistory = [];
+                return;
+            }
+
+            this.subscriptionStatus = result.status;
+            this.loadSubscriptionHistory(token);
+        });
+    }
+
+    private loadSubscriptionHistory(token: string): void {
+        this.shopSubscriptionService.getHistory(token).subscribe((result) => {
+            if (!result.success) {
+                this.subscriptionHistory = [];
+                return;
+            }
+
+            this.subscriptionHistory = result.history;
+        });
+    }
+
+    getReviewKey(item: ShopOrderHistoryItem): string {
+        return item.productId;
+    }
+
+    isReviewEditorOpen(item: ShopOrderHistoryItem): boolean {
+        return !!this.reviewEditorOpen[this.getReviewKey(item)];
+    }
+
+    toggleReviewEditor(item: ShopOrderHistoryItem): void {
+        const key = this.getReviewKey(item);
+        const next = !this.reviewEditorOpen[key];
+        this.reviewEditorOpen[key] = next;
+
+        if (next && !this.reviewDrafts[key]) {
+            this.reviewDrafts[key] = {
+                rating: 5,
+                reviewText: '',
+            };
+        }
+
+        if (next) {
+            this.reviewError[key] = '';
+            this.reviewSuccess[key] = '';
+        }
+    }
+
+    getReviewDraft(item: ShopOrderHistoryItem): { rating: number; reviewText: string } {
+        const key = this.getReviewKey(item);
+        if (!this.reviewDrafts[key]) {
+            this.reviewDrafts[key] = {
+                rating: 5,
+                reviewText: '',
+            };
+        }
+        return this.reviewDrafts[key];
+    }
+
+    submitVerifiedReview(item: ShopOrderHistoryItem): void {
+        const key = this.getReviewKey(item);
+        const draft = this.getReviewDraft(item);
+        const token = this.shopAuthService.getToken();
+
+        this.reviewError[key] = '';
+        this.reviewSuccess[key] = '';
+
+        if (!token) {
+            this.reviewError[key] = this.currentLanguage === 'de'
+                ? 'Bitte erneut anmelden.'
+                : 'Please sign in again.';
+            return;
+        }
+
+        const text = (draft.reviewText || '').trim();
+        if (text.length < 10) {
+            this.reviewError[key] = this.currentLanguage === 'de'
+                ? 'Bitte mindestens 10 Zeichen schreiben.'
+                : 'Please write at least 10 characters.';
+            return;
+        }
+
+        this.reviewSubmitting[key] = true;
+        this.shopReviewsService.saveReview({
+            token,
+            productId: item.productId,
+            rating: draft.rating,
+            reviewText: text,
+        }).subscribe((result) => {
+            this.reviewSubmitting[key] = false;
+            if (!result.success) {
+                this.reviewError[key] = result.error || (this.currentLanguage === 'de'
+                    ? 'Bewertung konnte nicht gespeichert werden.'
+                    : 'Could not save review.');
+                return;
+            }
+
+            this.reviewSuccess[key] = this.currentLanguage === 'de'
+                ? 'Verifizierte Bewertung gespeichert.'
+                : 'Verified review saved.';
+            this.reviewDrafts[key] = { rating: 5, reviewText: '' };
+        });
     }
 
     async downloadOrderCertificate(order: ShopOrderHistoryEntry, item: ShopOrderHistoryItem): Promise<void> {
         await this.certificateService.downloadCertificate(
             {
                 ownerName: order.ownerName || this.currentUser?.displayName || this.currentUser?.email || 'Certificate Holder',
+                companyName: (order.companyName || '').trim(),
                 orderId: order.paypalOrderId,
                 captureId: order.paypalCaptureId,
                 purchasedAt: order.purchasedAt,

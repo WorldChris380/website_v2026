@@ -13,8 +13,9 @@ export interface CartItem {
 
 const STORAGE_KEY = 'cb-cart-v3';
 const OWNER_STORAGE_KEY = 'cb-certificate-owner-v1';
+const COMPANY_STORAGE_KEY = 'cb-company-name-v1';
 const PURCHASE_STORAGE_KEY = 'cb-last-purchase-v1';
-const COMMERCIAL_LICENSE_SURCHARGE_EUR = 5;
+const COMMERCIAL_LICENSE_SURCHARGE_EUR = 10;
 
 export interface PurchasedCertificateItem {
     id: string;
@@ -33,6 +34,7 @@ export interface PurchaseRecord {
     captureId: string;
     purchasedAt: string;
     ownerName: string;
+    companyName: string;
     total: number;
     commercialLicenseUpgrade: boolean;
     commercialLicenseSurcharge: number;
@@ -46,6 +48,7 @@ export interface PurchaseRecord {
 export class ShopService {
     private readonly items = signal<CartItem[]>(this.loadFromStorage());
     private readonly certificateOwner = signal<string>(this.loadOwnerFromStorage());
+    private readonly companyName = signal<string>(this.loadCompanyNameFromStorage());
     private readonly lastPurchase = signal<PurchaseRecord | null>(this.loadPurchaseFromStorage());
 
     readonly items$ = computed(() => this.items());
@@ -60,6 +63,7 @@ export class ShopService {
     readonly grandTotal = computed(() => this.total() + this.commercialLicenseSurcharge());
     readonly totalQuantity = computed(() => this.items().reduce((sum, item) => sum + item.quantity, 0));
     readonly certificateOwner$ = computed(() => this.certificateOwner());
+    readonly companyName$ = computed(() => this.companyName());
     readonly lastPurchase$ = computed(() => this.lastPurchase());
 
     constructor() {
@@ -72,6 +76,12 @@ export class ShopService {
         effect(() => {
             try {
                 localStorage.setItem(OWNER_STORAGE_KEY, this.certificateOwner());
+            } catch { /* storage unavailable */ }
+        });
+
+        effect(() => {
+            try {
+                localStorage.setItem(COMPANY_STORAGE_KEY, this.companyName());
             } catch { /* storage unavailable */ }
         });
 
@@ -111,6 +121,15 @@ export class ShopService {
         }
     }
 
+    private loadCompanyNameFromStorage(): string {
+        try {
+            const raw = localStorage.getItem(COMPANY_STORAGE_KEY) ?? '';
+            return raw.trim();
+        } catch {
+            return '';
+        }
+    }
+
     private loadPurchaseFromStorage(): PurchaseRecord | null {
         try {
             const raw = localStorage.getItem(PURCHASE_STORAGE_KEY);
@@ -127,6 +146,14 @@ export class ShopService {
 
     getCertificateOwner(): string {
         return this.certificateOwner();
+    }
+
+    setCompanyName(name: string) {
+        this.companyName.set(name.trim());
+    }
+
+    getCompanyName(): string {
+        return this.companyName();
     }
 
     setCommercialLicenseUpgrade(enabled: boolean) {
@@ -175,11 +202,13 @@ export class ShopService {
         orderNumber?: number;
         captureId: string;
         ownerName?: string;
+        companyName?: string;
         currency: 'EUR';
         invoiceNumber?: string;
         invoicePdfUrl?: string;
     }) {
         const ownerName = (params.ownerName || this.certificateOwner()).trim();
+        const companyName = (params.companyName || this.companyName()).trim();
         const commercialLicenseUpgrade = this.hasCommercialLicenseUpgrade();
         const commercialLicenseSurcharge = this.getCommercialLicenseSurcharge();
         const items = this.items().map((item) => ({
@@ -200,6 +229,7 @@ export class ShopService {
             captureId: params.captureId,
             purchasedAt: new Date().toISOString(),
             ownerName: ownerName || 'Certificate Holder',
+            companyName,
             total,
             commercialLicenseUpgrade,
             commercialLicenseSurcharge,

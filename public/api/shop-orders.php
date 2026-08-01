@@ -66,8 +66,11 @@ try {
 
 function fetchOrdersForUser(mysqli $db, int $userId): array
 {
+    $shopOrderColumns = fetchTableColumns($db, 'shop_orders');
+    $companyColumn = isset($shopOrderColumns['company_name']) ? 'company_name' : "'' AS company_name";
+
     $stmt = $db->prepare(
-        'SELECT id, owner_name, paypal_order_id, paypal_capture_id, order_status, total_amount, currency, purchased_at, invoice_number, invoice_pdf_url '
+        'SELECT id, owner_name, ' . $companyColumn . ', paypal_order_id, paypal_capture_id, order_status, total_amount, currency, purchased_at, invoice_number, invoice_pdf_url '
         . 'FROM shop_orders WHERE user_id = ? ORDER BY purchased_at DESC, id DESC'
     );
     if (!$stmt) {
@@ -88,6 +91,7 @@ function fetchOrdersForUser(mysqli $db, int $userId): array
         $orders[] = [
             'id' => $orderId,
             'ownerName' => (string) ($row['owner_name'] ?? ''),
+            'companyName' => (string) ($row['company_name'] ?? ''),
             'paypalOrderId' => (string) ($row['paypal_order_id'] ?? ''),
             'paypalCaptureId' => (string) ($row['paypal_capture_id'] ?? ''),
             'status' => (string) ($row['order_status'] ?? 'completed'),
@@ -103,6 +107,30 @@ function fetchOrdersForUser(mysqli $db, int $userId): array
     $stmt->close();
 
     return $orders;
+}
+
+function fetchTableColumns(mysqli $db, string $table): array
+{
+    $tableName = trim($table);
+    if ($tableName === '') {
+        return [];
+    }
+
+    $escapedTable = $db->real_escape_string($tableName);
+    $result = $db->query('SHOW COLUMNS FROM `' . $escapedTable . '`');
+    if (!$result) {
+        return [];
+    }
+
+    $columns = [];
+    while ($row = $result->fetch_assoc()) {
+        $name = isset($row['Field']) ? trim((string) $row['Field']) : '';
+        if ($name !== '') {
+            $columns[$name] = true;
+        }
+    }
+
+    return $columns;
 }
 
 function fetchOrderItems(mysqli $db, int $orderId): array

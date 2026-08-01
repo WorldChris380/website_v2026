@@ -1,141 +1,264 @@
-<div id="home-atf" class="hero-section" role="main"
-    aria-label="Homepage hero with photography, travel and career slides" (touchstart.passive)="onTouchStart($event)"
-    (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()">
-    <!-- Skip link for keyboard navigation -->
-    <!-- Slide 1: Travel - Bright Mode -->
-    <div class="hero-background hero-background-travel-bright" [ngClass]="{ 'active': currentSlide === 0 }"
-        [style.opacity]="currentSlide === 0 ? 1 : 0"
-        style="background-image: url('/assets/img/photography/Travel/North America/Costa Rica/2024.06.02 So Butterfly Garden, La Fortuna Hotel/Tropic vulcano Arenal view from La Fortuna .jpg');"
-        role="img" aria-label="Tropical volcano Arenal in Costa Rica - Travel destination">
-    </div>
-    <!-- Slide 1: Travel - Dark Mode -->
-    <div class="hero-background hero-background-travel-dark" [ngClass]="{ 'active': currentSlide === 0 }"
-        [style.opacity]="currentSlide === 0 ? 1 : 0"
-        style="background-image: url('https://christian-boehme-gallery.s3.eu-central-3.ionoscloud.com/grid/Travel/North_America/United_States_of_America_(USA)/New_York/2014.07.24_Do/dsc-1158b.jpg');"
-        role="img" aria-label="New York City grid view - Travel destination">
-    </div>
-    <!-- Slide 2: Aviation - Bright Mode -->
-    <div class="hero-background hero-background-aviation-bright" [ngClass]="{ 'active': currentSlide === 1 }"
-        [style.opacity]="currentSlide === 1 ? 1 : 0"
-        style="background-image: url('/assets/img/photography/Aviation/Australia and Oceania/Australia/Fraser Island/Arriving small plane at an airstrip on Fraser Island in Australia .JPG');"
-        role="img" aria-label="Small aircraft arriving at Fraser Island airstrip - Aviation photography">
-    </div>
-    <!-- Slide 2: Aviation - Dark Mode -->
-    <div class="hero-background hero-background-aviation-dark" [ngClass]="{ 'active': currentSlide === 1 }"
-        [style.opacity]="currentSlide === 1 ? 1 : 0"
-        style="background-image: url('https://christian-boehme-gallery.s3.eu-central-3.ionoscloud.com/grid/Aviation/Europe/Germany/Dresden_Aiport_(DRS)/2013/2013.12.01_So/dsc-6784b.jpg');"
-        role="img" aria-label="Aircraft at Dresden Airport - Aviation photography">
-    </div>
-    <!-- Slide 3: Photography - Bright Mode -->
-    <div class="hero-background hero-background-photography-bright" [ngClass]="{ 'active': currentSlide === 2 }"
-        [style.opacity]="currentSlide === 2 ? 1 : 0"
-        style="background-image: url('https://christian-boehme-gallery.s3.eu-central-3.ionoscloud.com/grid/Travel/Australia_and_Oceania/Australia/Queensland/Roadtrip_Brisbane-Cairns/2017.07.07_Fr_Whitheaven_Beach/crb-0841b.jpg');"
+<div id="home-atf" class="hero-section" role="main" aria-label="Homepage hero with photography showcase"
+    (touchstart.passive)="onTouchStart($event)" (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()">
+    <div class="hero-background hero-background-photography-bright active"
+        style="background-image: url('/assets/img/photography/Travel/Australia%20and%20Oceania/whitehaven%20beach.JPG');"
         role="img" aria-label="Whitehaven Beach Queensland Australia - Photography portfolio">
     </div>
-    <!-- Slide 3: Photography - Dark Mode -->
-    <div class="hero-background hero-background-photography-dark" [ngClass]="{ 'active': currentSlide === 2 }"
-        [style.opacity]="currentSlide === 2 ? 1 : 0"
-        style="background-image: url('/assets/img/other/CRB_8567B.JPG');"
+    <div class="hero-background hero-background-photography-dark active"
+        style="background-image: url('/assets/img/photography/Travel/Australia%20and%20Oceania/whitehaven%20beach.JPG');"
         role="img" aria-label="Professional photography portfolio - Showcasing creative visual storytelling">
     </div>
-    <!-- Slide 4: Career - Bright Mode -->
-    <div class="hero-background hero-background-bright" [ngClass]="{ 'active': currentSlide === 3 }"
-        [style.opacity]="currentSlide === 3 ? 1 : 0"
-        style="background-image: url('/assets/img/other/cloudsurfing.JPG');" role="img"
-        aria-label="Creative cloud surfing concept - Innovation and career excellence">
-    </div>
-    <!-- Slide 4: Career - Dark Mode -->
-    <div class="hero-background hero-background-dark" [ngClass]="{ 'active': currentSlide === 3 }"
-        [style.opacity]="currentSlide === 3 ? 1 : 0"
-        style="background-image: url('/assets/img/other/Sydney Skyline Black n orange.JPG');" role="img"
-        aria-label="Sydney skyline at night - Career inspiration and global perspective">
-    </div>
 
-    <!-- Slide 1 Content: Travel -->
-    @if (currentSlide === 0) {
-    <div class="hero-content">
-        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Travels.' : 'Reisen.' }}</h1>
-        <div class="hero-quotes">
-            <p class="hero-quote">{{ currentQuote }}</p>
-        </div>
-        <div class="hero-buttons">
-            <a class="btn btn-secondary" routerLink="/gallery" [queryParams]="{ filter: 'travel' }">{{ currentLanguage
-                === 'en' ? 'Travel Gallery' : 'Reisefotos' }}</a>
-        </div>
-    </div>
-    }
-
-    <!-- Slide 2 Content: Aviation -->
-    @if (currentSlide === 1) {
-    <div class="hero-content">
-        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Aviation.' : 'Luftfahrt.' }}</h1>
-        <div class="hero-quotes">
-            <p class="hero-quote">{{ currentQuote }}</p>
-        </div>
-        <div class="hero-buttons">
-            <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'aviation' }">{{ currentLanguage
-                === 'en' ? 'View aviation photos' : 'Luftfahrtfotografien ansehen' }}</a>
-        </div>
-    </div>
-    }
-
-    <!-- Slide 3 Content: Photography -->
-    @if (currentSlide === 2) {
     <div class="hero-content">
         <h1 class="hero-title">{{ currentLanguage === 'en' ? 'Photography.' : 'Fotografie.' }}</h1>
         <div class="hero-quotes">
-            <p class="hero-quote">{{ currentQuote }}</p>
+            <p class="hero-quote" [class.quote-hidden]="!quoteVisible">{{ currentQuote }}</p>
         </div>
         <div class="hero-buttons">
-            <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'aviation' }">{{ currentLanguage
+            <a class="btn btn-primary" routerLink="/photography" [queryParams]="{ filter: 'aviation' }">{{
+                currentLanguage
                 === 'en' ? 'Aviation Gallery' : 'Luftfahrt Galerie' }}</a>
-            <a class="btn btn-primary" routerLink="/gallery" [queryParams]="{ filter: 'travel' }">{{ currentLanguage ===
+            <a class="btn btn-primary" routerLink="/photography" [queryParams]="{ filter: 'travel' }">{{ currentLanguage
+                ===
                 'en' ? 'Travel Gallery' : 'Reise Galerie' }}</a>
         </div>
     </div>
-    }
 
-    <!-- Slide 4 Content: Career -->
-    @if (currentSlide === 3) {
-    <div class="hero-content">
-        <h1 class="hero-title">{{ currentLanguage === 'en' ? 'My career.' : 'Meine Karriere.' }}</h1>
-        <div class="hero-quotes">
-            <p class="hero-quote">{{ currentQuote }}</p>
-        </div>
-        <div class="hero-buttons">
-            <a class="btn btn-primary" href="https://github.com/WorldChris380" target="_blank">GitHub</a>
-            <a class="btn btn-primary" href="https://www.linkedin.com/in/christian-boehme-business/"
-                target="_blank">LinkedIn</a>
-            <a class="btn btn-view-cv" routerLink="/career">{{ currentLanguage === 'en' ? 'View CV' : 'CV anzeigen'
-                }}</a>
-        </div>
-    </div>
-    }
+</div>
 
-    <div class="hero-dots" role="tablist" aria-label="Hero sections">
-        <button class="hero-dot-item dot-travel" [class.active]="currentSlide === 0" (click)="goToSlide(0)"
-            [attr.aria-pressed]="currentSlide === 0"
-            [attr.aria-label]="currentLanguage === 'en' ? 'Travel section' : 'Reisen Abschnitt'">
-            <span class="hero-dot-label">{{ currentLanguage === 'en' ? 'Travel' : 'Reisen' }}</span>
-            <span class="hero-dot-line"></span>
-        </button>
-        <button class="hero-dot-item dot-photography" [class.active]="currentSlide === 2" (click)="goToSlide(2)"
-            [attr.aria-pressed]="currentSlide === 2"
-            [attr.aria-label]="currentLanguage === 'en' ? 'Photography section' : 'Fotografie Abschnitt'">
-            <span class="hero-dot-label">{{ currentLanguage === 'en' ? 'Photography' : 'Fotografie' }}</span>
-            <span class="hero-dot-line"></span>
-        </button>
-        <button class="hero-dot-item dot-aviation" [class.active]="currentSlide === 1" (click)="goToSlide(1)"
-            [attr.aria-pressed]="currentSlide === 1"
-            [attr.aria-label]="currentLanguage === 'en' ? 'Aviation section' : 'Luftfahrt Abschnitt'">
-            <span class="hero-dot-label">{{ currentLanguage === 'en' ? 'Aviation' : 'Luftfahrt' }}</span>
-            <span class="hero-dot-line"></span>
-        </button>
-        <button class="hero-dot-item dot-career" [class.active]="currentSlide === 3" (click)="goToSlide(3)"
-            [attr.aria-pressed]="currentSlide === 3"
-            [attr.aria-label]="currentLanguage === 'en' ? 'Career section' : 'Karriere Abschnitt'">
-            <span class="hero-dot-label">{{ currentLanguage === 'en' ? 'Career' : 'Karriere' }}</span>
-            <span class="hero-dot-line"></span>
-        </button>
-    </div>
+<div class="hero-shop-transition" aria-hidden="true"></div>
+
+<!-- Unified scroll block: shop through career blend into one another via
+     seam gradients, images/content reveal on scroll (see .is-visible in home-atf.scss) -->
+<div class="home-story">
+
+    <!-- Shop Feature Section -->
+    <section class="home-section shop-section" data-animate>
+        <div class="home-section-inner shop-inner">
+            <div class="shop-content">
+                <p class="section-eyebrow">{{ currentLanguage === 'en' ? 'Photography Shop' : 'Fotografie Shop' }}</p>
+                <h2 class="section-heading">{{ currentLanguage === 'en' ? 'Download photos in original camera quality.'
+                    :
+                    'Fotos in originaler Kameraqualität herunterladen.' }}</h2>
+                <p class="section-body">{{ currentLanguage === 'en' ? 'Full resolution files, straight from the camera.
+                    No
+                    compression, no watermarks. Licensed for personal use — commercial upgrade available.' : 'Volle
+                    Auflösung, direkt von der Kamera. Keine Komprimierung, keine Wasserzeichen. Persönliche Lizenz
+                    inklusive
+                    — kommerzielles Upgrade verfügbar.' }}</p>
+                <div class="section-cta-row">
+                    <a routerLink="/shop/account" class="section-cta-btn shop-cta-btn">{{ currentLanguage === 'en' ?
+                        'Create
+                        free account' : 'Kostenloses Konto erstellen' }}</a>
+                </div>
+            </div>
+            <div class="shop-pricing-card">
+                <div class="shop-card-main">
+                    <div class="shop-card-price-row">
+                        <span class="shop-price">19€</span>
+                        <span class="shop-price-label">{{ currentLanguage === 'en' ? 'per photo' : 'pro Foto' }}</span>
+                    </div>
+                    <div class="shop-card-features">
+                        <p class="shop-feature-item">{{ currentLanguage === 'en' ? 'Original camera file' : 'Originale
+                            Kameradatei' }}</p>
+                        <p class="shop-feature-item">{{ currentLanguage === 'en' ? 'RAW file available on manual
+                            request, where available' : 'RAW-Datei auf manuelle Anfrage erhältlich, sofern vorhanden'
+                            }}</p>
+                        <p class="shop-feature-item">{{ currentLanguage === 'en' ? 'Full resolution, no compression' :
+                            'Volle Auflösung, keine Komprimierung' }}</p>
+                        <p class="shop-feature-item">{{ currentLanguage === 'en' ? 'Downloadable personal use license
+                            included' :
+                            'Downloadbare persönliche Nutzungslizenz inklusive' }}</p>
+                        <p class="shop-feature-item">{{ currentLanguage === 'en' ? 'Instant download after purchase' :
+                            'Sofortiger Download nach Kauf' }}</p>
+                        <p class="shop-feature-item">{{ currentLanguage === 'en' ? 'Automatic invoice after each
+                            purchase' :
+                            'Automatische Rechnung nach jedem Kauf' }}</p>
+                    </div>
+                    <div class="shop-card-upgrade">
+                        <span class="shop-upgrade-price">+ 10€</span>
+                        <span class="shop-upgrade-desc">{{ currentLanguage === 'en' ? 'Commercial license upgrade — for
+                            business, advertising and editorial use' : 'Kommerzielle Lizenz — für Unternehmen, Werbung
+                            und
+                            redaktionelle Nutzung' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-seam seam-shop-travel" aria-hidden="true"></div>
+
+    <!-- Travel Section -->
+    <section class="home-section travel-section" data-animate>
+        <div class="home-section-inner travel-inner">
+            <div class="travel-content">
+                <p class="section-eyebrow section-eyebrow-travel">{{ currentLanguage === 'en' ? 'Travel' : 'Reisen' }}
+                </p>
+                <h2 class="section-heading">{{ currentLanguage === 'en' ? 'The world through a lens.' : 'Die Welt durch
+                    eine
+                    Linse.' }}</h2>
+                <p class="section-body">{{ currentLanguage === 'en' ? 'From Australia to Vatican City, the travel
+                    collection
+                    spans five continents. Natural-light storytelling and authentic, unstaged scenes.' : 'Von Australien
+                    bis
+                    Vatikanstadt
+                    umspannt dieses Reisefotografie-Portfolio fünf Kontinente. Storytelling mit natürlichem Licht und
+                    authentische,
+                    ungestellte Szenen.' }}</p>
+                <div class="section-cta-row travel-cta-row">
+                    <a routerLink="/photography" [queryParams]="{filter: 'travel'}"
+                        class="section-cta-btn travel-cta-btn">{{
+                        currentLanguage === 'en' ? 'Travel Gallery' : 'Reise Galerie' }}</a>
+                    <a routerLink="/my-visited-countries" class="section-cta-btn travel-cta-btn-secondary"><span
+                            class="count-up" data-count-target="42">0</span>&nbsp;{{ currentLanguage === 'en' ?
+                        'Countries covered' : 'abgedeckte Länder' }}</a>
+                </div>
+            </div>
+
+            <figure class="travel-photo-frame">
+                <img src="/assets/img/photography/Travel/North%20America/Costa%20Rica/2024.06.03%20Mo%20La%20Fortuna%20Hot%20Springs%20Tabacon/Tropical%20paradise%20hot%20springs%20Tabacon%20Resort%20.jpg"
+                    alt="{{ currentLanguage === 'en' ? 'Tropical paradise hot springs at Tabacon Resort in Costa Rica' : 'Tropisches Paradies in den heißen Quellen des Tabacon Resort in Costa Rica' }}"
+                    loading="lazy" decoding="async" class="travel-photo-image" />
+            </figure>
+        </div>
+    </section>
+
+    <div class="section-seam seam-travel-aviation" aria-hidden="true"></div>
+
+    <!-- Aviation Section -->
+    <section class="home-section aviation-section" data-animate>
+        <div class="home-section-inner aviation-inner">
+            <div class="aviation-content">
+                <p class="section-eyebrow section-eyebrow-aviation">{{ currentLanguage === 'en' ? 'Aviation' :
+                    'Luftfahrt'
+                    }}
+                </p>
+                <h2 class="section-heading">{{ currentLanguage === 'en' ? 'Aircraft, airports and areas from the sky.' :
+                    'Flugzeuge,
+                    Flughäfen und Landschaften aus der Luft.' }}</h2>
+                <p class="section-body">{{ currentLanguage === 'en' ? '22 years of aviation spotting across Europe,
+                    Asia,
+                    America
+                    and
+                    Oceania. From small propellers on grass strips to wide-body jets on international hubs.' : '22
+                    Jahre
+                    des
+                    Spottens in Europa, Asien, Amerika und Ozeanien. Von kleinen Propellermaschinen auf Grasstreifen bis
+                    zu
+                    Großraum-Jets auf internationalen Drehkreuzen.' }}</p>
+                <div class="section-cta-row aviation-cta-row">
+                    <a routerLink="/photography" [queryParams]="{filter: 'aviation'}"
+                        class="section-cta-btn aviation-cta-btn">{{
+                        currentLanguage === 'en' ? 'Aviation Gallery' : 'Luftfahrt Galerie' }}</a>
+                </div>
+            </div>
+
+            <figure class="aviation-photo-frame">
+                <img src="/assets/img/photography/Aviation/Australia%20and%20Oceania/Australia/Fraser%20Island/Arriving%20small%20plane%20at%20an%20airstrip%20on%20Fraser%20Island%20in%20Australia%20.JPG"
+                    alt="{{ currentLanguage === 'en' ? 'Small aircraft arriving at a Fraser Island airstrip in Australia' : 'Kleines Flugzeug bei der Landung auf einer Piste auf Fraser Island in Australien' }}"
+                    loading="lazy" decoding="async" class="aviation-photo-image" />
+            </figure>
+        </div>
+    </section>
+
+    <div class="section-seam seam-aviation-photography" aria-hidden="true"></div>
+
+    <!-- Photography Section -->
+    <section class="home-section photography-section" data-animate>
+        <div class="home-section-inner photography-inner">
+            <div class="photography-content">
+                <p class="section-eyebrow section-eyebrow-photography">{{ currentLanguage === 'en' ? 'Photography' :
+                    'Fotografie' }}</p>
+                <h2 class="section-heading">{{ currentLanguage === 'en' ? 'Technique behind every frame.' : 'Technik
+                    hinter jedem Bild.' }}</h2>
+                <p class="section-body">{{ currentLanguage === 'en' ? 'Every shot is a deliberate technical choice —
+                    camera settings, filters and post-processing adapted to the light, the subject, and whether it is a
+                    still photo or a video.' : 'Jede Aufnahme ist eine bewusste technische Entscheidung —
+                    Kameraeinstellungen, Filter und Nachbearbeitung passend zu Licht, Motiv und ob es sich um Foto oder
+                    Video handelt.' }}</p>
+
+                <div class="photography-facts"
+                    [attr.aria-label]="currentLanguage === 'en' ? 'Technical tools and how they are used' : 'Technische Werkzeuge und ihr Einsatz'">
+                    <span class="photography-fact">{{ currentLanguage === 'en' ? 'ND filter — long exposures & smooth
+                        video in bright daylight' : 'ND-Filter — Langzeitbelichtung & ruhiges Video bei hellem
+                        Tageslicht' }}</span>
+                    <span class="photography-fact">{{ currentLanguage === 'en' ? 'Polarizing filter — cuts glare,
+                        deepens skies and water' : 'Polfilter — reduziert Spiegelungen, vertieft Himmel und Wasser'
+                        }}</span>
+                    <span class="photography-fact">{{ currentLanguage === 'en' ? 'Settings adapt to photo vs. video and
+                        available light' : 'Einstellungen passen sich an Foto vs. Video und Lichtverhältnisse an'
+                        }}</span>
+                </div>
+
+                <div class="section-cta-row photography-cta-row">
+                    <a routerLink="/about-my-photography" class="section-cta-btn photography-cta-btn">{{ currentLanguage
+                        === 'en' ? 'About My Photography' : 'Über meine Fotografie' }}</a>
+                </div>
+            </div>
+
+            <figure class="photography-photo-frame">
+                <img src="/assets/img/photography/Travel/Australia%20and%20Oceania/Sydney%20skyline.JPG"
+                    alt="{{ currentLanguage === 'en' ? 'Sydney skyline, captured with a polarizing filter to deepen the sky and reduce glare' : 'Sydney Skyline, aufgenommen mit Polfilter zur Vertiefung des Himmels und Reduzierung von Spiegelungen' }}"
+                    loading="lazy" decoding="async" class="photography-photo-image" />
+            </figure>
+        </div>
+    </section>
+
+    <!-- Career Section -->
+    <section class="home-section career-section" data-animate>
+        <div class="home-section-inner career-inner">
+            <div class="career-content">
+                <p class="section-eyebrow section-eyebrow-career">{{ currentLanguage === 'en' ? 'Career' : 'Karriere' }}
+                </p>
+                <h2 class="section-heading career-heading">{{ currentLanguage === 'en' ? 'Building digital products for
+                    travel and aviation brands.' :
+                    'Digitale Produkte für Reise- und Luftfahrtmarken.' }}</h2>
+                <p class="section-body">{{ currentLanguage === 'en' ? 'From frontend development and platform operations
+                    to
+                    tourism and aviation expertise - based in Halle (Saale), available for international projects.' :
+                    'Von
+                    Frontend-Entwicklung bis zu Tourismus- und Luftfahrt-Expertise - Standort Halle
+                    (Saale), verfügbar für internationale Projekte.' }}</p>
+
+                <div class="career-locations"
+                    [attr.aria-label]="currentLanguage === 'en' ? 'Places where I have worked' : 'Orte, an denen ich bereits gearbeitet habe'">
+                    <svg class="career-location-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                        focusable="false">
+                        <path d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        <path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                    </svg>
+                    <p class="career-location-text">{{ currentLanguage === 'en' ? 'Halle (Saale) • Dresden • Berlin •
+                        Brisbane and
+                        Sydney' : 'Halle (Saale) • Dresden • Berlin • Brisbane and Sydney, Australia' }}</p>
+                </div>
+
+                <div class="career-facts"
+                    [attr.aria-label]="currentLanguage === 'en' ? 'Career profile highlights' : 'Highlights des Karriereprofils'">
+                    <span class="career-fact">{{ currentLanguage === 'en' ? 'Frontend Development' :
+                        'Frontend-Entwicklung' }}</span>
+                    <span class="career-fact">{{ currentLanguage === 'en' ? 'Tourism Operations' : 'Tourismus,
+                        Operations' }}</span>
+                    <span class="career-fact">{{ currentLanguage === 'en' ? 'Aviation knowledge' :
+                        'Luftfahrtwissen' }}</span>
+                </div>
+
+                <div class="section-cta-row career-cta-row">
+                    <a routerLink="/career" class="section-cta-btn career-cta-btn">{{ currentLanguage === 'en' ? 'View
+                        full
+                        Curriculum Vitae' : 'Lebenslauf ansehen' }}</a>
+                    <button type="button" class="section-cta-btn career-cta-btn-secondary" (click)="downloadPDF()">{{
+                        currentLanguage === 'en' ? 'Download CV as PDF' : 'Lebenslauf als PDF' }}</button>
+                </div>
+            </div>
+
+            <figure class="career-window-frame">
+                <img src="/assets/img/other/Christian%20Boehme%20profile%20picture%20for%20web.jpg"
+                    alt="{{ currentLanguage === 'en' ? 'Portrait of Christian Boehme with a framed profile image' : 'Porträt von Christian Boehme mit gerahmtem Profilbild' }}"
+                    loading="lazy" decoding="async" class="career-window-image" />
+            </figure>
+        </div>
+    </section>
+
 </div>

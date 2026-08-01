@@ -1,18 +1,23 @@
 ﻿<div class="legal-container">
     <div class="legal-header">
         <h1>{{ currentLanguage === 'en' ? 'Legal Information' : 'Rechtliche Informationen' }}</h1>
-        <p>{{ currentLanguage === 'en' ? 'Impressum, Privacy Policy & Terms of Service' : 'Impressum, Datenschutz &
-            Nutzungsbedingungen' }}</p>
+        <p>{{ currentLanguage === 'en'
+            ? 'Legal notice, privacy policy and terms for the website, photo shop and user account.'
+            : 'Impressum, Datenschutzerklärung und Nutzungsbedingungen für Website, Fotoshop und Benutzerkonto.' }}</p>
     </div>
 
-    <div class="legal-tabs">
-        <button class="tab-button" [class.active]="activeTab === 'impressum'" (click)="switchTab('impressum')">
+    <div class="legal-tabs" role="tablist"
+        [attr.aria-label]="currentLanguage === 'en' ? 'Legal sections' : 'Rechtliche Bereiche'">
+        <button type="button" class="tab-button" [class.active]="activeTab === 'impressum'"
+            [attr.aria-pressed]="activeTab === 'impressum'" (click)="switchTab('impressum')">
             {{ currentLanguage === 'en' ? 'Impressum' : 'Impressum' }}
         </button>
-        <button class="tab-button" [class.active]="activeTab === 'privacy'" (click)="switchTab('privacy')">
+        <button type="button" class="tab-button" [class.active]="activeTab === 'privacy'"
+            [attr.aria-pressed]="activeTab === 'privacy'" (click)="switchTab('privacy')">
             {{ currentLanguage === 'en' ? 'Privacy Policy' : 'Datenschutz' }}
         </button>
-        <button class="tab-button" [class.active]="activeTab === 'terms'" (click)="switchTab('terms')">
+        <button type="button" class="tab-button" [class.active]="activeTab === 'terms'"
+            [attr.aria-pressed]="activeTab === 'terms'" (click)="switchTab('terms')">
             {{ currentLanguage === 'en' ? 'Terms of Service' : 'Nutzungsbedingungen' }}
         </button>
     </div>
@@ -22,18 +27,18 @@
             <h2>{{ currentLanguage === 'en' ? 'Impressum (Legal Notice)' : 'Impressum (Rechtliche Angaben)' }}</h2>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? 'Information according to § 5 DDG and § 18 MStV' : 'Angaben gemaess §
-                    5 DDG und § 18 MStV' }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '1. Information according to § 5 DDG and § 18 MStV' : '1. Angaben
+                    gemäß § 5 DDG und § 18 MStV' }}</h3>
                 <p>
                     Christian Böhme<br>
                     <em>{{ currentLanguage === 'en' ? 'Private address available on justified request' : 'Private
-                        Anschrift auf begruendete Anfrage' }}</em><br>
+                        Anschrift auf begründete Anfrage' }}</em><br>
                     Germany
                 </p>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? 'Contact' : 'Kontakt' }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '2. Contact' : '2. Kontakt' }}</h3>
                 <p>
                     E-Mail: <a href="mailto:info@christian-boehme.com">info@christian-boehme.com</a><br>
                     Website: <a href="https://www.christian-boehme.com" target="_blank"
@@ -42,41 +47,58 @@
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? 'Editorial responsibility' : 'Inhaltlich verantwortlich' }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '3. Scope of the online offer' : '3. Geltungsbereich des
+                    Online-Angebots' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'This legal notice applies to the public website, the photography gallery, the digital photo
+                    licensing shop, and the related customer account area on christian-boehme.com.'
+                    : 'Dieses Impressum gilt für die öffentliche Website, die Fotogalerie, den Shop für digitale
+                    Bildlizenzen sowie den dazugehörigen Kundenkonto-Bereich auf christian-boehme.com.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '4. Editorial responsibility' : '4. Inhaltlich verantwortlich' }}</h3>
                 <p>
                     Christian Böhme<br>
-                    {{ currentLanguage === 'en' ? 'Responsible for own content under general law.' : 'Verantwortlich
-                    für eigene Inhalte nach den allgemeinen Gesetzen.' }}
+                    {{ currentLanguage === 'en' ? 'Responsible for own content under general law.' : 'Verantwortlich für
+                    eigene Inhalte nach den allgemeinen Gesetzen.' }}
                 </p>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? 'Liability for content and links' : 'Haftung für Inhalte und Links'
-                    }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '5. Liability for content and links' : '5. Haftung für Inhalte und
+                    Links' }}</h3>
                 <p>
                     {{ currentLanguage === 'en'
-                    ? 'Content is created with care. No guarantee is given for completeness, accuracy, or timeliness.
-                    External links are reviewed at the time of linking; permanent monitoring is not reasonable without
-                    concrete indications of a violation.'
+                    ? 'Content is created with care. However, no guarantee is given for completeness, accuracy, or
+                    timeliness. External links are reviewed at the time of linking; permanent monitoring is not
+                    reasonable without concrete indications of a violation.'
                     : 'Die Inhalte werden mit Sorgfalt erstellt. Für Vollständigkeit, Richtigkeit und Aktualität wird
-                    keine Gewähr übernommen. Externe Links werden bei Verlinkung geprüft; eine dauerhafte Kontrolle
-                    ist ohne konkrete Hinweise auf Rechtsverstöße nicht zumutbar.' }}
+                    jedoch keine Gewähr übernommen. Externe Links werden bei Verlinkung geprüft; eine dauerhafte
+                    Kontrolle ist ohne konkrete Hinweise auf Rechtsverstöße nicht zumutbar.' }}
                 </p>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? 'Copyright and image rights' : 'Urheber- und Bildrechte' }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '6. Copyright, image rights, and licenses' : '6. Urheber-, Bild- und
+                    Lizenzrechte' }}</h3>
                 <p>
                     {{ currentLanguage === 'en'
-                    ? 'All texts, photos, graphics, and layouts on this website are protected by copyright and related
-                    rights. Any use outside legal limits requires prior permission.'
-                    : 'Sämtliche Texte, Fotos, Grafiken und Layouts dieser Website sind urheberrechtlich geschützt.
-                    Jede Nutzung außerhalb der gesetzlichen Schranken bedarf der vorherigen Zustimmung.' }}
+                    ? 'All texts, photos, graphics, layouts, and downloadable materials on this website are protected by
+                    copyright and related rights. The purchase of a photo product grants only the contractually agreed
+                    scope of use; copyright and all non-transferred rights remain with Christian Böhme.'
+                    : 'Sämtliche Texte, Fotos, Grafiken, Layouts und Downloadmaterialien dieser Website sind
+                    urheberrechtlich geschützt. Mit dem Erwerb eines Foto-Produkts wird ausschließlich der vertraglich
+                    vereinbarte Nutzungsumfang eingeräumt; das Urheberrecht und alle nicht ausdrücklich übertragenen
+                    Rechte verbleiben bei Christian Böhme.' }}
                 </p>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? 'Consumer dispute resolution' : 'Verbraucherstreitbeilegung' }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '7. Consumer dispute resolution' : '7. Verbraucherstreitbeilegung' }}
+                </h3>
                 <p>
                     {{ currentLanguage === 'en'
                     ? 'There is no obligation and no willingness to participate in dispute resolution proceedings before
@@ -84,7 +106,7 @@
                     : 'Es besteht keine Verpflichtung und keine Bereitschaft zur Teilnahme an Streitbeilegungsverfahren
                     vor einer Verbraucherschlichtungsstelle.' }}
                 </p>
-                <p><em>{{ currentLanguage === 'en' ? 'Last updated: April 2026' : 'Letzte Aktualisierung: April 2026'
+                <p><em>{{ currentLanguage === 'en' ? 'Last updated: July 2026' : 'Letzte Aktualisierung: Juli 2026'
                         }}</em></p>
             </div>
         </div>
@@ -101,84 +123,214 @@
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '2. Processed data categories' : '2. Verarbeitete Datenkategorien' }}
-                </h3>
-                <ul>
-                    <li>{{ currentLanguage === 'en' ? 'Server log data (IP address, date/time, requested URL, user
-                        agent, referrer)' : 'Server-Logdaten (IP-Adresse, Datum/Uhrzeit, aufgerufene URL, User Agent,
-                        Referrer)' }}</li>
-                    <li>{{ currentLanguage === 'en' ? 'Communication data from e-mails or contact requests' :
-                        'Kommunikationsdaten aus E-Mails oder Kontaktanfragen' }}</li>
-                    <li>{{ currentLanguage === 'en' ? 'Shop and account data (orders, invoices, download history)' :
-                        'Shop- und Kontodaten (Bestellungen, Rechnungen, Downloadhistorie)' }}</li>
-                    <li>{{ currentLanguage === 'en' ? 'Payment-related metadata (transaction IDs, status data; no full
-                        card details are stored here)' : 'Zahlungsbezogene Metadaten (Transaktions-IDs, Statusdaten;
-                        keine vollständigen Kartendaten auf dieser Website)' }}</li>
-                </ul>
-            </div>
-
-            <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '3. Purposes and legal bases (Art. 6 GDPR)' : '3. Zwecke und
-                    Rechtsgrundlagen (Art. 6 DSGVO)' }}</h3>
-                <ul>
-                    <li>{{ currentLanguage === 'en' ? 'Provision and security of the website (Art. 6(1)(f))' :
-                        'Bereitstellung und Sicherheit der Website (Art. 6 Abs. 1 lit. f)' }}</li>
-                    <li>{{ currentLanguage === 'en' ? 'Contract initiation and fulfillment for photo licensing purchases
-                        (Art. 6(1)(b))' : 'Vertragsanbahnung und -erfüllung bei Foto-Lizenzkäufen (Art. 6 Abs. 1 lit.
-                        b)' }}</li>
-                    <li>{{ currentLanguage === 'en' ? 'Compliance with legal retention and accounting obligations (Art.
-                        6(1)(c))' : 'Erfüllung gesetzlicher Aufbewahrungs- und Nachweispflichten (Art. 6 Abs. 1 lit.
-                        c)' }}</li>
-                    <li>{{ currentLanguage === 'en' ? 'Optional consent-based services where applicable (Art. 6(1)(a))'
-                        : 'Optionale einwilligungsbasierte Dienste, soweit einschlägig (Art. 6 Abs. 1 lit. a)' }}</li>
-                </ul>
-            </div>
-
-            <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '4. Recipients and processors' : '4. Empfänger und
-                    Auftragsverarbeiter' }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '2. Website provisioning, server logs, and media delivery' : '2.
+                    Bereitstellung der Website, Server-Logs und Medienauslieferung' }}</h3>
                 <p>
                     {{ currentLanguage === 'en'
-                    ? 'Data may be processed by hosting providers, infrastructure services, and payment service
-                    providers (e.g., PayPal) strictly for the required technical and contractual purposes.'
-                    : 'Daten können durch Hosting-Provider, Infrastruktur-Dienste und Zahlungsdienstleister (z. B.
-                    PayPal) ausschließlich zu den erforderlichen technischen und vertraglichen Zwecken verarbeitet
-                    werden.' }}
+                    ? 'When visiting this website, technical connection data may be processed automatically, in
+                    particular IP address, date and time, requested resource, browser type, operating system, referrer,
+                    and access status. Image files and downloads may also be delivered through external storage or
+                    infrastructure services for performance and reliability reasons.'
+                    : 'Beim Aufruf dieser Website können technisch erforderliche Verbindungsdaten automatisch
+                    verarbeitet werden, insbesondere IP-Adresse, Datum und Uhrzeit, aufgerufene Ressource, Browsertyp,
+                    Betriebssystem, Referrer und Zugriffsstatus. Bilddateien und Downloads können aus Performance- und
+                    Verfügbarkeitsgründen zudem über externe Speicher- oder Infrastruktur-Dienste ausgeliefert werden.'
+                    }}
                 </p>
-            </div>
-
-            <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '5. Storage duration' : '5. Speicherdauer' }}</h3>
                 <p>
                     {{ currentLanguage === 'en'
-                    ? 'Personal data is stored only as long as required for the respective purpose or legal retention
-                    period. Technical logs are usually retained for a short security-related period.'
-                    : 'Personenbezogene Daten werden nur so lange gespeichert, wie es für den jeweiligen Zweck oder
-                    gesetzliche Aufbewahrungsfristen erforderlich ist. Technische Logdaten werden in der Regel nur
-                    kurzzeitig zu Sicherheitszwecken vorgehalten.' }}
+                    ? 'The legal basis is Art. 6(1)(f) GDPR for secure and stable operation of the website.'
+                    : 'Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO für den sicheren und stabilen Betrieb der
+                    Website.' }}
                 </p>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '6. Your rights' : '6. Ihre Rechte' }}</h3>
-                <p>{{ currentLanguage === 'en' ? 'Under GDPR, you have rights of access, rectification, erasure,
-                    restriction, data portability, and objection as well as the right to withdraw consent at any time.'
-                    : 'Nach DSGVO haben Sie Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung,
-                    Datenübertragbarkeit und Widerspruch sowie das Recht, Einwilligungen jederzeit zu widerrufen.' }}
+                <h3>{{ currentLanguage === 'en' ? '3. Browser storage (local storage)' : '3. Browserspeicher (Local
+                    Storage)' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'This website stores certain settings and shop-related data in your browser, for example language
+                    preference, dark mode preference, shopping cart contents, certificate holder name, a short purchase
+                    summary, and login tokens for customer or admin areas where applicable.'
+                    : 'Diese Website speichert bestimmte Einstellungen und shopbezogene Daten im Browser, zum Beispiel
+                    Sprachpräferenz, Dark-Mode-Status, Inhalte des Warenkorbs, den Namen für Zertifikate, eine kurze
+                    Kaufzusammenfassung sowie gegebenenfalls Login-Token für Kunden- oder Admin-Bereiche.' }}
                 </p>
                 <p>
-                    {{ currentLanguage === 'en' ? 'You also have the right to lodge a complaint with a supervisory
-                    authority.' : 'Zudem besteht ein Beschwerderecht bei einer Datenschutzaufsichtsbehörde.' }}
+                    {{ currentLanguage === 'en'
+                    ? 'This storage is used to provide requested functions and to keep the shopping and account
+                    experience consistent across page reloads. The legal basis is Art. 6(1)(b) GDPR for requested
+                    shop/account functions and Art. 6(1)(f) GDPR for technically useful preference storage.'
+                    : 'Diese Speicherung dient der Bereitstellung angeforderter Funktionen und einer konsistenten Shop-
+                    und Kontonutzung über Seitenwechsel hinweg. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO für
+                    angeforderte Shop-/Kontofunktionen sowie Art. 6 Abs. 1 lit. f DSGVO für technisch sinnvolle
+                    Präferenzspeicherung.' }}
                 </p>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '7. Contact for privacy requests' : '7. Kontakt für
+                <h3>{{ currentLanguage === 'en' ? '4. Customer account, orders, invoices, and downloads' : '4.
+                    Kundenkonto, Bestellungen, Rechnungen und Downloads' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'If you register for a customer account or place an order, personal data such as name, e-mail
+                    address, optional company name (if provided for certificate or invoice usage), account
+                    credentials, order details, purchased licenses, invoices, and download history may be processed.'
+                    : 'Wenn Sie ein Kundenkonto anlegen oder eine Bestellung aufgeben, können personenbezogene Daten wie
+                    Name, E-Mail-Adresse, optionaler Firmenname (sofern für Zertifikat oder Rechnungsangaben
+                    angegeben), Zugangsdaten, Bestelldetails, erworbene Lizenzen, Rechnungen und Downloadhistorie
+                    verarbeitet werden.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Processing is carried out for contract initiation and performance under Art. 6(1)(b) GDPR and,
+                    where applicable, for compliance with tax and commercial retention obligations under Art. 6(1)(c)
+                    GDPR.'
+                    : 'Die Verarbeitung erfolgt zur Vertragsanbahnung und Vertragserfüllung nach Art. 6 Abs. 1 lit. b
+                    DSGVO und, soweit erforderlich, zur Erfüllung steuer- und handelsrechtlicher Aufbewahrungspflichten
+                    nach Art. 6 Abs. 1 lit. c DSGVO.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'This also applies to subscription products, including plan selection, activation status, included
+                    monthly download allowance, the consumption of included downloads, and the assignment of such usage
+                    to the authenticated customer account.'
+                    : 'Dies gilt auch für Abonnement-Produkte, einschließlich Tarifauswahl, Aktivierungsstatus,
+                    enthaltenem monatlichem Download-Kontingent, Verbrauch enthaltener Downloads und der Zuordnung
+                    dieser Nutzung zum authentifizierten Kundenkonto.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '5. Payments via PayPal' : '5. Zahlungen über PayPal' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'For online payments, PayPal services are integrated. When you start or complete a payment, data
+                    required for payment processing may be transmitted to PayPal, such as order amount, currency,
+                    transaction identifiers, and information necessary for fraud prevention and payment confirmation.
+                    Full payment card details are not stored on this website.'
+                    : 'Für Online-Zahlungen sind PayPal-Dienste eingebunden. Wenn Sie eine Zahlung starten oder
+                    abschließen, können die für die Zahlungsabwicklung erforderlichen Daten an PayPal übermittelt
+                    werden, etwa Bestellbetrag, Währung, Transaktionskennungen und Informationen zur Betrugsprävention
+                    und Zahlungsbestätigung. Vollständige Kartendaten werden auf dieser Website nicht gespeichert.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'The legal basis is Art. 6(1)(b) GDPR. PayPal acts as an independent controller for its own
+                    payment processing steps.'
+                    : 'Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO. PayPal handelt für eigene Schritte der
+                    Zahlungsabwicklung als eigenständiger Verantwortlicher.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '6. Optional Google Sign-In' : '6. Optionaler Google Sign-In' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'If you actively choose Google Sign-In, Google Identity Services are loaded and the transmitted
+                    Google credential is used to authenticate or create your customer account. This feature is optional
+                    and not required for browsing the public website.'
+                    : 'Wenn Sie aktiv den Google-Sign-In wählen, werden Google Identity Services geladen und das
+                    übermittelte Google-Credential zur Authentifizierung oder Erstellung Ihres Kundenkontos verwendet.
+                    Diese Funktion ist optional und nicht für die Nutzung der öffentlichen Website erforderlich.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Processing takes place only after your active action and is based on Art. 6(1)(b) GDPR for the
+                    requested login process. Depending on the provider setup, data transfers to third countries may
+                    occur.'
+                    : 'Die Verarbeitung erfolgt erst nach Ihrer aktiven Auswahl und beruht auf Art. 6 Abs. 1 lit. b
+                    DSGVO für den angeforderten Login-Prozess. Je nach Anbieterkonstellation kann es dabei zu
+                    Datenübermittlungen in Drittländer kommen.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '7. Verified reviews' : '7. Verifizierte Bewertungen' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Verified buyers may submit ratings and review texts for purchased images. Display name, rating,
+                    review text, and publication date may be shown in the gallery to other users.'
+                    : 'Verifizierte Käufer können Bewertungen und Rezensionstexte zu erworbenen Bildern abgeben.
+                    Anzeigename, Bewertung, Rezensionstext und Veröffentlichungsdatum können in der Galerie für andere
+                    Nutzer sichtbar dargestellt werden.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'The legal basis is Art. 6(1)(b) GDPR for the account-related review function requested by you and
+                    Art. 6(1)(f) GDPR for transparent product presentation.'
+                    : 'Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO für die von Ihnen angeforderte kontobezogene
+                    Bewertungsfunktion sowie Art. 6 Abs. 1 lit. f DSGVO für eine transparente Produktdarstellung.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '8. Recipients and third-country transfers' : '8. Empfänger und
+                    Drittlandübermittlungen' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Data may be processed by hosting providers, storage and infrastructure services, payment
+                    providers, e-mail services, and authentication providers where technically or contractually
+                    necessary. If providers process data outside the EU/EEA, this takes place under the provider’s
+                    applicable contractual and legal safeguards where available.'
+                    : 'Daten können durch Hosting-Provider, Speicher- und Infrastruktur-Dienste, Zahlungsdienstleister,
+                    E-Mail-Dienste und Authentifizierungsanbieter verarbeitet werden, soweit dies technisch oder
+                    vertraglich erforderlich ist. Falls Anbieter Daten außerhalb der EU/des EWR verarbeiten, erfolgt
+                    dies im Rahmen der jeweils anwendbaren vertraglichen und rechtlichen Schutzmechanismen des
+                    Anbieters, soweit verfügbar.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '9. Storage duration' : '9. Speicherdauer' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Personal data is stored only as long as required for the respective purpose. Account and order
+                    data may be retained for the duration of the customer relationship and beyond where statutory
+                    retention obligations apply. Technical log data is generally kept only for a short security-related
+                    period.'
+                    : 'Personenbezogene Daten werden nur so lange gespeichert, wie es für den jeweiligen Zweck
+                    erforderlich ist. Konto- und Bestelldaten können für die Dauer der Kundenbeziehung und darüber
+                    hinaus gespeichert werden, soweit gesetzliche Aufbewahrungspflichten bestehen. Technische Logdaten
+                    werden in der Regel nur kurzzeitig zu Sicherheitszwecken vorgehalten.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Subscription-related status data and logs about included download usage may be retained as long
+                    as required to manage active plans, document fulfilled digital services, prevent misuse, and satisfy
+                    legal retention requirements.'
+                    : 'Abonnementbezogene Statusdaten und Protokolle über die Nutzung enthaltener Downloads können so
+                    lange gespeichert werden, wie dies zur Verwaltung aktiver Tarife, zur Dokumentation erbrachter
+                    digitaler Leistungen, zur Missbrauchsvermeidung und zur Erfüllung gesetzlicher
+                    Aufbewahrungspflichten erforderlich ist.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '10. Your rights' : '10. Ihre Rechte' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Under GDPR, you have rights of access, rectification, erasure, restriction, data portability,
+                    objection, and the right to withdraw any consent with future effect.'
+                    : 'Nach der DSGVO haben Sie Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung,
+                    Datenübertragbarkeit, Widerspruch sowie das Recht, eine erteilte Einwilligung mit Wirkung für die
+                    Zukunft zu widerrufen.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'You also have the right to lodge a complaint with a data protection supervisory authority.'
+                    : 'Zudem besteht ein Beschwerderecht bei einer Datenschutzaufsichtsbehörde.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '11. Contact for privacy requests' : '11. Kontakt für
                     Datenschutzanfragen' }}</h3>
                 <p>
                     E-Mail: <a href="mailto:info@christian-boehme.com">info@christian-boehme.com</a>
                 </p>
-                <p><em>{{ currentLanguage === 'en' ? 'Last updated: April 2026' : 'Letzte Aktualisierung: April 2026'
+                <p><em>{{ currentLanguage === 'en' ? 'Last updated: July 2026' : 'Letzte Aktualisierung: Juli 2026'
                         }}</em></p>
             </div>
         </div>
@@ -190,89 +342,240 @@
                 <h3>{{ currentLanguage === 'en' ? '1. Scope' : '1. Geltungsbereich' }}</h3>
                 <p>
                     {{ currentLanguage === 'en'
-                    ? 'These terms apply to the use of christian-boehme.com and related online services.'
-                    : 'Diese Bedingungen gelten für die Nutzung von christian-boehme.com und der damit verbundenen
-                    Online-Dienste.' }}
+                    ? 'These terms apply to the use of christian-boehme.com, the gallery, the photo licensing shop, and
+                    the related customer account services.'
+                    : 'Diese Bedingungen gelten für die Nutzung von christian-boehme.com, der Galerie, des
+                    Foto-Lizenzshops und der dazugehörigen Kundenkonto-Dienste.' }}
                 </p>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '2. Content and rights of use' : '2. Inhalte und Nutzungsrechte' }}
-                </h3>
+                <h3>{{ currentLanguage === 'en' ? '2. Offer, checkout, and contract conclusion' : '2. Angebot, Checkout
+                    und Vertragsschluss' }}</h3>
                 <p>
                     {{ currentLanguage === 'en'
-                    ? 'All content is protected by copyright. Downloads and usage rights are granted only within the
-                    contractually agreed license scope.'
-                    : 'Sämtliche Inhalte sind urheberrechtlich geschützt. Downloads und Nutzungsrechte werden nur im
-                    vertraglich vereinbarten Lizenzumfang eingeräumt.' }}
+                    ? 'Product presentations on the website do not by themselves constitute a legally binding guarantee
+                    of availability. The decisive details for a purchase are the information shown during checkout and
+                    the payment confirmation.'
+                    : 'Produktdarstellungen auf der Website stellen für sich genommen noch keine rechtlich bindende
+                    Verfügbarkeitsgarantie dar. Maßgeblich für einen Kauf sind die im Checkout angezeigten Informationen
+                    und die Zahlungsbestätigung.' }}
                 </p>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '3. Shop, orders, and payments' : '3. Shop, Bestellungen und
-                    Zahlungen' }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '3. Prices and payment providers' : '3. Preise und
+                    Zahlungsdienstleister' }}</h3>
                 <p>
                     {{ currentLanguage === 'en'
-                    ? 'For digital photo licenses and related products, the details shown during checkout apply. Payment
-                    processing may be handled by external payment providers.'
-                    : 'Für digitale Foto-Lizenzen und damit verbundene Produkte gelten die im Checkout angezeigten
-                    Details. Die Zahlungsabwicklung kann über externe Zahlungsdienstleister erfolgen.' }}
+                    ? 'The prices shown during checkout apply. Payment processing may be handled by external payment
+                    providers, especially PayPal. Additional provider terms may apply to the payment method you select.'
+                    : 'Es gelten die im Checkout angezeigten Preise. Die Zahlungsabwicklung kann über externe
+                    Zahlungsdienstleister, insbesondere PayPal, erfolgen. Für die gewählte Zahlungsart können ergänzende
+                    Bedingungen des jeweiligen Zahlungsdienstleisters gelten.' }}
                 </p>
-            </div>
-
-            <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '4. Availability and technical operation' : '4. Verfügbarkeit und
-                    technischer Betrieb' }}</h3>
                 <p>
                     {{ currentLanguage === 'en'
-                    ? 'No uninterrupted availability is guaranteed. Maintenance, security, or force majeure may lead to
-                    temporary restrictions.'
-                    : 'Eine unterbrechungsfreie Verfügbarkeit wird nicht geschuldet. Wartung, Sicherheit oder höhere
-                    Gewalt können zu vorübergehenden Einschränkungen führen.' }}
+                    ? 'This includes one-time image license purchases as well as subscription products, such as a
+                    monthly plan for EUR 9.99 or an annual billing model for EUR 99.99, if these are currently offered
+                    in the account area.'
+                    : 'Dies umfasst sowohl einmalige Bildlizenzkäufe als auch Abonnement-Produkte, etwa einen
+                    Monatstarif für 9,99 EUR oder ein Jahresabrechnungsmodell für 99,99 EUR, sofern diese aktuell im
+                    Kontobereich angeboten werden.' }}
                 </p>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '5. Prohibited use' : '5. Unzulässige Nutzung' }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '4. Digital image licenses and scope of use' : '4. Digitale
+                    Bildlizenzen und Nutzungsumfang' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Unless expressly agreed otherwise, the shop sells digital usage rights for photographs, not the
+                    copyright itself. The permitted scope of use results from the purchased license model, the product
+                    description, and any explicitly granted commercial upgrade.'
+                    : 'Soweit nicht ausdrücklich etwas anderes vereinbart ist, werden im Shop digitale Nutzungsrechte an
+                    Fotografien verkauft, nicht das Urheberrecht selbst. Der zulässige Nutzungsumfang ergibt sich aus
+                    dem erworbenen Lizenzmodell, der Produktbeschreibung und einer gegebenenfalls ausdrücklich gebuchten
+                    kommerziellen Erweiterung.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '5. Delivery, downloads, certificates, and invoices' : '5.
+                    Bereitstellung, Downloads, Zertifikate und Rechnungen' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Digital content is generally provided electronically after successful payment. Where available,
+                    downloads, invoices, and license certificates are made accessible in the success view and/or
+                    customer account.'
+                    : 'Digitale Inhalte werden grundsätzlich nach erfolgreicher Zahlung elektronisch bereitgestellt.
+                    Soweit vorgesehen, werden Downloads, Rechnungen und Lizenzzertifikate in der Erfolgsansicht und/oder
+                    im Kundenkonto zugänglich gemacht.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'In the case of subscription products, access may be granted in the customer account for the
+                    booked term, including a technically enforced monthly quota of included image downloads. Unused
+                    monthly allowances generally do not automatically create an entitlement beyond the technically
+                    provided plan logic unless expressly agreed otherwise.'
+                    : 'Bei Abonnement-Produkten kann der Zugang für die gebuchte Laufzeit im Kundenkonto bereitgestellt
+                    werden, einschließlich eines technisch durchgesetzten monatlichen Kontingents enthaltener
+                    Bilddownloads. Nicht genutzte Monatskontingente begründen grundsätzlich keinen automatischen
+                    Anspruch über die technisch vorgesehene Tariflogik hinaus, sofern nicht ausdrücklich etwas anderes
+                    vereinbart ist.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '6. Consumer notice on digital content and withdrawal' : '6.
+                    Verbraucherhinweis zu digitalen Inhalten und Widerruf' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'If statutory consumer withdrawal rights apply to a specific purchase, the information provided
+                    during checkout remains decisive. For digital content, any premature expiry of a withdrawal right
+                    generally requires the consumer’s prior express consent and acknowledgement.'
+                    : 'Soweit für einen konkreten Kauf gesetzliche Widerrufsrechte für Verbraucher bestehen, bleiben die
+                    im Checkout bereitgestellten Hinweise maßgeblich. Bei digitalen Inhalten setzt ein vorzeitiges
+                    Erlöschen eines Widerrufsrechts grundsätzlich eine vorherige ausdrückliche Zustimmung und
+                    Bestätigung des Verbrauchers voraus.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'This may also apply to digital subscription services if execution begins immediately after
+                    booking or activation and the legal conditions for the start of digital performance are met.'
+                    : 'Dies kann auch für digitale Abo-Leistungen gelten, wenn die Ausführung unmittelbar nach Buchung
+                    oder Aktivierung beginnt und die gesetzlichen Voraussetzungen für den Beginn der digitalen Leistung
+                    erfüllt sind.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '7. Subscription plans and included download allowance' : '7.
+                    Abonnements und enthaltenes Download-Kontingent' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'If subscription products are offered, they grant access to the contractually defined scope of
+                    digital use for the selected term only. This may include a limited monthly image-download allowance
+                    tied to the authenticated user account.'
+                    : 'Soweit Abonnement-Produkte angeboten werden, gewähren sie ausschließlich Zugang zum vertraglich
+                    definierten Umfang digitaler Nutzung für die gewählte Laufzeit. Dies kann ein begrenztes monatliches
+                    Bild-Download-Kontingent umfassen, das an das authentifizierte Benutzerkonto gebunden ist.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'The operator may technically restrict, log, or block subscription use where monthly limits are
+                    exhausted, accounts are inactive, or misuse is suspected.'
+                    : 'Der Betreiber kann die Nutzung des Abos technisch beschränken, protokollieren oder sperren, wenn
+                    Monatslimits ausgeschöpft sind, Konten inaktiv sind oder ein Missbrauchsverdacht besteht.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Unless expressly stated otherwise at checkout, subscription products in the current
+                    implementation are time-limited prepaid digital services. They do not automatically renew solely by
+                    virtue of account activation; instead, a new booking or a deliberate plan change in the account area
+                    may replace an existing plan.'
+                    : 'Soweit im Checkout nicht ausdrücklich etwas anderes angegeben ist, handelt es sich bei den
+                    aktuell angebotenen Abonnement-Produkten um zeitlich befristete, im Voraus bezahlte digitale
+                    Leistungen. Sie verlängern sich nicht allein durch die Aktivierung des Kontos automatisch; vielmehr
+                    kann eine neue Buchung oder ein bewusster Tarifwechsel im Kontobereich ein bestehendes Abo
+                    ersetzen.' }}
+                </p>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'If an immediate cancellation function is provided in the account area, users may end the
+                    subscription at any time with immediate effect. After cancellation, access to subscription-based
+                    downloads ends immediately, unless temporary access is required for technical processing, legal
+                    obligations, or abuse prevention.'
+                    : 'Soweit im Kontobereich eine Funktion zur sofortigen Kündigung angeboten wird, können Nutzer das
+                    Abonnement jederzeit mit sofortiger Wirkung beenden. Nach der Kündigung endet der Zugriff auf
+                    abonnementsbasierte Downloads sofort, sofern kein vorübergehender Zugriff aus technischen,
+                    rechtlichen oder missbrauchsbezogenen Gründen erforderlich ist.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '8. User accounts and access data' : '8. Benutzerkonten und
+                    Zugangsdaten' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Users are responsible for keeping their access data confidential and for providing truthful
+                    information during registration and ordering. Accounts may not be misused, transferred, or used for
+                    unlawful purposes.'
+                    : 'Nutzer sind dafür verantwortlich, ihre Zugangsdaten vertraulich zu behandeln und bei
+                    Registrierung und Bestellung zutreffende Angaben zu machen. Konten dürfen nicht missbräuchlich,
+                    übertragen oder für rechtswidrige Zwecke verwendet werden.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '9. Reviews and user-generated content' : '9. Bewertungen und
+                    nutzergenerierte Inhalte' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'Reviews must be factual, lawful, and free from third-party rights violations. The operator
+                    reserves the right to remove content that is abusive, unlawful, misleading, or technically
+                    disruptive.'
+                    : 'Bewertungen müssen sachlich, rechtmäßig und frei von Rechten Dritter sein. Der Betreiber behält
+                    sich vor, Inhalte zu entfernen, die beleidigend, rechtswidrig, irreführend oder technisch störend
+                    sind.' }}
+                </p>
+            </div>
+
+            <div class="section">
+                <h3>{{ currentLanguage === 'en' ? '10. Availability and prohibited use' : '10. Verfügbarkeit und
+                    unzulässige Nutzung' }}</h3>
+                <p>
+                    {{ currentLanguage === 'en'
+                    ? 'No uninterrupted availability is guaranteed. Maintenance, security incidents, force majeure, or
+                    provider outages may lead to temporary restrictions.'
+                    : 'Eine unterbrechungsfreie Verfügbarkeit wird nicht garantiert. Wartung, Sicherheitsvorfälle,
+                    höhere Gewalt oder Ausfälle externer Dienste können zu vorübergehenden Einschränkungen führen.' }}
+                </p>
                 <ul>
-                    <li>{{ currentLanguage === 'en' ? 'Automated scraping without permission' : 'Automatisiertes
-                        Scraping ohne Erlaubnis' }}</li>
+                    <li>{{ currentLanguage === 'en' ? 'Automated scraping or bulk downloading without permission' :
+                        'Automatisiertes Scraping oder massenhafter Download ohne Erlaubnis' }}</li>
                     <li>{{ currentLanguage === 'en' ? 'Security attacks or unauthorized access attempts' :
                         'Sicherheitsangriffe oder unbefugte Zugriffsversuche' }}</li>
-                    <li>{{ currentLanguage === 'en' ? 'Use that violates laws or third-party rights' : 'Nutzung, die
-                        gegen Gesetze oder Rechte Dritter verstößt' }}</li>
+                    <li>{{ currentLanguage === 'en' ? 'Circumvention of subscription limits or account-based access
+                        restrictions' :
+                        'Umgehung von Abo-Limits oder kontobezogenen Zugriffsbeschränkungen' }}</li>
+                    <li>{{ currentLanguage === 'en' ? 'Any use that violates laws, license terms, or third-party rights'
+                        : 'Jede Nutzung, die gegen Gesetze, Lizenzbedingungen oder Rechte Dritter verstößt' }}</li>
                 </ul>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '6. Liability' : '6. Haftung' }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '11. Liability' : '11. Haftung' }}</h3>
                 <p>
                     {{ currentLanguage === 'en'
                     ? 'Liability is limited as permitted by law. Mandatory statutory liability, especially for intent,
-                    gross negligence, injury to life/body/health, and product liability, remains unaffected.'
+                    gross negligence, injury to life, body or health, and liability under mandatory product liability
+                    law, remains unaffected.'
                     : 'Die Haftung ist im gesetzlich zulässigen Umfang beschränkt. Zwingende gesetzliche Haftung,
-                    insbesondere bei Vorsatz, grober Fahrlässigkeit, Verletzung von Leben, Körper oder Gesundheit
-                    sowie nach Produkthaftungsgesetz, bleibt unberührt.' }}
+                    insbesondere bei Vorsatz, grober Fahrlässigkeit, Verletzung von Leben, Körper oder Gesundheit sowie
+                    nach zwingendem Produkthaftungsrecht, bleibt unberührt.' }}
                 </p>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '7. Applicable law' : '7. Anwendbares Recht' }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '12. Applicable law' : '12. Anwendbares Recht' }}</h3>
                 <p>
                     {{ currentLanguage === 'en'
-                    ? 'The law of the Federal Republic of Germany applies. Mandatory consumer protection provisions
-                    remain unaffected.'
-                    : 'Es gilt das Recht der Bundesrepublik Deutschland. Zwingende Verbraucherschutzvorschriften bleiben
-                    unberührt.' }}
+                    ? 'The law of the Federal Republic of Germany applies, excluding any mandatory consumer protection
+                    law of the country in which a consumer has habitual residence only to the extent legally
+                    permissible.'
+                    : 'Es gilt das Recht der Bundesrepublik Deutschland, wobei zwingende verbraucherschützende
+                    Vorschriften des Staates des gewöhnlichen Aufenthalts eines Verbrauchers nur insoweit unberührt
+                    bleiben, wie dies rechtlich erforderlich ist.' }}
                 </p>
             </div>
 
             <div class="section">
-                <h3>{{ currentLanguage === 'en' ? '8. Contact' : '8. Kontakt' }}</h3>
+                <h3>{{ currentLanguage === 'en' ? '13. Contact' : '13. Kontakt' }}</h3>
                 <p>
                     E-Mail: <a href="mailto:info@christian-boehme.com">info@christian-boehme.com</a>
                 </p>
-                <p><em>{{ currentLanguage === 'en' ? 'Last updated: April 2026' : 'Letzte Aktualisierung: April 2026'
+                <p><em>{{ currentLanguage === 'en' ? 'Last updated: July 2026' : 'Letzte Aktualisierung: Juli 2026'
                         }}</em></p>
             </div>
         </div>

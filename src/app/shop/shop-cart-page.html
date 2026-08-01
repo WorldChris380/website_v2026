@@ -1,4 +1,4 @@
-<div class="cart-page">
+﻿<div class="cart-page">
     <div class="cart-shell">
         <header class="cart-hero">
             <div>
@@ -89,6 +89,12 @@
                     <span>{{ t('owner') }}</span>
                     <strong>{{ certificateOwner }}</strong>
                     <p class="owner-lock-hint">{{ t('ownerHint') }}</p>
+                    <label class="company-name-field">
+                        <span>{{ t('company') }}</span>
+                        <input type="text" [ngModel]="companyName" (ngModelChange)="onCompanyNameChange($event)"
+                            [placeholder]="t('company')" />
+                    </label>
+                    <p class="owner-lock-hint owner-lock-hint-company">{{ t('companyHint') }}</p>
                     <p class="checkout-ready-message">{{ t('checkoutReadyCopy') }}</p>
                     <button type="button" class="logout-link" (click)="logout()">{{ t('logout') }}</button>
                 </div>
@@ -103,9 +109,10 @@
 
                 <div class="checkout-actions">
                     <app-paypal-button *ngIf="canCheckout" [items]="items" currency="EUR" [ownerName]="certificateOwner"
-                        (paymentSuccess)="onPaymentSuccess()">
+                        [companyName]="companyName" (paymentSuccess)="onPaymentSuccess()">
                     </app-paypal-button>
-                    <button class="continue-shopping" [routerLink]="['/gallery']">{{ t('continueShopping') }}</button>
+                    <button class="continue-shopping" [routerLink]="['/photography']">{{ t('continueShopping')
+                        }}</button>
                     <button class="clear-cart" (click)="clear()">{{ t('clearCart') }}</button>
                 </div>
             </aside>
@@ -116,7 +123,7 @@
                 <div class="empty-icon">🛒</div>
                 <h2>{{ t('emptyCart') }}</h2>
                 <p>{{ t('emptyLead') }}</p>
-                <a [routerLink]="['/gallery']" class="browse-btn">{{ t('browseGallery') }}</a>
+                <a [routerLink]="['/photography']" class="browse-btn">{{ t('browseGallery') }}</a>
             </div>
         </ng-template>
     </div>

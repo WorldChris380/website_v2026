@@ -1,22 +1,22 @@
-<div class="counters" *ngIf="!loading">
-    <a class="counter-card counter-link" [routerLink]="['/gallery']">
+﻿<div class="counters" *ngIf="!loading">
+    <a class="counter-card counter-link" [routerLink]="['/photography']">
         <div class="counter-number">{{ formatNumber(displayTotalPhotos) }}</div>
         <div class="counter-label">{{ currentLanguage === 'en' ? 'Photos in database' : 'Fotos in Datenbank' }}</div>
     </a>
 
-    <a class="counter-card counter-link" [routerLink]="['/gallery']" [queryParams]="{filter: 'aviation'}">
+    <a class="counter-card counter-link" [routerLink]="['/photography']" [queryParams]="{filter: 'aviation'}">
         <div class="counter-number">{{ formatNumber(displayAviationPhotos) }}</div>
         <div class="counter-label">{{ currentLanguage === 'en' ? 'Aviation Photos presented' : 'Luftfahrtfotos
             präsentiert' }}</div>
     </a>
 
-    <a class="counter-card counter-link" [routerLink]="['/gallery']" [queryParams]="{filter: 'travel'}">
+    <a class="counter-card counter-link" [routerLink]="['/photography']" [queryParams]="{filter: 'travel'}">
         <div class="counter-number">{{ formatNumber(displayTravelPhotos) }}</div>
         <div class="counter-label">{{ currentLanguage === 'en' ? 'Travel Photos presented' : 'Reisefotos präsentiert' }}
         </div>
     </a>
 
-    <a class="counter-card counter-link" [routerLink]="['/gallery']">
+    <a class="counter-card counter-link" [routerLink]="['/photography']">
         <div class="counter-number">{{ formatNumber(displayCountriesPresented) }}</div>
         <div class="counter-label">{{ currentLanguage === 'en' ? 'Countries presented' : 'Länder präsentiert' }}</div>
     </a>

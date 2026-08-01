@@ -13,6 +13,7 @@ type CertificateItem = {
 
 type CertificateOrder = {
     ownerName?: string;
+    companyName?: string;
     orderId: string;
     captureId: string;
     purchasedAt: string;
@@ -30,6 +31,7 @@ export class CertificateService {
             imagePreviewMissing: lang === 'de' ? 'Bildvorschau nicht verfügbar' : 'Image preview not available',
             certificateId: lang === 'de' ? 'Zertifikats-ID' : 'Certificate ID',
             licenseHolder: lang === 'de' ? 'Lizenznehmer' : 'License holder',
+            company: lang === 'de' ? 'Firma' : 'Company',
             imageTitle: lang === 'de' ? 'Bildtitel' : 'Image title',
             imageId: lang === 'de' ? 'Bild-ID' : 'Image ID',
             quantity: lang === 'de' ? 'Menge' : 'Quantity',
@@ -60,6 +62,7 @@ export class CertificateService {
             ...imageCandidates.filter((value) => this.isSameOriginUrl(value)),
         ];
         const certificateId = `${order.captureId}-${item.id}`;
+        const companyName = (order.companyName || '').trim();
 
         const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
         doc.setFillColor(247, 250, 252);
@@ -125,6 +128,10 @@ export class CertificateService {
             [t.orderId, order.orderId],
             [t.captureId, order.captureId],
         ];
+
+        if (companyName !== '') {
+            lines.splice(2, 0, [t.company, companyName]);
+        }
 
         let y = 58;
         for (const [label, value] of lines) {

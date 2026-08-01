@@ -57,6 +57,10 @@ export class ShopCart {
         return this.shop.getCertificateOwner();
     }
 
+    get companyName() {
+        return this.shop.getCompanyName();
+    }
+
     t(key: string): string {
         const de = this.currentLanguage === 'de';
         const map: Record<string, string> = {
@@ -66,6 +70,8 @@ export class ShopCart {
             total: de ? 'Gesamt' : 'Total',
             owner: de ? 'Zertifikatsinhaber' : 'Certificate holder',
             ownerPlaceholder: de ? 'Vor- und Nachname' : 'First and last name',
+            company: de ? 'Firmenname (optional)' : 'Company name (optional)',
+            companyPlaceholder: de ? 'z. B. Muster GmbH' : 'e.g. Acme Ltd.',
             clear: de ? 'Warenkorb leeren' : 'Clear cart',
         };
 
@@ -86,6 +92,10 @@ export class ShopCart {
 
     onCertificateOwnerChange(name: string) {
         this.shop.setCertificateOwner(name);
+    }
+
+    onCompanyNameChange(name: string) {
+        this.shop.setCompanyName(name);
     }
 
     increment(id: string) {

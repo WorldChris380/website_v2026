@@ -3,6 +3,17 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once __DIR__ . '/_paypal.php';
 
+// All subscription plan product IDs — personal-use and commercial-use
+// tiers, monthly and annual. Kept as one list so every place that needs to
+// recognize "this cart item is a subscription" (digital-goods flag,
+// order persistence, activation) checks against the same set.
+const SUBSCRIPTION_PLAN_IDS = [
+    'subscription-monthly',
+    'subscription-yearly',
+    'subscription-commercial-monthly',
+    'subscription-commercial-yearly',
+];
+
 $allowedOrigins = [
     'https://www.christian-boehme.com',
     'https://christian-boehme.com',
@@ -60,6 +71,7 @@ try {
         $items = normalizeCartItems($payload['items'] ?? null, $currency);
         $items = withCommercialLicenseUpgrade($items, $commercialLicenseUpgrade, $currency);
         $ownerName = trim((string) ($payload['ownerName'] ?? ''));
+        $companyName = trim((string) ($payload['companyName'] ?? ''));
         $userToken = trim((string) ($payload['token'] ?? ''));
         $capture = capturePayPalOrder($config, $orderId);
         $captured = extractCapturedAmount($capture);
@@ -72,7 +84,7 @@ try {
             throw new RuntimeException('Captured amount does not match cart total.');
         }
 
-        $invoice = persistSuccessfulOrder($orderId, $captured['captureId'], $captured['amount'], $currency, $items, $payload['items'] ?? null, $ownerName, $userToken);
+        $invoice = persistSuccessfulOrder($orderId, $captured['captureId'], $captured['amount'], $currency, $items, $payload['items'] ?? null, $ownerName, $companyName, $userToken);
 
         respond(200, [
             'ok' => true,
@@ -173,7 +185,7 @@ function withCommercialLicenseUpgrade(array $items, bool $enabled, string $curre
         'id' => 'commercial-license-upgrade',
         'title' => 'Commercial license upgrade',
         'quantity' => $imageQuantity,
-        'unit_price' => number_format(5, 2, '.', ''),
+        'unit_price' => number_format(10, 2, '.', ''),
         'currency' => $currency,
     ];
 
@@ -185,7 +197,35 @@ function resolveServerProduct(string $id, array $imageProducts): array
     if ($id === 'commercial-license-upgrade') {
         return [
             'title' => 'Commercial license upgrade',
-            'price' => 5.00,
+            'price' => 10.00,
+        ];
+    }
+
+    if ($id === 'subscription-monthly') {
+        return [
+            'title' => 'Photo Subscription Monthly',
+            'price' => 9.99,
+        ];
+    }
+
+    if ($id === 'subscription-yearly') {
+        return [
+            'title' => 'Photo Subscription Annual',
+            'price' => 99.99,
+        ];
+    }
+
+    if ($id === 'subscription-commercial-monthly') {
+        return [
+            'title' => 'Commercial Photo Subscription Monthly',
+            'price' => 19.99,
+        ];
+    }
+
+    if ($id === 'subscription-commercial-yearly') {
+        return [
+            'title' => 'Commercial Photo Subscription Annual',
+            'price' => 199.99,
         ];
     }
 
@@ -282,7 +322,9 @@ function buildPurchaseUnits(array $items, string $currency): array
                 'value' => number_format($unitPrice, 2, '.', ''),
             ],
             'quantity' => (string) $quantity,
-            'category' => $item['id'] === 'commercial-license-upgrade' ? 'DIGITAL_GOODS' : 'PHYSICAL_GOODS',
+            'category' => in_array($item['id'], array_merge(['commercial-license-upgrade'], SUBSCRIPTION_PLAN_IDS), true)
+                ? 'DIGITAL_GOODS'
+                : 'PHYSICAL_GOODS',
         ];
     }
 
@@ -469,11 +511,13 @@ function persistSuccessfulOrder(
     array $catalogItems,
     $rawItems,
     string $ownerName,
+    string $companyName,
     string $token
 ): array {
     $db = getGalleryMysqli();
     $user = resolveAuthenticatedUser($db, $token);
     $persistedItems = buildPersistedOrderItems($catalogItems, $rawItems, $currency);
+    $containsSubscription = orderContainsSubscription($persistedItems);
     $customerEmail = $user['email'] ?? null;
     $customerDisplayName = $user['display_name'] ?? null;
     $customerDisplayName = is_string($customerDisplayName) ? trim($customerDisplayName) : '';
@@ -481,51 +525,80 @@ function persistSuccessfulOrder(
     $userId = isset($user['id']) ? (int) $user['id'] : null;
     $invoiceToken = buildInvoiceToken();
     $resolvedOwnerName = trim($ownerName);
+    $resolvedCompanyName = trim($companyName);
+    if ($containsSubscription && (!isset($user['id']) || (int) ($user['id'] ?? 0) <= 0)) {
+        throw new RuntimeException('Subscriptions require a logged-in user account.');
+    }
     if ($userId !== null && $userId > 0) {
         $resolvedOwnerName = $customerDisplayName !== '' ? $customerDisplayName : $customerEmail;
     }
 
     $db->begin_transaction();
     try {
-        $insertOrderSql = <<<'SQL'
-INSERT INTO shop_orders (
-    user_id,
-    customer_email,
-    customer_display_name,
-    owner_name,
-    paypal_order_id,
-    paypal_capture_id,
-    order_status,
-    total_amount,
-    currency,
-    purchased_at
-) VALUES (?, ?, ?, ?, ?, ?, 'completed', ?, ?, CURRENT_TIMESTAMP)
-SQL;
+        $shopOrderColumns = fetchTableColumns($db, 'shop_orders');
+        ensureShopOrdersCompanyNameColumn($db, $shopOrderColumns);
+        $shopOrderColumns = fetchTableColumns($db, 'shop_orders');
+        $supportsCompanyName = isset($shopOrderColumns['company_name']);
+
+        $insertColumns = [
+            'user_id',
+            'customer_email',
+            'customer_display_name',
+            'owner_name',
+        ];
+        $insertPlaceholders = ['?', '?', '?', '?'];
+        $insertBindTypes = 'isss';
+        $insertBindValues = [];
+
+        $nullableUserId = $userId > 0 ? $userId : null;
+        $insertBindValues[] = $nullableUserId;
+        $insertBindValues[] = $customerEmail;
+        $insertBindValues[] = $customerDisplayName;
+        $nullableOwnerName = $resolvedOwnerName !== '' ? $resolvedOwnerName : null;
+        $insertBindValues[] = $nullableOwnerName;
+
+        if ($supportsCompanyName) {
+            $insertColumns[] = 'company_name';
+            $insertPlaceholders[] = '?';
+            $insertBindTypes .= 's';
+            $insertBindValues[] = $resolvedCompanyName;
+        }
+
+        $insertColumns = array_merge($insertColumns, [
+            'paypal_order_id',
+            'paypal_capture_id',
+            'order_status',
+            'total_amount',
+            'currency',
+            'purchased_at',
+        ]);
+        $insertPlaceholders = array_merge($insertPlaceholders, [
+            '?',
+            '?',
+            "'completed'",
+            '?',
+            '?',
+            'CURRENT_TIMESTAMP',
+        ]);
+        $insertBindTypes .= 'ssds';
+
+        $totalAmount = (float) $capturedAmount;
+        $insertBindValues[] = $paypalOrderId;
+        $insertBindValues[] = $paypalCaptureId;
+        $insertBindValues[] = $totalAmount;
+        $insertBindValues[] = $currency;
+
+        $insertOrderSql = 'INSERT INTO shop_orders (' . implode(', ', $insertColumns) . ') VALUES (' . implode(', ', $insertPlaceholders) . ')';
 
         $insertOrderStmt = $db->prepare($insertOrderSql);
         if (!$insertOrderStmt) {
             throw new RuntimeException('Failed to prepare order insert: ' . $db->error);
         }
-
-        $totalAmount = (float) $capturedAmount;
-        $nullableUserId = $userId > 0 ? $userId : null;
-        $nullableOwnerName = $resolvedOwnerName !== '' ? $resolvedOwnerName : null;
-        $insertOrderStmt->bind_param(
-            'isssssds',
-            $nullableUserId,
-            $customerEmail,
-            $customerDisplayName,
-            $nullableOwnerName,
-            $paypalOrderId,
-            $paypalCaptureId,
-            $totalAmount,
-            $currency
-        );
+        bindDynamicParams($insertOrderStmt, $insertBindTypes, $insertBindValues);
         $insertOrderStmt->execute();
         $shopOrderId = (int) $insertOrderStmt->insert_id;
         $insertOrderStmt->close();
 
-        $shopOrderColumns = fetchTableColumns($db, 'shop_orders');
         $supportsInvoiceToken = isset($shopOrderColumns['invoice_token']);
         $supportsInvoiceNumber = isset($shopOrderColumns['invoice_number']);
         $supportsInvoicePdfUrl = isset($shopOrderColumns['invoice_pdf_url']);
@@ -603,6 +676,12 @@ SQL;
         }
 
         $insertItemStmt->close();
+
+        if ($containsSubscription && $userId !== null && $userId > 0) {
+            ensureSubscriptionTables($db);
+            activatePurchasedSubscriptions($db, $userId, $shopOrderId, $paypalOrderId, $paypalCaptureId, $persistedItems);
+        }
+
         $db->commit();
         return [
             'orderNumber' => $shopOrderId,
@@ -613,6 +692,15 @@ SQL;
         $db->rollback();
         throw $e;
     }
+}
+
+function ensureShopOrdersCompanyNameColumn(mysqli $db, array $columns): void
+{
+    if (isset($columns['company_name'])) {
+        return;
+    }
+
+    $db->query("ALTER TABLE shop_orders ADD COLUMN company_name VARCHAR(190) NOT NULL DEFAULT '' AFTER owner_name");
 }
 
 function buildInvoiceToken(): string
@@ -666,9 +754,10 @@ function buildPersistedOrderItems(array $catalogItems, $rawItems, string $curren
         $id = (string) ($catalogItem['id'] ?? '');
         $rawItem = $rawById[$id] ?? [];
         $isLicenseProduct = $id === 'image-license' || $id === 'commercial-license-upgrade';
+        $isSubscriptionProduct = in_array($id, SUBSCRIPTION_PLAN_IDS, true);
         $items[] = [
             'product_id' => $id,
-            'product_type' => $isLicenseProduct ? 'license' : 'photo',
+            'product_type' => $isSubscriptionProduct ? 'subscription' : ($isLicenseProduct ? 'license' : 'photo'),
             'title' => (string) ($catalogItem['title'] ?? 'Photo Print'),
             'image_url' => normalizeNullableUrl($rawItem['imageUrl'] ?? null),
             'original_image_url' => normalizeNullableUrl($rawItem['originalImageUrl'] ?? null),
@@ -679,6 +768,115 @@ function buildPersistedOrderItems(array $catalogItems, $rawItems, string $curren
     }
 
     return $items;
+}
+
+function orderContainsSubscription(array $items): bool
+{
+    foreach ($items as $item) {
+        if (($item['product_type'] ?? '') === 'subscription') {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function ensureSubscriptionTables(mysqli $db): void
+{
+    try {
+        $probe = $db->query('SELECT 1 FROM shop_user_subscriptions LIMIT 1');
+        if ($probe !== false) {
+            if ($probe instanceof mysqli_result) {
+                $probe->free();
+            }
+            return;
+        }
+    } catch (Throwable $ignored) {
+        // Continue to CREATE TABLE.
+    }
+
+    $db->query(<<<'SQL'
+CREATE TABLE IF NOT EXISTS shop_user_subscriptions (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NOT NULL,
+    shop_order_id INT UNSIGNED NOT NULL,
+    plan_code VARCHAR(40) NOT NULL,
+    plan_name VARCHAR(120) NOT NULL,
+    status VARCHAR(24) NOT NULL DEFAULT 'active',
+    paypal_order_id VARCHAR(64) NOT NULL DEFAULT '',
+    paypal_capture_id VARCHAR(64) NOT NULL DEFAULT '',
+    started_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at DATETIME NOT NULL,
+    monthly_download_limit SMALLINT UNSIGNED NOT NULL DEFAULT 2,
+    monthly_downloads_used SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    downloads_reset_at DATETIME NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_user_status (user_id, status, expires_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+SQL);
+
+    $db->query(<<<'SQL'
+CREATE TABLE IF NOT EXISTS shop_subscription_downloads (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    subscription_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    image_id INT UNSIGNED NOT NULL,
+    downloaded_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    period_key CHAR(7) NOT NULL,
+    PRIMARY KEY (id),
+    KEY idx_subscription_period (subscription_id, period_key),
+    KEY idx_user_downloads (user_id, downloaded_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+SQL);
+}
+
+function activatePurchasedSubscriptions(mysqli $db, int $userId, int $shopOrderId, string $paypalOrderId, string $paypalCaptureId, array $items): void
+{
+    $replaceStmt = $db->prepare("UPDATE shop_user_subscriptions SET status = 'replaced' WHERE user_id = ? AND status IN ('active', 'cancelling')");
+    if ($replaceStmt) {
+        $replaceStmt->bind_param('i', $userId);
+        $replaceStmt->execute();
+        $replaceStmt->close();
+    }
+
+    $insertStmt = $db->prepare(
+        "INSERT INTO shop_user_subscriptions (user_id, shop_order_id, plan_code, plan_name, status, paypal_order_id, paypal_capture_id, started_at, expires_at, monthly_download_limit, monthly_downloads_used, downloads_reset_at) VALUES (?, ?, ?, ?, 'active', ?, ?, CURRENT_TIMESTAMP, ?, 2, 0, CURRENT_TIMESTAMP)"
+    );
+    if (!$insertStmt) {
+        throw new RuntimeException('Failed to prepare subscription insert: ' . $db->error);
+    }
+
+    foreach ($items as $item) {
+        if (($item['product_type'] ?? '') !== 'subscription') {
+            continue;
+        }
+
+        $planCode = (string) ($item['product_id'] ?? 'subscription-monthly');
+        $planName = (string) ($item['title'] ?? 'Photo Subscription');
+        $expiresAt = new DateTimeImmutable('now');
+        if (str_ends_with($planCode, '-yearly')) {
+            $expiresAt = $expiresAt->modify('+1 year');
+        } else {
+            $expiresAt = $expiresAt->modify('+1 month');
+        }
+
+        $expiresAtSql = $expiresAt->format('Y-m-d H:i:s');
+        $insertStmt->bind_param(
+            'iisssss',
+            $userId,
+            $shopOrderId,
+            $planCode,
+            $planName,
+            $paypalOrderId,
+            $paypalCaptureId,
+            $expiresAtSql
+        );
+        $insertStmt->execute();
+    }
+
+    $insertStmt->close();
 }
 
 function normalizeNullableUrl($value): ?string

@@ -20,18 +20,46 @@ export class ShopHome implements OnInit {
     t(key: string): string {
         const de = this.currentLanguage === 'de';
         const map: Record<string, string> = {
-            pageTitle: de ? 'Foto-Lizenzierung' : 'Photo Licensing',
-            pageLead: de ? 'Lizenziere ausgewählte Aviation- und Reisefotos mit möglichst wenig Reibung.' : 'License selected aviation and travel photos with as little friction as possible.',
-            hint: de ? 'Wähle dein Motiv in der Galerie, lege es in den Warenkorb und schließe den Kauf in wenigen Schritten ab.' : 'Choose your image in the gallery, add it to cart, and complete the purchase in a few simple steps.',
-            badge: de ? 'Lizenz' : 'License',
-            productTitle: de ? 'Foto lizenzieren' : 'License Photo',
-            productCopy: de ? 'Kaufe eine kommerzielle Bildlizenz für die rechtssichere Nutzung eines Fotos aus meiner Galerie in Web, Social, Print oder Präsentationen.' : 'Buy a commercial image license for legally compliant use of a gallery photo on the web, in social media, print, or presentations.',
-            meta1: de ? 'Lizenztyp: Standard Commercial License' : 'License type: Standard Commercial License',
-            meta2: de ? 'Nutzung: Web, Social Media, Editorial, Präsentation' : 'Usage: Web, social media, editorial, presentation',
-            meta3: de ? 'Lieferung: Rechnung + Zertifikat direkt im Konto' : 'Delivery: Invoice + certificate directly in your account',
-            meta4: de ? 'Checkout: Digitale Lieferung ohne Versandkosten' : 'Checkout: Digital delivery without shipping costs',
-            stock: de ? 'Sofort verfügbar' : 'Available instantly',
-            cta: de ? 'Zur Galerie' : 'Go to gallery',
+            pageTitle: de ? 'Preise' : 'Pricing',
+            pageLead: de ? 'Vier Wege, Fotos aus meiner Galerie zu lizenzieren — je nach Bedarf.' : 'Four ways to license photos from my gallery — pick what fits.',
+            hint: de ? 'Einzelkauf für ein einzelnes Motiv, Abo für regelmäßigen persönlichen Bedarf, kommerzielles Abo für regelmäßige geschäftliche Nutzung, kommerzielle Lizenz als Einzel-Upgrade.' : 'Single purchase for one photo, subscription for regular personal use, commercial subscription for regular business use, commercial license as a one-off upgrade.',
+
+            singleBadge: de ? 'Einzelkauf' : 'Single purchase',
+            singleTitle: de ? 'Foto in Originalqualität' : 'Photo in original quality',
+            singleCopy: de ? 'Volle Auflösung, direkt von der Kamera. Keine Komprimierung, keine Wasserzeichen.' : 'Full resolution, straight from the camera. No compression, no watermarks.',
+            singleMeta1: de ? 'Originale Kameradatei' : 'Original camera file',
+            singleMeta2: de ? 'RAW-Datei auf manuelle Anfrage, sofern vorhanden' : 'RAW file on manual request, where available',
+            singleMeta3: de ? 'Volle Auflösung, keine Komprimierung' : 'Full resolution, no compression',
+            singleMeta4: de ? 'Persönliche Nutzungslizenz inklusive' : 'Personal use license included',
+            singleMeta5: de ? 'Sofortiger Download nach Kauf' : 'Instant download after purchase',
+            perPhoto: de ? 'pro Foto' : 'per photo',
+
+            subBadge: de ? 'Abo' : 'Subscription',
+            subTitle: de ? 'Bis zu 2 Fotos pro Monat' : 'Up to 2 photos per month',
+            subCopy: de ? 'Für regelmäßigen Bedarf: monatlich neue Downloads, kündbar jederzeit im Konto.' : 'For regular use: fresh downloads every month, cancel anytime in your account.',
+            subMeta1: de ? '2 Downloads pro Kalendermonat' : '2 downloads per calendar month',
+            subMeta2: de ? 'Monatlich 9,99 € oder jährlich 99,99 €' : 'EUR 9.99 monthly or EUR 99.99 billed annually',
+            subMeta3: de ? 'Jederzeit kündbar im Konto' : 'Cancel anytime in your account',
+            perMonth: de ? 'ab / Monat' : 'from / month',
+            subCta: de ? 'Zum Konto' : 'Go to account',
+
+            commSubBadge: de ? 'Kommerzielles Abo' : 'Commercial subscription',
+            commSubTitle: de ? 'Bis zu 2 Fotos pro Monat, kommerziell' : 'Up to 2 photos per month, commercial',
+            commSubCopy: de ? 'Für regelmäßigen geschäftlichen Bedarf: monatlich neue Downloads mit kommerzieller Lizenz.' : 'For regular business use: fresh downloads every month, with a commercial license.',
+            commSubMeta1: de ? '2 Downloads pro Kalendermonat' : '2 downloads per calendar month',
+            commSubMeta2: de ? 'Monatlich 19,99 € oder jährlich 199,99 €' : 'EUR 19.99 monthly or EUR 199.99 billed annually',
+            commSubMeta3: de ? 'Jederzeit kündbar — Laufzeit wird beachtet' : 'Cancel anytime — the term is still honored',
+            commSubCta: de ? 'Zum Konto' : 'Go to account',
+
+            commBadge: de ? 'Upgrade' : 'Upgrade',
+            commTitle: de ? 'Kommerzielle Lizenz' : 'Commercial license',
+            commCopy: de ? 'Aufpreis auf den Einzelkauf für die geschäftliche Nutzung eines Fotos.' : 'Add-on to the single purchase for business use of a photo.',
+            commMeta1: de ? 'Nutzung: Web, Social Media, Werbung' : 'Usage: web, social media, advertising',
+            commMeta2: de ? 'Nutzung: redaktionell und in Präsentationen' : 'Usage: editorial and presentations',
+            commMeta3: de ? 'Wird beim Kauf als Upgrade ausgewählt' : 'Selected as an upgrade during purchase',
+            addOn: de ? 'Aufpreis' : 'add-on',
+
+            galleryCta: de ? 'Zur Galerie' : 'Go to gallery',
         };
 
         return map[key] || key;
@@ -45,10 +73,10 @@ export class ShopHome implements OnInit {
 
         this.metaService.updateSEO(
             {
-                title: 'Photo Shop | Christian Böhme Photography',
-                description: 'Buy a commercial image license for aviation and travel photography. Fast PayPal checkout and immediate confirmation.',
+                title: 'Pricing | Christian Böhme Photography Shop',
+                description: 'Overview of photo licensing options: single purchase, personal subscription, commercial subscription, and commercial license upgrade for aviation and travel photography.',
                 image: 'https://www.christian-boehme.com/assets/img/other/Dresden%20Skyline.jpg',
-                url: 'https://www.christian-boehme.com/shop',
+                url: 'https://www.christian-boehme.com/shop/pricing',
                 type: 'website'
             },
             {
@@ -56,7 +84,7 @@ export class ShopHome implements OnInit {
                 "@type": "Store",
                 "name": "Christian Böhme Photography Shop",
                 "description": "Commercial and editorial image licensing for aviation and travel photography",
-                "url": "https://www.christian-boehme.com/shop",
+                "url": "https://www.christian-boehme.com/shop/pricing",
                 "image": "https://www.christian-boehme.com/assets/img/other/Dresden%20Skyline.jpg",
                 "priceRange": "€€",
                 "paymentAccepted": ["PayPal", "Credit Card"],
