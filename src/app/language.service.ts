@@ -14,11 +14,17 @@ export class LanguageService {
 
     constructor() {
         const savedLanguage = localStorage.getItem('language') as Language | null;
-        if (savedLanguage) {
-            this.currentLanguage = savedLanguage;
-            this.language$.next(this.currentLanguage);
-        }
+        this.currentLanguage = savedLanguage || this.detectBrowserLanguage();
+        this.language$.next(this.currentLanguage);
         this.updateHtmlLang(this.currentLanguage);
+    }
+
+    private detectBrowserLanguage(): Language {
+        const browserLanguages = navigator.languages && navigator.languages.length
+            ? navigator.languages
+            : [navigator.language];
+        const isGerman = browserLanguages.some(lang => lang.toLowerCase().startsWith('de'));
+        return isGerman ? 'de' : 'en';
     }
 
     private updateHtmlLang(lang: Language): void {
@@ -56,7 +62,13 @@ export class LanguageService {
             'myCareer': 'My Career',
             'buyPhotos': 'Buy my photos and videos on adobe stock',
             'aviationGallery': 'Aviation Gallery',
-            'aviationSpotterHotels': 'Aviation Spotter Hotels',
+            'aviationSpotterHotels': 'Spotter Hotels',
+            'aviationTravelsGroup': 'Aviation Travels',
+            'aviationPhotographyGroup': 'Aviation Photography',
+            'travelPhotographyGroup': 'Travel Photography',
+            'tourOperatorGroup': 'Tour Operator and Travel Agency',
+            'externalWebsitesGroup': 'External Websites',
+            'curriculumVitaeGroup': 'Curriculum vitae',
             'airlineSim': 'AirlineSim',
             'airGermany': 'Air Germany',
             'airGermanyDescription': 'Fictional airline website based on AirlineSim',
@@ -309,7 +321,13 @@ export class LanguageService {
             'myCareer': 'Mein CV',
             'buyPhotos': 'Meine Fotos und Videos auf Adobe Stock kaufen',
             'aviationGallery': 'Luftfahrt Galerie',
-            'aviationSpotterHotels': 'Aviation Spotter Hotels',
+            'aviationSpotterHotels': 'Spotter Hotels',
+            'aviationTravelsGroup': 'Aviation Travels',
+            'aviationPhotographyGroup': 'Aviation Photography',
+            'travelPhotographyGroup': 'Travel Photography',
+            'tourOperatorGroup': 'Tour Operator and Travel Agency',
+            'externalWebsitesGroup': 'External Websites',
+            'curriculumVitaeGroup': 'Curriculum vitae',
             'airlineSim': 'AirlineSim',
             'airGermany': 'Air Germany',
             'airGermanyDescription': 'Internetauftritt fiktioneller Fluggesellschaft auf AirlineSim',

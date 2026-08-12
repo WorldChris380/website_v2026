@@ -47,19 +47,25 @@
                             {{ getTranslation('travel') }}
                         </h3>
                         <div class="megamenu-links">
-                            <a [routerLink]="['/photography']" [queryParams]="{filter: 'travel'}"
-                                class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('travelGallery') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescTravelPhotography') }}</span>
-                            </a>
-                            <a [routerLink]="['/travel-budget-calculator']" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('budgetCalculator') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescBudgetCalculator') }}</span>
-                            </a>
-                            <a [routerLink]="['/travel-faqs']" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('travelFaqs') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescTravelFaqs') }}</span>
-                            </a>
+                            <div class="megamenu-subgroup">
+                                <span class="subgroup-title">{{ getTranslation('travelPhotographyGroup') }}</span>
+                                <a [routerLink]="['/photography']" [queryParams]="{filter: 'travel'}"
+                                    class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('travelGallery') }}</span>
+                                    <span class="link-description">{{ getTranslation('menuDescTravelPhotography') }}</span>
+                                </a>
+                            </div>
+                            <div class="megamenu-subgroup">
+                                <span class="subgroup-title">{{ getTranslation('tourOperatorGroup') }}</span>
+                                <a [routerLink]="['/travel-budget-calculator']" class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('budgetCalculator') }}</span>
+                                    <span class="link-description">{{ getTranslation('menuDescBudgetCalculator') }}</span>
+                                </a>
+                                <a [routerLink]="['/travel-faqs']" class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('travelFaqs') }}</span>
+                                    <span class="link-description">{{ getTranslation('menuDescTravelFaqs') }}</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -71,16 +77,22 @@
                             {{ getTranslation('aviation') }}
                         </h3>
                         <div class="megamenu-links">
-                            <a [routerLink]="['/photography']" [queryParams]="{filter: 'aviation'}"
-                                class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('aviationGallery') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescAviationPhotography')
-                                    }}</span>
-                            </a>
-                            <a href="/aviation-spotter-hotels" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('aviationSpotterHotels') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescSpotterHotels') }}</span>
-                            </a>
+                            <div class="megamenu-subgroup">
+                                <span class="subgroup-title">{{ getTranslation('aviationPhotographyGroup') }}</span>
+                                <a [routerLink]="['/photography']" [queryParams]="{filter: 'aviation'}"
+                                    class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('aviationGallery') }}</span>
+                                    <span class="link-description">{{ getTranslation('menuDescAviationPhotography')
+                                        }}</span>
+                                </a>
+                            </div>
+                            <div class="megamenu-subgroup">
+                                <span class="subgroup-title">{{ getTranslation('aviationTravelsGroup') }}</span>
+                                <a href="/aviation-spotter-hotels" class="megamenu-link megamenu-sublink">
+                                    <span class="link-title">{{ getTranslation('aviationSpotterHotels') }}</span>
+                                    <span class="link-description">{{ getTranslation('menuDescSpotterHotels') }}</span>
+                                </a>
+                            </div>
                             <div class="megamenu-subgroup">
                                 <span class="subgroup-title">{{ getTranslation('airlineSim') }}</span>
                                 <a [routerLink]="['/airlinesim-ceo-tools']" class="megamenu-link megamenu-sublink">
@@ -113,14 +125,17 @@
                                 <span class="link-title">{{ getTranslation('aboutMyPhotography') }}</span>
                                 <span class="link-description">{{ getTranslation('menuDescAboutPhotography') }}</span>
                             </a>
-                            <a target="_blank"
-                                href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
-                                class="megamenu-link">
-                                <img class="adobe-stock-logo" [src]="darkmodePNG('adobe-stock-logo')"
-                                    alt="adobe stock logo">
-                                <span class="link-title">{{ getTranslation('buyPhotos') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescAdobeStock') }}</span>
-                            </a>
+                            <div class="megamenu-subgroup">
+                                <span class="subgroup-title">{{ getTranslation('externalWebsitesGroup') }}</span>
+                                <a target="_blank"
+                                    href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
+                                    class="megamenu-link megamenu-sublink">
+                                    <img class="adobe-stock-logo" [src]="darkmodePNG('adobe-stock-logo')"
+                                        alt="adobe stock logo">
+                                    <span class="link-title">{{ getTranslation('buyPhotos') }}</span>
+                                    <span class="link-description">{{ getTranslation('menuDescAdobeStock') }}</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -133,6 +148,7 @@
                         </h3>
                         <div class="megamenu-links">
                             <div class="megamenu-subgroup">
+                                <span class="subgroup-title">{{ getTranslation('curriculumVitaeGroup') }}</span>
                                 <a [routerLink]="['/career']" [fragment]="'profile'"
                                     class="megamenu-link megamenu-sublink">
                                     <span class="link-title">{{ getTranslation('profile') }}</span>
@@ -162,16 +178,19 @@
                                 <span class="link-title">{{ getTranslation('myVisitedCountries') }}</span>
                                 <span class="link-description">{{ getTranslation('menuDescVisitedCountries') }}</span>
                             </a>
-                            <div class="megamenu-social-row">
-                                <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
-                                    class="megamenu-link">
-                                    <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">
-                                    <span class="link-title">{{ getTranslation('linkedin') }}</span>
-                                </a>
-                                <a target="_blank" href="https://github.com/WorldChris380" class="megamenu-link">
-                                    <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">
-                                    <span class="link-title">{{ getTranslation('github') }}</span>
-                                </a>
+                            <div class="megamenu-subgroup">
+                                <span class="subgroup-title">{{ getTranslation('externalWebsitesGroup') }}</span>
+                                <div class="megamenu-social-row">
+                                    <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
+                                        class="megamenu-link">
+                                        <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">
+                                        <span class="link-title">{{ getTranslation('linkedin') }}</span>
+                                    </a>
+                                    <a target="_blank" href="https://github.com/WorldChris380" class="megamenu-link">
+                                        <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">
+                                        <span class="link-title">{{ getTranslation('github') }}</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

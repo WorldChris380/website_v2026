@@ -14,8 +14,13 @@ import { LanguageService, Language } from '../language.service';
 export class ShopHome implements OnInit {
     private languageService = inject(LanguageService);
     currentLanguage: Language = 'en';
+    usageMode: 'private' | 'commercial' = 'private';
 
     constructor(private metaService: MetaService) { }
+
+    setUsageMode(mode: 'private' | 'commercial'): void {
+        this.usageMode = mode;
+    }
 
     t(key: string): string {
         const de = this.currentLanguage === 'de';
@@ -23,6 +28,11 @@ export class ShopHome implements OnInit {
             pageTitle: de ? 'Preise' : 'Pricing',
             pageLead: de ? 'Vier Wege, Fotos aus meiner Galerie zu lizenzieren — je nach Bedarf.' : 'Four ways to license photos from my gallery — pick what fits.',
             hint: de ? 'Einzelkauf für ein einzelnes Motiv, Abo für regelmäßigen persönlichen Bedarf, kommerzielles Abo für regelmäßige geschäftliche Nutzung, kommerzielle Lizenz als Einzel-Upgrade.' : 'Single purchase for one photo, subscription for regular personal use, commercial subscription for regular business use, commercial license as a one-off upgrade.',
+            hintPrivate: de ? 'Einzelkauf für ein einzelnes Motiv, Abo für regelmäßigen persönlichen Bedarf.' : 'Single purchase for one photo, subscription for regular personal use.',
+            hintCommercial: de ? 'Kommerzielles Abo für regelmäßige geschäftliche Nutzung, kommerzielle Lizenz als Einzel-Upgrade zum Einzelkauf.' : 'Commercial subscription for regular business use, commercial license as a one-off upgrade to the single purchase.',
+            usagePrivateLabel: de ? 'Privat' : 'Private',
+            usageCommercialLabel: de ? 'Kommerziell' : 'Commercial',
+            usageToggleAria: de ? 'Zwischen privater und kommerzieller Nutzung wechseln' : 'Switch between private and commercial use',
 
             singleBadge: de ? 'Einzelkauf' : 'Single purchase',
             singleTitle: de ? 'Foto in Originalqualität' : 'Photo in original quality',

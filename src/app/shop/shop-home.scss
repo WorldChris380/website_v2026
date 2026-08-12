@@ -31,6 +31,11 @@
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-strong);
     margin-bottom: var(--space-6);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
 
     @media (max-width: 768px) {
         padding: var(--space-5) var(--space-4);
@@ -45,6 +50,39 @@
         @media (max-width: 480px) {
             font-size: var(--font-size-xl);
         }
+    }
+}
+
+.usage-mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: var(--radius-lg);
+    flex-shrink: 0;
+}
+
+.usage-mode-btn {
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background-color var(--dur-fast) var(--ease-standard),
+        color var(--dur-fast) var(--ease-standard);
+
+    &:hover {
+        color: #ffffff;
+    }
+
+    &.active {
+        background: #ffffff;
+        color: $shop-blue-dark;
     }
 }
 

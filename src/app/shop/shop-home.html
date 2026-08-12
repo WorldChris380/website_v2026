@@ -6,13 +6,23 @@
                 <h1>{{ t('pageTitle') }}</h1>
                 <p class="lede">{{ t('pageLead') }}</p>
             </div>
+            <div class="usage-mode-toggle" role="group" [attr.aria-label]="t('usageToggleAria')">
+                <button type="button" class="usage-mode-btn" [class.active]="usageMode === 'private'"
+                    [attr.aria-pressed]="usageMode === 'private'" (click)="setUsageMode('private')">
+                    {{ t('usagePrivateLabel') }}
+                </button>
+                <button type="button" class="usage-mode-btn" [class.active]="usageMode === 'commercial'"
+                    [attr.aria-pressed]="usageMode === 'commercial'" (click)="setUsageMode('commercial')">
+                    {{ t('usageCommercialLabel') }}
+                </button>
+            </div>
         </header>
         <section class="shop-body">
-            <p class="hint">{{ t('hint') }}</p>
+            <p class="hint">{{ usageMode === 'private' ? t('hintPrivate') : t('hintCommercial') }}</p>
 
             <div class="products-grid">
                 <!-- Single purchase -->
-                <article class="product-card">
+                <article class="product-card" *ngIf="usageMode === 'private'">
                     <div class="product-header">
                         <p class="eyebrow">{{ t('singleBadge') }}</p>
                         <h3>{{ t('singleTitle') }}</h3>
@@ -35,7 +45,7 @@
                 </article>
 
                 <!-- Subscription -->
-                <article class="product-card featured">
+                <article class="product-card featured" *ngIf="usageMode === 'private'">
                     <div class="product-header">
                         <p class="eyebrow badge-new">{{ t('subBadge') }}</p>
                         <h3>{{ t('subTitle') }}</h3>
@@ -57,7 +67,7 @@
                 </article>
 
                 <!-- Commercial subscription -->
-                <article class="product-card">
+                <article class="product-card" *ngIf="usageMode === 'commercial'">
                     <div class="product-header">
                         <p class="eyebrow">{{ t('commSubBadge') }}</p>
                         <h3>{{ t('commSubTitle') }}</h3>
@@ -79,7 +89,7 @@
                 </article>
 
                 <!-- Commercial license upgrade -->
-                <article class="product-card">
+                <article class="product-card" *ngIf="usageMode === 'commercial'">
                     <div class="product-header">
                         <p class="eyebrow">{{ t('commBadge') }}</p>
                         <h3>{{ t('commTitle') }}</h3>
