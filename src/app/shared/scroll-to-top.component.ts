@@ -1,4 +1,4 @@
-import { Component, HostListener, signal } from '@angular/core';
+import { Component, HostListener, signal, ChangeDetectionStrategy } from '@angular/core';
 
 
 @Component({
@@ -16,6 +16,7 @@ import { Component, HostListener, signal } from '@angular/core';
       </button>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [`
     .scroll-to-top {
       position: fixed;

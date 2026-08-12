@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -10,6 +10,7 @@ import { LanguageService, Language } from '../../language.service';
     standalone: true,
     imports: [RouterModule, FormsModule],
     templateUrl: './photography-travels.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './photography-travels.scss'
 })
 export class PhotographyTravels implements OnInit {

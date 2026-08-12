@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -37,6 +37,7 @@ interface GalleryImage {
     standalone: true,
     imports: [CommonModule, FormsModule, RouterModule, ShopCart],
     templateUrl: './gallery.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./gallery.scss'],
 })
 export class Gallery implements OnInit, OnDestroy {

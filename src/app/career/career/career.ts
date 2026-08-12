@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, HostListener, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { ActivatedRoute } from '@angular/router';
 import { LanguageService, Language } from '../../language.service';
@@ -13,6 +13,7 @@ import { MetaService } from '../../services/meta.service';
         '(touchend)': 'onTouchEnd($event)'
     },
     templateUrl: './career.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './career.scss'
 })
 export class Career implements OnInit, OnDestroy {

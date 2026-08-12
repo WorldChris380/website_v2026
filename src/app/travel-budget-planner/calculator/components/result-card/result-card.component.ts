@@ -1,5 +1,5 @@
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import type {
     BudgetResult,
     CountryCostData,
@@ -16,6 +16,7 @@ import type { Language } from '../../../../language.service';
     standalone: true,
     imports: [],
     styleUrl: './result-card.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
 @if (selectedCountry && !isCalculating) {
   <div class="calc-result-card">

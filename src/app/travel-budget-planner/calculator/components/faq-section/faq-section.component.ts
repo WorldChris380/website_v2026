@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-calc-faq-section',
     standalone: true,
     styleUrl: './faq-section.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
 <section class="faq-section">
     <div class="faq-inner">

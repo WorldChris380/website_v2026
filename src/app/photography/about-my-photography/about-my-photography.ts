@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 
 import { Counters } from './counters/counters';
 import { Language, LanguageService } from '../../language.service';
@@ -24,6 +24,7 @@ interface FormerCamera {
     standalone: true,
     imports: [Counters],
     templateUrl: './about-my-photography.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./about-my-photography.scss']
 })
 export class AboutMyPhotography implements OnInit, OnDestroy {

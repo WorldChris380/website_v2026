@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -25,6 +25,7 @@ type SubscriptionPlanId =
     standalone: true,
     imports: [CommonModule, FormsModule, RouterModule, PayPalButton],
     templateUrl: './account.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './account.scss'
 })
 export class Account implements OnInit, AfterViewInit {

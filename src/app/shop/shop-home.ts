@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { MetaService } from '../services/meta.service';
@@ -9,6 +9,7 @@ import { LanguageService, Language } from '../language.service';
     standalone: true,
     imports: [RouterModule],
     templateUrl: './shop-home.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './shop-home.scss'
 })
 export class ShopHome implements OnInit {

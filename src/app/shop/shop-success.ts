@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MetaService } from '../services/meta.service';
@@ -11,6 +11,7 @@ import { LanguageService, Language } from '../language.service';
     standalone: true,
     imports: [CommonModule, RouterModule],
     templateUrl: './shop-success.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './shop-success.scss'
 })
 export class ShopSuccess implements OnInit {

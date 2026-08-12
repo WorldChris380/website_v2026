@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -126,6 +126,7 @@ type CollapsibleSectionKey = 'starting' | 'destination' | 'budgetSearch' | 'dest
     ResultCardComponent
 ],
     templateUrl: './calculator.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './calculator.scss'
 })
 export class TravelBudgetCalculatorComponent implements OnInit, OnDestroy {

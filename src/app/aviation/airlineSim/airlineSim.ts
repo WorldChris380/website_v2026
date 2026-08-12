@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { LanguageService, Language } from '../../language.service';
 import { MetaService } from '../../services/meta.service';
@@ -8,6 +8,7 @@ import { MetaService } from '../../services/meta.service';
     standalone: true,
     imports: [],
     templateUrl: './airlineSim.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './airlineSim.scss',
 })
 export class AirlineSim implements OnInit {

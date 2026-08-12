@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService, Language } from '../language.service';
@@ -9,6 +9,7 @@ import { MetaService } from '../services/meta.service';
     standalone: true,
     imports: [],
     templateUrl: './legal.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './legal.scss'
 })
 export class Legal implements OnInit {

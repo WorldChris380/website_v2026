@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -13,6 +13,7 @@ import { LanguageService, Language } from '../language.service';
     standalone: true,
     imports: [CommonModule, FormsModule, RouterModule, PayPalButton],
     templateUrl: './shop-cart-page.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './shop-cart-page.scss'
 })
 export class ShopCartPage implements OnInit {

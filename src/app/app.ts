@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild, ElementRef, HostListener, effect } from '@angular/core';
+import { Component, signal, ViewChild, ElementRef, HostListener, effect, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -17,6 +17,7 @@ import { ToastService } from './shared/toast.service';
   standalone: true,
   imports: [Header, Footer, RouterOutlet, HttpClientModule, ToastContainerComponent, ScrollToTopComponent],
   templateUrl: './app.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.scss'
 })
 export class App {

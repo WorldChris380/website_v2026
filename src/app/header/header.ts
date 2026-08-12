@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { DarkModeService } from '../dark-mode.service';
@@ -13,6 +13,7 @@ type MenuHeading = 'aviation' | 'blog' | 'travel' | 'shop' | 'career' | 'photogr
   standalone: true,
   imports: [RouterModule],
   templateUrl: './header.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './header.scss',
 })
 

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, Output, EventEmitter, OnChanges, OnDestroy, SimpleChanges, inject } from '@angular/core';
+import { Component, ElementRef, Input, Output, EventEmitter, OnChanges, OnDestroy, SimpleChanges, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -42,6 +42,7 @@ interface PayPalClientConfigResponse {
     standalone: true,
     imports: [],
     templateUrl: './paypal-button.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './paypal-button.scss'
 })
 export class PayPalButton implements OnChanges, OnDestroy {

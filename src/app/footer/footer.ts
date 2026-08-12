@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { DarkModeService } from '../dark-mode.service';
@@ -8,6 +8,7 @@ import { LanguageService, Language } from '../language.service';
   selector: 'app-footer',
   imports: [RouterModule],
   templateUrl: './footer.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './footer.scss',
 })
 export class Footer implements OnInit {

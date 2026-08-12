@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+﻿import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { Router, RouterModule } from '@angular/router';
 import { MetaService } from '../../services/meta.service';
@@ -15,6 +15,7 @@ interface Continent {
     standalone: true,
     imports: [RouterModule],
     templateUrl: './my-visited-countries.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './my-visited-countries.scss'
 })
 export class MyVisitedCountries implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { LanguageService, Language } from '../../language.service';
 import { MetaService } from '../../services/meta.service';
@@ -9,6 +9,7 @@ import { FaqSectionComponent } from '../../travel-budget-planner/calculator/comp
     standalone: true,
     imports: [FaqSectionComponent],
     templateUrl: './travel-faqs.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './travel-faqs.scss'
 })
 export class TravelFaqs implements OnInit {

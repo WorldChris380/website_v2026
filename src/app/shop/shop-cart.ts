@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, computed, signal, effect } from '@angular/core';
+import { Component, Input, Output, EventEmitter, computed, signal, effect, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { LanguageService, Language } from '../language.service';
     standalone: true,
     imports: [CommonModule, FormsModule, PayPalButton],
     templateUrl: './shop-cart.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './shop-cart.scss'
 })
 export class ShopCart {

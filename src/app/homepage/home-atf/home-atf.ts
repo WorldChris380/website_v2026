@@ -1,5 +1,5 @@
 
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { LanguageService, Language } from '../../language.service';
@@ -10,6 +10,7 @@ import { MetaService } from '../../services/meta.service';
   standalone: true,
   imports: [RouterModule],
   templateUrl: './home-atf.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./home-atf.scss'],
 })
 

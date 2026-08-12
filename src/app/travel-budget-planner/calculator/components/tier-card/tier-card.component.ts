@@ -1,5 +1,5 @@
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import type { DisplayCurrency } from '../../calculator';
 
 @Component({
@@ -7,6 +7,7 @@ import type { DisplayCurrency } from '../../calculator';
     standalone: true,
     imports: [],
     styleUrl: './tier-card.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
 @if (tierData) {
   <div class="tier-card">

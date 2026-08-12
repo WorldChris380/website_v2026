@@ -1,5 +1,5 @@
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import type { CountryCostData, CountryInsight } from '../../calculator';
 import type { Language } from '../../../../language.service';
 
@@ -8,6 +8,7 @@ import type { Language } from '../../../../language.service';
     standalone: true,
     imports: [],
     styleUrl: './insight-card.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
 @if (insight && country) {
   <div>

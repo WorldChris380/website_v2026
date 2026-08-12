@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -18,6 +18,7 @@ interface Manifest {
     standalone: true,
     imports: [HttpClientModule, RouterModule],
     templateUrl: './counters.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./counters.scss']
 })
 export class Counters implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../admin.service';
@@ -10,6 +10,7 @@ import { LanguageService } from '../../language.service';
     standalone: true,
     imports: [FormsModule],
     templateUrl: './admin-home.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './admin-home.scss'
 })
 export class AdminHome {

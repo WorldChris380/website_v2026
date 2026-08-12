@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { RouterModule } from '@angular/router';
 import { MetaService } from '../../services/meta.service';
@@ -9,6 +9,7 @@ import { LanguageService, Language } from '../../language.service';
     standalone: true,
     imports: [RouterModule],
     templateUrl: './aviation-spotter-hotels.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './aviation-spotter-hotels.scss'
 })
 export class AviationSpotterHotels implements OnInit {

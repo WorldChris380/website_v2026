@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { LanguageService, Language } from '../../language.service';
@@ -19,6 +19,7 @@ import { FALLBACK_COUNTRIES } from '../shared-countries.const';
     HeroPresetsComponent
 ],
     templateUrl: './search-by-budget.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './search-by-budget.scss'
 })
 export class SearchByBudget implements OnInit {

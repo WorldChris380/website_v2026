@@ -1,11 +1,12 @@
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-calc-hero-presets',
     standalone: true,
     imports: [],
     styleUrl: './hero-presets.component.scss',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
 <section class="hero-section">
     <div class="hero-content">
