@@ -1,10 +1,18 @@
 <div class="paypal-box">
-    <div class="paypal-loading" *ngIf="isLoading">
-        <span class="spinner-sm"></span>
+  @if (isLoading) {
+    <div class="paypal-loading">
+      <span class="spinner-sm"></span>
     </div>
-    <div class="paypal-error" *ngIf="!isLoading && loadError">{{ loadError }}</div>
-    <div id="paypal-btn-container" *ngIf="!isLoading && !isPlaceholder"></div>
-    <p class="hint" *ngIf="isPlaceholder">PayPal Client ID not configured. Set <code>paypalClientId</code> in
-        <code>environment.ts</code>.
-    </p>
+  }
+  @if (!isLoading && loadError) {
+    <div class="paypal-error">{{ loadError }}</div>
+  }
+  @if (!isLoading && !isPlaceholder) {
+    <div id="paypal-btn-container"></div>
+  }
+  @if (isPlaceholder) {
+    <p class="hint">PayPal Client ID not configured. Set <code>paypalClientId</code> in
+    <code>environment.ts</code>.
+  </p>
+}
 </div>

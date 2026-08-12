@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../admin.service';
 import { ToastService } from '../../shared/toast.service';
@@ -8,7 +8,7 @@ import { LanguageService } from '../../language.service';
 @Component({
     selector: 'app-admin-home',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],
     templateUrl: './admin-home.html',
     styleUrl: './admin-home.scss'
 })

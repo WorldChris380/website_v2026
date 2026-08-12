@@ -1,6 +1,6 @@
 
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { LanguageService, Language } from '../../language.service';
 import { MetaService } from '../../services/meta.service';
@@ -8,7 +8,7 @@ import { MetaService } from '../../services/meta.service';
 @Component({
   selector: 'app-home-atf',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './home-atf.html',
   styleUrls: ['./home-atf.scss'],
 })

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute } from '@angular/router';
 import { LanguageService, Language } from '../../language.service';
 import { MetaService } from '../../services/meta.service';
@@ -7,7 +7,7 @@ import { MetaService } from '../../services/meta.service';
 @Component({
     selector: 'app-career',
     standalone: true,
-    imports: [CommonModule],
+    imports: [],
     host: {
         '(touchstart.passive)': 'onTouchStart($event)',
         '(touchend)': 'onTouchEnd($event)'

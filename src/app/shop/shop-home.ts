@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MetaService } from '../services/meta.service';
 import { LanguageService, Language } from '../language.service';
@@ -7,7 +7,7 @@ import { LanguageService, Language } from '../language.service';
 @Component({
     selector: 'app-shop-home',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [RouterModule],
     templateUrl: './shop-home.html',
     styleUrl: './shop-home.scss'
 })

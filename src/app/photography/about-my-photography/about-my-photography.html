@@ -1,72 +1,80 @@
 <article class="about-photography" itemscope itemtype="https://schema.org/Article">
-    <meta itemprop="name" [content]="getTranslation('aboutPhotography')">
-    <meta itemprop="description" content="Professional photography equipment - Nikon Z50 II and Tamron 18-300mm lens">
+  <meta itemprop="name" [content]="getTranslation('aboutPhotography')">
+  <meta itemprop="description" content="Professional photography equipment - Nikon Z50 II and Tamron 18-300mm lens">
 
-    <header class="photography-header">
-        <h1 itemprop="headline">{{ getTranslation('aboutPhotography') }}</h1>
-        <p itemprop="about">Explore my photography journey with professional equipment and captured moments from around
-            the world.</p>
-    </header>
+  <header class="photography-header">
+    <h1 itemprop="headline">{{ getTranslation('aboutPhotography') }}</h1>
+    <p itemprop="about">Explore my photography journey with professional equipment and captured moments from around
+    the world.</p>
+  </header>
 
-    <!-- Equipment Section -->
-    <section class="equipment-section" aria-label="Photography Equipment">
-        <h2>{{ getTranslation('myEquipment') }}</h2>
+  <!-- Equipment Section -->
+  <section class="equipment-section" aria-label="Photography Equipment">
+    <h2>{{ getTranslation('myEquipment') }}</h2>
 
-        <div class="equipment-grid" role="list">
-            <!-- Camera Card -->
-            <article class="equipment-card" role="listitem" itemscope itemtype="https://schema.org/Thing">
-                <div class="equipment-header">
-                    <h3 itemprop="category">{{ getTranslation('camera') }}</h3>
-                    <span class="equipment-model" itemprop="name">{{ camera.name }}</span>
-                </div>
-                <p class="equipment-type" itemprop="model">{{ camera.model }}</p>
-                <ul class="equipment-specs" aria-label="Camera Specifications">
-                    <li *ngFor="let spec of camera.specs" itemprop="features">
-                        <span class="spec-icon" aria-hidden="true">✓</span>
-                        {{ spec }}
-                    </li>
-                </ul>
-            </article>
-
-            <!-- Lens Card -->
-            <article class="equipment-card" role="listitem" itemscope itemtype="https://schema.org/Thing">
-                <div class="equipment-header">
-                    <h3 itemprop="category">{{ getTranslation('lens') }}</h3>
-                    <span class="equipment-model" itemprop="name">{{ lens.name }}</span>
-                </div>
-                <p class="equipment-type" itemprop="model">{{ lens.model }}</p>
-                <ul class="equipment-specs" aria-label="Lens Specifications">
-                    <li *ngFor="let spec of lens.specs" itemprop="features">
-                        <span class="spec-icon" aria-hidden="true">✓</span>
-                        {{ spec }}
-                    </li>
-                </ul>
-            </article>
+    <div class="equipment-grid" role="list">
+      <!-- Camera Card -->
+      <article class="equipment-card" role="listitem" itemscope itemtype="https://schema.org/Thing">
+        <div class="equipment-header">
+          <h3 itemprop="category">{{ getTranslation('camera') }}</h3>
+          <span class="equipment-model" itemprop="name">{{ camera.name }}</span>
         </div>
+        <p class="equipment-type" itemprop="model">{{ camera.model }}</p>
+        <ul class="equipment-specs" aria-label="Camera Specifications">
+          @for (spec of camera.specs; track spec) {
+            <li itemprop="features">
+              <span class="spec-icon" aria-hidden="true">✓</span>
+              {{ spec }}
+            </li>
+          }
+        </ul>
+      </article>
 
-        <h3>{{ getTranslation('formerCameras') }}</h3>
-        <div class="equipment-grid" role="list">
-            <article class="equipment-card" role="listitem" *ngFor="let former of formerCameras" itemscope
-                itemtype="https://schema.org/Thing">
-                <div class="equipment-header">
-                    <h3 itemprop="category">{{ getTranslation('formerCameraPeriod') }}</h3>
-                    <span class="equipment-model" itemprop="name">{{ former.name }}</span>
-                </div>
-                <p class="equipment-type" itemprop="model">{{ former.period }}</p>
-                <ul class="equipment-specs" aria-label="Former Camera Details">
-                    <li *ngFor="let note of former.notes" itemprop="features">
-                        <span class="spec-icon" aria-hidden="true">✓</span>
-                        {{ note }}
-                    </li>
-                </ul>
-            </article>
+      <!-- Lens Card -->
+      <article class="equipment-card" role="listitem" itemscope itemtype="https://schema.org/Thing">
+        <div class="equipment-header">
+          <h3 itemprop="category">{{ getTranslation('lens') }}</h3>
+          <span class="equipment-model" itemprop="name">{{ lens.name }}</span>
         </div>
-    </section>
+        <p class="equipment-type" itemprop="model">{{ lens.model }}</p>
+        <ul class="equipment-specs" aria-label="Lens Specifications">
+          @for (spec of lens.specs; track spec) {
+            <li itemprop="features">
+              <span class="spec-icon" aria-hidden="true">✓</span>
+              {{ spec }}
+            </li>
+          }
+        </ul>
+      </article>
+    </div>
 
-    <!-- Statistics Section with Counters -->
-    <section class="statistics-section" aria-label="Photography Statistics">
-        <h2>{{ getTranslation('features') }}</h2>
-        <p>Photography statistics and achievements across genres and destinations</p>
-        <app-counters></app-counters>
-    </section>
+    <h3>{{ getTranslation('formerCameras') }}</h3>
+    <div class="equipment-grid" role="list">
+      @for (former of formerCameras; track former) {
+        <article class="equipment-card" role="listitem" itemscope
+          itemtype="https://schema.org/Thing">
+          <div class="equipment-header">
+            <h3 itemprop="category">{{ getTranslation('formerCameraPeriod') }}</h3>
+            <span class="equipment-model" itemprop="name">{{ former.name }}</span>
+          </div>
+          <p class="equipment-type" itemprop="model">{{ former.period }}</p>
+          <ul class="equipment-specs" aria-label="Former Camera Details">
+            @for (note of former.notes; track note) {
+              <li itemprop="features">
+                <span class="spec-icon" aria-hidden="true">✓</span>
+                {{ note }}
+              </li>
+            }
+          </ul>
+        </article>
+      }
+    </div>
+  </section>
+
+  <!-- Statistics Section with Counters -->
+  <section class="statistics-section" aria-label="Photography Statistics">
+    <h2>{{ getTranslation('features') }}</h2>
+    <p>Photography statistics and achievements across genres and destinations</p>
+    <app-counters></app-counters>
+  </section>
 </article>

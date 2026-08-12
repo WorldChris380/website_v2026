@@ -1,114 +1,122 @@
 <div class="shop-page">
-    <div class="shop-shell">
-        <header class="shop-hero">
-            <div>
-                <p class="eyebrow">Shop</p>
-                <h1>{{ t('pageTitle') }}</h1>
-                <p class="lede">{{ t('pageLead') }}</p>
+  <div class="shop-shell">
+    <header class="shop-hero">
+      <div>
+        <p class="eyebrow">Shop</p>
+        <h1>{{ t('pageTitle') }}</h1>
+        <p class="lede">{{ t('pageLead') }}</p>
+      </div>
+      <div class="usage-mode-toggle" role="group" [attr.aria-label]="t('usageToggleAria')">
+        <button type="button" class="usage-mode-btn" [class.active]="usageMode === 'private'"
+          [attr.aria-pressed]="usageMode === 'private'" (click)="setUsageMode('private')">
+          {{ t('usagePrivateLabel') }}
+        </button>
+        <button type="button" class="usage-mode-btn" [class.active]="usageMode === 'commercial'"
+          [attr.aria-pressed]="usageMode === 'commercial'" (click)="setUsageMode('commercial')">
+          {{ t('usageCommercialLabel') }}
+        </button>
+      </div>
+    </header>
+    <section class="shop-body">
+      <p class="hint">{{ usageMode === 'private' ? t('hintPrivate') : t('hintCommercial') }}</p>
+
+      <div class="products-grid">
+        <!-- Single purchase -->
+        @if (usageMode === 'private') {
+          <article class="product-card">
+            <div class="product-header">
+              <p class="eyebrow">{{ t('singleBadge') }}</p>
+              <h3>{{ t('singleTitle') }}</h3>
             </div>
-            <div class="usage-mode-toggle" role="group" [attr.aria-label]="t('usageToggleAria')">
-                <button type="button" class="usage-mode-btn" [class.active]="usageMode === 'private'"
-                    [attr.aria-pressed]="usageMode === 'private'" (click)="setUsageMode('private')">
-                    {{ t('usagePrivateLabel') }}
-                </button>
-                <button type="button" class="usage-mode-btn" [class.active]="usageMode === 'commercial'"
-                    [attr.aria-pressed]="usageMode === 'commercial'" (click)="setUsageMode('commercial')">
-                    {{ t('usageCommercialLabel') }}
-                </button>
+            <p class="product-copy">{{ t('singleCopy') }}</p>
+            <ul class="product-meta">
+              <li>{{ t('singleMeta1') }}</li>
+              <li>{{ t('singleMeta2') }}</li>
+              <li>{{ t('singleMeta3') }}</li>
+              <li>{{ t('singleMeta4') }}</li>
+              <li>{{ t('singleMeta5') }}</li>
+            </ul>
+            <div class="product-price">
+              <span class="price">19€</span>
+              <span class="stock-indicator">{{ t('perPhoto') }}</span>
             </div>
-        </header>
-        <section class="shop-body">
-            <p class="hint">{{ usageMode === 'private' ? t('hintPrivate') : t('hintCommercial') }}</p>
-
-            <div class="products-grid">
-                <!-- Single purchase -->
-                <article class="product-card" *ngIf="usageMode === 'private'">
-                    <div class="product-header">
-                        <p class="eyebrow">{{ t('singleBadge') }}</p>
-                        <h3>{{ t('singleTitle') }}</h3>
-                    </div>
-                    <p class="product-copy">{{ t('singleCopy') }}</p>
-                    <ul class="product-meta">
-                        <li>{{ t('singleMeta1') }}</li>
-                        <li>{{ t('singleMeta2') }}</li>
-                        <li>{{ t('singleMeta3') }}</li>
-                        <li>{{ t('singleMeta4') }}</li>
-                        <li>{{ t('singleMeta5') }}</li>
-                    </ul>
-                    <div class="product-price">
-                        <span class="price">19€</span>
-                        <span class="stock-indicator">{{ t('perPhoto') }}</span>
-                    </div>
-                    <div class="product-actions">
-                        <a class="primary" [routerLink]="['/photography']">{{ t('galleryCta') }}</a>
-                    </div>
-                </article>
-
-                <!-- Subscription -->
-                <article class="product-card featured" *ngIf="usageMode === 'private'">
-                    <div class="product-header">
-                        <p class="eyebrow badge-new">{{ t('subBadge') }}</p>
-                        <h3>{{ t('subTitle') }}</h3>
-                    </div>
-                    <p class="product-copy">{{ t('subCopy') }}</p>
-                    <ul class="product-meta">
-                        <li>{{ t('subMeta1') }}</li>
-                        <li>{{ t('subMeta2') }}</li>
-                        <li>{{ t('subMeta3') }}</li>
-                    </ul>
-                    <div class="product-price">
-                        <span class="price">9,99€</span>
-                        <span class="stock-indicator">{{ t('perMonth') }}</span>
-                    </div>
-                    <div class="product-actions">
-                        <a class="primary" [routerLink]="['/shop/account']" fragment="subscription">{{ t('subCta')
-                            }}</a>
-                    </div>
-                </article>
-
-                <!-- Commercial subscription -->
-                <article class="product-card" *ngIf="usageMode === 'commercial'">
-                    <div class="product-header">
-                        <p class="eyebrow">{{ t('commSubBadge') }}</p>
-                        <h3>{{ t('commSubTitle') }}</h3>
-                    </div>
-                    <p class="product-copy">{{ t('commSubCopy') }}</p>
-                    <ul class="product-meta">
-                        <li>{{ t('commSubMeta1') }}</li>
-                        <li>{{ t('commSubMeta2') }}</li>
-                        <li>{{ t('commSubMeta3') }}</li>
-                    </ul>
-                    <div class="product-price">
-                        <span class="price">19,99€</span>
-                        <span class="stock-indicator">{{ t('perMonth') }}</span>
-                    </div>
-                    <div class="product-actions">
-                        <a class="primary" [routerLink]="['/shop/account']" fragment="subscription">{{
-                            t('commSubCta') }}</a>
-                    </div>
-                </article>
-
-                <!-- Commercial license upgrade -->
-                <article class="product-card" *ngIf="usageMode === 'commercial'">
-                    <div class="product-header">
-                        <p class="eyebrow">{{ t('commBadge') }}</p>
-                        <h3>{{ t('commTitle') }}</h3>
-                    </div>
-                    <p class="product-copy">{{ t('commCopy') }}</p>
-                    <ul class="product-meta">
-                        <li>{{ t('commMeta1') }}</li>
-                        <li>{{ t('commMeta2') }}</li>
-                        <li>{{ t('commMeta3') }}</li>
-                    </ul>
-                    <div class="product-price">
-                        <span class="price">+10€</span>
-                        <span class="stock-indicator">{{ t('addOn') }}</span>
-                    </div>
-                    <div class="product-actions">
-                        <a class="secondary" [routerLink]="['/photography']">{{ t('galleryCta') }}</a>
-                    </div>
-                </article>
+            <div class="product-actions">
+              <a class="primary" [routerLink]="['/photography']">{{ t('galleryCta') }}</a>
             </div>
-        </section>
-    </div>
+          </article>
+        }
+
+        <!-- Subscription -->
+        @if (usageMode === 'private') {
+          <article class="product-card featured">
+            <div class="product-header">
+              <p class="eyebrow badge-new">{{ t('subBadge') }}</p>
+              <h3>{{ t('subTitle') }}</h3>
+            </div>
+            <p class="product-copy">{{ t('subCopy') }}</p>
+            <ul class="product-meta">
+              <li>{{ t('subMeta1') }}</li>
+              <li>{{ t('subMeta2') }}</li>
+              <li>{{ t('subMeta3') }}</li>
+            </ul>
+            <div class="product-price">
+              <span class="price">9,99€</span>
+              <span class="stock-indicator">{{ t('perMonth') }}</span>
+            </div>
+            <div class="product-actions">
+              <a class="primary" [routerLink]="['/shop/account']" fragment="subscription">{{ t('subCta')
+              }}</a>
+            </div>
+          </article>
+        }
+
+        <!-- Commercial subscription -->
+        @if (usageMode === 'commercial') {
+          <article class="product-card">
+            <div class="product-header">
+              <p class="eyebrow">{{ t('commSubBadge') }}</p>
+              <h3>{{ t('commSubTitle') }}</h3>
+            </div>
+            <p class="product-copy">{{ t('commSubCopy') }}</p>
+            <ul class="product-meta">
+              <li>{{ t('commSubMeta1') }}</li>
+              <li>{{ t('commSubMeta2') }}</li>
+              <li>{{ t('commSubMeta3') }}</li>
+            </ul>
+            <div class="product-price">
+              <span class="price">19,99€</span>
+              <span class="stock-indicator">{{ t('perMonth') }}</span>
+            </div>
+            <div class="product-actions">
+              <a class="primary" [routerLink]="['/shop/account']" fragment="subscription">{{
+              t('commSubCta') }}</a>
+            </div>
+          </article>
+        }
+
+        <!-- Commercial license upgrade -->
+        @if (usageMode === 'commercial') {
+          <article class="product-card">
+            <div class="product-header">
+              <p class="eyebrow">{{ t('commBadge') }}</p>
+              <h3>{{ t('commTitle') }}</h3>
+            </div>
+            <p class="product-copy">{{ t('commCopy') }}</p>
+            <ul class="product-meta">
+              <li>{{ t('commMeta1') }}</li>
+              <li>{{ t('commMeta2') }}</li>
+              <li>{{ t('commMeta3') }}</li>
+            </ul>
+            <div class="product-price">
+              <span class="price">+10€</span>
+              <span class="stock-indicator">{{ t('addOn') }}</span>
+            </div>
+            <div class="product-actions">
+              <a class="secondary" [routerLink]="['/photography']">{{ t('galleryCta') }}</a>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  </div>
 </div>

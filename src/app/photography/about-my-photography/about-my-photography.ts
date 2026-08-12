@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Counters } from './counters/counters';
 import { Language, LanguageService } from '../../language.service';
 import { DarkModeService } from '../../dark-mode.service';
@@ -22,7 +22,7 @@ interface FormerCamera {
 @Component({
     selector: 'app-about-my-photography',
     standalone: true,
-    imports: [CommonModule, Counters],
+    imports: [Counters],
     templateUrl: './about-my-photography.html',
     styleUrls: ['./about-my-photography.scss']
 })

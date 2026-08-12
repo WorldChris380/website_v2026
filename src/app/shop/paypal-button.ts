@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, Output, EventEmitter, OnChanges, OnDestroy, SimpleChanges, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { PayPalService } from './paypal.service';
@@ -40,7 +40,7 @@ interface PayPalClientConfigResponse {
 @Component({
     selector: 'app-paypal-button',
     standalone: true,
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './paypal-button.html',
     styleUrl: './paypal-button.scss'
 })

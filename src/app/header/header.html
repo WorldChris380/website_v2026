@@ -1,491 +1,517 @@
 ﻿<header id="header-full-width" [class.loading]="isLoading">
-    <div id="header-content-limitation">
-        <div id="header-logo-div">
-            <a id="header-logo-link" href=""><img id="header-logo-img"
-                    src="/assets/img/icons-and-logos/christian-boehme-logo.png" alt="Logo of Christian Boehme">
-                <span id="page-heading">Christian Böhme</span>
-                <span class="page-heading-current" [class.section-travel]="currentPageSection === 'travel'"
-                    [class.section-aviation]="currentPageSection === 'aviation'"
-                    [class.section-photography]="currentPageSection === 'photography'"
-                    [class.section-career]="currentPageSection === 'career'"
-                    [class.section-blog]="currentPageSection === 'blog'"
-                    *ngIf="currentPageTitleShort && currentPageSection !== 'shop'">{{
-                    currentPageTitleShort }}</span>
-            </a>
-        </div>
+  <div id="header-content-limitation">
+    <div id="header-logo-div">
+      <a id="header-logo-link" href=""><img id="header-logo-img"
+        src="/assets/img/icons-and-logos/christian-boehme-logo.png" alt="Logo of Christian Boehme">
+        <span id="page-heading">Christian Böhme</span>
+        @if (currentPageTitleShort && currentPageSection !== 'shop') {
+          <span class="page-heading-current" [class.section-travel]="currentPageSection === 'travel'"
+            [class.section-aviation]="currentPageSection === 'aviation'"
+            [class.section-photography]="currentPageSection === 'photography'"
+            [class.section-career]="currentPageSection === 'career'"
+            [class.section-blog]="currentPageSection === 'blog'"
+            >{{
+          currentPageTitleShort }}</span>
+        }
+      </a>
+    </div>
 
-        <div id="header-navigation-div">
-            <nav #desktopMegaNav class="desktop-mega-nav" aria-label="Primary navigation"
-                (mouseleave)="setMegamenuOpen(false)">
-                <a [routerLink]="['/travel-budget-calculator']" class="desktop-mega-link" data-category="travel"
-                    (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('travel')">{{ getTranslation('travel')
-                    }}</a>
-                <a [routerLink]="['/photography']" [queryParams]="{ filter: 'aviation' }" class="desktop-mega-link"
-                    data-category="aviation" (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('aviation')">{{
-                    getTranslation('aviation') }}</a>
-                <a [routerLink]="['/photography']" class="desktop-mega-link" data-category="photography"
-                    (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('photography')">{{
-                    getTranslation('photography') }}</a>
-                <a [routerLink]="['/career']" class="desktop-mega-link" data-category="career"
-                    (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('career')">{{
-                    getTranslation('myCareer') }}</a>
-                <a [routerLink]="['/shop']" class="desktop-mega-link" data-category="shop"
-                    (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('shop')">{{ getTranslation('shop') }}</a>
-            </nav>
+    <div id="header-navigation-div">
+      <nav #desktopMegaNav class="desktop-mega-nav" aria-label="Primary navigation"
+        (mouseleave)="setMegamenuOpen(false)">
+        <a [routerLink]="['/travel-budget-calculator']" class="desktop-mega-link" data-category="travel"
+          (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('travel')">{{ getTranslation('travel')
+        }}</a>
+        <a [routerLink]="['/photography']" [queryParams]="{ filter: 'aviation' }" class="desktop-mega-link"
+          data-category="aviation" (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('aviation')">{{
+        getTranslation('aviation') }}</a>
+        <a [routerLink]="['/photography']" class="desktop-mega-link" data-category="photography"
+          (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('photography')">{{
+        getTranslation('photography') }}</a>
+        <a [routerLink]="['/career']" class="desktop-mega-link" data-category="career"
+          (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('career')">{{
+        getTranslation('myCareer') }}</a>
+        <a [routerLink]="['/shop']" class="desktop-mega-link" data-category="shop"
+        (mouseenter)="setMegamenuOpen(true); setDesktopDropdown('shop')">{{ getTranslation('shop') }}</a>
+      </nav>
 
-            <!-- Megamenu Panel -->
-            <div class="megamenu-panel" [class.open]="megamenuOpen"
-                [style.width.px]="megamenuPanelWidth" (mouseenter)="setMegamenuOpen(true)"
-                (mouseleave)="setMegamenuOpen(false)" (click)="handleMegamenuClick($event)">
-                <div class="megamenu-content">
+      <!-- Megamenu Panel -->
+      <div class="megamenu-panel" [class.open]="megamenuOpen"
+        [style.width.px]="megamenuPanelWidth" (mouseenter)="setMegamenuOpen(true)"
+        (mouseleave)="setMegamenuOpen(false)" (click)="handleMegamenuClick($event)">
+        <div class="megamenu-content">
 
-                    <!-- Travel Section -->
-                    <div class="megamenu-section" data-category="travel"
-                        [class.active]="openDesktopDropdownMenu === 'travel'"
-                        (mouseenter)="setDesktopDropdown('travel')">
-                        <h3 class="megamenu-category">
-                            {{ getTranslation('travel') }}
-                        </h3>
-                        <div class="megamenu-links">
-                            <div class="megamenu-subgroup">
-                                <span class="subgroup-title">{{ getTranslation('travelPhotographyGroup') }}</span>
-                                <a [routerLink]="['/photography']" [queryParams]="{filter: 'travel'}"
-                                    class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('travelGallery') }}</span>
-                                    <span class="link-description">{{ getTranslation('menuDescTravelPhotography') }}</span>
-                                </a>
-                            </div>
-                            <div class="megamenu-subgroup">
-                                <span class="subgroup-title">{{ getTranslation('tourOperatorGroup') }}</span>
-                                <a [routerLink]="['/travel-budget-calculator']" class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('budgetCalculator') }}</span>
-                                    <span class="link-description">{{ getTranslation('menuDescBudgetCalculator') }}</span>
-                                </a>
-                                <a [routerLink]="['/travel-faqs']" class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('travelFaqs') }}</span>
-                                    <span class="link-description">{{ getTranslation('menuDescTravelFaqs') }}</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Aviation Section -->
-                    <div class="megamenu-section" data-category="aviation"
-                        [class.active]="openDesktopDropdownMenu === 'aviation'"
-                        (mouseenter)="setDesktopDropdown('aviation')">
-                        <h3 class="megamenu-category">
-                            {{ getTranslation('aviation') }}
-                        </h3>
-                        <div class="megamenu-links">
-                            <div class="megamenu-subgroup">
-                                <span class="subgroup-title">{{ getTranslation('aviationPhotographyGroup') }}</span>
-                                <a [routerLink]="['/photography']" [queryParams]="{filter: 'aviation'}"
-                                    class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('aviationGallery') }}</span>
-                                    <span class="link-description">{{ getTranslation('menuDescAviationPhotography')
-                                        }}</span>
-                                </a>
-                            </div>
-                            <div class="megamenu-subgroup">
-                                <span class="subgroup-title">{{ getTranslation('aviationTravelsGroup') }}</span>
-                                <a href="/aviation-spotter-hotels" class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('aviationSpotterHotels') }}</span>
-                                    <span class="link-description">{{ getTranslation('menuDescSpotterHotels') }}</span>
-                                </a>
-                            </div>
-                            <div class="megamenu-subgroup">
-                                <span class="subgroup-title">{{ getTranslation('airlineSim') }}</span>
-                                <a [routerLink]="['/airlinesim-ceo-tools']" class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('airlineSimCeoTools') }}</span>
-                                    <span class="link-description">{{ getTranslation('airlineSimCeoToolsDescription')
-                                        }}</span>
-                                </a>
-
-                                <a [routerLink]="['/air-germany']" class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('airGermany') }}</span>
-                                    <span class="link-description">{{ getTranslation('airGermanyDescription') }}</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Photography Section -->
-                    <div class="megamenu-section" data-category="photography"
-                        [class.active]="openDesktopDropdownMenu === 'photography'"
-                        (mouseenter)="setDesktopDropdown('photography')">
-                        <h3 class="megamenu-category">
-                            {{ getTranslation('photography') }}
-                        </h3>
-                        <div class="megamenu-links">
-                            <a [routerLink]="['/photography']" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('photoGallery') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescPhotoGallery') }}</span>
-                            </a>
-                            <a [routerLink]="['/about-my-photography']" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('aboutMyPhotography') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescAboutPhotography') }}</span>
-                            </a>
-                            <div class="megamenu-subgroup">
-                                <span class="subgroup-title">{{ getTranslation('externalWebsitesGroup') }}</span>
-                                <a target="_blank"
-                                    href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
-                                    class="megamenu-link megamenu-sublink">
-                                    <img class="adobe-stock-logo" [src]="darkmodePNG('adobe-stock-logo')"
-                                        alt="adobe stock logo">
-                                    <span class="link-title">{{ getTranslation('buyPhotos') }}</span>
-                                    <span class="link-description">{{ getTranslation('menuDescAdobeStock') }}</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Career Section -->
-                    <div class="megamenu-section" data-category="career"
-                        [class.active]="openDesktopDropdownMenu === 'career'"
-                        (mouseenter)="setDesktopDropdown('career')">
-                        <h3 class="megamenu-category">
-                            {{ getTranslation('myCareer') }}
-                        </h3>
-                        <div class="megamenu-links">
-                            <div class="megamenu-subgroup">
-                                <span class="subgroup-title">{{ getTranslation('curriculumVitaeGroup') }}</span>
-                                <a [routerLink]="['/career']" [fragment]="'profile'"
-                                    class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('profile') }}</span>
-                                </a>
-                                <a [routerLink]="['/career']" [fragment]="'experience'"
-                                    class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('experience') }}</span>
-                                </a>
-                                <a [routerLink]="['/career']" [fragment]="'education'"
-                                    class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('education') }}</span>
-                                </a>
-                                <a [routerLink]="['/career']" [fragment]="'skills'"
-                                    class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('skillsCertifications') }}</span>
-                                </a>
-                                <a [routerLink]="['/career']" [fragment]="'projects'"
-                                    class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('projects') }}</span>
-                                </a>
-                                <a [routerLink]="['/career']" [fragment]="'testimonials'"
-                                    class="megamenu-link megamenu-sublink">
-                                    <span class="link-title">{{ getTranslation('testimonials') }}</span>
-                                </a>
-                            </div>
-                            <a href="/my-visited-countries" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('myVisitedCountries') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescVisitedCountries') }}</span>
-                            </a>
-                            <div class="megamenu-subgroup">
-                                <span class="subgroup-title">{{ getTranslation('externalWebsitesGroup') }}</span>
-                                <div class="megamenu-social-row">
-                                    <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
-                                        class="megamenu-link">
-                                        <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">
-                                        <span class="link-title">{{ getTranslation('linkedin') }}</span>
-                                    </a>
-                                    <a target="_blank" href="https://github.com/WorldChris380" class="megamenu-link">
-                                        <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">
-                                        <span class="link-title">{{ getTranslation('github') }}</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Shop Section -->
-                    <div class="megamenu-section" data-category="shop"
-                        [class.active]="openDesktopDropdownMenu === 'shop'" (mouseenter)="setDesktopDropdown('shop')">
-                        <h3 class="megamenu-category">
-                            {{ getTranslation('shop') }}
-                        </h3>
-                        <div class="megamenu-links">
-                            <a [routerLink]="['/photography']"
-                                class="megamenu-link megamenu-link-featured megamenu-shop-primary">
-                                <span class="link-title">
-                                    {{ currentLanguage === 'de' ? 'Foto lizenzieren' : 'License Photo' }}
-                                    <span class="megamenu-shop-pill">Featured</span>
-                                </span>
-                                <span class="link-description">{{ currentLanguage === 'de' ? 'Direkt zur Galerie und
-                                    Motive für den Warenkorb auswählen.' : 'Go straight to the gallery and select
-                                    photos for your cart.' }}</span>
-                            </a>
-                            <a [routerLink]="['/shop/pricing']" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('pricingOverview') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescPricing') }}</span>
-                            </a>
-                            <a [routerLink]="['/shop/account']" fragment="subscription" class="megamenu-link">
-                                <span class="link-title">{{ getTranslation('manageSubscription') }}</span>
-                                <span class="link-description">{{ getTranslation('menuDescSubscription') }}</span>
-                            </a>
-                            <a [routerLink]="['/shop/cart']" class="megamenu-link">
-                                <span class="link-title">
-                                    {{ currentLanguage === 'de' ? 'Warenkorb' : 'Cart' }}
-                                    <span class="megamenu-shop-pill" *ngIf="cartQuantity > 0">{{ cartQuantity }}</span>
-                                </span>
-                                <span class="link-description">{{ currentLanguage === 'de' ? 'Auswahl prüfen und
-                                    Checkout starten.' : 'Review your selection and start checkout.' }}</span>
-                            </a>
-                            <a [routerLink]="['/shop/account']" class="megamenu-link" *ngIf="isShopAuthenticated">
-                                <span class="link-title">{{ currentLanguage === 'de' ? 'Mein Konto & Bestellungen' : 'My
-                                    Account & Orders' }}</span>
-                                <span class="link-description">{{ currentLanguage === 'de' ? 'Bestellungen, Rechnungen
-                                    und Historie verwalten.' : 'Manage orders, invoices, and purchase history.'
-                                    }}</span>
-                            </a>
-                            <a [routerLink]="['/shop/account']" class="megamenu-link">
-                                <span class="link-title">{{ currentLanguage === 'de' ? 'Downloads & Zertifikate' :
-                                    'Downloads & Certificates' }}</span>
-                                <span class="link-description">{{ currentLanguage === 'de' ? 'Originale und
-                                    Echtheitszertifikate erneut laden.' : 'Re-download originals and authenticity
-                                    certificates.' }}</span>
-                            </a>
-                            <button type="button" class="megamenu-link megamenu-link-button"
-                                (click)="handleShopAccountAction()">
-                                <span class="link-title">{{ isShopAuthenticated
-                                    ? (currentLanguage === 'de' ? 'Abmelden' : 'Logout')
-                                    : (currentLanguage === 'de' ? 'Anmelden / Registrieren' : 'Login / Register')
-                                    }}</span>
-                                <span class="link-description">{{ isShopAuthenticated
-                                    ? (currentLanguage === 'de' ? 'Sicher vom Shop-Konto abmelden.' : 'Sign out safely
-                                    from your shop account.')
-                                    : (currentLanguage === 'de' ? 'Im Konto anmelden oder neu registrieren.' : 'Sign in
-                                    or create your account.') }}</span>
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
+          <!-- Travel Section -->
+          <div class="megamenu-section" data-category="travel"
+            [class.active]="openDesktopDropdownMenu === 'travel'"
+            (mouseenter)="setDesktopDropdown('travel')">
+            <h3 class="megamenu-category">
+              {{ getTranslation('travel') }}
+            </h3>
+            <div class="megamenu-links">
+              <div class="megamenu-subgroup">
+                <span class="subgroup-title">{{ getTranslation('travelPhotographyGroup') }}</span>
+                <a [routerLink]="['/photography']" [queryParams]="{filter: 'travel'}"
+                  class="megamenu-link megamenu-sublink">
+                  <span class="link-title">{{ getTranslation('travelGallery') }}</span>
+                  <span class="link-description">{{ getTranslation('menuDescTravelPhotography') }}</span>
+                </a>
+              </div>
+              <div class="megamenu-subgroup">
+                <span class="subgroup-title">{{ getTranslation('tourOperatorGroup') }}</span>
+                <a [routerLink]="['/travel-budget-calculator']" class="megamenu-link megamenu-sublink">
+                  <span class="link-title">{{ getTranslation('budgetCalculator') }}</span>
+                  <span class="link-description">{{ getTranslation('menuDescBudgetCalculator') }}</span>
+                </a>
+                <a [routerLink]="['/travel-faqs']" class="megamenu-link megamenu-sublink">
+                  <span class="link-title">{{ getTranslation('travelFaqs') }}</span>
+                  <span class="link-description">{{ getTranslation('menuDescTravelFaqs') }}</span>
+                </a>
+              </div>
             </div>
+          </div>
+
+          <!-- Aviation Section -->
+          <div class="megamenu-section" data-category="aviation"
+            [class.active]="openDesktopDropdownMenu === 'aviation'"
+            (mouseenter)="setDesktopDropdown('aviation')">
+            <h3 class="megamenu-category">
+              {{ getTranslation('aviation') }}
+            </h3>
+            <div class="megamenu-links">
+              <div class="megamenu-subgroup">
+                <span class="subgroup-title">{{ getTranslation('aviationPhotographyGroup') }}</span>
+                <a [routerLink]="['/photography']" [queryParams]="{filter: 'aviation'}"
+                  class="megamenu-link megamenu-sublink">
+                  <span class="link-title">{{ getTranslation('aviationGallery') }}</span>
+                  <span class="link-description">{{ getTranslation('menuDescAviationPhotography')
+                  }}</span>
+                </a>
+              </div>
+              <div class="megamenu-subgroup">
+                <span class="subgroup-title">{{ getTranslation('aviationTravelsGroup') }}</span>
+                <a href="/aviation-spotter-hotels" class="megamenu-link megamenu-sublink">
+                  <span class="link-title">{{ getTranslation('aviationSpotterHotels') }}</span>
+                  <span class="link-description">{{ getTranslation('menuDescSpotterHotels') }}</span>
+                </a>
+              </div>
+              <div class="megamenu-subgroup">
+                <span class="subgroup-title">{{ getTranslation('airlineSim') }}</span>
+                <a [routerLink]="['/airlinesim-ceo-tools']" class="megamenu-link megamenu-sublink">
+                  <span class="link-title">{{ getTranslation('airlineSimCeoTools') }}</span>
+                  <span class="link-description">{{ getTranslation('airlineSimCeoToolsDescription')
+                  }}</span>
+                </a>
+
+                <a [routerLink]="['/air-germany']" class="megamenu-link megamenu-sublink">
+                  <span class="link-title">{{ getTranslation('airGermany') }}</span>
+                  <span class="link-description">{{ getTranslation('airGermanyDescription') }}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Photography Section -->
+          <div class="megamenu-section" data-category="photography"
+            [class.active]="openDesktopDropdownMenu === 'photography'"
+            (mouseenter)="setDesktopDropdown('photography')">
+            <h3 class="megamenu-category">
+              {{ getTranslation('photography') }}
+            </h3>
+            <div class="megamenu-links">
+              <a [routerLink]="['/photography']" class="megamenu-link">
+                <span class="link-title">{{ getTranslation('photoGallery') }}</span>
+                <span class="link-description">{{ getTranslation('menuDescPhotoGallery') }}</span>
+              </a>
+              <a [routerLink]="['/about-my-photography']" class="megamenu-link">
+                <span class="link-title">{{ getTranslation('aboutMyPhotography') }}</span>
+                <span class="link-description">{{ getTranslation('menuDescAboutPhotography') }}</span>
+              </a>
+              <div class="megamenu-subgroup">
+                <span class="subgroup-title">{{ getTranslation('externalWebsitesGroup') }}</span>
+                <a target="_blank"
+                  href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
+                  class="megamenu-link megamenu-sublink">
+                  <img class="adobe-stock-logo" [src]="darkmodePNG('adobe-stock-logo')"
+                    alt="adobe stock logo">
+                    <span class="link-title">{{ getTranslation('buyPhotos') }}</span>
+                    <span class="link-description">{{ getTranslation('menuDescAdobeStock') }}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Career Section -->
+            <div class="megamenu-section" data-category="career"
+              [class.active]="openDesktopDropdownMenu === 'career'"
+              (mouseenter)="setDesktopDropdown('career')">
+              <h3 class="megamenu-category">
+                {{ getTranslation('myCareer') }}
+              </h3>
+              <div class="megamenu-links">
+                <div class="megamenu-subgroup">
+                  <span class="subgroup-title">{{ getTranslation('curriculumVitaeGroup') }}</span>
+                  <a [routerLink]="['/career']" [fragment]="'profile'"
+                    class="megamenu-link megamenu-sublink">
+                    <span class="link-title">{{ getTranslation('profile') }}</span>
+                  </a>
+                  <a [routerLink]="['/career']" [fragment]="'experience'"
+                    class="megamenu-link megamenu-sublink">
+                    <span class="link-title">{{ getTranslation('experience') }}</span>
+                  </a>
+                  <a [routerLink]="['/career']" [fragment]="'education'"
+                    class="megamenu-link megamenu-sublink">
+                    <span class="link-title">{{ getTranslation('education') }}</span>
+                  </a>
+                  <a [routerLink]="['/career']" [fragment]="'skills'"
+                    class="megamenu-link megamenu-sublink">
+                    <span class="link-title">{{ getTranslation('skillsCertifications') }}</span>
+                  </a>
+                  <a [routerLink]="['/career']" [fragment]="'projects'"
+                    class="megamenu-link megamenu-sublink">
+                    <span class="link-title">{{ getTranslation('projects') }}</span>
+                  </a>
+                  <a [routerLink]="['/career']" [fragment]="'testimonials'"
+                    class="megamenu-link megamenu-sublink">
+                    <span class="link-title">{{ getTranslation('testimonials') }}</span>
+                  </a>
+                </div>
+                <a href="/my-visited-countries" class="megamenu-link">
+                  <span class="link-title">{{ getTranslation('myVisitedCountries') }}</span>
+                  <span class="link-description">{{ getTranslation('menuDescVisitedCountries') }}</span>
+                </a>
+                <div class="megamenu-subgroup">
+                  <span class="subgroup-title">{{ getTranslation('externalWebsitesGroup') }}</span>
+                  <div class="megamenu-social-row">
+                    <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
+                      class="megamenu-link">
+                      <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">
+                      <span class="link-title">{{ getTranslation('linkedin') }}</span>
+                    </a>
+                    <a target="_blank" href="https://github.com/WorldChris380" class="megamenu-link">
+                      <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">
+                      <span class="link-title">{{ getTranslation('github') }}</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shop Section -->
+            <div class="megamenu-section" data-category="shop"
+              [class.active]="openDesktopDropdownMenu === 'shop'" (mouseenter)="setDesktopDropdown('shop')">
+              <h3 class="megamenu-category">
+                {{ getTranslation('shop') }}
+              </h3>
+              <div class="megamenu-links">
+                <a [routerLink]="['/photography']"
+                  class="megamenu-link megamenu-link-featured megamenu-shop-primary">
+                  <span class="link-title">
+                    {{ currentLanguage === 'de' ? 'Foto lizenzieren' : 'License Photo' }}
+                    <span class="megamenu-shop-pill">Featured</span>
+                  </span>
+                  <span class="link-description">{{ currentLanguage === 'de' ? 'Direkt zur Galerie und
+                    Motive für den Warenkorb auswählen.' : 'Go straight to the gallery and select
+                  photos for your cart.' }}</span>
+                </a>
+                <a [routerLink]="['/shop/pricing']" class="megamenu-link">
+                  <span class="link-title">{{ getTranslation('pricingOverview') }}</span>
+                  <span class="link-description">{{ getTranslation('menuDescPricing') }}</span>
+                </a>
+                <a [routerLink]="['/shop/account']" fragment="subscription" class="megamenu-link">
+                  <span class="link-title">{{ getTranslation('manageSubscription') }}</span>
+                  <span class="link-description">{{ getTranslation('menuDescSubscription') }}</span>
+                </a>
+                <a [routerLink]="['/shop/cart']" class="megamenu-link">
+                  <span class="link-title">
+                    {{ currentLanguage === 'de' ? 'Warenkorb' : 'Cart' }}
+                    @if (cartQuantity > 0) {
+                      <span class="megamenu-shop-pill">{{ cartQuantity }}</span>
+                    }
+                  </span>
+                  <span class="link-description">{{ currentLanguage === 'de' ? 'Auswahl prüfen und
+                  Checkout starten.' : 'Review your selection and start checkout.' }}</span>
+                </a>
+                @if (isShopAuthenticated) {
+                  <a [routerLink]="['/shop/account']" class="megamenu-link">
+                    <span class="link-title">{{ currentLanguage === 'de' ? 'Mein Konto & Bestellungen' : 'My
+                    Account & Orders' }}</span>
+                    <span class="link-description">{{ currentLanguage === 'de' ? 'Bestellungen, Rechnungen
+                      und Historie verwalten.' : 'Manage orders, invoices, and purchase history.'
+                    }}</span>
+                  </a>
+                }
+                <a [routerLink]="['/shop/account']" class="megamenu-link">
+                  <span class="link-title">{{ currentLanguage === 'de' ? 'Downloads & Zertifikate' :
+                  'Downloads & Certificates' }}</span>
+                  <span class="link-description">{{ currentLanguage === 'de' ? 'Originale und
+                    Echtheitszertifikate erneut laden.' : 'Re-download originals and authenticity
+                  certificates.' }}</span>
+                </a>
+                <button type="button" class="megamenu-link megamenu-link-button"
+                  (click)="handleShopAccountAction()">
+                  <span class="link-title">{{ isShopAuthenticated
+                    ? (currentLanguage === 'de' ? 'Abmelden' : 'Logout')
+                    : (currentLanguage === 'de' ? 'Anmelden / Registrieren' : 'Login / Register')
+                  }}</span>
+                  <span class="link-description">{{ isShopAuthenticated
+                    ? (currentLanguage === 'de' ? 'Sicher vom Shop-Konto abmelden.' : 'Sign out safely
+                    from your shop account.')
+                    : (currentLanguage === 'de' ? 'Im Konto anmelden oder neu registrieren.' : 'Sign in
+                  or create your account.') }}</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
         </div>
-        <div id="header-3rd-row-div">
-            <a class="header-cart" [routerLink]="['/shop/cart']" [title]="getTranslation('shop')"
-                [attr.aria-label]="getTranslation('shopCart') + (cartQuantity > 0 ? ' (' + cartQuantity + ' items)' : ' (empty)')">
-                <svg class="icon-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                    <path
-                        d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.865-4.593 2.235-6.615a.75.75 0 0 0-.746-.885H5.106M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                </svg>
-                <span class="cart-badge" *ngIf="cartQuantity > 0">{{ cartQuantity }}</span>
-            </a>
-            <span (click)="toggleLanguage()" id="language-toggle" [title]="getTranslation('toggleLanguage')"
-                role="button" tabindex="0" [attr.aria-label]="getTranslation('toggleLanguage')"
-                (keydown.enter)="toggleLanguage()" (keydown.space)="toggleLanguage()">
-                <img class="flag-icon"
-                    [src]="currentLanguage === 'en' ? darkmodeSVG('flag-de') : darkmodeSVG('flag-gb')"
-                    [alt]="currentLanguage === 'en' ? 'German Flag' : 'UK Flag'">
+      </div>
+      <div id="header-3rd-row-div">
+        <a class="header-cart" [routerLink]="['/shop/cart']" [title]="getTranslation('shop')"
+          [attr.aria-label]="getTranslation('shopCart') + (cartQuantity > 0 ? ' (' + cartQuantity + ' items)' : ' (empty)')">
+          <svg class="icon-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path
+              d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.865-4.593 2.235-6.615a.75.75 0 0 0-.746-.885H5.106M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+            </svg>
+            @if (cartQuantity > 0) {
+              <span class="cart-badge">{{ cartQuantity }}</span>
+            }
+          </a>
+          <span (click)="toggleLanguage()" id="language-toggle" [title]="getTranslation('toggleLanguage')"
+            role="button" tabindex="0" [attr.aria-label]="getTranslation('toggleLanguage')"
+            (keydown.enter)="toggleLanguage()" (keydown.space)="toggleLanguage()">
+            <img class="flag-icon"
+              [src]="currentLanguage === 'en' ? darkmodeSVG('flag-de') : darkmodeSVG('flag-gb')"
+              [alt]="currentLanguage === 'en' ? 'German Flag' : 'UK Flag'">
             </span>
             <span (click)="toggleDarkMode()" id="moon-icon" role="button" tabindex="0"
-                [attr.aria-label]="'Enable dark mode'" (keydown.enter)="toggleDarkMode()"
-                (keydown.space)="toggleDarkMode()"><img [src]="darkmodePNG('mode-icon')" alt="Darkmode Icon">
+              [attr.aria-label]="'Enable dark mode'" (keydown.enter)="toggleDarkMode()"
+              (keydown.space)="toggleDarkMode()"><img [src]="darkmodePNG('mode-icon')" alt="Darkmode Icon">
             </span>
             <span (click)="toggleDarkMode()" id="light-icon" role="button" tabindex="0"
-                [attr.aria-label]="'Enable light mode'" (keydown.enter)="toggleDarkMode()"
-                (keydown.space)="toggleDarkMode()"><img [src]="darkmodePNG('mode-icon')" alt="Brightmode Icon">
+              [attr.aria-label]="'Enable light mode'" (keydown.enter)="toggleDarkMode()"
+              (keydown.space)="toggleDarkMode()"><img [src]="darkmodePNG('mode-icon')" alt="Brightmode Icon">
             </span>
             <div id="burger-menu-icon">
-                <button (click)="toggleBurgerMenu()" id="burger-menu-open-icon" type="button"
-                    aria-label="Open navigation menu" [style.display]="burgerMenuOpen ? 'none' : 'flex'">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" aria-hidden="true" focusable="false">
-                        <path d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
-                    </svg>
-                </button>
-                <button (click)="toggleBurgerMenu()" id="burger-menu-close-icon" type="button"
-                    aria-label="Close navigation menu" [style.display]="burgerMenuOpen ? 'flex' : 'none'">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" aria-hidden="true" focusable="false">
-                        <path d="M6 18 18 6M6 6l12 12" />
-                    </svg>
-                </button>
+              <button (click)="toggleBurgerMenu()" id="burger-menu-open-icon" type="button"
+                aria-label="Open navigation menu" [style.display]="burgerMenuOpen ? 'none' : 'flex'">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+                </svg>
+              </button>
+              <button (click)="toggleBurgerMenu()" id="burger-menu-close-icon" type="button"
+                aria-label="Close navigation menu" [style.display]="burgerMenuOpen ? 'flex' : 'none'">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" aria-hidden="true" focusable="false">
+                  <path d="M6 18 18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
+          </div>
         </div>
-    </div>
-    <div id="burger-menu-content" [class.open]="burgerMenuOpen" [class.closing]="burgerMenuClosing">
-        <div id="burger-menu-main-content">
+        <div id="burger-menu-content" [class.open]="burgerMenuOpen" [class.closing]="burgerMenuClosing">
+          <div id="burger-menu-main-content">
 
             <a (click)="goBackToMainMobileMenuFunc()" class="goBackToMainMobileMenu" href="javascript:void(0)">
-                < Go Back </a>
+            < Go Back </a>
 
-                    <!-- Mobile Travel Menu -->
-                    <a (click)="toggleMobileDropdownMenu('travel')" class="burger-menu-dark-green-item"
-                        href="javascript:void(0);">{{ getTranslation('travel') }}</a>
-                    <div *ngIf="openMobileDropdownMenu === 'travel'" id="mobile-travel-dropdown"
-                        [class.open]="openMobileDropdownMenu === 'travel'">
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
-                            [queryParams]="{ filter: 'travel' }" class="mobile-dropdown-link dropdown-link-travel">
-                            {{ getTranslation('travelGallery') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/travel-budget-calculator']"
-                            class="mobile-dropdown-link dropdown-link-travel">
-                            {{ getTranslation('budgetCalculator') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/travel-faqs']"
-                            class="mobile-dropdown-link dropdown-link-travel">
-                            {{ getTranslation('travelFaqs') }}
-                        </a>
-                    </div>
-
-                    <!-- Mobile Aviation Menu -->
-                    <a (click)="toggleMobileDropdownMenu('aviation')" class="burger-menu-blue-item"
-                        href="javascript:void(0);">{{ getTranslation('aviation') }}</a>
-                    <div *ngIf="openMobileDropdownMenu === 'aviation'" id="mobile-aviation-dropdown"
-                        [class.open]="openMobileDropdownMenu === 'aviation'">
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
-                            [queryParams]="{ filter: 'aviation' }" class="mobile-dropdown-link dropdown-link-aviation">
-                            {{ getTranslation('aviationGallery') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/aviation-spotter-hotels']"
-                            class="mobile-dropdown-link dropdown-link-aviation">
-                            {{ getTranslation('aviationSpotterHotels') }}
-                        </a>
-                        <a (click)="toggleMobileSubDropdownMenu('airline-sim')"
-                            class="mobile-dropdown-link dropdown-link-aviation" href="javascript:void(0);">
-                            {{ getTranslation('airlineSim') }}
-                        </a>
-                        <div *ngIf="openMobileSubDropdownMenu === 'airline-sim'" class="mobile-dropdown-sublist">
-                            <a (click)="closeMenuAfterNavigation()" [routerLink]="['/airlinesim-ceo-tools']"
-                                class="mobile-dropdown-sublink">
-                                {{ getTranslation('airlineSimCeoTools') }}
-                            </a>
-                            <a (click)="closeMenuAfterNavigation()" [routerLink]="['/air-germany']"
-                                class="mobile-dropdown-sublink">
-                                {{ getTranslation('airGermany') }}
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Mobile Photography Menu -->
-                    <a (click)="toggleMobileDropdownMenu('photography')" class="burger-menu-orange-item"
-                        href="javascript:void(0);">{{ getTranslation('photography') }}</a>
-                    <div *ngIf="openMobileDropdownMenu === 'photography'" id="mobile-photography-dropdown"
-                        [class.open]="openMobileDropdownMenu === 'photography'">
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
-                            class="mobile-dropdown-link dropdown-link-photography">
-                            {{ getTranslation('photoGallery') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/about-my-photography']"
-                            class="mobile-dropdown-link dropdown-link-photography">
-                            {{ getTranslation('aboutMyPhotography') }}
-                        </a>
-                        <a target="_blank"
-                            href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
-                            class="mobile-dropdown-link dropdown-link-photography">
-                            <img id="adobe-stock-mobile-logo" [src]="darkmodePNG('adobe-stock-logo')"
-                                alt="adobe stock logo">{{ getTranslation('buyPhotos') }}
-                        </a>
-                    </div>
-
-                    <!-- Mobile Career Menu -->
-                    <a (click)="toggleMobileDropdownMenu('career')" class="burger-menu-blue-item"
-                        href="javascript:void(0);">{{ getTranslation('myCareer') }}</a>
-                    <div *ngIf="openMobileDropdownMenu === 'career'" id="mobile-career-dropdown"
-                        [class.open]="openMobileDropdownMenu === 'career'">
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'profile'"
-                            class="mobile-dropdown-link dropdown-link-career">
-                            {{ getTranslation('profile') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'experience'"
-                            class="mobile-dropdown-link dropdown-link-career">
-                            {{ getTranslation('experience') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'education'"
-                            class="mobile-dropdown-link dropdown-link-career">
-                            {{ getTranslation('education') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'skills'"
-                            class="mobile-dropdown-link dropdown-link-career">
-                            {{ getTranslation('skillsCertifications') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'projects'"
-                            class="mobile-dropdown-link dropdown-link-career">
-                            {{ getTranslation('projects') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'testimonials'"
-                            class="mobile-dropdown-link dropdown-link-career">
-                            {{ getTranslation('testimonials') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/my-visited-countries']"
-                            class="mobile-dropdown-link dropdown-link-career">
-                            {{ getTranslation('myVisitedCountries') }}
-                        </a>
-                        <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
-                            class="mobile-dropdown-link dropdown-link-career">
-                            <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">{{
-                            getTranslation('linkedin') }}
-                        </a>
-                        <a target="_blank" href="https://github.com/WorldChris380"
-                            class="mobile-dropdown-link dropdown-link-career">
-                            <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">{{
-                            getTranslation('github') }}
-                        </a>
-                    </div>
-
-                    <!-- Mobile Shop Menu -->
-                    <a (click)="toggleMobileDropdownMenu('shop')" class="burger-menu-blue-item"
-                        href="javascript:void(0);">{{ getTranslation('shop') }}</a>
-                    <div *ngIf="openMobileDropdownMenu === 'shop'" id="mobile-shop-dropdown"
-                        [class.open]="openMobileDropdownMenu === 'shop'">
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
-                            class="mobile-dropdown-link dropdown-link-shop">
-                            {{ currentLanguage === 'de' ? 'Foto lizenzieren' : 'License Photo' }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/pricing']"
-                            class="mobile-dropdown-link dropdown-link-shop">
-                            {{ getTranslation('pricingOverview') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/account']"
-                            fragment="subscription" class="mobile-dropdown-link dropdown-link-shop">
-                            {{ getTranslation('manageSubscription') }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/cart']"
-                            class="mobile-dropdown-link dropdown-link-shop">
-                            {{ currentLanguage === 'de' ? 'Warenkorb' : 'Cart' }}
-                            <span class="megamenu-shop-pill" *ngIf="cartQuantity > 0">{{ cartQuantity }}</span>
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/account']"
-                            class="mobile-dropdown-link dropdown-link-shop" *ngIf="isShopAuthenticated">
-                            {{ currentLanguage === 'de' ? 'Mein Konto & Bestellungen' : 'My Account & Orders' }}
-                        </a>
-                        <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/account']"
-                            class="mobile-dropdown-link dropdown-link-shop">
-                            {{ currentLanguage === 'de' ? 'Downloads & Zertifikate' : 'Downloads & Certificates' }}
-                        </a>
-                        <a (click)="handleShopAccountActionMobile()" class="mobile-dropdown-link dropdown-link-shop"
-                            href="javascript:void(0);">
-                            {{ isShopAuthenticated
-                            ? (currentLanguage === 'de' ? 'Abmelden' : 'Logout')
-                            : (currentLanguage === 'de' ? 'Anmelden / Registrieren' : 'Login / Register') }}
-                        </a>
-                    </div>
-        </div>
-        <div id="mobileBottomMenu">
-            <div id="mobile-bottom-Menu-first-coloum">
-                <a class="header-cart header-cart-mobile" [routerLink]="['/shop/cart']"
-                    [title]="getTranslation('shop')"
-                    [attr.aria-label]="getTranslation('shopCart') + (cartQuantity > 0 ? ' (' + cartQuantity + ' items)' : ' (empty)')">
-                    <svg class="icon-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                        <path
-                            d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.865-4.593 2.235-6.615a.75.75 0 0 0-.746-.885H5.106M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                    </svg>
-                    <span class="cart-badge" *ngIf="cartQuantity > 0">{{ cartQuantity }}</span>
+            <!-- Mobile Travel Menu -->
+            <a (click)="toggleMobileDropdownMenu('travel')" class="burger-menu-dark-green-item"
+            href="javascript:void(0);">{{ getTranslation('travel') }}</a>
+            @if (openMobileDropdownMenu === 'travel') {
+              <div id="mobile-travel-dropdown"
+                [class.open]="openMobileDropdownMenu === 'travel'">
+                <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
+                  [queryParams]="{ filter: 'travel' }" class="mobile-dropdown-link dropdown-link-travel">
+                  {{ getTranslation('travelGallery') }}
                 </a>
-                <span (click)="toggleLanguage()" id="language-toggle-mobile" [title]="getTranslation('toggleLanguage')">
-                    <img class="flag-icon"
-                        [src]="currentLanguage === 'en' ? darkmodeSVG('flag-de') : darkmodeSVG('flag-gb')"
-                        [alt]="currentLanguage === 'en' ? 'German Flag' : 'UK Flag'">
-                </span>
-                <span (click)="toggleDarkMode()" id="moon-icon-burger"><img [src]="darkmodePNG('mode-icon')"
-                        alt="icon for turning on dark mode">
-                </span>
-                <span (click)="toggleDarkMode()" id="light-icon-burger"><img [src]="darkmodePNG('mode-icon')"
-                        alt="icon for turning on light mode">
-                </span>
-            </div>
-        </div>
+                <a (click)="closeMenuAfterNavigation()" [routerLink]="['/travel-budget-calculator']"
+                  class="mobile-dropdown-link dropdown-link-travel">
+                  {{ getTranslation('budgetCalculator') }}
+                </a>
+                <a (click)="closeMenuAfterNavigation()" [routerLink]="['/travel-faqs']"
+                  class="mobile-dropdown-link dropdown-link-travel">
+                  {{ getTranslation('travelFaqs') }}
+                </a>
+              </div>
+            }
 
-    </div>
-</header>
+            <!-- Mobile Aviation Menu -->
+            <a (click)="toggleMobileDropdownMenu('aviation')" class="burger-menu-blue-item"
+            href="javascript:void(0);">{{ getTranslation('aviation') }}</a>
+            @if (openMobileDropdownMenu === 'aviation') {
+              <div id="mobile-aviation-dropdown"
+                [class.open]="openMobileDropdownMenu === 'aviation'">
+                <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
+                  [queryParams]="{ filter: 'aviation' }" class="mobile-dropdown-link dropdown-link-aviation">
+                  {{ getTranslation('aviationGallery') }}
+                </a>
+                <a (click)="closeMenuAfterNavigation()" [routerLink]="['/aviation-spotter-hotels']"
+                  class="mobile-dropdown-link dropdown-link-aviation">
+                  {{ getTranslation('aviationSpotterHotels') }}
+                </a>
+                <a (click)="toggleMobileSubDropdownMenu('airline-sim')"
+                  class="mobile-dropdown-link dropdown-link-aviation" href="javascript:void(0);">
+                  {{ getTranslation('airlineSim') }}
+                </a>
+                @if (openMobileSubDropdownMenu === 'airline-sim') {
+                  <div class="mobile-dropdown-sublist">
+                    <a (click)="closeMenuAfterNavigation()" [routerLink]="['/airlinesim-ceo-tools']"
+                      class="mobile-dropdown-sublink">
+                      {{ getTranslation('airlineSimCeoTools') }}
+                    </a>
+                    <a (click)="closeMenuAfterNavigation()" [routerLink]="['/air-germany']"
+                      class="mobile-dropdown-sublink">
+                      {{ getTranslation('airGermany') }}
+                    </a>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Mobile Photography Menu -->
+            <a (click)="toggleMobileDropdownMenu('photography')" class="burger-menu-orange-item"
+            href="javascript:void(0);">{{ getTranslation('photography') }}</a>
+            @if (openMobileDropdownMenu === 'photography') {
+              <div id="mobile-photography-dropdown"
+                [class.open]="openMobileDropdownMenu === 'photography'">
+                <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
+                  class="mobile-dropdown-link dropdown-link-photography">
+                  {{ getTranslation('photoGallery') }}
+                </a>
+                <a (click)="closeMenuAfterNavigation()" [routerLink]="['/about-my-photography']"
+                  class="mobile-dropdown-link dropdown-link-photography">
+                  {{ getTranslation('aboutMyPhotography') }}
+                </a>
+                <a target="_blank"
+                  href="https://stock.adobe.com/de/contributor/211348852/christian-boehme-com?load_type=author&prev_url=detail"
+                  class="mobile-dropdown-link dropdown-link-photography">
+                  <img id="adobe-stock-mobile-logo" [src]="darkmodePNG('adobe-stock-logo')"
+                    alt="adobe stock logo">{{ getTranslation('buyPhotos') }}
+                  </a>
+                </div>
+              }
+
+              <!-- Mobile Career Menu -->
+              <a (click)="toggleMobileDropdownMenu('career')" class="burger-menu-blue-item"
+              href="javascript:void(0);">{{ getTranslation('myCareer') }}</a>
+              @if (openMobileDropdownMenu === 'career') {
+                <div id="mobile-career-dropdown"
+                  [class.open]="openMobileDropdownMenu === 'career'">
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'profile'"
+                    class="mobile-dropdown-link dropdown-link-career">
+                    {{ getTranslation('profile') }}
+                  </a>
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'experience'"
+                    class="mobile-dropdown-link dropdown-link-career">
+                    {{ getTranslation('experience') }}
+                  </a>
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'education'"
+                    class="mobile-dropdown-link dropdown-link-career">
+                    {{ getTranslation('education') }}
+                  </a>
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'skills'"
+                    class="mobile-dropdown-link dropdown-link-career">
+                    {{ getTranslation('skillsCertifications') }}
+                  </a>
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'projects'"
+                    class="mobile-dropdown-link dropdown-link-career">
+                    {{ getTranslation('projects') }}
+                  </a>
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/career']" [fragment]="'testimonials'"
+                    class="mobile-dropdown-link dropdown-link-career">
+                    {{ getTranslation('testimonials') }}
+                  </a>
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/my-visited-countries']"
+                    class="mobile-dropdown-link dropdown-link-career">
+                    {{ getTranslation('myVisitedCountries') }}
+                  </a>
+                  <a target="_blank" href="https://www.linkedin.com/in/christian-boehme-business/"
+                    class="mobile-dropdown-link dropdown-link-career">
+                    <img class="linkedIn-Logo" [src]="darkmodePNG('linkedIn-logo')" alt="LinkedIn Logo">{{
+                    getTranslation('linkedin') }}
+                  </a>
+                  <a target="_blank" href="https://github.com/WorldChris380"
+                    class="mobile-dropdown-link dropdown-link-career">
+                    <img class="github-logo" [src]="darkmodePNG('GitHub-logo')" alt="GitHub Logo">{{
+                    getTranslation('github') }}
+                  </a>
+                </div>
+              }
+
+              <!-- Mobile Shop Menu -->
+              <a (click)="toggleMobileDropdownMenu('shop')" class="burger-menu-blue-item"
+              href="javascript:void(0);">{{ getTranslation('shop') }}</a>
+              @if (openMobileDropdownMenu === 'shop') {
+                <div id="mobile-shop-dropdown"
+                  [class.open]="openMobileDropdownMenu === 'shop'">
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/photography']"
+                    class="mobile-dropdown-link dropdown-link-shop">
+                    {{ currentLanguage === 'de' ? 'Foto lizenzieren' : 'License Photo' }}
+                  </a>
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/pricing']"
+                    class="mobile-dropdown-link dropdown-link-shop">
+                    {{ getTranslation('pricingOverview') }}
+                  </a>
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/account']"
+                    fragment="subscription" class="mobile-dropdown-link dropdown-link-shop">
+                    {{ getTranslation('manageSubscription') }}
+                  </a>
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/cart']"
+                    class="mobile-dropdown-link dropdown-link-shop">
+                    {{ currentLanguage === 'de' ? 'Warenkorb' : 'Cart' }}
+                    @if (cartQuantity > 0) {
+                      <span class="megamenu-shop-pill">{{ cartQuantity }}</span>
+                    }
+                  </a>
+                  @if (isShopAuthenticated) {
+                    <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/account']"
+                      class="mobile-dropdown-link dropdown-link-shop">
+                      {{ currentLanguage === 'de' ? 'Mein Konto & Bestellungen' : 'My Account & Orders' }}
+                    </a>
+                  }
+                  <a (click)="closeMenuAfterNavigation()" [routerLink]="['/shop/account']"
+                    class="mobile-dropdown-link dropdown-link-shop">
+                    {{ currentLanguage === 'de' ? 'Downloads & Zertifikate' : 'Downloads & Certificates' }}
+                  </a>
+                  <a (click)="handleShopAccountActionMobile()" class="mobile-dropdown-link dropdown-link-shop"
+                    href="javascript:void(0);">
+                    {{ isShopAuthenticated
+                    ? (currentLanguage === 'de' ? 'Abmelden' : 'Logout')
+                    : (currentLanguage === 'de' ? 'Anmelden / Registrieren' : 'Login / Register') }}
+                  </a>
+                </div>
+              }
+            </div>
+            <div id="mobileBottomMenu">
+              <div id="mobile-bottom-Menu-first-coloum">
+                <a class="header-cart header-cart-mobile" [routerLink]="['/shop/cart']"
+                  [title]="getTranslation('shop')"
+                  [attr.aria-label]="getTranslation('shopCart') + (cartQuantity > 0 ? ' (' + cartQuantity + ' items)' : ' (empty)')">
+                  <svg class="icon-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path
+                      d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.865-4.593 2.235-6.615a.75.75 0 0 0-.746-.885H5.106M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                    </svg>
+                    @if (cartQuantity > 0) {
+                      <span class="cart-badge">{{ cartQuantity }}</span>
+                    }
+                  </a>
+                  <span (click)="toggleLanguage()" id="language-toggle-mobile" [title]="getTranslation('toggleLanguage')">
+                    <img class="flag-icon"
+                      [src]="currentLanguage === 'en' ? darkmodeSVG('flag-de') : darkmodeSVG('flag-gb')"
+                      [alt]="currentLanguage === 'en' ? 'German Flag' : 'UK Flag'">
+                    </span>
+                    <span (click)="toggleDarkMode()" id="moon-icon-burger"><img [src]="darkmodePNG('mode-icon')"
+                      alt="icon for turning on dark mode">
+                    </span>
+                    <span (click)="toggleDarkMode()" id="light-icon-burger"><img [src]="darkmodePNG('mode-icon')"
+                      alt="icon for turning on light mode">
+                    </span>
+                  </div>
+                </div>
+
+              </div>
+            </header>

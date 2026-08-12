@@ -5,6 +5,8 @@
 <app-scroll-to-top></app-scroll-to-top>
 
 <!-- Right-click Warning -->
-<div class="right-click-warning" *ngIf="showRightClickWarning">
+@if (showRightClickWarning) {
+  <div class="right-click-warning">
     <p>{{ rightClickMessage }}</p>
-</div>
+  </div>
+}

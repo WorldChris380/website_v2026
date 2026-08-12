@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { DarkModeService } from '../dark-mode.service';
 import { LanguageService, Language } from '../language.service';
 
 @Component({
   selector: 'app-footer',
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './footer.html',
   styleUrl: './footer.scss',
 })

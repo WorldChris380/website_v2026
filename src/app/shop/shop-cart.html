@@ -1,52 +1,63 @@
 <div class="cart-drawer" [class.open]="isOpen()">
-    <div class="cart-header">
-        <div>
-            <p class="eyebrow">Shop</p>
-            <h3>{{ t('selection') }}</h3>
-        </div>
-        <button class="close" (click)="toggle()">✕</button>
+  <div class="cart-header">
+    <div>
+      <p class="eyebrow">Shop</p>
+      <h3>{{ t('selection') }}</h3>
     </div>
+    <button class="close" (click)="toggle()">✕</button>
+  </div>
 
-    <div class="cart-body" *ngIf="totalQuantity > 0; else emptyState">
-        <div class="cart-item" *ngFor="let item of items">
-            <img [src]="item.imageUrl" [alt]="item.title">
-            <div class="info">
-                <p class="title">{{ item.title }}</p>
-                <p class="price">{{ item.price | number:'1.2-2' }} {{ item.currency }}</p>
-                <div class="qty">
-                    <button (click)="decrement(item.id)">−</button>
-                    <span>{{ item.quantity }}</span>
-                    <button (click)="increment(item.id)">+</button>
-                </div>
+  @if (totalQuantity > 0) {
+    <div class="cart-body">
+      @for (item of items; track item) {
+        <div class="cart-item">
+          <img [src]="item.imageUrl" [alt]="item.title">
+          <div class="info">
+            <p class="title">{{ item.title }}</p>
+            <p class="price">{{ item.price | number:'1.2-2' }} {{ item.currency }}</p>
+            <div class="qty">
+              <button (click)="decrement(item.id)">−</button>
+              <span>{{ item.quantity }}</span>
+              <button (click)="increment(item.id)">+</button>
             </div>
-            <button class="remove" (click)="remove(item.id)">{{ t('remove') }}</button>
+          </div>
+          <button class="remove" (click)="remove(item.id)">{{ t('remove') }}</button>
         </div>
+      }
     </div>
+  } @else {
+    <div class="empty">
+      <p>{{ t('empty') }}</p>
+    </div>
+  }
 
-    <ng-template #emptyState>
-        <div class="empty">
-            <p>{{ t('empty') }}</p>
-        </div>
-    </ng-template>
 
-    <div class="cart-footer">
-        <div class="total">
-            <span>{{ t('total') }}</span>
-            <strong>{{ total | number:'1.2-2' }} EUR</strong>
-        </div>
-        <label class="certificate-owner" *ngIf="totalQuantity > 0">
-            <span>{{ t('owner') }}</span>
-            <input type="text" [ngModel]="certificateOwner" (ngModelChange)="onCertificateOwnerChange($event)"
-                [placeholder]="t('ownerPlaceholder')" />
+  <div class="cart-footer">
+    <div class="total">
+      <span>{{ t('total') }}</span>
+      <strong>{{ total | number:'1.2-2' }} EUR</strong>
+    </div>
+    @if (totalQuantity > 0) {
+      <label class="certificate-owner">
+        <span>{{ t('owner') }}</span>
+        <input type="text" [ngModel]="certificateOwner" (ngModelChange)="onCertificateOwnerChange($event)"
+          [placeholder]="t('ownerPlaceholder')" />
         </label>
-        <label class="certificate-owner" *ngIf="totalQuantity > 0">
-            <span>{{ t('company') }}</span>
-            <input type="text" [ngModel]="companyName" (ngModelChange)="onCompanyNameChange($event)"
-                [placeholder]="t('companyPlaceholder')" />
-        </label>
-        <app-paypal-button *ngIf="totalQuantity > 0" [items]="items" currency="EUR" [ownerName]="certificateOwner"
+      }
+      @if (totalQuantity > 0) {
+        <label class="certificate-owner">
+          <span>{{ t('company') }}</span>
+          <input type="text" [ngModel]="companyName" (ngModelChange)="onCompanyNameChange($event)"
+            [placeholder]="t('companyPlaceholder')" />
+          </label>
+        }
+        @if (totalQuantity > 0) {
+          <app-paypal-button [items]="items" currency="EUR" [ownerName]="certificateOwner"
             [companyName]="companyName" (paymentSuccess)="onPaymentSuccess()">
-        </app-paypal-button>
-        <button class="clear" (click)="clear()" *ngIf="totalQuantity > 0">{{ t('clear') }}</button>
+          </app-paypal-button>
+        }
+        @if (totalQuantity > 0) {
+          <button class="clear" (click)="clear()">{{ t('clear') }}</button>
+        }
+      </div>
     </div>
-</div>

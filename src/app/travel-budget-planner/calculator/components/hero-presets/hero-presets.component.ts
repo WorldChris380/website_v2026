@@ -1,10 +1,10 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'app-calc-hero-presets',
     standalone: true,
-    imports: [CommonModule],
+    imports: [],
     styleUrl: './hero-presets.component.scss',
     template: `
 <section class="hero-section">

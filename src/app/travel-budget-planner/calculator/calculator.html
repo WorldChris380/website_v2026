@@ -1,624 +1,638 @@
 @if (wizardMode) {
-<div class="wizard-progress-shell">
+  <div class="wizard-progress-shell">
     <div class="wizard-progress" role="tablist" [attr.aria-label]="t('calcWizardStepsAriaLabel')">
-        @for (step of [1,2,3,4,5]; track step) {
+      @for (step of [1,2,3,4,5]; track step) {
         <button type="button" class="wizard-step" [class.active]="wizardStep === step" [class.done]="wizardStep > step"
-            (click)="goToWizardStep(step)">
-            <span class="wizard-step-index">{{ step }}</span>
-            <span class="wizard-step-label">{{ getWizardStepLabel(step) }}</span>
+          (click)="goToWizardStep(step)">
+          <span class="wizard-step-index">{{ step }}</span>
+          <span class="wizard-step-label">{{ getWizardStepLabel(step) }}</span>
         </button>
-        }
+      }
     </div>
-</div>
+  </div>
 }
 
 <div class="calc-layout" [style.--left-pane-width.px]="leftPaneWidth">
 
-    <div class="calc-form-card">
-        <h2 class="form-title">{{ t('budgetCalculator') }}</h2>
-        <button class="btn-collapse-all" type="button" (click)="toggleAllSections()">
-            {{ areAllSectionsExpanded()
-            ? (currentLanguage === 'de' ? 'Alle Bereiche einklappen' : 'Collapse all sections')
-            : (currentLanguage === 'de' ? 'Alle Bereiche ausklappen' : 'Expand all sections') }}
+  <div class="calc-form-card">
+    <h2 class="form-title">{{ t('budgetCalculator') }}</h2>
+    <button class="btn-collapse-all" type="button" (click)="toggleAllSections()">
+      {{ areAllSectionsExpanded()
+      ? (currentLanguage === 'de' ? 'Alle Bereiche einklappen' : 'Collapse all sections')
+      : (currentLanguage === 'de' ? 'Alle Bereiche ausklappen' : 'Expand all sections') }}
+    </button>
+
+    @if (wizardMode) {
+      <div class="wizard-step-guide">
+        <div class="step-guide-header">
+          <span class="step-guide-number">{{ wizardStep }}</span>
+          <span class="step-guide-title">{{ getWizardStepLabel(wizardStep) }}</span>
+        </div>
+        <p class="step-guide-description">{{ t('calcWizardStepDesc' + wizardStep) }}</p>
+        <p class="step-guide-hint">💡 {{ t('calcWizardStepHint' + wizardStep) }}</p>
+      </div>
+    }
+
+    @if (!wizardMode || wizardStep === 1) {
+      <section class="filter-section" [class.collapsed]="!isSectionExpanded('starting')">
+        <div class="filter-section-head">
+          <h3>{{ currentLanguage === 'de' ? '1. Ausgangsdaten' : '1. Starting data' }}</h3>
+          <p>{{ currentLanguage === 'de' ? 'Von wo reist du und in welcher Währung soll angezeigt werden?' :
+          'Where are you traveling from and which display currency do you prefer?' }}</p>
+          <button class="section-toggle" type="button" (click)="toggleSection('starting')">
+            {{ isSectionExpanded('starting')
+            ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
+            : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
+          </button>
+        </div>
+
+        <div class="form-row form-row--stackable">
+          <div class="form-group">
+            <label for="origin-country">{{ t('calcStartCountry') }}</label>
+            <div class="select-wrapper">
+              @if (selectedOriginCountry) {
+                <span class="select-flag" aria-hidden="true">
+                  @if (!shouldUseFallbackFlag(selectedOriginCountry.code)) {
+                    <img class="select-flag-image" [src]="getFlagApiUrl(selectedOriginCountry.code)" [alt]="''"
+                      loading="lazy" decoding="async" (error)="onFlagImageError(selectedOriginCountry.code)">
+                  } @else {
+                    {{ getFallbackFlagEmoji(selectedOriginCountry.code) }}
+                  }
+                </span>
+              }
+              <select id="origin-country" [(ngModel)]="selectedOriginCountryCode"
+                (ngModelChange)="onOriginCountryChange()" [class.has-flag]="selectedOriginCountry">
+                <option value="">{{ t('calcSelectStartCountry') }}</option>
+                @for (cont of getOriginVisibleContinents(); track cont) {
+                  <optgroup
+                    [label]="getContinentLabel(cont)">
+                    @for (c of getOriginCountriesByContinent(cont); track c) {
+                      <option [value]="c.code">
+                        {{ getCountryLabel(c) }}
+                      </option>
+                    }
+                  </optgroup>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="display-currency">{{ t('calcDisplayCurrency') }}</label>
+            <div class="select-wrapper select-wrapper--plain">
+              <select id="display-currency" [(ngModel)]="selectedCurrency"
+                (ngModelChange)="onDisplayCurrencyChange()">
+                @for (currency of currencyOptions; track currency) {
+                  <option [value]="currency.code">{{ currency.label
+                    }}
+                  </option>
+                }
+              </select>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="filter-section" [class.collapsed]="!isSectionExpanded('destination')">
+        <div class="filter-section-head">
+          <h3>{{ currentLanguage === 'de' ? '2. Wunschziel' : '2. Preferred destination' }}</h3>
+          <p>{{ currentLanguage === 'de' ? 'Lege optional ein Wunschland fest, um es später direkt vergleichen zu
+            können.' :
+          'Optionally set a preferred destination to compare it directly later.' }}</p>
+          <button class="section-toggle" type="button" (click)="toggleSection('destination')">
+            {{ isSectionExpanded('destination')
+            ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
+            : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
+          </button>
+        </div>
+
+        <div class="form-group">
+          <label for="country">{{ currentLanguage === 'de' ? 'Wunschland (optional) zum Vergleichen' : 'Preferred
+          destination (optional) for comparison' }}</label>
+          <div class="select-wrapper">
+            @if (selectedCountryCode && currentInsight) {
+              <span class="select-flag" aria-hidden="true">
+                @if (!shouldUseFallbackFlag(selectedCountryCode)) {
+                  <img class="select-flag-image" [src]="getFlagApiUrl(selectedCountryCode)" [alt]="''"
+                    loading="lazy" decoding="async" (error)="onFlagImageError(selectedCountryCode)">
+                } @else {
+                  {{ getFallbackFlagEmoji(selectedCountryCode) }}
+                }
+              </span>
+            }
+            <select id="country" [(ngModel)]="selectedCountryCode" (ngModelChange)="onCountryChange()"
+              [class.has-flag]="selectedCountryCode && currentInsight">
+              <option value="">{{ currentLanguage === 'de' ? 'Kein Zielland festgelegt' : 'No destination
+              selected' }}</option>
+              @for (cont of getVisibleContinents(); track cont) {
+                <optgroup [label]="getContinentLabel(cont)">
+                  @for (c of getCountriesByContinent(cont); track c) {
+                    <option [value]="c.code">
+                      {{ getCountryLabel(c) }}
+                    </option>
+                  }
+                </optgroup>
+              }
+            </select>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="filter-section" [class.collapsed]="!isSectionExpanded('budgetSearch')">
+        <div class="filter-section-head">
+          <h3>{{ currentLanguage === 'de' ? '3. Budgetsuche' : '3. Budget search' }}</h3>
+          <p>{{ currentLanguage === 'de' ? 'Lege deinen Gesamtbudgetrahmen mit den Reglern fest.' :
+          'Set your total budget range using the sliders.' }}</p>
+          <button class="section-toggle" type="button" (click)="toggleSection('budgetSearch')">
+            {{ isSectionExpanded('budgetSearch')
+            ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
+            : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
+          </button>
+        </div>
+
+        <div class="budget-search-head">
+          <strong>{{ t('calcBudgetSearchTitle') }}</strong>
+          @if (reverseSearchPerformed) {
+            <span class="budget-search-count">{{ reverseResultsCount }} {{ t('calcBudgetSearchMatches') }}</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <div class="label-with-hint">
+            <label for="reverse-budget-min">{{ currentLanguage === 'de' ? 'Budgetbereich gesamt' :
+            'Total budget range' }}</label>
+            <details class="hint-overlay">
+              <summary class="hint-toggle"
+                [attr.aria-label]="currentLanguage === 'de' ? 'Treffer-Hinweis anzeigen' : 'Show match hint'">
+              ?</summary>
+              <div class="field-hint hint-popover">
+                {{ currentLanguage === 'de'
+                ? 'Treffer im gewaehlten Bereich: '
+                : 'Matches in selected range: ' }}
+                <strong>{{ getReverseBudgetPreviewHitCount() }}</strong>
+              </div>
+            </details>
+            <details class="hint-overlay">
+              <summary class="hint-toggle"
+                [attr.aria-label]="currentLanguage === 'de' ? 'Budget-Hinweis anzeigen' : 'Show budget hint'">
+              ?</summary>
+              <div class="field-hint hint-popover">{{ t('calcReverseBudgetHint') }}</div>
+            </details>
+          </div>
+
+          <div class="range-readout">
+            <span>{{ currentLanguage === 'de' ? 'Von' : 'From' }}: <strong>{{
+            formatDisplayCurrencyAmount(reverseBudgetMin) }}</strong></span>
+            <span>{{ currentLanguage === 'de' ? 'Bis' : 'To' }}: <strong>{{
+            formatDisplayCurrencyAmount(reverseBudgetMax) }}</strong></span>
+          </div>
+
+          <div class="range-slider-pair">
+            <input id="reverse-budget-min" class="range-input" type="range" [min]="reverseBudgetFloor"
+              [max]="reverseBudgetCeiling" [step]="reverseBudgetStep" [(ngModel)]="reverseBudgetMin"
+              (ngModelChange)="onReverseBudgetRangeChange('min')">
+
+            <input id="reverse-budget-max" class="range-input" type="range" [min]="reverseBudgetFloor"
+              [max]="reverseBudgetCeiling" [step]="reverseBudgetStep" [(ngModel)]="reverseBudgetMax"
+              (ngModelChange)="onReverseBudgetRangeChange('max')">
+          </div>
+
+          <div class="budget-mini-chart" aria-hidden="true">
+            <div class="budget-mini-chart-bars">
+              @for (bucket of getReverseBudgetPreviewBuckets(); track bucket.label) {
+                <div class="budget-mini-bar" [class.active]="bucket.active"
+                [style.--bar-height.%]="bucket.heightPercent"></div>
+              }
+            </div>
+            <div class="budget-mini-chart-labels">
+              <span>{{ formatDisplayCurrencyAmount(getReverseBudgetPreviewDomain().min) }}</span>
+              <span>{{ formatDisplayCurrencyAmount(getReverseBudgetPreviewDomain().max) }}</span>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <section class="filter-section" [class.collapsed]="!isSectionExpanded('destFilters')">
+        <div class="filter-section-head">
+          <h3>{{ currentLanguage === 'de' ? '4. Ziellandfilter' : '4. Destination filters' }}</h3>
+          <p>{{ currentLanguage === 'de' ? 'Filter sind optional, falls du bereits eine klare Präferenz hast.' :
+          'Filters are optional if you already have clear preferences.' }}</p>
+          <button class="section-toggle" type="button" (click)="toggleSection('destFilters')">
+            {{ isSectionExpanded('destFilters')
+            ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
+            : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
+          </button>
+        </div>
+
+        <div class="filter-head">
+          <button type="button" class="btn-filter-reset" (click)="resetCountryFilters()">
+            {{ currentLanguage === 'de' ? 'Zurücksetzen' : 'Reset' }}
+          </button>
+        </div>
+
+        <div class="form-row form-row--stackable">
+          <div class="form-group">
+            <label for="filter-continent">{{ currentLanguage === 'de' ? 'Kontinent' : 'Continent' }}</label>
+            <div class="select-wrapper select-wrapper--plain">
+              <select id="filter-continent" [(ngModel)]="selectedContinentFilter"
+                (ngModelChange)="onCountryFilterChange()">
+                <option value="all">{{ currentLanguage === 'de' ? 'Alle Kontinente' : 'All continents' }}
+                </option>
+                @for (cont of continents; track cont) {
+                  <option [value]="cont">{{ getContinentLabel(cont) }}
+                  </option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="filter-safety">{{ currentLanguage === 'de' ? 'Sicherheit' : 'Safety' }}</label>
+            <div class="select-wrapper select-wrapper--plain">
+              <select id="filter-safety" [(ngModel)]="selectedSafetyFilter"
+                (ngModelChange)="onCountryFilterChange()">
+                <option value="all">{{ currentLanguage === 'de' ? 'Alle Sicherheitsstufen' : 'All safety
+                levels' }}</option>
+                <option value="low">{{ getSafetyLabel('low') }}</option>
+                <option value="medium">{{ getSafetyLabel('medium') }}</option>
+                <option value="high">{{ getSafetyLabel('high') }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="filter-tourism">{{ currentLanguage === 'de' ? 'Touristische Erschlossenheit' : 'Tourism
+          development' }}</label>
+          <div class="select-wrapper select-wrapper--plain">
+            <select id="filter-tourism" [(ngModel)]="selectedTourismFilter"
+              (ngModelChange)="onCountryFilterChange()">
+              <option value="all">{{ currentLanguage === 'de' ? 'Alle Stufen' : 'All levels' }}</option>
+              <option value="high">{{ getTourismLabel('high') }}</option>
+              <option value="medium">{{ getTourismLabel('medium') }}</option>
+              <option value="low">{{ getTourismLabel('low') }}</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn-secondary" (click)="findDestinationsByBudget()"
+          [disabled]="isCalculating || reverseBudgetMax <= 0">
+          {{ t('calcFindByBudget') }}
         </button>
 
-        @if (wizardMode) {
-        <div class="wizard-step-guide">
-            <div class="step-guide-header">
-                <span class="step-guide-number">{{ wizardStep }}</span>
-                <span class="step-guide-title">{{ getWizardStepLabel(wizardStep) }}</span>
-            </div>
-            <p class="step-guide-description">{{ t('calcWizardStepDesc' + wizardStep) }}</p>
-            <p class="step-guide-hint">💡 {{ t('calcWizardStepHint' + wizardStep) }}</p>
+      </section>
+
+      @if (wizardMode) {
+        <div class="wizard-actions">
+          <button class="btn-secondary" type="button" [disabled]="!canProceedWizardStep()" (click)="nextWizardStep()">
+            {{ t('calcWizardContinueTripDetails') }}
+          </button>
         </div>
-        }
+      }
+    }
 
-        @if (!wizardMode || wizardStep === 1) {
-        <section class="filter-section" [class.collapsed]="!isSectionExpanded('starting')">
-            <div class="filter-section-head">
-                <h3>{{ currentLanguage === 'de' ? '1. Ausgangsdaten' : '1. Starting data' }}</h3>
-                <p>{{ currentLanguage === 'de' ? 'Von wo reist du und in welcher Währung soll angezeigt werden?' :
-                    'Where are you traveling from and which display currency do you prefer?' }}</p>
-                <button class="section-toggle" type="button" (click)="toggleSection('starting')">
-                    {{ isSectionExpanded('starting')
-                    ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
-                    : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
-                </button>
+    @if (!wizardMode || wizardStep === 2) {
+      <section class="filter-section" [class.collapsed]="!isSectionExpanded('tripParams')">
+        <div class="filter-section-head">
+          <h3>{{ currentLanguage === 'de' ? '5. Reiseparameter' : '5. Trip parameters' }}</h3>
+          <p>{{ currentLanguage === 'de' ? 'Lege Dauer, Personen und den Reisemonat fest.' :
+          'Set trip length, number of travelers and travel month.' }}</p>
+          <button class="section-toggle" type="button" (click)="toggleSection('tripParams')">
+            {{ isSectionExpanded('tripParams')
+            ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
+            : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
+          </button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="duration">{{ t('calcDuration') }}</label>
+            <div class="number-input">
+              <button class="num-btn" (click)="duration = duration > 1 ? duration - 1 : 1; scheduleAutoCalc()"
+              type="button">&#8722;</button>
+              <input id="duration" type="number" [(ngModel)]="duration" (ngModelChange)="scheduleAutoCalc()"
+                min="1" max="365">
+              <button class="num-btn" (click)="duration = duration + 1; scheduleAutoCalc()"
+              type="button">+</button>
             </div>
+          </div>
+          <div class="form-group">
+            <label for="persons">{{ t('calcPersons') }}</label>
+            <div class="number-input">
+              <button class="num-btn" (click)="persons = persons > 1 ? persons - 1 : 1; scheduleAutoCalc()"
+              type="button">&#8722;</button>
+              <input id="persons" type="number" [(ngModel)]="persons" (ngModelChange)="scheduleAutoCalc()"
+                min="1" max="20">
+              <button class="num-btn" (click)="persons = persons + 1; scheduleAutoCalc()"
+              type="button">+</button>
+            </div>
+          </div>
+        </div>
 
-            <div class="form-row form-row--stackable">
-                <div class="form-group">
-                    <label for="origin-country">{{ t('calcStartCountry') }}</label>
-                    <div class="select-wrapper">
-                        @if (selectedOriginCountry) {
-                        <span class="select-flag" aria-hidden="true">
-                            @if (!shouldUseFallbackFlag(selectedOriginCountry.code)) {
-                            <img class="select-flag-image" [src]="getFlagApiUrl(selectedOriginCountry.code)" [alt]="''"
-                                loading="lazy" decoding="async" (error)="onFlagImageError(selectedOriginCountry.code)">
-                            } @else {
-                            {{ getFallbackFlagEmoji(selectedOriginCountry.code) }}
-                            }
-                        </span>
-                        }
-                        <select id="origin-country" [(ngModel)]="selectedOriginCountryCode"
-                            (ngModelChange)="onOriginCountryChange()" [class.has-flag]="selectedOriginCountry">
-                            <option value="">{{ t('calcSelectStartCountry') }}</option>
-                            <optgroup *ngFor="let cont of getOriginVisibleContinents()"
-                                [label]="getContinentLabel(cont)">
-                                <option *ngFor="let c of getOriginCountriesByContinent(cont)" [value]="c.code">
-                                    {{ getCountryLabel(c) }}
-                                </option>
-                            </optgroup>
-                        </select>
-                    </div>
+        <div class="form-row form-row--stackable">
+          <div class="form-group">
+            <div class="label-with-hint">
+              <label for="travel-month">{{ t('calcTravelMonthLabel') }}</label>
+              <details class="hint-overlay">
+                <summary class="hint-toggle"
+                  [attr.aria-label]="currentLanguage === 'de' ? 'Monat-Hinweis anzeigen' : 'Show month hint'">
+                ?</summary>
+                <div class="field-hint hint-popover">
+                  {{ t('calcTravelMonthHint') }}
+                  {{ getAutoTravelMonthHint() }}
+                  @if (selectedCountry) {
+                    {{ t('calcDerivedSeasonLabel') }}: {{ getDerivedSeasonLabelForCountry(selectedCountry)
+                    }}.
+                  }
                 </div>
-
-                <div class="form-group">
-                    <label for="display-currency">{{ t('calcDisplayCurrency') }}</label>
-                    <div class="select-wrapper select-wrapper--plain">
-                        <select id="display-currency" [(ngModel)]="selectedCurrency"
-                            (ngModelChange)="onDisplayCurrencyChange()">
-                            <option *ngFor="let currency of currencyOptions" [value]="currency.code">{{ currency.label
-                                }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
+              </details>
             </div>
-
-        </section>
-
-        <section class="filter-section" [class.collapsed]="!isSectionExpanded('destination')">
-            <div class="filter-section-head">
-                <h3>{{ currentLanguage === 'de' ? '2. Wunschziel' : '2. Preferred destination' }}</h3>
-                <p>{{ currentLanguage === 'de' ? 'Lege optional ein Wunschland fest, um es später direkt vergleichen zu
-                    können.' :
-                    'Optionally set a preferred destination to compare it directly later.' }}</p>
-                <button class="section-toggle" type="button" (click)="toggleSection('destination')">
-                    {{ isSectionExpanded('destination')
-                    ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
-                    : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
-                </button>
-            </div>
-
-            <div class="form-group">
-                <label for="country">{{ currentLanguage === 'de' ? 'Wunschland (optional) zum Vergleichen' : 'Preferred
-                    destination (optional) for comparison' }}</label>
-                <div class="select-wrapper">
-                    @if (selectedCountryCode && currentInsight) {
-                    <span class="select-flag" aria-hidden="true">
-                        @if (!shouldUseFallbackFlag(selectedCountryCode)) {
-                        <img class="select-flag-image" [src]="getFlagApiUrl(selectedCountryCode)" [alt]="''"
-                            loading="lazy" decoding="async" (error)="onFlagImageError(selectedCountryCode)">
-                        } @else {
-                        {{ getFallbackFlagEmoji(selectedCountryCode) }}
-                        }
-                    </span>
-                    }
-                    <select id="country" [(ngModel)]="selectedCountryCode" (ngModelChange)="onCountryChange()"
-                        [class.has-flag]="selectedCountryCode && currentInsight">
-                        <option value="">{{ currentLanguage === 'de' ? 'Kein Zielland festgelegt' : 'No destination
-                            selected' }}</option>
-                        <optgroup *ngFor="let cont of getVisibleContinents()" [label]="getContinentLabel(cont)">
-                            <option *ngFor="let c of getCountriesByContinent(cont)" [value]="c.code">
-                                {{ getCountryLabel(c) }}
-                            </option>
-                        </optgroup>
-                    </select>
-                </div>
-            </div>
-
-        </section>
-
-        <section class="filter-section" [class.collapsed]="!isSectionExpanded('budgetSearch')">
-            <div class="filter-section-head">
-                <h3>{{ currentLanguage === 'de' ? '3. Budgetsuche' : '3. Budget search' }}</h3>
-                <p>{{ currentLanguage === 'de' ? 'Lege deinen Gesamtbudgetrahmen mit den Reglern fest.' :
-                    'Set your total budget range using the sliders.' }}</p>
-                <button class="section-toggle" type="button" (click)="toggleSection('budgetSearch')">
-                    {{ isSectionExpanded('budgetSearch')
-                    ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
-                    : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
-                </button>
-            </div>
-
-            <div class="budget-search-head">
-                <strong>{{ t('calcBudgetSearchTitle') }}</strong>
-                @if (reverseSearchPerformed) {
-                <span class="budget-search-count">{{ reverseResultsCount }} {{ t('calcBudgetSearchMatches') }}</span>
+            <div class="select-wrapper select-wrapper--plain">
+              <select id="travel-month" [(ngModel)]="selectedTravelMonth"
+                (ngModelChange)="onTravelMonthChange()">
+                <option [ngValue]="null">{{ currentLanguage === 'de' ? 'Automatisch günstigster Monat' :
+                'Auto (cheapest month)' }}</option>
+                @for (month of travelMonths; track month) {
+                  <option [ngValue]="month">{{ getTravelMonthLabel(month)
+                    }}
+                  </option>
                 }
+              </select>
             </div>
-
-            <div class="form-group">
-                <div class="label-with-hint">
-                    <label for="reverse-budget-min">{{ currentLanguage === 'de' ? 'Budgetbereich gesamt' :
-                        'Total budget range' }}</label>
-                    <details class="hint-overlay">
-                        <summary class="hint-toggle"
-                            [attr.aria-label]="currentLanguage === 'de' ? 'Treffer-Hinweis anzeigen' : 'Show match hint'">
-                            ?</summary>
-                        <div class="field-hint hint-popover">
-                            {{ currentLanguage === 'de'
-                            ? 'Treffer im gewaehlten Bereich: '
-                            : 'Matches in selected range: ' }}
-                            <strong>{{ getReverseBudgetPreviewHitCount() }}</strong>
-                        </div>
-                    </details>
-                    <details class="hint-overlay">
-                        <summary class="hint-toggle"
-                            [attr.aria-label]="currentLanguage === 'de' ? 'Budget-Hinweis anzeigen' : 'Show budget hint'">
-                            ?</summary>
-                        <div class="field-hint hint-popover">{{ t('calcReverseBudgetHint') }}</div>
-                    </details>
-                </div>
-
-                <div class="range-readout">
-                    <span>{{ currentLanguage === 'de' ? 'Von' : 'From' }}: <strong>{{
-                            formatDisplayCurrencyAmount(reverseBudgetMin) }}</strong></span>
-                    <span>{{ currentLanguage === 'de' ? 'Bis' : 'To' }}: <strong>{{
-                            formatDisplayCurrencyAmount(reverseBudgetMax) }}</strong></span>
-                </div>
-
-                <div class="range-slider-pair">
-                    <input id="reverse-budget-min" class="range-input" type="range" [min]="reverseBudgetFloor"
-                        [max]="reverseBudgetCeiling" [step]="reverseBudgetStep" [(ngModel)]="reverseBudgetMin"
-                        (ngModelChange)="onReverseBudgetRangeChange('min')">
-
-                    <input id="reverse-budget-max" class="range-input" type="range" [min]="reverseBudgetFloor"
-                        [max]="reverseBudgetCeiling" [step]="reverseBudgetStep" [(ngModel)]="reverseBudgetMax"
-                        (ngModelChange)="onReverseBudgetRangeChange('max')">
-                </div>
-
-                <div class="budget-mini-chart" aria-hidden="true">
-                    <div class="budget-mini-chart-bars">
-                        @for (bucket of getReverseBudgetPreviewBuckets(); track bucket.label) {
-                        <div class="budget-mini-bar" [class.active]="bucket.active"
-                            [style.--bar-height.%]="bucket.heightPercent"></div>
-                        }
-                    </div>
-                    <div class="budget-mini-chart-labels">
-                        <span>{{ formatDisplayCurrencyAmount(getReverseBudgetPreviewDomain().min) }}</span>
-                        <span>{{ formatDisplayCurrencyAmount(getReverseBudgetPreviewDomain().max) }}</span>
-                    </div>
-                </div>
-
-            </div>
-
-        </section>
-
-        <section class="filter-section" [class.collapsed]="!isSectionExpanded('destFilters')">
-            <div class="filter-section-head">
-                <h3>{{ currentLanguage === 'de' ? '4. Ziellandfilter' : '4. Destination filters' }}</h3>
-                <p>{{ currentLanguage === 'de' ? 'Filter sind optional, falls du bereits eine klare Präferenz hast.' :
-                    'Filters are optional if you already have clear preferences.' }}</p>
-                <button class="section-toggle" type="button" (click)="toggleSection('destFilters')">
-                    {{ isSectionExpanded('destFilters')
-                    ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
-                    : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
-                </button>
-            </div>
-
-            <div class="filter-head">
-                <button type="button" class="btn-filter-reset" (click)="resetCountryFilters()">
-                    {{ currentLanguage === 'de' ? 'Zurücksetzen' : 'Reset' }}
-                </button>
-            </div>
-
-            <div class="form-row form-row--stackable">
-                <div class="form-group">
-                    <label for="filter-continent">{{ currentLanguage === 'de' ? 'Kontinent' : 'Continent' }}</label>
-                    <div class="select-wrapper select-wrapper--plain">
-                        <select id="filter-continent" [(ngModel)]="selectedContinentFilter"
-                            (ngModelChange)="onCountryFilterChange()">
-                            <option value="all">{{ currentLanguage === 'de' ? 'Alle Kontinente' : 'All continents' }}
-                            </option>
-                            <option *ngFor="let cont of continents" [value]="cont">{{ getContinentLabel(cont) }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="filter-safety">{{ currentLanguage === 'de' ? 'Sicherheit' : 'Safety' }}</label>
-                    <div class="select-wrapper select-wrapper--plain">
-                        <select id="filter-safety" [(ngModel)]="selectedSafetyFilter"
-                            (ngModelChange)="onCountryFilterChange()">
-                            <option value="all">{{ currentLanguage === 'de' ? 'Alle Sicherheitsstufen' : 'All safety
-                                levels' }}</option>
-                            <option value="low">{{ getSafetyLabel('low') }}</option>
-                            <option value="medium">{{ getSafetyLabel('medium') }}</option>
-                            <option value="high">{{ getSafetyLabel('high') }}</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="filter-tourism">{{ currentLanguage === 'de' ? 'Touristische Erschlossenheit' : 'Tourism
-                    development' }}</label>
-                <div class="select-wrapper select-wrapper--plain">
-                    <select id="filter-tourism" [(ngModel)]="selectedTourismFilter"
-                        (ngModelChange)="onCountryFilterChange()">
-                        <option value="all">{{ currentLanguage === 'de' ? 'Alle Stufen' : 'All levels' }}</option>
-                        <option value="high">{{ getTourismLabel('high') }}</option>
-                        <option value="medium">{{ getTourismLabel('medium') }}</option>
-                        <option value="low">{{ getTourismLabel('low') }}</option>
-                    </select>
-                </div>
-            </div>
-
-            <button class="btn-secondary" (click)="findDestinationsByBudget()"
-                [disabled]="isCalculating || reverseBudgetMax <= 0">
-                {{ t('calcFindByBudget') }}
-            </button>
-
-        </section>
-
-        @if (wizardMode) {
-        <div class="wizard-actions">
-            <button class="btn-secondary" type="button" [disabled]="!canProceedWizardStep()" (click)="nextWizardStep()">
-                {{ t('calcWizardContinueTripDetails') }}
-            </button>
+          </div>
         </div>
-        }
-        }
 
-        @if (!wizardMode || wizardStep === 2) {
-        <section class="filter-section" [class.collapsed]="!isSectionExpanded('tripParams')">
-            <div class="filter-section-head">
-                <h3>{{ currentLanguage === 'de' ? '5. Reiseparameter' : '5. Trip parameters' }}</h3>
-                <p>{{ currentLanguage === 'de' ? 'Lege Dauer, Personen und den Reisemonat fest.' :
-                    'Set trip length, number of travelers and travel month.' }}</p>
-                <button class="section-toggle" type="button" (click)="toggleSection('tripParams')">
-                    {{ isSectionExpanded('tripParams')
-                    ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
-                    : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
-                </button>
-            </div>
+      </section>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="duration">{{ t('calcDuration') }}</label>
-                    <div class="number-input">
-                        <button class="num-btn" (click)="duration = duration > 1 ? duration - 1 : 1; scheduleAutoCalc()"
-                            type="button">&#8722;</button>
-                        <input id="duration" type="number" [(ngModel)]="duration" (ngModelChange)="scheduleAutoCalc()"
-                            min="1" max="365">
-                        <button class="num-btn" (click)="duration = duration + 1; scheduleAutoCalc()"
-                            type="button">+</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="persons">{{ t('calcPersons') }}</label>
-                    <div class="number-input">
-                        <button class="num-btn" (click)="persons = persons > 1 ? persons - 1 : 1; scheduleAutoCalc()"
-                            type="button">&#8722;</button>
-                        <input id="persons" type="number" [(ngModel)]="persons" (ngModelChange)="scheduleAutoCalc()"
-                            min="1" max="20">
-                        <button class="num-btn" (click)="persons = persons + 1; scheduleAutoCalc()"
-                            type="button">+</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-row form-row--stackable">
-                <div class="form-group">
-                    <div class="label-with-hint">
-                        <label for="travel-month">{{ t('calcTravelMonthLabel') }}</label>
-                        <details class="hint-overlay">
-                            <summary class="hint-toggle"
-                                [attr.aria-label]="currentLanguage === 'de' ? 'Monat-Hinweis anzeigen' : 'Show month hint'">
-                                ?</summary>
-                            <div class="field-hint hint-popover">
-                                {{ t('calcTravelMonthHint') }}
-                                {{ getAutoTravelMonthHint() }}
-                                @if (selectedCountry) {
-                                {{ t('calcDerivedSeasonLabel') }}: {{ getDerivedSeasonLabelForCountry(selectedCountry)
-                                }}.
-                                }
-                            </div>
-                        </details>
-                    </div>
-                    <div class="select-wrapper select-wrapper--plain">
-                        <select id="travel-month" [(ngModel)]="selectedTravelMonth"
-                            (ngModelChange)="onTravelMonthChange()">
-                            <option [ngValue]="null">{{ currentLanguage === 'de' ? 'Automatisch günstigster Monat' :
-                                'Auto (cheapest month)' }}</option>
-                            <option *ngFor="let month of travelMonths" [ngValue]="month">{{ getTravelMonthLabel(month)
-                                }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        @if (wizardMode) {
+      @if (wizardMode) {
         <div class="wizard-actions">
-            <button class="btn-reset" type="button" (click)="prevWizardStep()">
-                {{ t('back') }}
-            </button>
-            <button class="btn-secondary" type="button" [disabled]="!canProceedWizardStep()" (click)="nextWizardStep()">
-                {{ t('calcWizardContinueBudgetSearch') }}
-            </button>
+          <button class="btn-reset" type="button" (click)="prevWizardStep()">
+            {{ t('back') }}
+          </button>
+          <button class="btn-secondary" type="button" [disabled]="!canProceedWizardStep()" (click)="nextWizardStep()">
+            {{ t('calcWizardContinueBudgetSearch') }}
+          </button>
         </div>
-        }
-        }
+      }
+    }
 
-        @if (!wizardMode || wizardStep === 4) {
+    @if (!wizardMode || wizardStep === 4) {
 
-        <section class="filter-section" [class.collapsed]="!isSectionExpanded('costProfile')">
-            <div class="filter-section-head">
-                <h3>{{ currentLanguage === 'de' ? '6. Kostenprofil' : '6. Cost profile' }}</h3>
-                <p>{{ currentLanguage === 'de' ? 'Passe Puffer, Unterkunft und Reisestil an dein Vorhaben an.' :
-                    'Adjust buffer, accommodation and travel style for your plan.' }}</p>
-                <button class="section-toggle" type="button" (click)="toggleSection('costProfile')">
-                    {{ isSectionExpanded('costProfile')
-                    ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
-                    : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
-                </button>
-            </div>
+      <section class="filter-section" [class.collapsed]="!isSectionExpanded('costProfile')">
+        <div class="filter-section-head">
+          <h3>{{ currentLanguage === 'de' ? '6. Kostenprofil' : '6. Cost profile' }}</h3>
+          <p>{{ currentLanguage === 'de' ? 'Passe Puffer, Unterkunft und Reisestil an dein Vorhaben an.' :
+          'Adjust buffer, accommodation and travel style for your plan.' }}</p>
+          <button class="section-toggle" type="button" (click)="toggleSection('costProfile')">
+            {{ isSectionExpanded('costProfile')
+            ? (currentLanguage === 'de' ? 'Einklappen' : 'Collapse')
+            : (currentLanguage === 'de' ? 'Ausklappen' : 'Expand') }}
+          </button>
+        </div>
 
-            <div class="form-group">
-                <div class="range-header">
-                    <div class="label-with-hint">
-                        <label for="buffer-range">{{ t('calcBufferPercent') }}</label>
-                        <details class="hint-overlay">
-                            <summary class="hint-toggle"
-                                [attr.aria-label]="currentLanguage === 'de' ? 'Puffer-Hinweis anzeigen' : 'Show buffer hint'">
-                                ?
-                            </summary>
-                            <div class="field-hint hint-popover">{{ currentLanguage === 'de' ? 'Passe den
-                                Sicherheitspuffer für
-                                Visa, Extras und
-                                spontane Ausgaben an.' : 'Adjust the safety margin for visas, extras and unexpected
-                                travel
-                                spend.'
-                                }}
-                            </div>
-                        </details>
-                        <details class="hint-overlay">
-                            <summary class="hint-toggle"
-                                [attr.aria-label]="currentLanguage === 'de' ? 'Empfehlung anzeigen' : 'Show recommendation'">
-                                ?
-                            </summary>
-                            <div class="field-hint hint-popover">{{ getSafetyBufferRecommendation() }}</div>
-                        </details>
-                    </div>
-                    <span class="range-value">{{ bufferPercentage }}%</span>
+        <div class="form-group">
+          <div class="range-header">
+            <div class="label-with-hint">
+              <label for="buffer-range">{{ t('calcBufferPercent') }}</label>
+              <details class="hint-overlay">
+                <summary class="hint-toggle"
+                  [attr.aria-label]="currentLanguage === 'de' ? 'Puffer-Hinweis anzeigen' : 'Show buffer hint'">
+                  ?
+                </summary>
+                <div class="field-hint hint-popover">{{ currentLanguage === 'de' ? 'Passe den
+                  Sicherheitspuffer für
+                  Visa, Extras und
+                  spontane Ausgaben an.' : 'Adjust the safety margin for visas, extras and unexpected
+                  travel
+                  spend.'
+                  }}
                 </div>
-                <input id="buffer-range" class="range-input" type="range" min="5" max="30" step="1"
-                    [(ngModel)]="bufferPercentage" (ngModelChange)="refreshEstimate()">
+              </details>
+              <details class="hint-overlay">
+                <summary class="hint-toggle"
+                  [attr.aria-label]="currentLanguage === 'de' ? 'Empfehlung anzeigen' : 'Show recommendation'">
+                  ?
+                </summary>
+                <div class="field-hint hint-popover">{{ getSafetyBufferRecommendation() }}</div>
+              </details>
             </div>
-            <div class="form-group">
-                <label>{{ t('calcAccommodation') }}</label>
-                <div class="radio-group">
-                    <label class="radio-option" [class.selected]="accommodationType === 'budget'">
-                        <input type="radio" [(ngModel)]="accommodationType" value="budget"
-                            (ngModelChange)="refreshEstimate()">
-                        <span class="radio-icon">&#128716;</span>
-                        <span>{{ t('calcAccBudget') }}</span>
-                    </label>
-                    <label class="radio-option" [class.selected]="accommodationType === 'midrange'">
-                        <input type="radio" [(ngModel)]="accommodationType" value="midrange"
-                            (ngModelChange)="refreshEstimate()">
-                        <span class="radio-icon">&#127976;</span>
-                        <span>{{ t('calcAccMidrange') }}</span>
-                    </label>
-                    <label class="radio-option" [class.selected]="accommodationType === 'luxury'">
-                        <input type="radio" [(ngModel)]="accommodationType" value="luxury"
-                            (ngModelChange)="refreshEstimate()">
-                        <span class="radio-icon">&#127775;</span>
-                        <span>{{ t('calcAccLuxury') }}</span>
-                    </label>
-                </div>
-            </div>
+            <span class="range-value">{{ bufferPercentage }}%</span>
+          </div>
+          <input id="buffer-range" class="range-input" type="range" min="5" max="30" step="1"
+            [(ngModel)]="bufferPercentage" (ngModelChange)="refreshEstimate()">
+        </div>
+        <div class="form-group">
+          <label>{{ t('calcAccommodation') }}</label>
+          <div class="radio-group">
+            <label class="radio-option" [class.selected]="accommodationType === 'budget'">
+              <input type="radio" [(ngModel)]="accommodationType" value="budget"
+                (ngModelChange)="refreshEstimate()">
+              <span class="radio-icon">&#128716;</span>
+              <span>{{ t('calcAccBudget') }}</span>
+            </label>
+            <label class="radio-option" [class.selected]="accommodationType === 'midrange'">
+              <input type="radio" [(ngModel)]="accommodationType" value="midrange"
+                (ngModelChange)="refreshEstimate()">
+              <span class="radio-icon">&#127976;</span>
+              <span>{{ t('calcAccMidrange') }}</span>
+            </label>
+            <label class="radio-option" [class.selected]="accommodationType === 'luxury'">
+              <input type="radio" [(ngModel)]="accommodationType" value="luxury"
+                (ngModelChange)="refreshEstimate()">
+              <span class="radio-icon">&#127775;</span>
+              <span>{{ t('calcAccLuxury') }}</span>
+            </label>
+          </div>
+        </div>
 
-            <div class="form-group">
-                <label>{{ t('calcStyle') }}</label>
-                <div class="radio-group">
-                    <label class="radio-option" [class.selected]="travelStyle === 'budget'">
-                        <input type="radio" [(ngModel)]="travelStyle" value="budget"
-                            (ngModelChange)="refreshEstimate()">
-                        <span class="radio-icon">&#127992;</span>
-                        <span>{{ t('calcStyleBudget') }}</span>
-                    </label>
-                    <label class="radio-option" [class.selected]="travelStyle === 'midrange'">
-                        <input type="radio" [(ngModel)]="travelStyle" value="midrange"
-                            (ngModelChange)="refreshEstimate()">
-                        <span class="radio-icon">&#129523;</span>
-                        <span>{{ t('calcStyleMidrange') }}</span>
-                    </label>
-                    <label class="radio-option" [class.selected]="travelStyle === 'luxury'">
-                        <input type="radio" [(ngModel)]="travelStyle" value="luxury"
-                            (ngModelChange)="refreshEstimate()">
-                        <span class="radio-icon">&#128142;</span>
-                        <span>{{ t('calcStyleLuxury') }}</span>
-                    </label>
-                </div>
-            </div>
+        <div class="form-group">
+          <label>{{ t('calcStyle') }}</label>
+          <div class="radio-group">
+            <label class="radio-option" [class.selected]="travelStyle === 'budget'">
+              <input type="radio" [(ngModel)]="travelStyle" value="budget"
+                (ngModelChange)="refreshEstimate()">
+              <span class="radio-icon">&#127992;</span>
+              <span>{{ t('calcStyleBudget') }}</span>
+            </label>
+            <label class="radio-option" [class.selected]="travelStyle === 'midrange'">
+              <input type="radio" [(ngModel)]="travelStyle" value="midrange"
+                (ngModelChange)="refreshEstimate()">
+              <span class="radio-icon">&#129523;</span>
+              <span>{{ t('calcStyleMidrange') }}</span>
+            </label>
+            <label class="radio-option" [class.selected]="travelStyle === 'luxury'">
+              <input type="radio" [(ngModel)]="travelStyle" value="luxury"
+                (ngModelChange)="refreshEstimate()">
+              <span class="radio-icon">&#128142;</span>
+              <span>{{ t('calcStyleLuxury') }}</span>
+            </label>
+          </div>
+        </div>
 
-        </section>
+      </section>
 
-        @if (wizardMode) {
+      @if (wizardMode) {
         <div class="wizard-actions">
-            <button class="btn-reset" type="button" (click)="prevWizardStep()">
-                {{ t('back') }}
-            </button>
-            <button class="btn-secondary" type="button" (click)="nextWizardStep()">
-                {{ t('calcWizardContinueResult') }}
-            </button>
+          <button class="btn-reset" type="button" (click)="prevWizardStep()">
+            {{ t('back') }}
+          </button>
+          <button class="btn-secondary" type="button" (click)="nextWizardStep()">
+            {{ t('calcWizardContinueResult') }}
+          </button>
         </div>
-        }
-        }
+      }
+    }
 
-        @if ((!wizardMode || wizardStep === 5) && !result) {
-        @if (wizardMode) {
+    @if ((!wizardMode || wizardStep === 5) && !result) {
+      @if (wizardMode) {
         <div class="wizard-summary-card">
-            <h3>{{ t('calcWizardSummaryTitle') }}</h3>
-            <p>
-                {{ t('calcWizardSummaryDestination') }}: <strong>{{ selectedCountry ? getCountryLabel(selectedCountry) :
-                    '-' }}</strong><br>
-                {{ t('calcWizardSummaryOrigin') }}: <strong>{{ selectedOriginCountry ?
-                    getCountryLabel(selectedOriginCountry) : '-' }}</strong><br>
-                {{ t('calcWizardSummaryDuration') }}: <strong>{{ duration }} {{ t('calcWizardSummaryDays')
-                    }}</strong><br>
-                {{ t('calcWizardSummaryTravelers') }}: <strong>{{ persons }}</strong><br>
-                {{ t('calcWizardSummaryDisplayCurrency') }}: <strong>{{ selectedCurrency }}</strong><br>
-                {{ t('calcWizardSummaryLocalCurrency') }}: <strong>{{ selectedCountry ?
-                    getCountryCurrency(selectedCountry) : '-' }}</strong>
-            </p>
-        </div>
-        }
+          <h3>{{ t('calcWizardSummaryTitle') }}</h3>
+          <p>
+            {{ t('calcWizardSummaryDestination') }}: <strong>{{ selectedCountry ? getCountryLabel(selectedCountry) :
+          '-' }}</strong><br>
+          {{ t('calcWizardSummaryOrigin') }}: <strong>{{ selectedOriginCountry ?
+        getCountryLabel(selectedOriginCountry) : '-' }}</strong><br>
+        {{ t('calcWizardSummaryDuration') }}: <strong>{{ duration }} {{ t('calcWizardSummaryDays')
+      }}</strong><br>
+      {{ t('calcWizardSummaryTravelers') }}: <strong>{{ persons }}</strong><br>
+      {{ t('calcWizardSummaryDisplayCurrency') }}: <strong>{{ selectedCurrency }}</strong><br>
+      {{ t('calcWizardSummaryLocalCurrency') }}: <strong>{{ selectedCountry ?
+    getCountryCurrency(selectedCountry) : '-' }}</strong>
+  </p>
+</div>
+}
 
-        @if (wizardMode) {
-        <div class="wizard-actions">
-            <button class="btn-reset" type="button" (click)="prevWizardStep()">
-                {{ t('back') }}
-            </button>
-        </div>
-        }
-        }
+@if (wizardMode) {
+  <div class="wizard-actions">
+    <button class="btn-reset" type="button" (click)="prevWizardStep()">
+      {{ t('back') }}
+    </button>
+  </div>
+}
+}
 
-        <div class="form-reset-row">
-            <button class="btn-reset" (click)="reset()">{{ t('calcReset') }}</button>
-        </div>
+<div class="form-reset-row">
+  <button class="btn-reset" (click)="reset()">{{ t('calcReset') }}</button>
+</div>
 
-        <p class="currency-note">{{ getDisplayCurrencyHelperText() }}</p>
+<p class="currency-note">{{ getDisplayCurrencyHelperText() }}</p>
+</div>
+
+<div class="calc-resize-handle" role="separator" aria-orientation="vertical"
+  [attr.aria-label]="currentLanguage === 'de' ? 'Spaltenbreite anpassen' : 'Resize columns'"
+  (mousedown)="startColumnResize($event)">
+  <span></span>
+</div>
+
+<div class="calc-right-col">
+
+  @if (isCalculating) {
+    <div class="calc-loading-card">
+      <div class="loading-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <p>{{ t('calcCalculating') }}</p>
     </div>
+  }
 
-    <div class="calc-resize-handle" role="separator" aria-orientation="vertical"
-        [attr.aria-label]="currentLanguage === 'de' ? 'Spaltenbreite anpassen' : 'Resize columns'"
-        (mousedown)="startColumnResize($event)">
-        <span></span>
-    </div>
+  <app-calc-result-card [result]="result" [selectedCountry]="selectedCountry" [currentInsight]="currentInsight"
+    [duration]="duration" [persons]="persons" [currentLanguage]="currentLanguage"
+    [originCountry]="selectedOriginCountry" [displayCurrency]="selectedCurrency"
+    [bufferPercentage]="bufferPercentage" [formatCurrency]="formatCurrencyFn" [isCalculating]="isCalculating"
+    [t]="tFn" [getCountryLabel]="countryLabelFn" [getBarWidth]="barWidthFn" [openLink]="openLinkFn"
+    [selectedCountryComparison]="selectedCountryComparison" [getCompareRankPercent]="compareRankPercentFn"
+    [getContinentLabel]="continentLabelFn" [getCountryCurrency]="countryCurrencyFn"
+    [getCountrySafety]="countrySafetyFn" [getCountryTourismDevelopment]="countryTourismFn"
+    [getSafetyLabel]="safetyLabelFn" [getTourismLabel]="tourismLabelFn" [getPriceLevelLabel]="priceLevelLabelFn"
+    [getDerivedSeasonLabelForCountry]="seasonLabelFn"
+    [countryPhotoUrl]="selectedCountry ? getCountryPhotoUrl(selectedCountry) : ''">
+  </app-calc-result-card>
 
-    <div class="calc-right-col">
+  @if (selectedOriginCountryCode && getTopCheapestCountries().length > 0) {
+    <section class="top-cheapest-card">
+      <div class="top-cheapest-header">
+        <h3>{{ currentLanguage === 'de' ? 'Top 3 günstigste Länder' : 'Top 3 cheapest countries' }}</h3>
+        <p>{{ currentLanguage === 'de' ? 'Automatisch nach deinem aktuellen Reiseprofil berechnet.' :
+        'Auto-calculated from your current trip profile.' }}</p>
+      </div>
 
-        @if (isCalculating) {
-        <div class="calc-loading-card">
-            <div class="loading-dots">
-                <span></span><span></span><span></span>
-            </div>
-            <p>{{ t('calcCalculating') }}</p>
-        </div>
-        }
-
-        <app-calc-result-card [result]="result" [selectedCountry]="selectedCountry" [currentInsight]="currentInsight"
-            [duration]="duration" [persons]="persons" [currentLanguage]="currentLanguage"
-            [originCountry]="selectedOriginCountry" [displayCurrency]="selectedCurrency"
-            [bufferPercentage]="bufferPercentage" [formatCurrency]="formatCurrencyFn" [isCalculating]="isCalculating"
-            [t]="tFn" [getCountryLabel]="countryLabelFn" [getBarWidth]="barWidthFn" [openLink]="openLinkFn"
-            [selectedCountryComparison]="selectedCountryComparison" [getCompareRankPercent]="compareRankPercentFn"
-            [getContinentLabel]="continentLabelFn" [getCountryCurrency]="countryCurrencyFn"
-            [getCountrySafety]="countrySafetyFn" [getCountryTourismDevelopment]="countryTourismFn"
-            [getSafetyLabel]="safetyLabelFn" [getTourismLabel]="tourismLabelFn" [getPriceLevelLabel]="priceLevelLabelFn"
-            [getDerivedSeasonLabelForCountry]="seasonLabelFn"
-            [countryPhotoUrl]="selectedCountry ? getCountryPhotoUrl(selectedCountry) : ''">
-        </app-calc-result-card>
-
-        @if (selectedOriginCountryCode && getTopCheapestCountries().length > 0) {
-        <section class="top-cheapest-card">
-            <div class="top-cheapest-header">
-                <h3>{{ currentLanguage === 'de' ? 'Top 3 günstigste Länder' : 'Top 3 cheapest countries' }}</h3>
-                <p>{{ currentLanguage === 'de' ? 'Automatisch nach deinem aktuellen Reiseprofil berechnet.' :
-                    'Auto-calculated from your current trip profile.' }}</p>
-            </div>
-
-            <div class="top-cheapest-grid">
-                @for (entry of getTopCheapestCountries(); track entry.country.code) {
-                <a class="top-cheapest-item" [class.photo-loading]="!getCountryPhotoUrl(entry.country)"
-                    [routerLink]="['/travel-budget-summary']" [queryParams]="buildSummaryLink(entry)"
-                    [title]="getCountryLabel(entry.country)">
-                    @if (getCountryPhotoUrl(entry.country)) {
-                    <img [src]="getCountryPhotoUrl(entry.country)" [alt]="getCountryLabel(entry.country)" loading="lazy"
-                        decoding="async">
-                    }
-                    <div class="top-cheapest-overlay">
-                        <strong>{{ getCountryLabel(entry.country) }}</strong>
-                        <span>{{ formatCurrency(entry.total) }}</span>
-                        <span class="top-cheapest-cta">{{ currentLanguage === 'de' ? 'Details &amp; Buchen' : 'Details
-                            &amp; Book' }} &#8594;</span>
-                    </div>
-                </a>
-                }
-            </div>
-        </section>
-        }
-
-        @if (reverseSearchPerformed) {
-        <div class="reverse-results-card">
-            <div class="reverse-results-header">
-                <h3>{{ t('calcReverseResultsTitle') }}</h3>
-                <button class="btn-clear" type="button" (click)="clearReverseSearch()">{{ t('calcClearResults')
-                    }}</button>
-            </div>
-
-            @if (reverseMatches.length === 0) {
-            <p class="reverse-empty">{{ t('calcReverseNoResults') }}</p>
-            } @else {
-            <div class="reverse-list">
-                @for (match of reverseMatches; track match.country.code) {
-                <article class="reverse-item">
-                    <div class="reverse-country">
-                        <span class="reverse-flag" aria-hidden="true">
-                            @if (!shouldUseFallbackFlag(match.country.code)) {
-                            <img class="reverse-flag-image" [src]="getFlagApiUrl(match.country.code)" [alt]="''"
-                                loading="lazy" decoding="async" (error)="onFlagImageError(match.country.code)">
-                            } @else {
-                            {{ getFallbackFlagEmoji(match.country.code) }}
-                            }
-                        </span>
-                        <div>
-                            <strong>{{ getCountryLabel(match.country) }}</strong>
-                            <small>{{ getContinentLabel(match.country.continent) }}</small>
-                        </div>
-                    </div>
-                    <div class="reverse-price">
-                        <strong>{{ formatCurrency(match.total) }}</strong>
-                        <small>{{ formatCurrency(match.perDayPerPerson) }} / {{ t('calcPerDayPerPerson') }}</small>
-                    </div>
-                    <button class="btn-use-country" type="button"
-                        (click)="selectCountryFromReverse(match.country.code)">
-                        {{ t('calcUseDestination') }}
-                    </button>
-                </article>
-                }
-            </div>
+      <div class="top-cheapest-grid">
+        @for (entry of getTopCheapestCountries(); track entry.country.code) {
+          <a class="top-cheapest-item" [class.photo-loading]="!getCountryPhotoUrl(entry.country)"
+            [routerLink]="['/travel-budget-summary']" [queryParams]="buildSummaryLink(entry)"
+            [title]="getCountryLabel(entry.country)">
+            @if (getCountryPhotoUrl(entry.country)) {
+              <img [src]="getCountryPhotoUrl(entry.country)" [alt]="getCountryLabel(entry.country)" loading="lazy"
+                decoding="async">
             }
-        </div>
+            <div class="top-cheapest-overlay">
+              <strong>{{ getCountryLabel(entry.country) }}</strong>
+              <span>{{ formatCurrency(entry.total) }}</span>
+              <span class="top-cheapest-cta">{{ currentLanguage === 'de' ? 'Details &amp; Buchen' : 'Details
+              &amp; Book' }} &#8594;</span>
+            </div>
+          </a>
         }
+      </div>
+    </section>
+  }
 
-        @if (!selectedCountryCode && !result && !isCalculating) {
-        <div class="placeholder-card">
-            <span class="placeholder-icon">&#127758;</span>
-            <h3>{{ t('calcSelectCountry') }}</h3>
-            <p>{{ currentLanguage === 'de'
-                ? 'Wähle Ziel, Abflugland und Reisestil, um sofort einen realistischen Kostenrahmen zu sehen.'
-                : 'Choose your destination, departure country and travel style to get an instant realistic cost range.'
-                }}</p>
+  @if (reverseSearchPerformed) {
+    <div class="reverse-results-card">
+      <div class="reverse-results-header">
+        <h3>{{ t('calcReverseResultsTitle') }}</h3>
+        <button class="btn-clear" type="button" (click)="clearReverseSearch()">{{ t('calcClearResults')
+        }}</button>
+      </div>
+
+      @if (reverseMatches.length === 0) {
+        <p class="reverse-empty">{{ t('calcReverseNoResults') }}</p>
+      } @else {
+        <div class="reverse-list">
+          @for (match of reverseMatches; track match.country.code) {
+            <article class="reverse-item">
+              <div class="reverse-country">
+                <span class="reverse-flag" aria-hidden="true">
+                  @if (!shouldUseFallbackFlag(match.country.code)) {
+                    <img class="reverse-flag-image" [src]="getFlagApiUrl(match.country.code)" [alt]="''"
+                      loading="lazy" decoding="async" (error)="onFlagImageError(match.country.code)">
+                  } @else {
+                    {{ getFallbackFlagEmoji(match.country.code) }}
+                  }
+                </span>
+                <div>
+                  <strong>{{ getCountryLabel(match.country) }}</strong>
+                  <small>{{ getContinentLabel(match.country.continent) }}</small>
+                </div>
+              </div>
+              <div class="reverse-price">
+                <strong>{{ formatCurrency(match.total) }}</strong>
+                <small>{{ formatCurrency(match.perDayPerPerson) }} / {{ t('calcPerDayPerPerson') }}</small>
+              </div>
+              <button class="btn-use-country" type="button"
+                (click)="selectCountryFromReverse(match.country.code)">
+                {{ t('calcUseDestination') }}
+              </button>
+            </article>
+          }
         </div>
-        }
+      }
     </div>
+  }
+
+  @if (!selectedCountryCode && !result && !isCalculating) {
+    <div class="placeholder-card">
+      <span class="placeholder-icon">&#127758;</span>
+      <h3>{{ t('calcSelectCountry') }}</h3>
+      <p>{{ currentLanguage === 'de'
+        ? 'Wähle Ziel, Abflugland und Reisestil, um sofort einen realistischen Kostenrahmen zu sehen.'
+        : 'Choose your destination, departure country and travel style to get an instant realistic cost range.'
+      }}</p>
+    </div>
+  }
+</div>
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { DarkModeService } from '../../dark-mode.service';
@@ -16,7 +16,7 @@ interface Manifest {
 @Component({
     selector: 'app-counters',
     standalone: true,
-    imports: [CommonModule, HttpClientModule, RouterModule],
+    imports: [HttpClientModule, RouterModule],
     templateUrl: './counters.html',
     styleUrls: ['./counters.scss']
 })

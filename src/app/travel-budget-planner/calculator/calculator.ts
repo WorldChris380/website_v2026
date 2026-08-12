@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
@@ -121,11 +121,10 @@ type CollapsibleSectionKey = 'starting' | 'destination' | 'budgetSearch' | 'dest
     selector: 'app-calculator',
     standalone: true,
     imports: [
-        CommonModule,
-        FormsModule,
-        RouterLink,
-        ResultCardComponent,
-    ],
+    FormsModule,
+    RouterLink,
+    ResultCardComponent
+],
     templateUrl: './calculator.html',
     styleUrl: './calculator.scss'
 })

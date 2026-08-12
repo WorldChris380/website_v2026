@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MetaService } from '../../services/meta.service';
 import { LanguageService, Language } from '../../language.service';
@@ -7,7 +7,7 @@ import { LanguageService, Language } from '../../language.service';
 @Component({
     selector: 'app-aviation-spotter-hotels',
     standalone: true,
-    imports: [RouterModule, CommonModule],
+    imports: [RouterModule],
     templateUrl: './aviation-spotter-hotels.html',
     styleUrl: './aviation-spotter-hotels.scss'
 })

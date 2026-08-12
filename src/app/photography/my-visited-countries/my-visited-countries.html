@@ -1,31 +1,35 @@
 <div class="travels-counter-container">
-    <div class="header">
-        <h2>{{ getUiText('title') }}</h2>
-        <div class="stats">
-            <span class="stat-item">{{ totalCountries }} {{ getUiText('countries') }}</span>
-            <span class="stat-separator">•</span>
-            <span class="stat-item">{{ totalContinents }} {{ getUiText('continents') }}</span>
-        </div>
-        <div class="legend">
-            <span class="legend-item available"><span class="status-dot"></span>{{ getUiText('photosAvailable')
-                }}</span>
-            <span class="legend-item unavailable"><span class="status-dot"></span>{{ getUiText('noPhotos') }}</span>
-        </div>
+  <div class="header">
+    <h2>{{ getUiText('title') }}</h2>
+    <div class="stats">
+      <span class="stat-item">{{ totalCountries }} {{ getUiText('countries') }}</span>
+      <span class="stat-separator">•</span>
+      <span class="stat-item">{{ totalContinents }} {{ getUiText('continents') }}</span>
     </div>
+    <div class="legend">
+      <span class="legend-item available"><span class="status-dot"></span>{{ getUiText('photosAvailable')
+    }}</span>
+    <span class="legend-item unavailable"><span class="status-dot"></span>{{ getUiText('noPhotos') }}</span>
+  </div>
+</div>
 
-    <div class="continents-grid">
-        <div *ngFor="let continent of continents" class="continent-card">
-            <div class="continent-header">
-                {{ translateContinent(continent.name) }}
-            </div>
-            <div class="countries-list" [class.expanded]="continent.countries.length > 0">
-                <button *ngFor="let country of continent.countries" class="country-btn" (click)="goToGallery(country)"
-                    [class.available]="isCountryAvailable(country)" [class.unavailable]="!isCountryAvailable(country)"
-                    [disabled]="!isCountryAvailable(country)">
-                    <span class="status-dot"></span>
-                    <span class="country-name">{{ translateCountry(country) }}</span>
-                </button>
-            </div>
-        </div>
+<div class="continents-grid">
+  @for (continent of continents; track continent) {
+    <div class="continent-card">
+      <div class="continent-header">
+        {{ translateContinent(continent.name) }}
+      </div>
+      <div class="countries-list" [class.expanded]="continent.countries.length > 0">
+        @for (country of continent.countries; track country) {
+          <button class="country-btn" (click)="goToGallery(country)"
+            [class.available]="isCountryAvailable(country)" [class.unavailable]="!isCountryAvailable(country)"
+            [disabled]="!isCountryAvailable(country)">
+            <span class="status-dot"></span>
+            <span class="country-name">{{ translateCountry(country) }}</span>
+          </button>
+        }
+      </div>
     </div>
+  }
+</div>
 </div>

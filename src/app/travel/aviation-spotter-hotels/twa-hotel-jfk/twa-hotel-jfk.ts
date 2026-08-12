@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MetaService } from '../../../services/meta.service';
 
 @Component({
     selector: 'app-twa-hotel-jfk',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [RouterModule],
     templateUrl: './twa-hotel-jfk.html',
     styleUrl: './twa-hotel-jfk.scss'
 })

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MetaService } from '../../services/meta.service';
@@ -8,7 +8,7 @@ import { LanguageService, Language } from '../../language.service';
 @Component({
     selector: 'app-photography-travels',
     standalone: true,
-    imports: [RouterModule, CommonModule, FormsModule],
+    imports: [RouterModule, FormsModule],
     templateUrl: './photography-travels.html',
     styleUrl: './photography-travels.scss'
 })

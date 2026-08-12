@@ -1,6 +1,6 @@
 import { Component, signal, ViewChild, ElementRef, HostListener, effect } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { HttpClientModule } from '@angular/common/http';
 import { Header } from './header/header';
 import { HomeAtf } from './homepage/home-atf/home-atf';
@@ -15,7 +15,7 @@ import { ToastService } from './shared/toast.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [Header, Footer, RouterOutlet, CommonModule, HttpClientModule, ToastContainerComponent, ScrollToTopComponent],
+  imports: [Header, Footer, RouterOutlet, HttpClientModule, ToastContainerComponent, ScrollToTopComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

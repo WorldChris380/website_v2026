@@ -1,184 +1,221 @@
 <!-- Navigation -->
 <nav class="career-nav">
-    <button class="nav-item" [class.active]="activeSection === 'profile'" (click)="toggleSection('profile')">
-        {{ getTranslation('profile') }}
-    </button>
-    <button class="nav-item" [class.active]="activeSection === 'experience'" (click)="toggleSection('experience')">
-        {{ getTranslation('experience') }}
-    </button>
-    <button class="nav-item" [class.active]="activeSection === 'education'" (click)="toggleSection('education')">
-        {{ getTranslation('education') }}
-    </button>
-    <button class="nav-item" [class.active]="activeSection === 'skills'" (click)="toggleSection('skills')">
-        {{ getTranslation('skillsCertifications') }}
-    </button>
-    <button class="nav-item" [class.active]="activeSection === 'projects'" (click)="toggleSection('projects')">
-        {{ getTranslation('projects') }}
-    </button>
-    <button class="nav-item" [class.active]="activeSection === 'testimonials'" (click)="toggleSection('testimonials')">
-        {{ getTranslation('testimonials') }}
-    </button>
-    <button class="btn-download" (click)="downloadPDF()">
-        <span class="icon">⬇️</span> {{ getTranslation('downloadPDF') }}
-    </button>
+  <button class="nav-item" [class.active]="activeSection === 'profile'" (click)="toggleSection('profile')">
+    {{ getTranslation('profile') }}
+  </button>
+  <button class="nav-item" [class.active]="activeSection === 'experience'" (click)="toggleSection('experience')">
+    {{ getTranslation('experience') }}
+  </button>
+  <button class="nav-item" [class.active]="activeSection === 'education'" (click)="toggleSection('education')">
+    {{ getTranslation('education') }}
+  </button>
+  <button class="nav-item" [class.active]="activeSection === 'skills'" (click)="toggleSection('skills')">
+    {{ getTranslation('skillsCertifications') }}
+  </button>
+  <button class="nav-item" [class.active]="activeSection === 'projects'" (click)="toggleSection('projects')">
+    {{ getTranslation('projects') }}
+  </button>
+  <button class="nav-item" [class.active]="activeSection === 'testimonials'" (click)="toggleSection('testimonials')">
+    {{ getTranslation('testimonials') }}
+  </button>
+  <button class="btn-download" (click)="downloadPDF()">
+    <span class="icon">⬇️</span> {{ getTranslation('downloadPDF') }}
+  </button>
 </nav>
 
 <div class="career-container" id="cv-content">
-    <header class="career-header" *ngIf="activeSection === 'profile'">
-        <div class="profile-image-wrapper">
-            <img src="/assets/img/other/Christian Boehme profile picture for web.jpg" alt="Christian Böhme"
-                class="profile-image">
+  @if (activeSection === 'profile') {
+    <header class="career-header">
+      <div class="profile-image-wrapper">
+        <img src="/assets/img/other/Christian Boehme profile picture for web.jpg" alt="Christian Böhme"
+          class="profile-image">
         </div>
         <div class="header-content">
-            <h1>{{ getProfile().name }}</h1>
-            <h2 class="subtitle">{{ getProfile().title }}</h2>
-            <p class="about">{{ getProfile().about }}</p>
-
-            <div class="contact-bar">
-                <div class="contact-item">
-                    <span class="icon">📍</span>
-                    <span>{{ getProfile().location }}</span>
-                </div>
-                <div class="contact-item">
-                    <span class="icon">📧</span>
-                    <a [href]="'mailto:' + getProfile().email">{{ getProfile().email }}</a>
-                </div>
-                <div class="contact-item">
-                    <span class="icon">🌐</span>
-                    <a [href]="'https://' + profile.website" target="_blank">{{ profile.website }}</a>
-                </div>
+          <h1>{{ getProfile().name }}</h1>
+          <h2 class="subtitle">{{ getProfile().title }}</h2>
+          <p class="about">{{ getProfile().about }}</p>
+          <div class="contact-bar">
+            <div class="contact-item">
+              <span class="icon">📍</span>
+              <span>{{ getProfile().location }}</span>
             </div>
+            <div class="contact-item">
+              <span class="icon">📧</span>
+              <a [href]="'mailto:' + getProfile().email">{{ getProfile().email }}</a>
+            </div>
+            <div class="contact-item">
+              <span class="icon">🌐</span>
+              <a [href]="'https://' + profile.website" target="_blank">{{ profile.website }}</a>
+            </div>
+          </div>
         </div>
-    </header>
+      </header>
+    }
 
-    <div class="career-grid" *ngIf="activeSection === 'experience' || activeSection === 'education'">
+    @if (activeSection === 'experience' || activeSection === 'education') {
+      <div class="career-grid">
         <main class="main-content">
-            <section class="section" *ngIf="activeSection === 'experience'">
-                <h3 class="section-title">{{ getTranslation('experience') }}</h3>
-                <div class="timeline">
-                    <div class="timeline-item" *ngFor="let exp of experiences">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <h4 class="role">{{ exp.role }}</h4>
-                                <span class="period">{{ exp.period }}</span>
-                            </div>
-                            <div class="company">{{ exp.company }}</div>
-                            <p class="description">{{ exp.description }}</p>
-                        </div>
+          @if (activeSection === 'experience') {
+            <section class="section">
+              <h3 class="section-title">{{ getTranslation('experience') }}</h3>
+              <div class="timeline">
+                @for (exp of experiences; track exp) {
+                  <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                      <div class="timeline-header">
+                        <h4 class="role">{{ exp.role }}</h4>
+                        <span class="period">{{ exp.period }}</span>
+                      </div>
+                      <div class="company">{{ exp.company }}</div>
+                      <p class="description">{{ exp.description }}</p>
                     </div>
-                </div>
+                  </div>
+                }
+              </div>
             </section>
-
-            <section class="section" *ngIf="activeSection === 'education'">
-                <h3 class="section-title">{{ getTranslation('education') }}</h3>
-                <div class="timeline">
-                    <div class="timeline-item" *ngFor="let edu of education">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <h4 class="role">{{ edu.degree }}</h4>
-                                <span class="period">{{ edu.year }}</span>
-                            </div>
-                            <div class="company">{{ edu.school }}</div>
-                            <p class="description" *ngIf="edu.description">{{ edu.description }}</p>
-                        </div>
+          }
+          @if (activeSection === 'education') {
+            <section class="section">
+              <h3 class="section-title">{{ getTranslation('education') }}</h3>
+              <div class="timeline">
+                @for (edu of education; track edu) {
+                  <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                      <div class="timeline-header">
+                        <h4 class="role">{{ edu.degree }}</h4>
+                        <span class="period">{{ edu.year }}</span>
+                      </div>
+                      <div class="company">{{ edu.school }}</div>
+                      @if (edu.description) {
+                        <p class="description">{{ edu.description }}</p>
+                      }
                     </div>
-                </div>
+                  </div>
+                }
+              </div>
             </section>
+          }
         </main>
-    </div>
+      </div>
+    }
 
     <!-- Skills and Certifications Section -->
-    <div class="skills-certifications-container" *ngIf="activeSection === 'skills'">
+    @if (activeSection === 'skills') {
+      <div class="skills-certifications-container">
         <section class="section">
-            <h3 class="section-title">{{ getTranslation('skills') }}</h3>
-            <div class="skills-wrapper">
-                <span class="skill-tag" *ngFor="let skill of skills">{{ skill }}</span>
-            </div>
+          <h3 class="section-title">{{ getTranslation('skills') }}</h3>
+          <div class="skills-wrapper">
+            @for (skill of skills; track skill) {
+              <span class="skill-tag">{{ skill }}</span>
+            }
+          </div>
         </section>
-
         <section class="section">
-            <h3 class="section-title">{{ getTranslation('certifications') }}</h3>
-            <ul class="cert-list">
-                <li class="cert-item" *ngFor="let cert of certifications">
-                    <span class="icon">📜</span>
-                    <span>{{ cert }}</span>
-                </li>
-            </ul>
+          <h3 class="section-title">{{ getTranslation('certifications') }}</h3>
+          <ul class="cert-list">
+            @for (cert of certifications; track cert) {
+              <li class="cert-item">
+                <span class="icon">📜</span>
+                <span>{{ cert }}</span>
+              </li>
+            }
+          </ul>
         </section>
-
         <section class="section">
-            <h3 class="section-title">{{ getTranslation('languages') }}</h3>
-            <div class="languages-list">
-                <div class="language-item" *ngFor="let lang of languages">
-                    <span class="lang-name">{{ lang.name }}</span>
-                    <span class="lang-separator"></span>
-                    <span class="lang-level">{{ lang.level }}</span>
-                </div>
-            </div>
+          <h3 class="section-title">{{ getTranslation('languages') }}</h3>
+          <div class="languages-list">
+            @for (lang of languages; track lang) {
+              <div class="language-item">
+                <span class="lang-name">{{ lang.name }}</span>
+                <span class="lang-separator"></span>
+                <span class="lang-level">{{ lang.level }}</span>
+              </div>
+            }
+          </div>
         </section>
-    </div>
+      </div>
+    }
 
     <!-- Projects Section -->
-    <section class="section projects-section" *ngIf="projects.length > 0 && activeSection === 'projects'">
+    @if (projects.length > 0 && activeSection === 'projects') {
+      <section class="section projects-section">
         <h3 class="section-title">{{ getTranslation('projects') }}</h3>
         <div class="projects-grid">
-            <div class="project-card" *ngFor="let project of projects">
-                <h4 class="project-name">{{ project.name }}</h4>
-                <p class="project-description">{{ project.description }}</p>
-
-                <div class="project-meta">
-                    <div class="meta-item">
-                        <strong>{{ getTranslation('technologies') }}:</strong> {{ project.technologies }}
-                    </div>
-                    <div class="meta-item">
-                        <strong>{{ getTranslation('duration') }}:</strong> {{ project.duration }}
-                    </div>
+          @for (project of projects; track project) {
+            <div class="project-card">
+              <h4 class="project-name">{{ project.name }}</h4>
+              <p class="project-description">{{ project.description }}</p>
+              <div class="project-meta">
+                <div class="meta-item">
+                  <strong>{{ getTranslation('technologies') }}:</strong> {{ project.technologies }}
                 </div>
-
-                <div class="project-details">
-                    <div class="detail-block" *ngIf="project.workProcess">
-                        <h5>{{ getTranslation('process') }}</h5>
-                        <p>{{ project.workProcess }}</p>
-                    </div>
-                    <div class="detail-block" *ngIf="project.teamExperience">
-                        <h5>{{ getTranslation('teamExperience') }}</h5>
-                        <p>{{ project.teamExperience }}</p>
-                    </div>
+                <div class="meta-item">
+                  <strong>{{ getTranslation('duration') }}:</strong> {{ project.duration }}
                 </div>
-
-                <div class="project-links">
-                    <a [href]="project.liveUrl" target="_blank" class="project-link" *ngIf="project.liveUrl">
-                        <span class="icon">🔗</span> {{ getTranslation('liveTest') }}
-                    </a>
-                    <a [href]="project.githubUrl" target="_blank" class="project-link" *ngIf="project.githubUrl">
-                        <img src="/assets/img/icons-and-logos/GitHub-logo-black.png" alt="GitHub" class="link-icon">
-                        GitHub
-                    </a>
-                </div>
+              </div>
+              <div class="project-details">
+                @if (project.workProcess) {
+                  <div class="detail-block">
+                    <h5>{{ getTranslation('process') }}</h5>
+                    <p>{{ project.workProcess }}</p>
+                  </div>
+                }
+                @if (project.teamExperience) {
+                  <div class="detail-block">
+                    <h5>{{ getTranslation('teamExperience') }}</h5>
+                    <p>{{ project.teamExperience }}</p>
+                  </div>
+                }
+              </div>
+              <div class="project-links">
+                @if (project.liveUrl) {
+                  <a [href]="project.liveUrl" target="_blank" class="project-link">
+                    <span class="icon">🔗</span> {{ getTranslation('liveTest') }}
+                  </a>
+                }
+                @if (project.githubUrl) {
+                  <a [href]="project.githubUrl" target="_blank" class="project-link">
+                    <img src="/assets/img/icons-and-logos/GitHub-logo-black.png" alt="GitHub" class="link-icon">
+                    GitHub
+                  </a>
+                }
+              </div>
             </div>
+          }
         </div>
-    </section>
+      </section>
+    }
 
     <!-- Testimonials Section -->
-    <section class="section testimonials-section" *ngIf="testimonials.length > 0 && activeSection === 'testimonials'">
+    @if (testimonials.length > 0 && activeSection === 'testimonials') {
+      <section class="section testimonials-section">
         <h3 class="section-title">{{ getTranslation('whatColleaguesSay') }}</h3>
         <div class="testimonials-grid">
-            <div class="testimonial-card" *ngFor="let testimonial of testimonials">
-                <p class="testimonial-quote">"{{ testimonial.quote }}"</p>
-                <div class="testimonial-author">
-                    <strong>{{ testimonial.name }}</strong>
-                    <span class="testimonial-project">{{ getTranslation('projectLabel') }} {{ testimonial.project
-                        }}</span>
-                </div>
-                <a [href]="testimonial.link" target="_blank" class="testimonial-link" *ngIf="testimonial.link">
-                    <img *ngIf="testimonial.linkText === 'LinkedIn'"
-                        src="/assets/img/icons-and-logos/linkedIn-logo-black.png" alt="LinkedIn" class="link-icon">
-                    <span *ngIf="testimonial.linkText !== 'LinkedIn'" class="icon">🔗</span>
+          @for (testimonial of testimonials; track testimonial) {
+            <div class="testimonial-card">
+              <p class="testimonial-quote">"{{ testimonial.quote }}"</p>
+              <div class="testimonial-author">
+                <strong>{{ testimonial.name }}</strong>
+                <span class="testimonial-project">{{ getTranslation('projectLabel') }} {{ testimonial.project
+                }}</span>
+              </div>
+              @if (testimonial.link) {
+                <a [href]="testimonial.link" target="_blank" class="testimonial-link">
+                  @if (testimonial.linkText === 'LinkedIn') {
+                    <img
+                      src="/assets/img/icons-and-logos/linkedIn-logo-black.png" alt="LinkedIn" class="link-icon">
+                    }
+                    @if (testimonial.linkText !== 'LinkedIn') {
+                      <span class="icon">🔗</span>
+                    }
                     {{ testimonial.linkText }}
-                </a>
-            </div>
-        </div>
-    </section>
-</div>
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        </section>
+      }
+    </div>

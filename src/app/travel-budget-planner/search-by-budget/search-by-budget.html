@@ -1,133 +1,139 @@
 <app-calc-hero-presets [t]="tFn"></app-calc-hero-presets>
 
 <div class="search-container">
-    <div class="search-card">
-        <h2>{{ t('calcModeFind') }}</h2>
-        <p>{{ t('calcModeFindDesc') }}</p>
+  <div class="search-card">
+    <h2>{{ t('calcModeFind') }}</h2>
+    <p>{{ t('calcModeFindDesc') }}</p>
 
-        <div class="form-section">
-            <div class="form-row form-row--stackable">
-                <div class="form-group">
-                    <label for="duration">{{ t('calcDuration') }}</label>
-                    <div class="number-input">
-                        <button class="num-btn" (click)="duration = duration > 1 ? duration - 1 : 1"
-                            type="button">&#8722;</button>
-                        <input id="duration" type="number" [(ngModel)]="duration" min="1" max="365">
-                        <button class="num-btn" (click)="duration = duration + 1" type="button">+</button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="persons">{{ t('calcPersons') }}</label>
-                    <div class="number-input">
-                        <button class="num-btn" (click)="persons = persons > 1 ? persons - 1 : 1"
-                            type="button">&#8722;</button>
-                        <input id="persons" type="number" [(ngModel)]="persons" min="1" max="20">
-                        <button class="num-btn" (click)="persons = persons + 1" type="button">+</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-row form-row--stackable">
-                <div class="form-group">
-                    <label for="origin-country">{{ t('calcStartCountry') }}</label>
-                    <div class="select-wrapper">
-                        @if (selectedOriginCountry) {
-                        <span class="select-flag" aria-hidden="true">
-                            @if (!shouldUseFallbackFlag(selectedOriginCountry.code)) {
-                            <img class="select-flag-image" [src]="getFlagApiUrl(selectedOriginCountry.code)" [alt]="''"
-                                loading="lazy" decoding="async" (error)="onFlagImageError(selectedOriginCountry.code)">
-                            } @else {
-                            {{ getFallbackFlagEmoji(selectedOriginCountry.code) }}
-                            }
-                        </span>
-                        }
-                        <select id="origin-country" [(ngModel)]="selectedOriginCountryCode"
-                            (ngModelChange)="onOriginCountryChange()" [class.has-flag]="selectedOriginCountry">
-                            <option value="">{{ t('calcSelectStartCountry') }}</option>
-                            <optgroup *ngFor="let cont of getOriginVisibleContinents()"
-                                [label]="getContinentLabel(cont)">
-                                <option *ngFor="let c of getOriginCountriesByContinent(cont)" [value]="c.code">
-                                    {{ getCountryLabel(c) }}
-                                </option>
-                            </optgroup>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="display-currency">{{ t('calcDisplayCurrency') }}</label>
-                    <div class="select-wrapper select-wrapper--plain">
-                        <select id="display-currency" [(ngModel)]="selectedCurrency"
-                            (ngModelChange)="onDisplayCurrencyChange()">
-                            <option *ngFor="let currency of currencyOptions" [value]="currency.code">{{ currency.label
-                                }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+    <div class="form-section">
+      <div class="form-row form-row--stackable">
+        <div class="form-group">
+          <label for="duration">{{ t('calcDuration') }}</label>
+          <div class="number-input">
+            <button class="num-btn" (click)="duration = duration > 1 ? duration - 1 : 1"
+            type="button">&#8722;</button>
+            <input id="duration" type="number" [(ngModel)]="duration" min="1" max="365">
+            <button class="num-btn" (click)="duration = duration + 1" type="button">+</button>
+          </div>
         </div>
+        <div class="form-group">
+          <label for="persons">{{ t('calcPersons') }}</label>
+          <div class="number-input">
+            <button class="num-btn" (click)="persons = persons > 1 ? persons - 1 : 1"
+            type="button">&#8722;</button>
+            <input id="persons" type="number" [(ngModel)]="persons" min="1" max="20">
+            <button class="num-btn" (click)="persons = persons + 1" type="button">+</button>
+          </div>
+        </div>
+      </div>
 
-        <div class="budget-search-box">
-            <div class="budget-search-head">
-                <strong>{{ t('calcBudgetSearchTitle') }}</strong>
-                @if (reverseSearchPerformed) {
-                <span class="budget-search-count">{{ reverseResultsCount }} {{ t('calcBudgetSearchMatches') }}</span>
+      <div class="form-row form-row--stackable">
+        <div class="form-group">
+          <label for="origin-country">{{ t('calcStartCountry') }}</label>
+          <div class="select-wrapper">
+            @if (selectedOriginCountry) {
+              <span class="select-flag" aria-hidden="true">
+                @if (!shouldUseFallbackFlag(selectedOriginCountry.code)) {
+                  <img class="select-flag-image" [src]="getFlagApiUrl(selectedOriginCountry.code)" [alt]="''"
+                    loading="lazy" decoding="async" (error)="onFlagImageError(selectedOriginCountry.code)">
+                  } @else {
+                    {{ getFallbackFlagEmoji(selectedOriginCountry.code) }}
+                  }
+                </span>
+              }
+              <select id="origin-country" [(ngModel)]="selectedOriginCountryCode"
+                (ngModelChange)="onOriginCountryChange()" [class.has-flag]="selectedOriginCountry">
+                <option value="">{{ t('calcSelectStartCountry') }}</option>
+                @for (cont of getOriginVisibleContinents(); track cont) {
+                  <optgroup
+                    [label]="getContinentLabel(cont)">
+                    @for (c of getOriginCountriesByContinent(cont); track c) {
+                      <option [value]="c.code">
+                        {{ getCountryLabel(c) }}
+                      </option>
+                    }
+                  </optgroup>
                 }
+              </select>
             </div>
-            <div class="form-group">
-                <label for="reverse-budget">{{ t('calcReverseBudgetLabel') }}</label>
-                <div class="number-input">
-                    <button class="num-btn" (click)="reverseBudget = reverseBudget > 100 ? reverseBudget - 100 : 100"
-                        type="button">&#8722;</button>
-                    <input id="reverse-budget" type="number" [(ngModel)]="reverseBudget" min="100" step="100">
-                    <button class="num-btn" (click)="reverseBudget = reverseBudget + 100" type="button">+</button>
-                </div>
-                <p class="field-hint">{{ t('calcReverseBudgetHint') }}</p>
+          </div>
+          <div class="form-group">
+            <label for="display-currency">{{ t('calcDisplayCurrency') }}</label>
+            <div class="select-wrapper select-wrapper--plain">
+              <select id="display-currency" [(ngModel)]="selectedCurrency"
+                (ngModelChange)="onDisplayCurrencyChange()">
+                @for (currency of currencyOptions; track currency) {
+                  <option [value]="currency.code">{{ currency.label
+                    }}
+                  </option>
+                }
+              </select>
             </div>
-
-            <button class="btn-secondary" (click)="findDestinationsByBudget()"
-                [disabled]="isCalculating || reverseBudget <= 0">
-                {{ t('calcFindByBudget') }}
-            </button>
+          </div>
         </div>
+      </div>
+
+      <div class="budget-search-box">
+        <div class="budget-search-head">
+          <strong>{{ t('calcBudgetSearchTitle') }}</strong>
+          @if (reverseSearchPerformed) {
+            <span class="budget-search-count">{{ reverseResultsCount }} {{ t('calcBudgetSearchMatches') }}</span>
+          }
+        </div>
+        <div class="form-group">
+          <label for="reverse-budget">{{ t('calcReverseBudgetLabel') }}</label>
+          <div class="number-input">
+            <button class="num-btn" (click)="reverseBudget = reverseBudget > 100 ? reverseBudget - 100 : 100"
+            type="button">&#8722;</button>
+            <input id="reverse-budget" type="number" [(ngModel)]="reverseBudget" min="100" step="100">
+            <button class="num-btn" (click)="reverseBudget = reverseBudget + 100" type="button">+</button>
+          </div>
+          <p class="field-hint">{{ t('calcReverseBudgetHint') }}</p>
+        </div>
+
+        <button class="btn-secondary" (click)="findDestinationsByBudget()"
+          [disabled]="isCalculating || reverseBudget <= 0">
+          {{ t('calcFindByBudget') }}
+        </button>
+      </div>
     </div>
 
     @if (reverseSearchPerformed) {
-    <div class="reverse-results-card">
+      <div class="reverse-results-card">
         <div class="reverse-results-header">
-            <h3>{{ t('calcReverseResultsTitle') }}</h3>
-            <button class="btn-clear" type="button" (click)="clearReverseSearch()">{{ t('calcClearResults')
-                }}</button>
+          <h3>{{ t('calcReverseResultsTitle') }}</h3>
+          <button class="btn-clear" type="button" (click)="clearReverseSearch()">{{ t('calcClearResults')
+          }}</button>
         </div>
 
         @if (reverseMatches.length === 0) {
-        <p class="reverse-empty">{{ t('calcReverseNoResults') }}</p>
+          <p class="reverse-empty">{{ t('calcReverseNoResults') }}</p>
         } @else {
-        <div class="reverse-list">
+          <div class="reverse-list">
             @for (match of reverseMatches; track match.country.code) {
-            <article class="reverse-item">
+              <article class="reverse-item">
                 <div class="reverse-country">
-                    <span class="reverse-flag" aria-hidden="true">
-                        @if (!shouldUseFallbackFlag(match.country.code)) {
-                        <img class="reverse-flag-image" [src]="getFlagApiUrl(match.country.code)" [alt]="''"
-                            loading="lazy" decoding="async" (error)="onFlagImageError(match.country.code)">
-                        } @else {
+                  <span class="reverse-flag" aria-hidden="true">
+                    @if (!shouldUseFallbackFlag(match.country.code)) {
+                      <img class="reverse-flag-image" [src]="getFlagApiUrl(match.country.code)" [alt]="''"
+                        loading="lazy" decoding="async" (error)="onFlagImageError(match.country.code)">
+                      } @else {
                         {{ getFallbackFlagEmoji(match.country.code) }}
-                        }
+                      }
                     </span>
                     <div>
-                        <strong>{{ getCountryLabel(match.country) }}</strong>
-                        <small>{{ getContinentLabel(match.country.continent) }}</small>
+                      <strong>{{ getCountryLabel(match.country) }}</strong>
+                      <small>{{ getContinentLabel(match.country.continent) }}</small>
                     </div>
-                </div>
-                <div class="reverse-price">
+                  </div>
+                  <div class="reverse-price">
                     <strong>{{ formatCurrency(match.total) }}</strong>
                     <small>{{ formatCurrency(match.perDayPerPerson) }} / {{ t('calcPerDayPerPerson') }}</small>
-                </div>
-            </article>
-            }
+                  </div>
+                </article>
+              }
+            </div>
+          }
         </div>
-        }
+      }
     </div>
-    }
-</div>

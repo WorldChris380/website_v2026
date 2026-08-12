@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { LanguageService, Language } from '../../../language.service';
 import { MetaService } from '../../../services/meta.service';
 
 @Component({
     selector: 'app-air-germany',
     standalone: true,
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './airGermany.html',
     styleUrl: './airGermany.scss',
 })

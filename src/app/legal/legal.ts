@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { LanguageService, Language } from '../language.service';
 import { MetaService } from '../services/meta.service';
@@ -7,7 +7,7 @@ import { MetaService } from '../services/meta.service';
 @Component({
     selector: 'app-legal',
     standalone: true,
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './legal.html',
     styleUrl: './legal.scss'
 })

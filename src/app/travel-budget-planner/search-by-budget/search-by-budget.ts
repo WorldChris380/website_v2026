@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { LanguageService, Language } from '../../language.service';
 import { MetaService } from '../../services/meta.service';
@@ -15,10 +15,9 @@ import { FALLBACK_COUNTRIES } from '../shared-countries.const';
     selector: 'app-search-by-budget',
     standalone: true,
     imports: [
-        CommonModule,
-        FormsModule,
-        HeroPresetsComponent,
-    ],
+    FormsModule,
+    HeroPresetsComponent
+],
     templateUrl: './search-by-budget.html',
     styleUrl: './search-by-budget.scss'
 })

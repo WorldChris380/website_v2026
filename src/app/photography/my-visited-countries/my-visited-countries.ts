@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import { MetaService } from '../../services/meta.service';
 import { ManifestService } from '../../gallery/manifest.service';
@@ -13,7 +13,7 @@ interface Continent {
 @Component({
     selector: 'app-my-visited-countries',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [RouterModule],
     templateUrl: './my-visited-countries.html',
     styleUrl: './my-visited-countries.scss'
 })

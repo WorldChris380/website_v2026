@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { DarkModeService } from '../dark-mode.service';
 import { LanguageService, Language } from '../language.service';
@@ -11,7 +11,7 @@ type MenuHeading = 'aviation' | 'blog' | 'travel' | 'shop' | 'career' | 'photogr
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

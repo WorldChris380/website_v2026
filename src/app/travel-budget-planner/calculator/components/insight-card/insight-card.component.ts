@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input } from '@angular/core';
 import type { CountryCostData, CountryInsight } from '../../calculator';
 import type { Language } from '../../../../language.service';
@@ -6,42 +6,48 @@ import type { Language } from '../../../../language.service';
 @Component({
     selector: 'app-calc-insight-card',
     standalone: true,
-    imports: [CommonModule],
+    imports: [],
     styleUrl: './insight-card.component.scss',
     template: `
-<div *ngIf="insight && country">
+@if (insight && country) {
+  <div>
     <div class="insight-header">
-        <span class="insight-flag" aria-hidden="true">
-            <img *ngIf="!isFlagBroken(country.code)" class="insight-flag-image" [src]="getFlagApiUrl(country.code)" [alt]="''"
-                loading="lazy" decoding="async" (error)="markFlagBroken(country.code)">
-            <span *ngIf="isFlagBroken(country.code)">{{ getFallbackFlagEmoji(country.code) }}</span>
-        </span>
-        <h3>{{ getCountryLabel(country) }}</h3>
+      <span class="insight-flag" aria-hidden="true">
+        @if (!isFlagBroken(country.code)) {
+          <img class="insight-flag-image" [src]="getFlagApiUrl(country.code)" [alt]="''"
+            loading="lazy" decoding="async" (error)="markFlagBroken(country.code)">
+        }
+        @if (isFlagBroken(country.code)) {
+          <span>{{ getFallbackFlagEmoji(country.code) }}</span>
+        }
+      </span>
+      <h3>{{ getCountryLabel(country) }}</h3>
     </div>
     <div class="insight-grid">
-        <div class="insight-item">
-            <span class="insight-icon">&#128197;</span>
-            <div>
-                <span class="insight-label">{{ t('calcBestTime') }}</span>
-                <span class="insight-value">{{ currentLanguage === 'de' ? insight.bestTimeDE : insight.bestTime }}</span>
-            </div>
+      <div class="insight-item">
+        <span class="insight-icon">&#128197;</span>
+        <div>
+          <span class="insight-label">{{ t('calcBestTime') }}</span>
+          <span class="insight-value">{{ currentLanguage === 'de' ? insight.bestTimeDE : insight.bestTime }}</span>
         </div>
-        <div class="insight-item">
-            <span class="insight-icon">&#128178;</span>
-            <div>
-                <span class="insight-label">{{ t('calcLocalCurrency') }}</span>
-                <span class="insight-value">{{ insight.currency }}</span>
-            </div>
+      </div>
+      <div class="insight-item">
+        <span class="insight-icon">&#128178;</span>
+        <div>
+          <span class="insight-label">{{ t('calcLocalCurrency') }}</span>
+          <span class="insight-value">{{ insight.currency }}</span>
         </div>
-        <div class="insight-item insight-tip">
-            <span class="insight-icon">&#128161;</span>
-            <div>
-                <span class="insight-label">{{ t('calcMoneySaving') }}</span>
-                <span class="insight-value">{{ currentLanguage === 'de' ? insight.savingTipDE : insight.savingTip }}</span>
-            </div>
+      </div>
+      <div class="insight-item insight-tip">
+        <span class="insight-icon">&#128161;</span>
+        <div>
+          <span class="insight-label">{{ t('calcMoneySaving') }}</span>
+          <span class="insight-value">{{ currentLanguage === 'de' ? insight.savingTipDE : insight.savingTip }}</span>
         </div>
+      </div>
     </div>
-</div>
+  </div>
+}
 `
 })
 export class InsightCardComponent {

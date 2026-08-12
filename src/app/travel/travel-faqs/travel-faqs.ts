@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { LanguageService, Language } from '../../language.service';
 import { MetaService } from '../../services/meta.service';
 import { FaqSectionComponent } from '../../travel-budget-planner/calculator/components/faq-section/faq-section.component';
@@ -7,7 +7,7 @@ import { FaqSectionComponent } from '../../travel-budget-planner/calculator/comp
 @Component({
     selector: 'app-travel-faqs',
     standalone: true,
-    imports: [CommonModule, FaqSectionComponent],
+    imports: [FaqSectionComponent],
     templateUrl: './travel-faqs.html',
     styleUrl: './travel-faqs.scss'
 })
